@@ -30,6 +30,10 @@ This document records reproducible manual and automated quality assurance checks
 | **QA-20** | Appointments View 3-Mode Switcher | Toggle between List, Month Calendar, and Day Timeline in `AppointmentsView.jsx`. | Seamless view mode switching with state persistence. | Verified List, Month Calendar with daily detail drawer, and Day Timeline with operating hours (12:00–19:00 IST). | **PASS** (Batch 4A) |
 | **QA-21** | Client Detail Drawer & Spend Tracking | Open `ClientDetailDrawer.jsx` for client profile. | Displays total spend, visits, preferred shape, VIP tag, loyalty progress, and 1-tap call/WhatsApp. | Verified drawer renders style profile, loyalty reward checklist, and aftercare launcher. | **PASS** (Batch 4A) |
 | **QA-22** | Appointment Status Lifecycle | Update appointment status via `PUT /api/appointments/:id`. | Status updates correctly from Confirmed to In Progress to Completed. | API returned 200 OK and updated appointment status to 'In Progress'. | **PASS** (Batch 4A) |
+| **QA-23** | Batch 4B Production Build | Run `npm run build` with updated Invoices, Gift Cards, and Analytics components. | Zero syntax or bundling errors. | Built in 1.25s. Bundle sizes: CSS 71.37 kB, JS 747.48 kB. Zero errors. | **PASS** (Batch 4B) |
+| **QA-24** | Invoice Creation & Advance Credit Deduction | Submit `POST /api/invoices` with ₹500 advance deposit credited. | Persists line items, calculates ₹2,300 balance due, and returns 201 Created. | Created `INV-TEST-4B` with ₹2,800 total, ₹500 deposit deducted, and ₹2,300 balance due. | **PASS** (Batch 4B) |
+| **QA-25** | Public Invoice Security & UPI QR Code | Open `#invoice-:id` on `PublicInvoiceView.jsx`. | Dynamic UPI QR renders; owner "Mark Settled" restricted to authenticated session. | Dynamic UPI QR generated (`upi://pay`), owner action hidden from unauthenticated viewers. | **PASS** (Batch 4B) |
+| **QA-26** | Financial Backup & CSV Export API | Query `GET /api/backup/invoices-csv` with auth token. | Returns 200 OK with CSV text format for tax accounting. | Returns 200 OK with formatted CSV headers and records. | **PASS** (Batch 4B) |
 
 ---
 

@@ -254,13 +254,14 @@
       "category": "Extensions & Tips",
       "sku": "APX-NC-MED",
       "quantity": 4,
-      "minThreshold": 6,
+      "minThreshold": 0,
       "unit": "box (500 tips)",
       "supplier": "Apres Nail Professional",
-      "costPerUnit": 2800,
-      "status": "Low Stock",
+      "costPerUnit": 0,
+      "status": "In Stock",
       "location": "Drawer A-2",
-      "notes": "Most requested shape and length for bridal and graduation clients."
+      "notes": "Most requested shape and length for bridal and graduation clients.",
+      "updatedAt": "2026-11-17T15:56:00.961Z"
     },
     {
       "id": "inv_2",

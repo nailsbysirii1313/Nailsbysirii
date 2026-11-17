@@ -38,7 +38,7 @@ export default function InvoiceModal({
   if (!isOpen || !invoice) return null;
 
   const studioName = settings?.studioName || 'Nails by Sirii';
-  const tagline = settings?.tagline || 'Affordable Nail Studio & Academy in Dehradun';
+  const tagline = settings?.tagline || 'Bespoke Nail Architecture & Japanese Gel Studio';
   const phone = settings?.phone || '+91 73026 23493';
   const email = settings?.email || 'hello@nailsbysirii.com';
   const address = settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi Cantt, Dehradun 248003';
@@ -70,9 +70,9 @@ export default function InvoiceModal({
       .join('\n');
 
     return `*${studioName.toUpperCase()}*
-Cute & Aesthetic Nail Studio in Dehradun
+Bespoke Nail Architecture & Japanese Gel Studio • Dehradun
 -----------------------------------
-Studio Bill / Receipt: ${invoice.invoiceNumber}
+Official Studio Bill: ${invoice.invoiceNumber}
 Client: ${invoice.clientName}
 Date: ${invoice.date}
 
@@ -85,6 +85,10 @@ Subtotal: ${currency}${Number(invoice.subtotal).toLocaleString('en-IN')}${
       invoice.depositDeducted > 0
         ? `\nDeposit Credited: -${currency}${Number(invoice.depositDeducted).toLocaleString('en-IN')}`
         : ''
+    }${
+      invoice.giftCardDeducted > 0
+        ? `\nGift Voucher (${invoice.giftCardCode}): -${currency}${Number(invoice.giftCardDeducted).toLocaleString('en-IN')}`
+        : ''
     }
 Total Bill: ${currency}${Number(invoice.total).toLocaleString('en-IN')}
 Balance Due: ${currency}${Number(balanceDue).toLocaleString('en-IN')}
@@ -93,10 +97,10 @@ Payment Status: ${invoice.status.toUpperCase()}
 PAYMENT DETAILS:
 ${paymentInstructions}
 
-Digital Invoice Link:
+Digital Bill Link:
 ${clientInvoiceUrl}
 
-${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nails by Sirii! Keep your cuticles hydrated daily with botanical cuticle oil.`;
+${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for visiting Nails by Sirii! Keep your natural nail architecture nourished daily with botanical cuticle oil.`;
   };
 
   const handleCopyText = () => {
@@ -144,10 +148,10 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
 
   const handleConfirmPaid = () => {
     confetti({
-      particleCount: 90,
-      spread: 70,
+      particleCount: 80,
+      spread: 60,
       origin: { y: 0.6 },
-      colors: ['#E898A9', '#C24D68', '#C59B63', '#FAF7F5']
+      colors: ['#7D2838', '#C29358', '#FAF6F0', '#15803D']
     });
     if (onMarkPaid) {
       onMarkPaid(invoice.id, {
@@ -159,24 +163,24 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-atelier-noir/60 backdrop-blur-sm animate-fade-in overflow-y-auto">
-      <div className="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full shadow-float border-t sm:border border-atelier-champagneBorder relative max-h-[96vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-text-ink/60 backdrop-blur-sm overflow-y-auto">
+      <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-2xl w-full shadow-studio border-t sm:border border-border-subtle relative max-h-[96vh] flex flex-col font-sans">
         {/* Mobile Drag Indicator */}
-        <div className="w-10 h-1.5 rounded-full bg-stone-300 mx-auto my-2.5 sm:hidden shrink-0" />
+        <div className="w-10 h-1.5 rounded-full bg-border-subtle mx-auto my-2.5 sm:hidden shrink-0" />
 
         {/* Action Bar (Top) */}
-        <div className="no-print p-4 bg-atelier-cream/80 border-b border-atelier-champagneBorder flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div className="no-print p-4 bg-studio-canvas border-b border-border-subtle flex flex-wrap items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-2">
             <span
               className={`px-3 py-1 rounded-full text-xs font-bold ${
                 isPaid
-                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                  : 'bg-amber-50 text-amber-700 border border-amber-200'
+                  ? 'bg-status-emeraldBg text-status-emerald'
+                  : 'bg-amber-100 text-amber-900 border border-amber-300'
               }`}
             >
               {invoice.status}
             </span>
-            <span className="font-mono text-xs font-semibold text-atelier-charcoal">
+            <span className="font-mono text-xs font-semibold text-text-secondary">
               {invoice.invoiceNumber}
             </span>
           </div>
@@ -185,7 +189,7 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
             {/* Native Mobile Share / WhatsApp */}
             <button
               onClick={handleWhatsAppShare}
-              className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs active:scale-95"
+              className="px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs active:scale-95 min-h-[38px]"
               title="Send bill on WhatsApp"
             >
               <Send className="w-3.5 h-3.5" />
@@ -195,7 +199,7 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
             {/* Native Web Share */}
             <button
               onClick={handleWebShare}
-              className="px-3 py-1.5 rounded-xl bg-white border border-atelier-champagneBorder text-xs font-semibold text-atelier-charcoal hover:bg-atelier-rose50 flex items-center gap-1.5 transition-all shadow-xs active:scale-95"
+              className="px-3.5 py-2 rounded-xl bg-studio-surface border border-border-subtle text-xs font-semibold text-text-secondary hover:bg-studio-canvas hover:text-text-ink flex items-center gap-1.5 transition-all shadow-xs active:scale-95 min-h-[38px]"
               title="Share via device sheet"
             >
               <Share2 className="w-3.5 h-3.5" />
@@ -205,7 +209,7 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
             {/* Copy Receipt Text */}
             <button
               onClick={handleCopyText}
-              className="px-3 py-1.5 rounded-xl bg-white border border-atelier-champagneBorder text-xs font-semibold text-atelier-charcoal hover:bg-atelier-rose50 hover:text-atelier-rose600 flex items-center gap-1.5 transition-all shadow-xs active:scale-95"
+              className="px-3.5 py-2 rounded-xl bg-studio-surface border border-border-subtle text-xs font-semibold text-text-secondary hover:bg-studio-subtle hover:text-brand-wine flex items-center gap-1.5 transition-all shadow-xs active:scale-95 min-h-[38px]"
               title="Copy receipt text formatted for messaging"
             >
               {copiedText ? (
@@ -219,8 +223,8 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
             {/* Print / Save PDF */}
             <button
               onClick={handlePrint}
-              className="px-3 py-1.5 rounded-xl bg-white border border-atelier-champagneBorder text-xs font-semibold text-atelier-charcoal hover:bg-atelier-rose50 flex items-center gap-1.5 transition-all shadow-xs active:scale-95"
-              title="Print luxury paper invoice"
+              className="px-3.5 py-2 rounded-xl bg-studio-surface border border-border-subtle text-xs font-semibold text-text-secondary hover:bg-studio-canvas hover:text-text-ink flex items-center gap-1.5 transition-all shadow-xs active:scale-95 min-h-[38px]"
+              title="Print studio invoice"
             >
               <Printer className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Print / PDF</span>
@@ -230,7 +234,7 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
             {!isPaid && (
               <button
                 onClick={() => setShowPayModal(true)}
-                className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-soft active:scale-95"
+                className="px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-studio active:scale-95 min-h-[38px]"
               >
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>Mark Paid</span>
@@ -239,7 +243,8 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
 
             <button
               onClick={onClose}
-              className="p-1.5 rounded-full hover:bg-atelier-cream text-atelier-muted hover:text-atelier-noir transition-colors"
+              className="p-2 rounded-full hover:bg-studio-subtle text-text-muted hover:text-text-ink transition-colors min-h-[38px] min-w-[38px] flex items-center justify-center"
+              aria-label="Close"
             >
               <X className="w-5 h-5" />
             </button>
@@ -247,74 +252,74 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
         </div>
 
         {/* Scrollable Printable Studio Invoice */}
-        <div className="p-6 sm:p-10 invoice-printable bg-white space-y-7 text-xs text-atelier-charcoal overflow-y-auto">
+        <div className="p-6 sm:p-10 invoice-printable bg-studio-surface space-y-7 text-xs text-text-secondary overflow-y-auto">
           {/* Header Branding with Studio Logo */}
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 pb-6 border-b border-atelier-champagneBorder">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 pb-6 border-b border-border-subtle">
             <div className="space-y-2">
               <StudioLogo logoUrl={settings?.studioLogoUrl} size="lg" showText className="mb-2" />
-              <p className="text-xs text-atelier-muted tracking-wide">{tagline}</p>
-              <div className="text-[11px] text-atelier-muted space-y-0.5 pt-1">
+              <p className="text-xs text-text-muted tracking-wide">{tagline}</p>
+              <div className="text-xs text-text-muted space-y-0.5 pt-1">
                 <p>{address}</p>
                 <p>
                   {phone} • {email}
                 </p>
                 {settings?.instagram && (
-                  <p className="text-atelier-rose600 font-semibold">{settings.instagram}</p>
+                  <p className="text-brand-wine font-semibold">{settings.instagram}</p>
                 )}
               </div>
             </div>
 
             <div className="text-left sm:text-right space-y-1">
-              <span className="text-[10px] uppercase font-bold tracking-widest text-atelier-rose600 block">
+              <span className="text-[10px] uppercase font-bold tracking-widest text-brand-wine block">
                 Official Studio Tax Invoice
               </span>
-              <p className="font-mono text-base font-bold text-atelier-noir">
+              <p className="font-mono text-base font-bold text-text-ink">
                 {invoice.invoiceNumber}
               </p>
-              <div className="text-[11px] text-atelier-muted pt-1">
+              <div className="text-xs text-text-muted pt-1">
                 <p>
-                  Date: <span className="font-semibold text-atelier-charcoal">{invoice.date}</span>
+                  Date: <span className="font-semibold text-text-secondary">{invoice.date}</span>
                 </p>
                 <p>
-                  Due Date: <span className="font-semibold text-atelier-charcoal">{invoice.dueDate}</span>
+                  Due Date: <span className="font-semibold text-text-secondary">{invoice.dueDate}</span>
                 </p>
               </div>
             </div>
           </div>
 
           {/* Client Billed To & Status Bar */}
-          <div className="p-4 rounded-2xl bg-atelier-cream/50 border border-atelier-champagneBorder/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-4 rounded-2xl bg-studio-canvas border border-border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-atelier-muted block">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
                 Billed To Client:
               </span>
-              <p className="font-serif italic font-bold text-lg text-atelier-noir mt-0.5">
+              <p className="font-display font-semibold text-lg text-text-ink mt-0.5">
                 {invoice.clientName}
               </p>
-              <p className="text-[11px] text-atelier-muted font-medium">{invoice.clientPhone}</p>
+              <p className="text-xs text-text-muted font-mono">{invoice.clientPhone}</p>
               {invoice.clientEmail && (
-                <p className="text-[11px] text-atelier-muted">{invoice.clientEmail}</p>
+                <p className="text-xs text-text-muted">{invoice.clientEmail}</p>
               )}
             </div>
 
             <div className="sm:text-right">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-atelier-muted block">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
                 Payment Status
               </span>
               <span
                 className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-bold ${
                   isPaid
-                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                    : 'bg-amber-50 text-amber-700 border border-amber-200'
+                    ? 'bg-status-emeraldBg text-status-emerald'
+                    : 'bg-amber-100 text-amber-900 border border-amber-300'
                 }`}
               >
                 {invoice.status.toUpperCase()}
               </span>
               {invoice.paymentMethod && invoice.paymentMethod !== 'Pending' && (
-                <p className="text-[11px] text-atelier-muted mt-1 font-medium">
+                <p className="text-xs text-text-muted mt-1 font-medium">
                   Settled via {invoice.paymentMethod}
                   {invoice.utr && (
-                    <span className="block font-mono text-[10px] text-atelier-charcoal">
+                    <span className="block font-mono text-[10px] text-text-ink">
                       UTR: {invoice.utr}
                     </span>
                   )}
@@ -327,26 +332,26 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[340px]">
               <thead>
-                <tr className="border-b border-atelier-champagneBorder text-[10px] font-bold uppercase tracking-wider text-atelier-muted">
+                <tr className="border-b border-border-subtle text-[10px] font-bold uppercase tracking-wider text-text-muted">
                   <th className="py-2.5">Service / Treatment Description</th>
                   <th className="py-2.5 text-center">Qty</th>
                   <th className="py-2.5 text-right">Unit Price</th>
                   <th className="py-2.5 text-right">Total</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-atelier-champagneBorder/50">
+              <tbody className="divide-y divide-border-subtle/60">
                 {(invoice.items || []).map((item, idx) => (
                   <tr key={idx} className="text-xs">
-                    <td className="py-3 font-medium text-atelier-noir pr-2">
+                    <td className="py-3 font-medium text-text-ink pr-2">
                       {item.description}
                     </td>
-                    <td className="py-3 text-center text-atelier-muted font-medium">
+                    <td className="py-3 text-center text-text-muted font-medium">
                       {item.quantity}
                     </td>
-                    <td className="py-3 text-right text-atelier-charcoal font-medium">
+                    <td className="py-3 text-right text-text-secondary font-mono">
                       {currency}{Number(item.unitPrice).toLocaleString('en-IN')}
                     </td>
-                    <td className="py-3 text-right font-serif font-bold text-atelier-noir">
+                    <td className="py-3 text-right font-display font-bold text-text-ink">
                       {currency}{Number(item.amount).toLocaleString('en-IN')}
                     </td>
                   </tr>
@@ -356,11 +361,11 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
           </div>
 
           {/* Totals Section */}
-          <div className="pt-4 border-t border-atelier-champagneBorder flex flex-col sm:flex-row justify-between items-start gap-6">
+          <div className="pt-4 border-t border-border-subtle flex flex-col sm:flex-row justify-between items-start gap-6">
             {/* Dynamic UPI Payment QR Code Card */}
             {!isPaid ? (
-              <div className="p-4 rounded-2xl bg-atelier-blush/60 border border-atelier-rose200/80 flex items-center gap-4 max-w-sm">
-                <div className="bg-white p-2 rounded-xl shadow-xs border border-rose-100 shrink-0">
+              <div className="p-4 rounded-2xl bg-studio-canvas border border-border-subtle flex items-center gap-4 max-w-sm">
+                <div className="bg-white p-2.5 rounded-xl shadow-xs border border-border-subtle shrink-0">
                   <QRCodeSVG
                     value={upiUri}
                     size={90}
@@ -369,19 +374,19 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
                   />
                 </div>
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-atelier-rose600">
+                  <div className="flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-brand-wine">
                     <QrCode className="w-3 h-3" />
                     <span>Instant UPI Scan</span>
                   </div>
-                  <p className="text-[11px] font-semibold text-atelier-charcoal">
+                  <p className="text-xs font-semibold text-text-ink">
                     Scan with GPay / PhonePe / Paytm
                   </p>
-                  <p className="text-[10px] font-mono text-atelier-muted break-all">
+                  <p className="text-[10px] font-mono text-text-muted break-all">
                     {upiId}
                   </p>
                   <a
                     href={upiUri}
-                    className="no-print inline-flex items-center gap-1 text-[10px] font-bold text-atelier-rose600 hover:text-atelier-rose700 pt-0.5 underline"
+                    className="no-print inline-flex items-center gap-1 text-[11px] font-bold text-brand-wine hover:text-brand-wineHover pt-0.5 underline"
                   >
                     <Smartphone className="w-3 h-3" />
                     <span>Pay {currency}{Number(balanceDue).toLocaleString('en-IN')} on this Phone</span>
@@ -389,11 +394,11 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
                 </div>
               </div>
             ) : (
-              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center gap-3 text-emerald-800">
-                <ShieldCheck className="w-8 h-8 text-emerald-600 shrink-0" />
+              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center gap-3 text-emerald-800">
+                <ShieldCheck className="w-8 h-8 text-emerald-700 shrink-0" />
                 <div className="text-xs">
                   <p className="font-bold">Payment Settled</p>
-                  <p className="text-[11px] text-emerald-700">
+                  <p className="text-xs text-emerald-700">
                     Thank you! Your transaction is fully verified and cleared.
                   </p>
                 </div>
@@ -402,44 +407,44 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
 
             {/* Calculations Breakdown */}
             <div className="w-full sm:w-64 space-y-2 text-xs">
-              <div className="flex justify-between text-atelier-muted">
+              <div className="flex justify-between text-text-muted">
                 <span>Subtotal:</span>
-                <span className="font-semibold text-atelier-charcoal">
+                <span className="font-semibold text-text-secondary">
                   {currency}{Number(invoice.subtotal).toLocaleString('en-IN')}
                 </span>
               </div>
 
               {invoice.tip > 0 && (
-                <div className="flex justify-between text-atelier-muted">
+                <div className="flex justify-between text-text-muted">
                   <span>Artist Gratuity:</span>
-                  <span className="font-semibold text-atelier-charcoal">
+                  <span className="font-semibold text-text-secondary">
                     {currency}{Number(invoice.tip).toLocaleString('en-IN')}
                   </span>
                 </div>
               )}
 
               {invoice.depositDeducted > 0 && (
-                <div className="flex justify-between text-emerald-600 font-medium">
+                <div className="flex justify-between text-emerald-700 font-medium">
                   <span>Deposit Credited:</span>
                   <span>-{currency}{Number(invoice.depositDeducted).toLocaleString('en-IN')}</span>
                 </div>
               )}
 
               {invoice.giftCardDeducted > 0 && (
-                <div className="flex justify-between text-rose-600 font-medium">
+                <div className="flex justify-between text-brand-wine font-medium">
                   <span>Gift Voucher ({invoice.giftCardCode}):</span>
                   <span>-{currency}{Number(invoice.giftCardDeducted).toLocaleString('en-IN')}</span>
                 </div>
               )}
 
-              <div className="flex justify-between font-serif font-bold text-base text-atelier-noir pt-2 border-t border-atelier-champagneBorder">
+              <div className="flex justify-between font-display font-bold text-base text-text-ink pt-2 border-t border-border-subtle">
                 <span>Total Invoice:</span>
                 <span>{currency}{Number(invoice.total).toLocaleString('en-IN')}</span>
               </div>
 
-              <div className="flex justify-between items-baseline pt-1 text-atelier-rose600 font-bold">
+              <div className="flex justify-between items-baseline pt-1 text-brand-wine font-bold">
                 <span>Balance Due:</span>
-                <span className="text-2xl font-serif">
+                <span className="text-2xl font-display">
                   {currency}{Number(balanceDue).toLocaleString('en-IN')}
                 </span>
               </div>
@@ -447,25 +452,25 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
           </div>
 
           {/* Payment Instructions & Aftercare Footer */}
-          <div className="pt-6 border-t border-atelier-champagneBorder/80 space-y-3">
-            <div className="p-3.5 rounded-2xl bg-atelier-blush border border-atelier-rose200/60">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-atelier-rose600 block mb-1">
+          <div className="pt-6 border-t border-border-subtle space-y-3">
+            <div className="p-3.5 rounded-2xl bg-studio-canvas border border-border-subtle">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-brand-wine block mb-1">
                 Accepted Payment Methods
               </span>
-              <p className="text-xs font-medium text-atelier-charcoal leading-relaxed">
+              <p className="text-xs font-medium text-text-secondary leading-relaxed">
                 {paymentInstructions}
               </p>
             </div>
 
             {invoice.notes && (
-              <p className="text-center text-xs text-atelier-muted italic">
+              <p className="text-center text-xs text-text-muted italic">
                 "{invoice.notes}"
               </p>
             )}
 
-            <div className="text-center pt-2 border-t border-dashed border-stone-200 text-[10px] text-atelier-muted space-y-0.5">
-              <p className="font-semibold text-atelier-charcoal">
-                Luxury Gel Aftercare: Apply cuticle oil twice daily. Wear gloves for heavy household chores.
+            <div className="text-center pt-2 border-t border-dashed border-border-subtle text-xs text-text-muted space-y-0.5">
+              <p className="font-semibold text-text-secondary">
+                Bespoke Gel Aftercare: Apply cuticle oil twice daily. Wear gloves for household chores.
               </p>
               <p>For repairs or touch-ups, contact Sirii at {phone} or {email}.</p>
             </div>
@@ -474,41 +479,41 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
 
         {/* Payment Confirmation Drawer/Modal */}
         {showPayModal && (
-          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-atelier-noir/70 backdrop-blur-sm animate-fade-in">
-            <div className="bg-white rounded-3xl p-6 max-w-sm w-full border border-atelier-champagneBorder shadow-float space-y-4 text-xs">
-              <div className="flex items-center justify-between pb-2 border-b border-stone-100">
+          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-text-ink/70 backdrop-blur-sm">
+            <div className="bg-studio-surface rounded-3xl p-6 max-w-sm w-full border border-border-subtle shadow-studio space-y-4 text-xs font-sans">
+              <div className="flex items-center justify-between pb-2 border-b border-border-subtle">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                  <h3 className="font-serif italic font-bold text-base text-atelier-noir">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-700" />
+                  <h3 className="font-display font-semibold text-base text-text-ink">
                     Record Payment
                   </h3>
                 </div>
                 <button
                   onClick={() => setShowPayModal(false)}
-                  className="p-1 rounded-full text-stone-400 hover:text-stone-700"
+                  className="p-1 rounded-full text-text-muted hover:text-text-ink min-h-[36px] min-w-[36px] flex items-center justify-center"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="p-3 rounded-2xl bg-atelier-cream/60 space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-atelier-muted block">
+              <div className="p-3.5 rounded-2xl bg-studio-canvas border border-border-subtle space-y-1">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
                   Amount Received
                 </span>
-                <p className="font-serif italic font-bold text-2xl text-emerald-700">
+                <p className="font-display font-bold text-2xl text-emerald-800">
                   {currency}{Number(balanceDue).toLocaleString('en-IN')}
                 </p>
-                <p className="text-[11px] text-stone-600">Client: {invoice.clientName}</p>
+                <p className="text-xs text-text-secondary">Client: {invoice.clientName}</p>
               </div>
 
               <div>
-                <label className="block font-semibold text-atelier-charcoal mb-1">
+                <label className="block font-semibold text-text-secondary mb-1">
                   Payment Mode *
                 </label>
                 <select
                   value={paymentMethodSelect}
                   onChange={(e) => setPaymentMethodSelect(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-atelier-champagneBorder bg-white outline-none text-base sm:text-xs font-semibold"
+                  className="w-full px-3 py-2.5 rounded-xl border border-border-subtle bg-studio-surface outline-none text-base sm:text-xs font-semibold"
                 >
                   <option value="UPI (Google Pay)">UPI (Google Pay)</option>
                   <option value="UPI (PhonePe)">UPI (PhonePe)</option>
@@ -521,7 +526,7 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
               </div>
 
               <div>
-                <label className="block font-semibold text-atelier-charcoal mb-1">
+                <label className="block font-semibold text-text-secondary mb-1">
                   UPI UTR / Reference No. (Optional)
                 </label>
                 <input
@@ -529,7 +534,7 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
                   placeholder="e.g. UPI/331209481920"
                   value={utrNumber}
                   onChange={(e) => setUtrNumber(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-atelier-champagneBorder bg-white outline-none text-base sm:text-xs font-mono"
+                  className="w-full px-3 py-2.5 rounded-xl border border-border-subtle bg-studio-surface outline-none text-base sm:text-xs font-mono"
                 />
               </div>
 
@@ -537,14 +542,14 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for choosing Nai
                 <button
                   type="button"
                   onClick={() => setShowPayModal(false)}
-                  className="px-3.5 py-2 rounded-xl border border-stone-200 text-stone-600 font-semibold"
+                  className="px-3.5 py-2 rounded-xl border border-border-subtle text-text-secondary hover:bg-studio-canvas font-semibold min-h-[40px]"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleConfirmPaid}
-                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-soft"
+                  className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold shadow-studio min-h-[40px]"
                 >
                   Confirm Paid
                 </button>

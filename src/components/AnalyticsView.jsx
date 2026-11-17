@@ -10,15 +10,17 @@ import {
   Award,
   ArrowUpRight,
   PieChart,
-  CheckCircle2
+  CheckCircle2,
+  Wallet,
+  Clock
 } from 'lucide-react';
 
 export default function AnalyticsView({
-  clients,
-  appointments,
-  invoices,
-  services,
-  settings
+  clients = [],
+  appointments = [],
+  invoices = [],
+  services = [],
+  settings = {}
 }) {
   const currency = settings?.currency || '₹';
 
@@ -42,7 +44,7 @@ export default function AnalyticsView({
     (inv.items || []).forEach((item) => {
       // Find matching service
       const match = services.find((s) => s.name === item.description);
-      const cat = match ? match.category : 'Nail Art / Custom';
+      const cat = match ? match.category : 'Bespoke Nail Art / Custom';
       categoryMap[cat] = (categoryMap[cat] || 0) + (Number(item.amount) || 0);
     });
   });
@@ -52,44 +54,44 @@ export default function AnalyticsView({
   // 5. VIP Spender Leaderboard
   const sortedClients = [...clients].sort((a, b) => (b.totalSpent || 0) - (a.totalSpent || 0));
 
-  // 6. Recent Months Performance Mock / Projection
+  // 6. Recent Months Performance Run-rate
   const monthlyRunRate = Math.round((totalRevenue / 3) * 1.2) || 4500;
 
   return (
-    <div className="space-y-8 animate-fade-in pb-16">
+    <div className="space-y-8 pb-16 font-sans">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-atelier-rose100 text-atelier-rose600 text-xs font-semibold mb-2">
-            <TrendingUp className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-subtle text-brand-wine text-xs font-semibold mb-2 border border-border-subtle">
+            <TrendingUp className="w-3.5 h-3.5 text-brand-wine" />
             <span>Business Intelligence & Performance</span>
           </div>
-          <h2 className="font-serif italic font-bold text-2xl text-atelier-noir">
+          <h2 className="font-display font-semibold text-2xl sm:text-3xl text-text-ink tracking-tight">
             Studio Financials & Growth Analytics
           </h2>
-          <p className="text-xs text-atelier-muted">
-            Track average client spend, recurring appointment retention, and export financial records.
+          <p className="text-xs text-text-muted mt-1 max-w-xl">
+            Track average client ticket sizes, recurring appointment retention, treatment margins, and export financial records.
           </p>
         </div>
 
         {/* Quick CSV Export */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <a
             href="/api/backup/invoices-csv"
             download
-            className="px-4 py-2 rounded-xl bg-white border border-atelier-champagneBorder hover:border-atelier-rose300 text-atelier-charcoal text-xs font-semibold shadow-sm transition-all flex items-center gap-2"
+            className="px-4 py-2.5 rounded-xl bg-studio-surface border border-border-subtle hover:border-brand-wine text-text-secondary hover:text-text-ink text-xs font-semibold shadow-xs transition-all flex items-center gap-2 min-h-[44px]"
           >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+            <FileSpreadsheet className="w-4 h-4 text-emerald-700" />
             <span>Export CSV for Taxes</span>
           </a>
 
           <a
             href="/api/backup/export"
             download
-            className="px-4 py-2 rounded-xl bg-atelier-noir hover:bg-atelier-charcoal text-white text-xs font-semibold shadow-soft transition-all flex items-center gap-2"
+            className="px-4 py-2.5 rounded-xl bg-text-ink hover:bg-neutral-800 text-white text-xs font-semibold shadow-studio transition-all flex items-center gap-2 min-h-[44px]"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>Backup Data</span>
+            <Download className="w-4 h-4" />
+            <span>Backup Studio Data</span>
           </a>
         </div>
       </div>
@@ -97,65 +99,65 @@ export default function AnalyticsView({
       {/* 4 Core Financial Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Revenue */}
-        <div className="bg-white rounded-3xl p-5 border border-atelier-champagneBorder shadow-sm space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-atelier-muted block">
+        <div className="bg-studio-surface rounded-3xl p-5 border border-border-subtle shadow-xs space-y-2">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
             Collected Studio Revenue
           </span>
           <div className="flex items-baseline gap-1">
-            <span className="text-xs text-atelier-muted font-bold">{currency}</span>
-            <span className="font-serif font-bold text-3xl text-atelier-noir">
+            <span className="text-xs text-text-muted font-bold">{currency}</span>
+            <span className="font-display font-bold text-3xl text-text-ink">
               {totalRevenue.toLocaleString('en-IN')}
             </span>
           </div>
-          <p className="text-[11px] text-emerald-600 font-medium flex items-center gap-1">
+          <p className="text-xs text-emerald-700 font-medium flex items-center gap-1">
             <ArrowUpRight className="w-3.5 h-3.5" />
-            <span>{paidInvoices.length} paid invoices cleared</span>
+            <span>{paidInvoices.length} paid invoices settled</span>
           </p>
         </div>
 
         {/* Average Order Value */}
-        <div className="bg-white rounded-3xl p-5 border border-atelier-champagneBorder shadow-sm space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-atelier-muted block">
+        <div className="bg-studio-surface rounded-3xl p-5 border border-border-subtle shadow-xs space-y-2">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
             Average Ticket Size (AOV)
           </span>
           <div className="flex items-baseline gap-1">
-            <span className="text-xs text-atelier-muted font-bold">{currency}</span>
-            <span className="font-serif font-bold text-3xl text-atelier-noir">
+            <span className="text-xs text-text-muted font-bold">{currency}</span>
+            <span className="font-display font-bold text-3xl text-brand-wine">
               {Number(avgTicket).toLocaleString('en-IN')}
             </span>
           </div>
-          <p className="text-[11px] text-atelier-rose600 font-medium">
-            Per client appointment session
+          <p className="text-xs text-brand-wine font-medium">
+            Per appointment session
           </p>
         </div>
 
         {/* Client Retention */}
-        <div className="bg-white rounded-3xl p-5 border border-atelier-champagneBorder shadow-sm space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-atelier-muted block">
+        <div className="bg-studio-surface rounded-3xl p-5 border border-border-subtle shadow-xs space-y-2">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
             Client Rebooking Rate
           </span>
           <div className="flex items-baseline gap-1">
-            <span className="font-serif font-bold text-3xl text-atelier-rose600">
+            <span className="font-display font-bold text-3xl text-text-ink">
               {retentionRate}%
             </span>
           </div>
-          <p className="text-[11px] text-atelier-muted font-medium">
+          <p className="text-xs text-text-muted font-medium">
             {repeatClients.length} of {clients.length} clients are repeat visitors
           </p>
         </div>
 
         {/* Projected Monthly Run-rate */}
-        <div className="bg-white rounded-3xl p-5 border border-atelier-champagneBorder shadow-sm space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-atelier-muted block">
+        <div className="bg-studio-surface rounded-3xl p-5 border border-border-subtle shadow-xs space-y-2">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted block">
             Projected Monthly Run-Rate
           </span>
           <div className="flex items-baseline gap-1">
-            <span className="text-xs text-atelier-muted font-bold">{currency}</span>
-            <span className="font-serif font-bold text-3xl text-emerald-700">
+            <span className="text-xs text-text-muted font-bold">{currency}</span>
+            <span className="font-display font-bold text-3xl text-emerald-800">
               {monthlyRunRate.toLocaleString('en-IN')}
             </span>
           </div>
-          <p className="text-[11px] text-amber-600 font-medium">
+          <p className="text-xs text-amber-700 font-medium">
             +{currency}{pendingRevenue.toLocaleString('en-IN')} pending balances
           </p>
         </div>
@@ -164,12 +166,12 @@ export default function AnalyticsView({
       {/* Grid: Category Breakdown (Left) & Top Spenders Leaderboard (Right) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Revenue by Service Category */}
-        <div className="bg-white rounded-3xl p-6 sm:p-7 border border-atelier-champagneBorder shadow-sm space-y-5">
+        <div className="bg-studio-surface rounded-3xl p-6 sm:p-7 border border-border-subtle shadow-xs space-y-5">
           <div>
-            <h3 className="font-serif italic font-bold text-lg text-atelier-noir">
+            <h3 className="font-display font-semibold text-lg text-text-ink">
               Revenue by Service Category
             </h3>
-            <p className="text-xs text-atelier-muted">
+            <p className="text-xs text-text-muted">
               Discover which treatments generate the highest revenue for Nails by Sirii.
             </p>
           </div>
@@ -181,14 +183,14 @@ export default function AnalyticsView({
               return (
                 <div key={category} className="space-y-1.5 text-xs">
                   <div className="flex items-center justify-between font-semibold">
-                    <span className="text-atelier-charcoal">{category}</span>
-                    <span className="text-atelier-noir font-serif font-bold">
+                    <span className="text-text-secondary">{category}</span>
+                    <span className="text-text-ink font-display font-bold">
                       {currency}{Number(amount).toLocaleString('en-IN')} ({pct}%)
                     </span>
                   </div>
-                  <div className="w-full bg-atelier-cream h-2.5 rounded-full overflow-hidden">
+                  <div className="w-full bg-studio-canvas h-2.5 rounded-full overflow-hidden border border-border-subtle/50">
                     <div
-                      className="bg-gradient-to-r from-atelier-rose400 to-atelier-rose600 h-full rounded-full transition-all duration-500"
+                      className="bg-brand-wine h-full rounded-full transition-all duration-500"
                       style={{ width: `${Math.max(5, pct)}%` }}
                     />
                   </div>
@@ -197,60 +199,60 @@ export default function AnalyticsView({
             })}
           </div>
 
-          <div className="p-4 rounded-2xl bg-atelier-rose50/60 border border-atelier-rose200/60 text-xs text-atelier-charcoal leading-relaxed">
-            <p className="font-semibold text-atelier-noir mb-0.5">Studio Performance Insight:</p>
-            <p className="text-atelier-muted text-[11px]">
-              Sculpted Gel-X and 3D Hand-Painted Nail Art tier add-ons provide your highest margins, boosting the average ticket price by up to 45%.
+          <div className="p-4 rounded-2xl bg-studio-canvas border border-border-subtle text-xs text-text-secondary leading-relaxed">
+            <p className="font-semibold text-text-ink mb-0.5">Studio Performance Insight:</p>
+            <p className="text-text-muted text-xs">
+              Natural Nail Architecture (BIAB) and 3D Hand-Painted Nail Art tier add-ons provide the highest margins, boosting the average ticket price by up to 45%.
             </p>
           </div>
         </div>
 
         {/* Top VIP Clients Spender Leaderboard */}
-        <div className="bg-white rounded-3xl p-6 sm:p-7 border border-atelier-champagneBorder shadow-sm space-y-5">
+        <div className="bg-studio-surface rounded-3xl p-6 sm:p-7 border border-border-subtle shadow-xs space-y-5">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-serif italic font-bold text-lg text-atelier-noir">
+              <h3 className="font-display font-semibold text-lg text-text-ink">
                 Top Client Spenders & Loyalty
               </h3>
-              <p className="text-xs text-atelier-muted">
+              <p className="text-xs text-text-muted">
                 Your highest-value studio clients and their preferred aesthetics.
               </p>
             </div>
-            <Award className="w-5 h-5 text-atelier-gold" />
+            <Award className="w-5 h-5 text-accent-gold" />
           </div>
 
           <div className="space-y-3 pt-1">
             {sortedClients.slice(0, 5).map((client, index) => (
               <div
                 key={client.id}
-                className="p-3.5 rounded-2xl bg-atelier-cream/50 border border-atelier-champagneBorder flex items-center justify-between gap-3 text-xs"
+                className="p-3.5 rounded-2xl bg-studio-canvas border border-border-subtle flex items-center justify-between gap-3 text-xs"
               >
                 <div className="flex items-center gap-3">
-                  <span className="w-6 h-6 rounded-full bg-atelier-rose100 text-atelier-rose600 font-bold flex items-center justify-center text-xs shrink-0 font-serif">
+                  <span className="w-7 h-7 rounded-full bg-studio-surface border border-border-subtle text-brand-wine font-bold flex items-center justify-center text-xs shrink-0 font-display">
                     {index + 1}
                   </span>
                   <div>
                     <div className="flex items-center gap-1.5">
-                      <span className="font-serif italic font-bold text-sm text-atelier-noir">
+                      <span className="font-display font-semibold text-sm text-text-ink">
                         {client.name}
                       </span>
                       {client.vip && (
-                        <span className="px-1.5 py-0.2 rounded-md text-[9px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                        <span className="px-2 py-0.5 rounded-md text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
                           VIP
                         </span>
                       )}
                     </div>
-                    <span className="text-[11px] text-atelier-muted block">
+                    <span className="text-xs text-text-muted block">
                       {client.preferredShape || 'Almond'} • {client.totalVisits || 1} sessions
                     </span>
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <span className="font-serif font-bold text-atelier-rose600 text-base block">
+                  <span className="font-display font-bold text-brand-wine text-base block">
                     {currency}{(client.totalSpent || 0).toLocaleString('en-IN')}
                   </span>
-                  <span className="text-[10px] text-atelier-muted block">Lifetime Spend</span>
+                  <span className="text-[10px] text-text-muted block">Lifetime Spend</span>
                 </div>
               </div>
             ))}
@@ -260,4 +262,3 @@ export default function AnalyticsView({
     </div>
   );
 }
-

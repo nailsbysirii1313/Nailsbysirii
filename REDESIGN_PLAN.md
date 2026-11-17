@@ -97,17 +97,18 @@
   - `ClientDetailDrawer.jsx`: Redesigned with `studio-*` tokens, `getKolkataTodayString()`, loyalty rewards tracker, style profile, moodboard, and aftercare launcher.
   - `ClientsView.jsx`: Redesigned with `studio-*` tokens, 16px search input, VIP/Shape filters, and 1-tap Book/Bill actions.
   - `AppointmentsView.jsx`: Redesigned with `studio-*` tokens, `getKolkataTodayString()`, 12:00–19:00 operating hours timeline, Month Calendar with day detail panel, emergency repairs queue, and 1-tap phone alerts / billing.
-- [ ] **Batch 4B: Invoices & Billing, Public Invoices, Gift Cards, Financials & Analytics (NEXT)**:
-  - `InvoicesView.jsx`: Redesign invoice list, status badges (Paid, Pending, Overdue), and payment breakdown.
-  - `NewInvoiceModal.jsx`: Harmonize invoice creator with advance credit deductions and custom set line items.
-  - `PublicInvoiceView.jsx`: Upgrade digital bill presentation with UPI QR code and payment verification.
-  - `GiftCardsView.jsx`: Redesign voucher creation, redemption tracking, and luxury gift vouchers.
-  - `AnalyticsView.jsx`: Redesign revenue metrics, service breakdown, retention charts, and CSV export.
-- [ ] **Batch 4C: Inventory & Supplies, Services Menu, Nail Set Customizer**:
-  - `InventoryView.jsx`: Stock management, category chips, restock thresholds.
-  - `ServicesView.jsx`: Service catalog CRUD, pricing, duration, categories.
-  - `NailCustomizerView.jsx`: Studio customizer with SVG silhouettes and direct booking handoff.
-- [ ] **Batch 4D: Phone Reminders & NTFY, Settings, Navigation & Layout**:
+- [x] **Batch 4B: Invoices & Billing, Public Invoices, Gift Cards, Financials & Analytics (COMPLETED & TESTED)**:
+  - `InvoicesView.jsx`: Redesigned invoice list, financial overview in ₹, search, status pills (Paid / Unpaid), and WhatsApp dispatch.
+  - `NewInvoiceModal.jsx`: Harmonized invoice creator with advance credit deductions, gift voucher deductions, quick service picker, and custom set line items.
+  - `InvoiceModal.jsx`: Redesigned luxury printable digital receipt with dynamic UPI QR code, copy receipt text, and payment logging with UTR.
+  - `PublicInvoiceView.jsx`: Upgraded client-facing bill presentation with dynamic UPI QR code (`upi://pay`), instant payment intent, aftercare principles, and owner-only "Mark Settled" gate.
+  - `GiftCardsView.jsx`: Redesigned voucher creation, 4 stationery themes, live outstanding balances, instant in-studio checkout deduction, and printable vouchers.
+  - `AnalyticsView.jsx`: Redesigned studio financial metrics in ₹, average ticket size, client retention rate, category breakdown bars, top spender leaderboard, and tax CSV export.
+- [x] **Batch 4C: Inventory & Supplies, Services Menu, Nail Set Customizer (COMPLETED & TESTED)**:
+  - `InventoryView.jsx`: Stock management, category chips, restock thresholds, OSHA/Board hygiene checklist with reset/toggle, low stock alert trigger, 16px inputs.
+  - `ServicesView.jsx`: Service catalog CRUD, pricing, duration, categories, popular tags, 16px inputs.
+  - `NailCustomizerView.jsx`: Studio customizer with SVG silhouettes, length scaling, finish preview, direct booking & invoice handoffs, 16px inputs.
+- [ ] **Batch 4D: Phone Reminders & NTFY, Settings, Navigation & Layout (NEXT)**:
   - `RemindersView.jsx`: Mobile push alert setup with QR code, live dispatcher, dispatch history.
   - `SettingsView.jsx`: Studio hours, UPI ID, policies, profile management.
   - `Sidebar.jsx`, `Header.jsx`, `DashboardView.jsx`: Align Studio Hub layout and Today dashboard with `StudioTodayPilot`.

@@ -7,8 +7,8 @@ export default function NewInvoiceModal({
   isOpen,
   onClose,
   onSave,
-  clients,
-  services,
+  clients = [],
+  services = [],
   preselectedAppointment = null,
   preselectedClient = null,
   invoiceToEdit = null
@@ -39,8 +39,8 @@ export default function NewInvoiceModal({
       setClientName(invoiceToEdit.clientName || '');
       setClientPhone(invoiceToEdit.clientPhone || '');
       setClientEmail(invoiceToEdit.clientEmail || '');
-      setDate(invoiceToEdit.date || new Date().toISOString().split('T')[0]);
-      setDueDate(invoiceToEdit.dueDate || new Date().toISOString().split('T')[0]);
+      setDate(invoiceToEdit.date || getKolkataTodayString());
+      setDueDate(invoiceToEdit.dueDate || getKolkataTodayString());
       setStatus(invoiceToEdit.status || 'Unpaid');
       setPaymentMethod(invoiceToEdit.paymentMethod || 'Pending UPI');
       setItems(invoiceToEdit.items || []);
@@ -76,11 +76,9 @@ export default function NewInvoiceModal({
           lineItems = [...lineItems, ...addonItems];
         }
       } else {
-        let totalAddonsPrice = 0;
         const addonItems = (apt.addonServiceNames || []).map((addon) => {
           const foundAddon = (services || []).find((s) => s.name === addon);
           const addonPrice = Number(foundAddon?.price || 500);
-          totalAddonsPrice += addonPrice;
           return {
             description: addon,
             quantity: 1,
@@ -89,47 +87,40 @@ export default function NewInvoiceModal({
           };
         });
 
-        const baseEstimate = apt.price
-          ? Math.max(300, Number(apt.price) - totalAddonsPrice)
-          : (() => {
-              const foundSrv = (services || []).find((s) => s.id === apt.serviceId || s.name === apt.serviceName);
-              return Number(foundSrv?.price || 1400);
-            })();
-
-        lineItems = [
-          {
-            description: apt.serviceName || 'Signature Nail Treatment',
-            quantity: 1,
-            unitPrice: baseEstimate,
-            amount: baseEstimate
-          },
-          ...addonItems
-        ];
+        const mainPrice = Number(apt.price) || 2200;
+        const mainItem = {
+          description: apt.serviceName || 'Nail Architecture & Art Session',
+          quantity: 1,
+          unitPrice: mainPrice,
+          amount: mainPrice
+        };
+        lineItems = [mainItem, ...addonItems];
       }
 
-      setItems(lineItems);
-      setDepositDeducted(Number(apt.depositPaid || apt.advancePaid) || 0);
+      setItems(lineItems.length > 0 ? lineItems : [
+        { description: apt.serviceName || 'Studio Treatment', quantity: 1, unitPrice: Number(apt.price) || 2200, amount: Number(apt.price) || 2200 }
+      ]);
+
+      const advanceAmt = Number(apt.depositPaid || apt.advancePaid) || 0;
+      setDepositDeducted(advanceAmt);
+      setDate(apt.date || getKolkataTodayString());
+      setDueDate(apt.date || getKolkataTodayString());
     } else if (preselectedClient) {
-      setClientId(preselectedClient.id);
-      setClientName(preselectedClient.name);
-      setClientPhone(preselectedClient.phone);
+      setClientId(preselectedClient.id || '');
+      setClientName(preselectedClient.name || '');
+      setClientPhone(preselectedClient.phone || '');
       setClientEmail(preselectedClient.email || '');
-    } else if (clients.length > 0 && !clientId) {
-      setClientId(clients[0].id);
-      setClientName(clients[0].name);
-      setClientPhone(clients[0].phone);
-      setClientEmail(clients[0].email || '');
     }
-  }, [isOpen, preselectedAppointment, preselectedClient, invoiceToEdit, clients]);
+  }, [invoiceToEdit, preselectedAppointment, preselectedClient, clients, services]);
 
   if (!isOpen) return null;
 
-  const handleClientChange = (id) => {
-    setClientId(id);
-    const client = clients.find((c) => c.id === id);
+  const handleClientChange = (selectedId) => {
+    setClientId(selectedId);
+    const client = clients.find((c) => c.id === selectedId);
     if (client) {
       setClientName(client.name);
-      setClientPhone(client.phone);
+      setClientPhone(client.phone || '');
       setClientEmail(client.email || '');
     }
   };
@@ -138,9 +129,9 @@ export default function NewInvoiceModal({
     const updated = [...items];
     updated[index][field] = value;
     if (field === 'quantity' || field === 'unitPrice') {
-      const qty = Number(updated[index].quantity) || 0;
-      const price = Number(updated[index].unitPrice) || 0;
-      updated[index].amount = qty * price;
+      const q = Number(field === 'quantity' ? value : updated[index].quantity) || 1;
+      const p = Number(field === 'unitPrice' ? value : updated[index].unitPrice) || 0;
+      updated[index].amount = q * p;
     }
     setItems(updated);
   };
@@ -207,26 +198,27 @@ export default function NewInvoiceModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-atelier-noir/50 backdrop-blur-sm animate-fade-in overflow-y-auto">
-      <div className="bg-white rounded-t-3xl sm:rounded-3xl max-w-2xl w-full p-5 sm:p-8 shadow-float border-t sm:border border-atelier-champagneBorder relative max-h-[94vh] overflow-y-auto">
-        <div className="w-10 h-1.5 rounded-full bg-stone-300 mx-auto mb-3 sm:hidden" />
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-text-ink/60 backdrop-blur-sm overflow-y-auto">
+      <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-2xl w-full p-5 sm:p-8 shadow-studio border-t sm:border border-border-subtle relative max-h-[94vh] overflow-y-auto font-sans">
+        <div className="w-10 h-1.5 rounded-full bg-border-subtle mx-auto mb-3 sm:hidden" />
         <button
           onClick={onClose}
-          className="absolute top-4 sm:top-5 right-4 sm:right-5 p-2 rounded-full text-atelier-muted hover:text-atelier-noir hover:bg-atelier-cream transition-colors"
+          className="absolute top-4 sm:top-5 right-4 sm:right-5 p-2 rounded-full text-text-muted hover:text-text-ink hover:bg-studio-canvas transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center"
+          aria-label="Close"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="mb-6">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-atelier-rose100 text-atelier-rose600 text-xs font-semibold mb-2">
-            <Receipt className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-subtle text-brand-wine text-xs font-semibold mb-2 border border-border-subtle">
+            <Receipt className="w-3.5 h-3.5 text-brand-wine" />
             <span>{invoiceToEdit ? 'Edit Invoice' : 'New Client Invoice'}</span>
           </div>
-          <h3 className="font-serif italic font-bold text-2xl text-atelier-noir">
+          <h3 className="font-display font-semibold text-2xl text-text-ink">
             {invoiceToEdit ? 'Update Invoice' : 'Create Studio Invoice'}
           </h3>
-          <p className="text-xs text-atelier-muted mt-1">
-            Issue an itemized receipt in Rupees (₹) with UPI dynamic QR code, WhatsApp dispatch, and PDF print.
+          <p className="text-xs text-text-muted mt-1">
+            Issue an itemized receipt in Rupees (₹) with UPI dynamic QR code, WhatsApp dispatch, and advance credit deductions.
           </p>
         </div>
 
@@ -234,15 +226,16 @@ export default function NewInvoiceModal({
           {/* Client & Date Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="sm:col-span-1">
-              <label className="block font-semibold text-atelier-charcoal mb-1">
+              <label className="block font-semibold text-text-secondary mb-1">
                 Client *
               </label>
               {clients.length > 0 ? (
                 <select
                   value={clientId}
                   onChange={(e) => handleClientChange(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none text-base sm:text-xs font-medium"
+                  className="w-full px-3 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs font-medium"
                 >
+                  <option value="">Select client...</option>
                   {clients.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.name}
@@ -255,13 +248,13 @@ export default function NewInvoiceModal({
                   required
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-atelier-champagneBorder text-base sm:text-xs"
+                  className="w-full px-3 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas text-base sm:text-xs"
                 />
               )}
             </div>
 
             <div>
-              <label className="block font-semibold text-atelier-charcoal mb-1">
+              <label className="block font-semibold text-text-secondary mb-1">
                 Invoice Date *
               </label>
               <input
@@ -269,12 +262,12 @@ export default function NewInvoiceModal({
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none text-base sm:text-xs"
+                className="w-full px-3 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs"
               />
             </div>
 
             <div>
-              <label className="block font-semibold text-atelier-charcoal mb-1">
+              <label className="block font-semibold text-text-secondary mb-1">
                 Due Date *
               </label>
               <input
@@ -282,16 +275,16 @@ export default function NewInvoiceModal({
                 required
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none text-base sm:text-xs"
+                className="w-full px-3 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs"
               />
             </div>
           </div>
 
           {/* Quick Service Picker Dropdown */}
           {services && services.length > 0 && (
-            <div className="p-3 rounded-2xl bg-atelier-cream/40 border border-atelier-champagneBorder/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div className="flex items-center gap-1.5 text-atelier-charcoal font-semibold">
-                <Tag className="w-3.5 h-3.5 text-atelier-rose600" />
+            <div className="p-3.5 rounded-2xl bg-studio-canvas border border-border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div className="flex items-center gap-1.5 text-text-ink font-semibold">
+                <Tag className="w-3.5 h-3.5 text-brand-wine" />
                 <span>Quick-Add from Menu:</span>
               </div>
               <select
@@ -302,7 +295,7 @@ export default function NewInvoiceModal({
                   }
                 }}
                 defaultValue=""
-                className="px-3 py-1.5 rounded-xl border border-atelier-champagneBorder bg-white outline-none text-base sm:text-xs font-medium"
+                className="px-3 py-2 rounded-xl border border-border-subtle bg-studio-surface outline-none text-base sm:text-xs font-medium"
               >
                 <option value="" disabled>Select service to add...</option>
                 {services.map((s) => (
@@ -315,15 +308,15 @@ export default function NewInvoiceModal({
           )}
 
           {/* Line Items Table */}
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-atelier-noir">
+              <span className="font-semibold text-text-ink">
                 Itemized Services & Retail Items
               </span>
               <button
                 type="button"
                 onClick={() => addItem('', 0)}
-                className="text-xs font-semibold text-atelier-rose600 hover:text-atelier-rose500 flex items-center gap-1"
+                className="text-xs font-semibold text-brand-wine hover:text-brand-wineHover flex items-center gap-1 min-h-[36px]"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Item</span>
@@ -334,7 +327,7 @@ export default function NewInvoiceModal({
               {items.map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center gap-2 p-2.5 bg-atelier-cream/60 rounded-xl border border-atelier-champagneBorder"
+                  className="flex items-center gap-2 p-2.5 bg-studio-canvas rounded-xl border border-border-subtle"
                 >
                   <input
                     type="text"
@@ -342,7 +335,7 @@ export default function NewInvoiceModal({
                     placeholder="Item or service description"
                     value={item.description}
                     onChange={(e) => handleItemChange(idx, 'description', e.target.value)}
-                    className="flex-1 px-2.5 py-1.5 rounded-lg border border-atelier-champagneBorder bg-white outline-none focus:border-atelier-rose400 text-base sm:text-xs"
+                    className="flex-1 px-3 py-2 rounded-lg border border-border-subtle bg-studio-surface outline-none focus:border-brand-wine text-base sm:text-xs"
                   />
                   <div className="w-16">
                     <input
@@ -352,7 +345,7 @@ export default function NewInvoiceModal({
                       placeholder="Qty"
                       value={item.quantity}
                       onChange={(e) => handleItemChange(idx, 'quantity', e.target.value)}
-                      className="w-full px-2 py-1.5 rounded-lg border border-atelier-champagneBorder bg-white outline-none text-center text-base sm:text-xs"
+                      className="w-full px-2 py-2 rounded-lg border border-border-subtle bg-studio-surface outline-none text-center text-base sm:text-xs"
                     />
                   </div>
                   <div className="w-24">
@@ -364,17 +357,18 @@ export default function NewInvoiceModal({
                       placeholder="Price"
                       value={item.unitPrice}
                       onChange={(e) => handleItemChange(idx, 'unitPrice', e.target.value)}
-                      className="w-full px-2 py-1.5 rounded-lg border border-atelier-champagneBorder bg-white outline-none text-right text-base sm:text-xs"
+                      className="w-full px-2 py-2 rounded-lg border border-border-subtle bg-studio-surface outline-none text-right text-base sm:text-xs font-mono"
                     />
                   </div>
-                  <span className="w-20 font-serif font-bold text-atelier-noir text-right text-xs pr-1">
+                  <span className="w-20 font-display font-bold text-text-ink text-right text-xs pr-1">
                     ₹{Number(item.amount).toLocaleString('en-IN')}
                   </span>
                   <button
                     type="button"
                     onClick={() => removeItem(idx)}
                     disabled={items.length <= 1}
-                    className="p-1 text-atelier-muted hover:text-red-500 disabled:opacity-30 transition-colors"
+                    className="p-1.5 text-text-muted hover:text-rose-600 disabled:opacity-30 transition-colors"
+                    aria-label="Remove item"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -384,34 +378,34 @@ export default function NewInvoiceModal({
 
             {/* Quick Preset Buttons in Rupees */}
             <div className="flex flex-wrap items-center gap-1.5 pt-1">
-              <span className="text-[10px] text-atelier-muted uppercase font-bold tracking-wider mr-1">
+              <span className="text-[10px] text-text-muted uppercase font-bold tracking-wider mr-1">
                 Quick Add:
               </span>
               <button
                 type="button"
                 onClick={() => addItem('Organic Botanical Cuticle Oil Roller (Retail)', 950)}
-                className="px-2 py-1 rounded-md bg-white border border-atelier-champagneBorder hover:border-atelier-rose300 text-[10px] font-medium text-atelier-charcoal"
+                className="px-2.5 py-1 rounded-lg bg-studio-surface border border-border-subtle hover:border-brand-wine text-[11px] font-medium text-text-secondary"
               >
                 + Cuticle Oil (₹950)
               </button>
               <button
                 type="button"
                 onClick={() => addItem('Custom 3D Jewel / Swarovski Crystals', 1500)}
-                className="px-2 py-1 rounded-md bg-white border border-atelier-champagneBorder hover:border-atelier-rose300 text-[10px] font-medium text-atelier-charcoal"
+                className="px-2.5 py-1 rounded-lg bg-studio-surface border border-border-subtle hover:border-brand-wine text-[11px] font-medium text-text-secondary"
               >
                 + Crystals (₹1,500)
               </button>
               <button
                 type="button"
                 onClick={() => addItem('Steam Gel Soak-Off & Rebalance', 700)}
-                className="px-2 py-1 rounded-md bg-white border border-atelier-champagneBorder hover:border-atelier-rose300 text-[10px] font-medium text-atelier-charcoal"
+                className="px-2.5 py-1 rounded-lg bg-studio-surface border border-border-subtle hover:border-brand-wine text-[11px] font-medium text-text-secondary"
               >
                 + Removal (₹700)
               </button>
               <button
                 type="button"
                 onClick={() => addItem('Velvet Cat-Eye & Glaze Chrome Finish', 600)}
-                className="px-2 py-1 rounded-md bg-white border border-atelier-champagneBorder hover:border-atelier-rose300 text-[10px] font-medium text-atelier-charcoal"
+                className="px-2.5 py-1 rounded-lg bg-studio-surface border border-border-subtle hover:border-brand-wine text-[11px] font-medium text-text-secondary"
               >
                 + Glaze (₹600)
               </button>
@@ -419,17 +413,17 @@ export default function NewInvoiceModal({
           </div>
 
           {/* Financial Breakdown & Status */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-atelier-champagneBorder/60">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-border-subtle">
             {/* Status & Method */}
             <div className="space-y-3">
               <div>
-                <label className="block font-semibold text-atelier-charcoal mb-1">
+                <label className="block font-semibold text-text-secondary mb-1">
                   Payment Status
                 </label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 outline-none text-base sm:text-xs font-semibold"
+                  className="w-full px-3 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas outline-none text-base sm:text-xs font-semibold"
                 >
                   <option value="Unpaid">Unpaid / Balance Due</option>
                   <option value="Paid">Paid in Full</option>
@@ -438,13 +432,13 @@ export default function NewInvoiceModal({
               </div>
 
               <div>
-                <label className="block font-semibold text-atelier-charcoal mb-1">
+                <label className="block font-semibold text-text-secondary mb-1">
                   Payment Method
                 </label>
                 <select
                   value={paymentMethod}
                   onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 outline-none text-base sm:text-xs font-medium"
+                  className="w-full px-3 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas outline-none text-base sm:text-xs font-medium"
                 >
                   <option value="Pending UPI">Pending UPI</option>
                   <option value="UPI (Google Pay)">UPI (Google Pay)</option>
@@ -459,16 +453,16 @@ export default function NewInvoiceModal({
             </div>
 
             {/* Tip, Deposit & Calculations */}
-            <div className="p-4 rounded-2xl bg-atelier-blush border border-atelier-rose200/80 space-y-2">
+            <div className="p-4 rounded-2xl bg-studio-canvas border border-border-subtle space-y-2">
               <div className="flex justify-between text-xs">
-                <span className="text-atelier-muted">Subtotal:</span>
-                <span className="font-semibold text-atelier-noir">
+                <span className="text-text-muted">Subtotal:</span>
+                <span className="font-semibold text-text-ink">
                   ₹{Number(subtotal).toLocaleString('en-IN')}
                 </span>
               </div>
 
               <div className="flex items-center justify-between text-xs">
-                <span className="text-atelier-muted">Tip (₹):</span>
+                <span className="text-text-muted">Tip (₹):</span>
                 <div className="w-24">
                   <input
                     type="number"
@@ -477,13 +471,13 @@ export default function NewInvoiceModal({
                     placeholder="₹0"
                     value={tip}
                     onChange={(e) => setTip(e.target.value)}
-                    className="w-full px-2 py-0.5 rounded border border-atelier-champagneBorder text-right bg-white text-base sm:text-xs"
+                    className="w-full px-2 py-1 rounded-lg border border-border-subtle text-right bg-white text-base sm:text-xs"
                   />
                 </div>
               </div>
 
               <div className="flex items-center justify-between text-xs">
-                <span className="text-atelier-muted">Deposit Paid (₹):</span>
+                <span className="text-text-muted">Deposit Paid (₹):</span>
                 <div className="w-24">
                   <input
                     type="number"
@@ -492,27 +486,27 @@ export default function NewInvoiceModal({
                     placeholder="₹0"
                     value={depositDeducted}
                     onChange={(e) => setDepositDeducted(e.target.value)}
-                    className="w-full px-2 py-0.5 rounded border border-atelier-champagneBorder text-right bg-white text-base sm:text-xs text-emerald-600 font-semibold"
+                    className="w-full px-2 py-1 rounded-lg border border-emerald-300 text-right bg-emerald-50 text-base sm:text-xs text-emerald-800 font-semibold"
                   />
                 </div>
               </div>
 
-              <div className="pt-1 border-t border-atelier-rose200/50 space-y-1">
+              <div className="pt-1.5 border-t border-border-subtle space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-atelier-muted">Gift Voucher Code:</span>
+                  <span className="text-text-muted">Gift Voucher Code:</span>
                   <div className="w-28">
                     <input
                       type="text"
                       placeholder="GIFT-..."
                       value={giftCardCode}
                       onChange={(e) => setGiftCardCode(e.target.value.toUpperCase())}
-                      className="w-full px-2 py-0.5 rounded border border-atelier-champagneBorder text-right bg-white text-base sm:text-[11px] font-mono uppercase"
+                      className="w-full px-2 py-1 rounded-lg border border-border-subtle text-right bg-white text-base sm:text-[11px] font-mono uppercase"
                     />
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-atelier-muted">Voucher Credit (₹):</span>
+                  <span className="text-text-muted">Voucher Credit (₹):</span>
                   <div className="w-24">
                     <input
                       type="number"
@@ -521,15 +515,15 @@ export default function NewInvoiceModal({
                       placeholder="₹0"
                       value={giftCardDeducted}
                       onChange={(e) => setGiftCardDeducted(e.target.value)}
-                      className="w-full px-2 py-0.5 rounded border border-atelier-champagneBorder text-right bg-white text-base sm:text-xs text-rose-600 font-semibold"
+                      className="w-full px-2 py-1 rounded-lg border border-border-subtle text-right bg-white text-base sm:text-xs text-brand-wine font-semibold"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-atelier-rose200 flex justify-between items-baseline">
-                <span className="font-bold text-atelier-noir">Balance Due:</span>
-                <span className="font-serif italic font-bold text-xl text-atelier-rose600">
+              <div className="pt-2 border-t border-border-subtle flex justify-between items-baseline">
+                <span className="font-bold text-text-ink">Balance Due:</span>
+                <span className="font-display font-bold text-xl text-brand-wine">
                   ₹{Number(status === 'Paid' ? 0 : balanceDue).toLocaleString('en-IN')}
                 </span>
               </div>
@@ -538,29 +532,29 @@ export default function NewInvoiceModal({
 
           {/* Notes */}
           <div>
-            <label className="block font-semibold text-atelier-charcoal mb-1">
+            <label className="block font-semibold text-text-secondary mb-1">
               Invoice Footer & Care Instructions
             </label>
             <input
               type="text"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none text-base sm:text-xs"
+              className="w-full px-3 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs"
             />
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-atelier-champagneBorder/60">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-border-subtle">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl border border-atelier-champagneBorder text-atelier-charcoal hover:bg-atelier-cream text-xs font-semibold transition-all"
+              className="px-4 py-2.5 rounded-xl border border-border-subtle text-text-secondary hover:bg-studio-canvas text-xs font-semibold transition-all min-h-[44px]"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-xl bg-atelier-rose500 hover:bg-atelier-rose600 text-white text-xs font-semibold shadow-soft transition-all active:scale-95"
+              className="px-6 py-2.5 rounded-xl bg-brand-wine hover:bg-brand-wineHover text-white text-xs font-semibold shadow-studio transition-all active:scale-95 min-h-[44px]"
             >
               {invoiceToEdit ? 'Save Changes' : 'Issue Invoice'}
             </button>
