@@ -1071,8 +1071,8 @@ export default function ClientWebsite({
               className="px-3.5 sm:px-4 py-1.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio active:scale-95 transition-all flex items-center gap-1.5"
             >
               <Sparkles className="w-3.5 h-3.5 fill-white" />
-              <span className="hidden xs:inline">Reserve Slot</span>
-              <span className="xs:hidden">Reserve</span>
+              <span className="hidden sm:inline">Reserve Slot</span>
+              <span className="sm:hidden">Reserve</span>
             </a>
 
             {/* Studio Hub (Owner Passcode Protected) */}
