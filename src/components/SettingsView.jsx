@@ -21,6 +21,39 @@ import {
 } from 'lucide-react';
 import StudioLogo from './StudioLogo';
 
+export const DEFAULT_HERO_CARDS = [
+  {
+    id: 'soft',
+    label: 'Soft & Simple',
+    title: 'Clean Glazed Donut',
+    shape: 'Almond',
+    length: 'Short',
+    imageUrl: '/hero/soft-simple.jpg',
+    subtitle: 'Sheer strawberry nude • Natural almond',
+    tag: 'Trending Now'
+  },
+  {
+    id: 'sparkle',
+    label: 'A Little Sparkle',
+    title: 'Golden Pearl Chrome',
+    shape: 'Coffin',
+    length: 'Medium',
+    imageUrl: '/hero/little-sparkle.jpg',
+    subtitle: 'Champagne porcelain • Molten chrome shine',
+    tag: 'Studio Fav'
+  },
+  {
+    id: 'statement',
+    label: 'Make a Statement',
+    title: 'Velvet Rose Cat-Eye',
+    shape: 'Stiletto',
+    length: 'Long',
+    imageUrl: '/hero/make-statement.jpg',
+    subtitle: 'Magnetic silk shimmer • Sculpted stiletto',
+    tag: 'Statement Art'
+  }
+];
+
 export default function SettingsView({ settings, onSaveSettings }) {
   const [formData, setFormData] = useState({
     studioName: settings?.studioName || 'Nails by Sirii',
@@ -42,11 +75,15 @@ export default function SettingsView({ settings, onSaveSettings }) {
       settings?.paymentInstructions ||
       'UPI: 7302623493 / nailsbysirii@okaxis (GPay, PhonePe, Paytm) • Studio cash payments welcomed',
     depositRequirement: settings?.depositRequirement || 500,
-    studioPasscode: ''
+    studioPasscode: '',
+    heroCards: (settings?.heroCards && Array.isArray(settings.heroCards) && settings.heroCards.length >= 3)
+      ? settings.heroCards
+      : DEFAULT_HERO_CARDS
   });
 
   const [saving, setSaving] = useState(false);
   const [logoUploadedMsg, setLogoUploadedMsg] = useState(false);
+  const [cardUploadedMsgs, setCardUploadedMsgs] = useState({});
 
   useEffect(() => {
     if (settings) {
@@ -69,7 +106,10 @@ export default function SettingsView({ settings, onSaveSettings }) {
         autoRemindersEnabled: Boolean(settings.autoRemindersEnabled ?? prev.autoRemindersEnabled),
         paymentInstructions: settings.paymentInstructions || prev.paymentInstructions,
         depositRequirement: settings.depositRequirement ?? prev.depositRequirement,
-        studioPasscode: ''
+        studioPasscode: '',
+        heroCards: (settings.heroCards && Array.isArray(settings.heroCards) && settings.heroCards.length >= 3)
+          ? settings.heroCards
+          : prev.heroCards || DEFAULT_HERO_CARDS
       }));
     }
   }, [settings]);
@@ -81,12 +121,49 @@ export default function SettingsView({ settings, onSaveSettings }) {
       reader.onload = (loadEvent) => {
         const base64Url = loadEvent.target?.result;
         if (base64Url) {
-          setFormData({ ...formData, studioLogoUrl: base64Url });
+          setFormData((prev) => ({ ...prev, studioLogoUrl: base64Url }));
           setLogoUploadedMsg(true);
           setTimeout(() => setLogoUploadedMsg(false), 3000);
         }
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleHeroCardFieldChange = (index, field, value) => {
+    setFormData((prev) => {
+      const updated = [...(prev.heroCards || DEFAULT_HERO_CARDS)];
+      updated[index] = { ...updated[index], [field]: value };
+      return { ...prev, heroCards: updated };
+    });
+  };
+
+  const handleHeroCardPhotoChange = (index, e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (loadEvent) => {
+        const base64Url = loadEvent.target?.result;
+        if (base64Url) {
+          handleHeroCardFieldChange(index, 'imageUrl', base64Url);
+          setCardUploadedMsgs((prev) => ({ ...prev, [index]: true }));
+          setTimeout(() => {
+            setCardUploadedMsgs((prev) => ({ ...prev, [index]: false }));
+          }, 3500);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleResetHeroCard = (index) => {
+    const defaultCard = DEFAULT_HERO_CARDS[index];
+    if (defaultCard) {
+      setFormData((prev) => {
+        const updated = [...(prev.heroCards || DEFAULT_HERO_CARDS)];
+        updated[index] = { ...defaultCard };
+        return { ...prev, heroCards: updated };
+      });
     }
   };
 
@@ -266,6 +343,195 @@ export default function SettingsView({ settings, onSaveSettings }) {
                 className="w-full px-3.5 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas/40 focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs font-mono text-text-ink"
               />
             </div>
+          </div>
+        </div>
+
+        {/* Hero Showcase Cards (Homepage "Your Next Nail Crush") */}
+        <div className="bg-studio-surface rounded-3xl p-5 sm:p-7 border border-border-subtle shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-border-subtle">
+            <div className="flex items-center gap-2.5">
+              <Sparkles className="w-4 h-4 text-brand-wine" />
+              <div>
+                <h3 className="font-display font-semibold text-base text-text-ink">
+                  Hero Showcase Cards ("Your Next Nail Crush")
+                </h3>
+                <p className="text-xs text-text-muted mt-0.5 leading-relaxed">
+                  Customize the 3 interactive nail look cards featured on the homepage hero. Upload real photos or paste URLs.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {formData.heroCards.map((card, idx) => (
+              <div
+                key={card.id || idx}
+                className="rounded-2xl border border-border-subtle p-4 bg-studio-canvas/40 space-y-3.5 flex flex-col justify-between hover:border-brand-wine/30 transition-colors shadow-xs"
+              >
+                {/* Card Header & Mood Badge */}
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-studio-wineLight text-brand-wine border border-brand-wine/20">
+                    Card #{idx + 1} • {card.label}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => handleResetHeroCard(idx)}
+                    className="text-[11px] text-text-muted hover:text-brand-wine flex items-center gap-1 transition-colors"
+                    title="Reset to default preset"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Reset</span>
+                  </button>
+                </div>
+
+                {/* Photo Preview & Upload */}
+                <div className="space-y-2">
+                  <div className="relative w-full h-36 rounded-xl overflow-hidden bg-studio-surface border border-border-subtle group shadow-inner">
+                    {card.imageUrl ? (
+                      <img
+                        src={card.imageUrl}
+                        alt={card.title}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center text-text-muted text-xs">
+                        <Image className="w-6 h-6 mb-1 opacity-50" />
+                        <span>No image selected</span>
+                      </div>
+                    )}
+                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-wider">
+                      {card.tag || 'Featured'}
+                    </span>
+                    <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-text-ink text-[9px] font-semibold">
+                      {card.shape} • {card.length}
+                    </span>
+                  </div>
+
+                  {cardUploadedMsgs[idx] && (
+                    <p className="text-[11px] text-emerald-700 font-semibold">
+                      Photo uploaded! Save settings to publish.
+                    </p>
+                  )}
+
+                  <div className="flex items-center gap-2">
+                    <label className="cursor-pointer flex-1 px-3 py-1.5 rounded-xl bg-studio-surface border border-border-subtle hover:border-brand-wine text-text-ink font-semibold text-[11px] flex items-center justify-center gap-1.5 shadow-xs transition-colors min-h-[34px]">
+                      <Upload className="w-3.5 h-3.5 text-brand-wine" />
+                      <span>Upload Photo</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleHeroCardPhotoChange(idx, e)}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-semibold text-text-muted mb-1">
+                      Image URL / Path
+                    </label>
+                    <input
+                      type="text"
+                      value={card.imageUrl}
+                      onChange={(e) => handleHeroCardFieldChange(idx, 'imageUrl', e.target.value)}
+                      placeholder="/hero/photo.jpg or https://..."
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-border-subtle text-[11px] bg-studio-surface text-text-ink focus:border-brand-wine outline-none font-mono"
+                    />
+                  </div>
+                </div>
+
+                {/* Text Fields */}
+                <div className="space-y-2 pt-1 border-t border-border-subtle/60">
+                  <div>
+                    <label className="block text-[10px] font-semibold text-text-ink mb-1">
+                      Look Title *
+                    </label>
+                    <input
+                      type="text"
+                      value={card.title}
+                      onChange={(e) => handleHeroCardFieldChange(idx, 'title', e.target.value)}
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-border-subtle text-xs font-semibold bg-studio-surface text-text-ink focus:border-brand-wine outline-none"
+                      placeholder="e.g. Clean Glazed Donut"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-semibold text-text-ink mb-1">
+                      Details / Description
+                    </label>
+                    <input
+                      type="text"
+                      value={card.subtitle}
+                      onChange={(e) => handleHeroCardFieldChange(idx, 'subtitle', e.target.value)}
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-border-subtle text-[11px] bg-studio-surface text-text-muted focus:border-brand-wine outline-none"
+                      placeholder="e.g. Sheer strawberry nude • Natural almond"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-[10px] font-semibold text-text-ink mb-1">
+                        Tag Badge
+                      </label>
+                      <input
+                        type="text"
+                        value={card.tag}
+                        onChange={(e) => handleHeroCardFieldChange(idx, 'tag', e.target.value)}
+                        className="w-full px-2 py-1.5 rounded-lg border border-border-subtle text-[11px] bg-studio-surface text-text-ink focus:border-brand-wine outline-none"
+                        placeholder="e.g. Trending Now"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-semibold text-text-ink mb-1">
+                        Mood Label
+                      </label>
+                      <input
+                        type="text"
+                        value={card.label}
+                        onChange={(e) => handleHeroCardFieldChange(idx, 'label', e.target.value)}
+                        className="w-full px-2 py-1.5 rounded-lg border border-border-subtle text-[11px] bg-studio-surface text-text-ink focus:border-brand-wine outline-none"
+                        placeholder="e.g. Soft & Simple"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-[10px] font-semibold text-text-muted mb-1">
+                        Nail Shape
+                      </label>
+                      <select
+                        value={card.shape}
+                        onChange={(e) => handleHeroCardFieldChange(idx, 'shape', e.target.value)}
+                        className="w-full px-2 py-1.5 rounded-lg border border-border-subtle text-[11px] bg-studio-surface text-text-ink focus:border-brand-wine outline-none"
+                      >
+                        <option value="Almond">Almond</option>
+                        <option value="Coffin">Coffin</option>
+                        <option value="Stiletto">Stiletto</option>
+                        <option value="Squoval">Squoval</option>
+                        <option value="Square">Square</option>
+                        <option value="Round">Round</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-semibold text-text-muted mb-1">
+                        Length
+                      </label>
+                      <select
+                        value={card.length}
+                        onChange={(e) => handleHeroCardFieldChange(idx, 'length', e.target.value)}
+                        className="w-full px-2 py-1.5 rounded-lg border border-border-subtle text-[11px] bg-studio-surface text-text-ink focus:border-brand-wine outline-none"
+                      >
+                        <option value="Short">Short</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Long">Long</option>
+                        <option value="Extra Long">Extra Long</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

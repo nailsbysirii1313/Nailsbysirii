@@ -216,39 +216,42 @@ function classifyReview(r) {
   return 'Extensions & BIAB';
 }
 
-const HERO_STYLES = [
+export const DEFAULT_HERO_CARDS = [
   {
     id: 'soft',
     label: 'Soft & Simple',
     title: 'Clean Glazed Donut',
-    shape: 'almond',
-    length: 'short',
+    shape: 'Almond',
+    length: 'Short',
+    imageUrl: '/hero/soft-simple.jpg',
     baseColor: '#FDF2F8',
     finish: 'chrome',
     subtitle: 'Sheer strawberry nude • Natural almond',
-    tag: 'Design ideas'
+    tag: 'Trending Now'
   },
   {
     id: 'sparkle',
     label: 'A Little Sparkle',
     title: 'Golden Pearl Chrome',
-    shape: 'coffin',
-    length: 'medium',
+    shape: 'Coffin',
+    length: 'Medium',
+    imageUrl: '/hero/little-sparkle.jpg',
     baseColor: '#FFFBEB',
     finish: 'chrome',
     subtitle: 'Champagne porcelain • Molten chrome shine',
-    tag: 'Design ideas'
+    tag: 'Studio Fav'
   },
   {
     id: 'statement',
     label: 'Make a Statement',
-    title: 'Velvet Cat-Eye Stiletto',
-    shape: 'stiletto',
-    length: 'long',
-    baseColor: '#7D2838',
+    title: 'Velvet Rose Cat-Eye',
+    shape: 'Stiletto',
+    length: 'Long',
+    imageUrl: '/hero/make-statement.jpg',
+    baseColor: '#D4386A',
     finish: 'cat-eye',
     subtitle: 'Magnetic silk shimmer • Sculpted stiletto',
-    tag: 'Design ideas'
+    tag: 'Statement Art'
   }
 ];
 
@@ -272,8 +275,11 @@ export default function ClientWebsite({
   const [isRepairModalOpen, setIsRepairModalOpen] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
 
-  // Hero Interactive Fan State
-  const [activeHeroStyle, setActiveHeroStyle] = useState('sparkle');
+  // Hero Interactive Fan State (from settings or defaults)
+  const heroCards = (settings?.heroCards && Array.isArray(settings.heroCards) && settings.heroCards.length >= 3)
+    ? settings.heroCards
+    : DEFAULT_HERO_CARDS;
+  const [activeHeroStyle, setActiveHeroStyle] = useState(() => heroCards[1]?.id || 'sparkle');
 
   // Catalogue Filters
   const [activeCategory, setActiveCategory] = useState('All');
@@ -814,7 +820,7 @@ export default function ClientWebsite({
 
   // Hero Look Quick Booking Handler
   const handleBookHeroStyle = (styleId) => {
-    const styleObj = HERO_STYLES.find((s) => s.id === styleId) || HERO_STYLES[1];
+    const styleObj = heroCards.find((s) => s.id === styleId) || heroCards[1];
     let matchedLook = null;
     if (styleObj.id === 'soft') {
       matchedLook = catalogueBooklet.find((b) => b.id === 'biab_1') || catalogueBooklet[5];
@@ -827,8 +833,10 @@ export default function ClientWebsite({
     setBookingMode('lookbook');
     setSelectedLook(matchedLook);
     setSelectedAesthetic(`${styleObj.label} (${styleObj.title})`);
-    setSelectedShape(styleObj.shape.charAt(0).toUpperCase() + styleObj.shape.slice(1));
-    setSelectedLength(styleObj.length.charAt(0).toUpperCase() + styleObj.length.slice(1));
+    const shapeStr = String(styleObj.shape || 'Almond');
+    const lengthStr = String(styleObj.length || 'Medium');
+    setSelectedShape(shapeStr.charAt(0).toUpperCase() + shapeStr.slice(1));
+    setSelectedLength(lengthStr.charAt(0).toUpperCase() + lengthStr.slice(1));
     setClientNotes(`Hero Selection: ${styleObj.label} — ${styleObj.title} (${styleObj.subtitle})`);
     scrollTo('booking-section');
     setBookingStep(1);
@@ -1339,13 +1347,17 @@ export default function ClientWebsite({
         {/* MOBILE VIEW (< lg) */}
         <div className="flex flex-col items-center text-center space-y-5 lg:hidden animate-hero-fade-up">
           {/* 1. Small location line */}
-          <p className="text-xs font-bold uppercase tracking-wider text-studio-wine">
-            Nail studio in Dehradun
-          </p>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight border border-studio-wine/20 text-studio-wine text-xs font-bold uppercase tracking-wider shadow-xs">
+            <Sparkle className="w-3 h-3 fill-studio-wine" />
+            <span>Nail studio in Dehradun</span>
+          </div>
 
           {/* 2. Short headline with deliberate line breaks */}
           <h1 className="font-sans font-extrabold text-[42px] sm:text-5xl text-studio-ink leading-[1.08] tracking-tight">
-            Your next<br />nail crush.
+            Your next<br />
+            <span className="text-studio-wine">
+              nail crush.
+            </span>
           </h1>
 
           {/* 3. One supporting sentence */}
@@ -1353,36 +1365,40 @@ export default function ClientWebsite({
             Simple, sparkly, or something totally you. Let’s find your next look.
           </p>
 
-          {/* 4. Interactive nail-card fan */}
-          <div className="relative w-full max-w-[320px] sm:max-w-[360px] h-[255px] sm:h-[275px] flex items-center justify-center my-1 select-none">
-            {/* Restrained blush backdrop with single curved line and sparkle */}
+          {/* 4. Interactive nail-card fan with Real Photography */}
+          <div className="relative w-full max-w-[320px] sm:max-w-[360px] h-[260px] sm:h-[285px] flex items-center justify-center my-1 select-none">
+            {/* Soft pink glow aura with decorative curved line and sparkle */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10" aria-hidden="true">
-              <div className="w-[280px] h-[220px] rounded-full bg-studio-wineLight/60 blur-2xl" />
-              <svg className="absolute w-[240px] h-[140px] text-studio-wine/15" fill="none" viewBox="0 0 240 140">
-                <path d="M 15 120 C 70 30 170 30 225 120" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
+              <div className="w-[300px] h-[230px] rounded-full bg-gradient-to-tr from-pink-300/35 via-rose-200/30 to-pink-100/25 blur-3xl" />
+              <svg className="absolute w-[250px] h-[145px] text-studio-wine/20" fill="none" viewBox="0 0 250 145">
+                <path d="M 15 125 C 75 25 175 25 235 125" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
               </svg>
-              <Sparkle className="absolute top-2 right-6 w-3.5 h-3.5 text-studio-wine/40" />
+              <Sparkle className="absolute top-2 right-6 w-3.5 h-3.5 text-studio-wine/50 animate-pulse" />
+              <Sparkle className="absolute bottom-4 left-6 w-2.5 h-2.5 text-studio-wine/40" />
             </div>
 
-            {/* Three Overlapping Cards */}
-            {HERO_STYLES.map((style) => {
+            {/* Three Overlapping Cards with Real Photography */}
+            {heroCards.map((style, idx) => {
               const isFront = activeHeroStyle === style.id;
-              const activeIdx = HERO_STYLES.findIndex(s => s.id === activeHeroStyle);
-              const thisIdx = HERO_STYLES.findIndex(s => s.id === style.id);
-              const diff = (thisIdx - activeIdx + 3) % 3;
+              const activeIdx = heroCards.findIndex(s => s.id === activeHeroStyle);
+              const thisIdx = idx;
+              const diff = (thisIdx - (activeIdx >= 0 ? activeIdx : 0) + heroCards.length) % heroCards.length;
 
               let positionClass = '';
               if (isFront) {
-                positionClass = 'z-20 scale-100 rotate-0 translate-x-0 shadow-lg border-studio-wine/40 opacity-100';
+                positionClass = 'z-20 scale-100 rotate-0 translate-x-0 shadow-float border-studio-wine/40 ring-4 ring-studio-wine/10 opacity-100';
               } else if (diff === 1) {
                 positionClass = 'z-10 scale-[0.88] rotate-[8deg] translate-x-[54px] sm:translate-x-[68px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
               } else {
                 positionClass = 'z-10 scale-[0.88] -rotate-[8deg] -translate-x-[54px] sm:-translate-x-[68px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
               }
 
+              const fallbackImg = idx === 0 ? '/hero/soft-simple.jpg' : idx === 1 ? '/hero/little-sparkle.jpg' : '/hero/make-statement.jpg';
+              const cardImage = style.imageUrl || fallbackImg;
+
               return (
                 <div
-                  key={style.id}
+                  key={style.id || idx}
                   onClick={() => setActiveHeroStyle(style.id)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -1394,41 +1410,47 @@ export default function ClientWebsite({
                   tabIndex={0}
                   aria-pressed={isFront}
                   aria-label={`Select ${style.label} look`}
-                  className={`absolute w-[155px] sm:w-[175px] h-[230px] sm:h-[250px] rounded-[22px] bg-studio-surface border p-3 flex flex-col justify-between transition-all duration-[320ms] ease-out outline-none focus-visible:ring-2 focus-visible:ring-studio-wine ${positionClass}`}
+                  className={`absolute w-[165px] sm:w-[185px] h-[250px] sm:h-[272px] rounded-[22px] bg-white border overflow-hidden flex flex-col justify-between transition-all duration-[320ms] ease-out outline-none focus-visible:ring-2 focus-visible:ring-studio-wine ${positionClass}`}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-bold uppercase tracking-wider text-studio-wine bg-studio-wineLight/90 border border-studio-wine/10 px-2 py-0.5 rounded-full">
-                      {style.tag}
-                    </span>
-                    <span className="text-[10px] text-studio-muted font-medium capitalize">
-                      {style.shape}
-                    </span>
-                  </div>
+                  {/* Photo area */}
+                  <div className="relative w-full h-[62%] overflow-hidden bg-studio-canvas group">
+                    <img
+                      src={cardImage}
+                      alt={style.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="eager"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/25 pointer-events-none" />
 
-                  <div className="flex-1 flex items-center justify-center relative py-1">
-                    <div className="w-16 h-28 rounded-full bg-studio-canvas/50 border border-border-subtle/50 flex items-center justify-center shadow-inner overflow-hidden">
-                      <NailTipSchematic
-                        shape={style.shape}
-                        length={style.length}
-                        baseColor={style.baseColor}
-                        finish={style.finish}
-                        size="sm"
-                        className="scale-90"
-                      />
+                    <div className="absolute top-2.5 left-2.5 z-10">
+                      <span className="text-[9px] font-extrabold uppercase tracking-wider text-white bg-black/50 backdrop-blur-md border border-white/25 px-2 py-0.5 rounded-full shadow-xs">
+                        {style.tag || 'Trending'}
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-2 right-2.5 z-10">
+                      <span className="text-[9px] font-bold text-white bg-studio-wine/90 backdrop-blur-md px-2 py-0.5 rounded-full shadow-xs">
+                        {style.shape} • {style.length}
+                      </span>
                     </div>
                   </div>
 
-                  <div className="text-center pt-1 border-t border-border-subtle/60">
-                    <h4 className="font-sans font-bold text-xs sm:text-[13px] text-studio-ink leading-tight truncate">
-                      {style.title}
-                    </h4>
-                    <p className="text-[10px] text-studio-muted mt-0.5 truncate">
+                  {/* Card Details (Solid Opaque White Background) */}
+                  <div className="p-2.5 sm:p-3 bg-white flex-1 flex flex-col justify-center text-left border-t border-border-subtle/50 relative z-10">
+                    <div className="flex items-center justify-between gap-1">
+                      <h4 className="font-sans font-bold text-xs sm:text-[13px] text-studio-ink leading-tight truncate">
+                        {style.title}
+                      </h4>
+                      <span className="w-1.5 h-1.5 rounded-full bg-studio-wine shrink-0" />
+                    </div>
+                    <p className="text-[10px] text-studio-secondary line-clamp-1 mt-0.5 leading-snug">
                       {style.subtitle}
                     </p>
                   </div>
 
+                  {/* Glint on front card */}
                   {isFront && (
-                    <div className="absolute inset-0 pointer-events-none rounded-[22px] overflow-hidden" aria-hidden="true">
+                    <div className="absolute inset-0 pointer-events-none rounded-[22px] overflow-hidden z-20" aria-hidden="true">
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent animate-hero-shine" />
                     </div>
                   )}
@@ -1439,11 +1461,13 @@ export default function ClientWebsite({
 
           {/* 5. Three style buttons with hint */}
           <div className="space-y-2 w-full pt-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-studio-muted block">
-              Pick your mood
-            </span>
+            <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-studio-muted">
+              <span>Pick your mood</span>
+              <span className="text-studio-wine">•</span>
+              <span className="text-[10px] text-studio-wine lowercase font-normal">tap to switch</span>
+            </div>
             <div className="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
-              {HERO_STYLES.map((style) => {
+              {heroCards.map((style) => {
                 const isSelected = activeHeroStyle === style.id;
                 return (
                   <button
@@ -1451,8 +1475,8 @@ export default function ClientWebsite({
                     onClick={() => setActiveHeroStyle(style.id)}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 ${
                       isSelected
-                        ? 'bg-studio-wine text-white shadow-studio font-bold'
-                        : 'bg-studio-surface border border-studio-border text-studio-secondary hover:text-studio-ink hover:border-studio-borderStrong'
+                        ? 'bg-studio-wine text-white shadow-studio font-bold scale-105'
+                        : 'bg-white border border-studio-border text-studio-secondary hover:text-studio-ink hover:border-studio-wine/40'
                     }`}
                   >
                     {style.label}
@@ -1467,7 +1491,7 @@ export default function ClientWebsite({
             <a
               href="#booking-section"
               onClick={() => handleBookHeroStyle(activeHeroStyle)}
-              className="w-full max-w-xs py-3.5 px-6 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-sm font-bold shadow-studio transition-all active:scale-95 flex items-center justify-center gap-2"
+              className="w-full max-w-xs py-3.5 px-6 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-sm font-bold shadow-studio hover:shadow-glow transition-all active:scale-95 flex items-center justify-center gap-2"
             >
               <Sparkles className="w-4 h-4 fill-white" />
               <span>Book Your Nails</span>
@@ -1487,12 +1511,16 @@ export default function ClientWebsite({
         <div className="hidden lg:grid lg:grid-cols-12 lg:items-center lg:gap-12 animate-hero-fade-up">
           {/* Left Column: Copy & Actions */}
           <div className="lg:col-span-6 space-y-6 text-left">
-            <p className="text-xs font-bold uppercase tracking-wider text-studio-wine">
-              Nail studio in Dehradun
-            </p>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight border border-studio-wine/20 text-studio-wine text-xs font-bold uppercase tracking-wider shadow-xs">
+              <Sparkle className="w-3 h-3 fill-studio-wine" />
+              <span>Nail studio in Dehradun</span>
+            </div>
 
             <h1 className="font-sans font-extrabold text-5xl xl:text-6xl text-studio-ink leading-[1.08] tracking-tight">
-              Your next<br />nail crush.
+              Your next<br />
+              <span className="text-studio-wine">
+                nail crush.
+              </span>
             </h1>
 
             <p className="text-base text-studio-secondary leading-relaxed max-w-md">
@@ -1503,7 +1531,7 @@ export default function ClientWebsite({
               <a
                 href="#booking-section"
                 onClick={() => handleBookHeroStyle(activeHeroStyle)}
-                className="py-3.5 px-7 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-sm font-bold shadow-studio transition-all active:scale-95 inline-flex items-center justify-center gap-2"
+                className="py-3.5 px-7 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-sm font-bold shadow-studio hover:shadow-glow transition-all active:scale-95 inline-flex items-center justify-center gap-2"
               >
                 <Sparkles className="w-4 h-4 fill-white" />
                 <span>Book Your Nails</span>
@@ -1521,35 +1549,39 @@ export default function ClientWebsite({
 
           {/* Right Column: Card Fan & Style Buttons */}
           <div className="lg:col-span-6 flex flex-col items-center justify-center space-y-5">
-            <div className="relative w-full max-w-[380px] h-[280px] flex items-center justify-center select-none">
-              {/* Restrained blush backdrop with single curved line and sparkle */}
+            <div className="relative w-full max-w-[390px] h-[290px] flex items-center justify-center select-none">
+              {/* Soft pink glow aura with decorative curved line and sparkle */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10" aria-hidden="true">
-                <div className="w-[340px] h-[240px] rounded-full bg-studio-wineLight/60 blur-2xl" />
-                <svg className="absolute w-[280px] h-[160px] text-studio-wine/15" fill="none" viewBox="0 0 280 160">
-                  <path d="M 15 135 C 80 30 200 30 265 135" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
+                <div className="w-[360px] h-[250px] rounded-full bg-gradient-to-tr from-pink-300/35 via-rose-200/30 to-pink-100/25 blur-3xl" />
+                <svg className="absolute w-[290px] h-[165px] text-studio-wine/20" fill="none" viewBox="0 0 290 165">
+                  <path d="M 15 140 C 85 25 205 25 275 140" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
                 </svg>
-                <Sparkle className="absolute top-2 right-8 w-4 h-4 text-studio-wine/40" />
+                <Sparkle className="absolute top-2 right-8 w-4 h-4 text-studio-wine/50 animate-pulse" />
+                <Sparkle className="absolute bottom-5 left-8 w-3 h-3 text-studio-wine/40" />
               </div>
 
-              {/* Three Overlapping Cards */}
-              {HERO_STYLES.map((style) => {
+              {/* Three Overlapping Cards with Real Photography */}
+              {heroCards.map((style, idx) => {
                 const isFront = activeHeroStyle === style.id;
-                const activeIdx = HERO_STYLES.findIndex(s => s.id === activeHeroStyle);
-                const thisIdx = HERO_STYLES.findIndex(s => s.id === style.id);
-                const diff = (thisIdx - activeIdx + 3) % 3;
+                const activeIdx = heroCards.findIndex(s => s.id === activeHeroStyle);
+                const thisIdx = idx;
+                const diff = (thisIdx - (activeIdx >= 0 ? activeIdx : 0) + heroCards.length) % heroCards.length;
 
                 let positionClass = '';
                 if (isFront) {
-                  positionClass = 'z-20 scale-100 rotate-0 translate-x-0 shadow-xl border-studio-wine/40 opacity-100';
+                  positionClass = 'z-20 scale-100 rotate-0 translate-x-0 shadow-float border-studio-wine/40 ring-4 ring-studio-wine/10 opacity-100';
                 } else if (diff === 1) {
-                  positionClass = 'z-10 scale-[0.88] rotate-[8deg] translate-x-[74px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
+                  positionClass = 'z-10 scale-[0.88] rotate-[8deg] translate-x-[76px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
                 } else {
-                  positionClass = 'z-10 scale-[0.88] -rotate-[8deg] -translate-x-[74px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
+                  positionClass = 'z-10 scale-[0.88] -rotate-[8deg] -translate-x-[76px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
                 }
+
+                const fallbackImg = idx === 0 ? '/hero/soft-simple.jpg' : idx === 1 ? '/hero/little-sparkle.jpg' : '/hero/make-statement.jpg';
+                const cardImage = style.imageUrl || fallbackImg;
 
                 return (
                   <div
-                    key={style.id}
+                    key={style.id || idx}
                     onClick={() => setActiveHeroStyle(style.id)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
@@ -1561,41 +1593,47 @@ export default function ClientWebsite({
                     tabIndex={0}
                     aria-pressed={isFront}
                     aria-label={`Select ${style.label} look`}
-                    className={`absolute w-[180px] h-[255px] rounded-[22px] bg-studio-surface border p-3.5 flex flex-col justify-between transition-all duration-[320ms] ease-out outline-none focus-visible:ring-2 focus-visible:ring-studio-wine ${positionClass}`}
+                    className={`absolute w-[185px] h-[270px] rounded-[22px] bg-white border overflow-hidden flex flex-col justify-between transition-all duration-[320ms] ease-out outline-none focus-visible:ring-2 focus-visible:ring-studio-wine ${positionClass}`}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[9px] font-bold uppercase tracking-wider text-studio-wine bg-studio-wineLight/90 border border-studio-wine/10 px-2 py-0.5 rounded-full">
-                        {style.tag}
-                      </span>
-                      <span className="text-[10px] text-studio-muted font-medium capitalize">
-                        {style.shape}
-                      </span>
-                    </div>
+                    {/* Photo area */}
+                    <div className="relative w-full h-[62%] overflow-hidden bg-studio-canvas group">
+                      <img
+                        src={cardImage}
+                        alt={style.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="eager"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/25 pointer-events-none" />
 
-                    <div className="flex-1 flex items-center justify-center relative py-1">
-                      <div className="w-18 h-30 rounded-full bg-studio-canvas/50 border border-border-subtle/50 flex items-center justify-center shadow-inner overflow-hidden">
-                        <NailTipSchematic
-                          shape={style.shape}
-                          length={style.length}
-                          baseColor={style.baseColor}
-                          finish={style.finish}
-                          size="sm"
-                          className="scale-95"
-                        />
+                      <div className="absolute top-2.5 left-2.5 z-10">
+                        <span className="text-[9px] font-extrabold uppercase tracking-wider text-white bg-black/50 backdrop-blur-md border border-white/25 px-2 py-0.5 rounded-full shadow-xs">
+                          {style.tag || 'Trending'}
+                        </span>
+                      </div>
+
+                      <div className="absolute bottom-2 right-2.5 z-10">
+                        <span className="text-[9px] font-bold text-white bg-studio-wine/90 backdrop-blur-md px-2 py-0.5 rounded-full shadow-xs">
+                          {style.shape} • {style.length}
+                        </span>
                       </div>
                     </div>
 
-                    <div className="text-center pt-1.5 border-t border-border-subtle/60">
-                      <h4 className="font-sans font-bold text-xs sm:text-[13px] text-studio-ink leading-tight truncate">
-                        {style.title}
-                      </h4>
-                      <p className="text-[10px] text-studio-muted mt-0.5 truncate">
+                    {/* Card Details (Solid Opaque White Background) */}
+                    <div className="p-3 bg-white flex-1 flex flex-col justify-center text-left border-t border-border-subtle/50 relative z-10">
+                      <div className="flex items-center justify-between gap-1">
+                        <h4 className="font-sans font-bold text-xs sm:text-[13px] text-studio-ink leading-tight truncate">
+                          {style.title}
+                        </h4>
+                        <span className="w-1.5 h-1.5 rounded-full bg-studio-wine shrink-0" />
+                      </div>
+                      <p className="text-[10px] text-studio-secondary line-clamp-1 mt-0.5 leading-snug">
                         {style.subtitle}
                       </p>
                     </div>
 
+                    {/* Glint on front card */}
                     {isFront && (
-                      <div className="absolute inset-0 pointer-events-none rounded-[22px] overflow-hidden" aria-hidden="true">
+                      <div className="absolute inset-0 pointer-events-none rounded-[22px] overflow-hidden z-20" aria-hidden="true">
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent animate-hero-shine" />
                       </div>
                     )}
@@ -1606,11 +1644,13 @@ export default function ClientWebsite({
 
             {/* Style Buttons with Hint */}
             <div className="space-y-2 text-center w-full">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-studio-muted block">
-                Pick your mood
-              </span>
+              <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-studio-muted">
+                <span>Pick your mood</span>
+                <span className="text-studio-wine">•</span>
+                <span className="text-[10px] text-studio-wine lowercase font-normal">tap to switch</span>
+              </div>
               <div className="flex items-center justify-center gap-2">
-                {HERO_STYLES.map((style) => {
+                {heroCards.map((style) => {
                   const isSelected = activeHeroStyle === style.id;
                   return (
                     <button
@@ -1618,8 +1658,8 @@ export default function ClientWebsite({
                       onClick={() => setActiveHeroStyle(style.id)}
                       className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 ${
                         isSelected
-                          ? 'bg-studio-wine text-white shadow-studio font-bold'
-                          : 'bg-studio-surface border border-studio-border text-studio-secondary hover:text-studio-ink hover:border-studio-borderStrong'
+                          ? 'bg-studio-wine text-white shadow-studio font-bold scale-105'
+                          : 'bg-white border border-studio-border text-studio-secondary hover:text-studio-ink hover:border-studio-wine/40'
                       }`}
                     >
                       {style.label}

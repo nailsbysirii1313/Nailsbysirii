@@ -21,7 +21,39 @@
     "timings": "12:00 PM – 7:00 PM",
     "googleRating": "4.9",
     "googleReviewCount": 344,
-    "googleMapsUrl": "https://maps.google.com/?q=Nails+by+Sirii+Laxmi+Navraj+Plaza+Garhi+Cantonment+Dehradun"
+    "googleMapsUrl": "https://maps.google.com/?q=Nails+by+Sirii+Laxmi+Navraj+Plaza+Garhi+Cantonment+Dehradun",
+    "heroCards": [
+      {
+        "id": "soft",
+        "label": "Soft & Simple",
+        "title": "Clean Glazed Donut",
+        "shape": "Almond",
+        "length": "Short",
+        "imageUrl": "/hero/soft-simple.jpg",
+        "subtitle": "Sheer strawberry nude • Natural almond",
+        "tag": "Trending Now"
+      },
+      {
+        "id": "sparkle",
+        "label": "A Little Sparkle",
+        "title": "Golden Pearl Chrome",
+        "shape": "Coffin",
+        "length": "Medium",
+        "imageUrl": "/hero/little-sparkle.jpg",
+        "subtitle": "Champagne porcelain • Molten chrome shine",
+        "tag": "Studio Fav"
+      },
+      {
+        "id": "statement",
+        "label": "Make a Statement",
+        "title": "Velvet Rose Cat-Eye",
+        "shape": "Stiletto",
+        "length": "Long",
+        "imageUrl": "/hero/make-statement.jpg",
+        "subtitle": "Magnetic silk shimmer • Sculpted stiletto",
+        "tag": "Statement Art"
+      }
+    ]
   },
   "services": [
     {
