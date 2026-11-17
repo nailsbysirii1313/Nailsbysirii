@@ -69,44 +69,6 @@ export default function App() {
     return 'clientWebsite';
   });
 
-  // Listen to hash and query changes for live deep-linking
-  useEffect(() => {
-    const handleUrlRouting = () => {
-      const params = new URLSearchParams(window.location.search);
-      const hash = window.location.hash;
-      const authed = localStorage.getItem('nbs_studio_auth') === 'true';
-
-      if (params.get('hidePrices') === 'true' || params.get('noPrices') === '1' || hash.includes('no-prices')) {
-        setHidePrices(true);
-      } else if (params.get('hidePrices') === 'false') {
-        setHidePrices(false);
-      }
-
-      if (hash.startsWith('#invoice-')) {
-        const invId = hash.replace('#invoice-', '');
-        const target = invoices.find((i) => i.id === invId);
-        if (target) {
-          setSelectedInvoice(target);
-        }
-        setTabState('publicInvoice');
-      } else if (params.get('view') === 'studio' || hash.startsWith('#studio')) {
-        if (authed) {
-          setTabState('dashboard');
-        } else {
-          setPendingTab('dashboard');
-          setIsPasscodeModalOpen(true);
-        }
-      }
-    };
-
-    window.addEventListener('hashchange', handleUrlRouting);
-    window.addEventListener('popstate', handleUrlRouting);
-    return () => {
-      window.removeEventListener('hashchange', handleUrlRouting);
-      window.removeEventListener('popstate', handleUrlRouting);
-    };
-  }, [invoices]);
-
   // Protected Tab Switcher
   const setTab = (targetTab) => {
     if (targetTab === 'clientWebsite' || targetTab === 'publicBooking') {
@@ -195,6 +157,44 @@ export default function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  // Listen to hash and query changes for live deep-linking
+  useEffect(() => {
+    const handleUrlRouting = () => {
+      const params = new URLSearchParams(window.location.search);
+      const hash = window.location.hash;
+      const authed = localStorage.getItem('nbs_studio_auth') === 'true';
+
+      if (params.get('hidePrices') === 'true' || params.get('noPrices') === '1' || hash.includes('no-prices')) {
+        setHidePrices(true);
+      } else if (params.get('hidePrices') === 'false') {
+        setHidePrices(false);
+      }
+
+      if (hash.startsWith('#invoice-')) {
+        const invId = hash.replace('#invoice-', '');
+        const target = (invoices || []).find((i) => i.id === invId);
+        if (target) {
+          setSelectedInvoice(target);
+        }
+        setTabState('publicInvoice');
+      } else if (params.get('view') === 'studio' || hash.startsWith('#studio')) {
+        if (authed) {
+          setTabState('dashboard');
+        } else {
+          setPendingTab('dashboard');
+          setIsPasscodeModalOpen(true);
+        }
+      }
+    };
+
+    window.addEventListener('hashchange', handleUrlRouting);
+    window.addEventListener('popstate', handleUrlRouting);
+    return () => {
+      window.removeEventListener('hashchange', handleUrlRouting);
+      window.removeEventListener('popstate', handleUrlRouting);
+    };
+  }, [invoices]);
 
   // Quick Messaging State
   const [isQuickMessageOpen, setIsQuickMessageOpen] = useState(false);
