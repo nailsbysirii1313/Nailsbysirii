@@ -1355,7 +1355,7 @@ export default function ClientWebsite({
           <h1 className="font-sans font-extrabold text-[42px] sm:text-5xl text-studio-ink leading-[1.08] tracking-tight">
             Your next<br />
             <span className="text-studio-wine">
-              nail crush.
+              nail <span className="font-display italic font-bold">crush.</span>
             </span>
           </h1>
 
@@ -1472,11 +1472,10 @@ export default function ClientWebsite({
                   <button
                     key={style.id}
                     onClick={() => setActiveHeroStyle(style.id)}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 ${
-                      isSelected
-                        ? 'bg-studio-wine text-white shadow-studio font-bold scale-105'
-                        : 'bg-white border border-studio-border text-studio-secondary hover:text-studio-ink hover:border-studio-wine/40'
-                    }`}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 ${isSelected
+                      ? 'bg-studio-wine text-white shadow-studio font-bold scale-105'
+                      : 'bg-white border border-studio-border text-studio-secondary hover:text-studio-ink hover:border-studio-wine/40'
+                      }`}
                   >
                     {style.label}
                   </button>
@@ -1518,7 +1517,7 @@ export default function ClientWebsite({
             <h1 className="font-sans font-extrabold text-5xl xl:text-6xl text-studio-ink leading-[1.08] tracking-tight">
               Your next<br />
               <span className="text-studio-wine">
-                nail crush.
+                nail <span className="font-display italic font-bold">crush.</span>
               </span>
             </h1>
 
@@ -1655,11 +1654,10 @@ export default function ClientWebsite({
                     <button
                       key={style.id}
                       onClick={() => setActiveHeroStyle(style.id)}
-                      className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 ${
-                        isSelected
-                          ? 'bg-studio-wine text-white shadow-studio font-bold scale-105'
-                          : 'bg-white border border-studio-border text-studio-secondary hover:text-studio-ink hover:border-studio-wine/40'
-                      }`}
+                      className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 ${isSelected
+                        ? 'bg-studio-wine text-white shadow-studio font-bold scale-105'
+                        : 'bg-white border border-studio-border text-studio-secondary hover:text-studio-ink hover:border-studio-wine/40'
+                        }`}
                     >
                       {style.label}
                     </button>
