@@ -32,7 +32,7 @@ export default function MobileBottomNav({
   const hasUrgentAttention = (counts?.pendingRepairs || 0) > 0 || (counts?.lowStockCount || 0) > 0;
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-2xl border-t border-rose-100/80 shadow-[0_-10px_30px_rgba(217,110,133,0.12)] px-2 pt-1 pb-[calc(0.6rem+env(safe-area-inset-bottom))] transition-all">
+    <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-2xl border-t border-rose-100/80 shadow-[0_-10px_30px_rgba(217,110,133,0.12)] px-2 pt-1 pb-[calc(0.6rem+env(safe-area-inset-bottom))] transition-all">
       <div className="max-w-md mx-auto flex items-center justify-around relative">
         {/* Tab 1: Today / Dashboard */}
         <button

@@ -41,21 +41,25 @@ export default function ClientsView({
   });
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in font-sans">
       {/* Header & Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="font-serif italic font-bold text-2xl text-atelier-noir">
-            Client Directory & CRM
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight text-studio-wine text-xs font-semibold mb-1.5">
+            <Users className="w-3.5 h-3.5" />
+            <span>Client Portfolio & CRM</span>
+          </div>
+          <h2 className="font-display italic font-bold text-2xl sm:text-3xl text-studio-ink">
+            Client Directory
           </h2>
-          <p className="text-xs text-atelier-muted">
-            Manage your client portfolio, nail preferences, and lifetime appointment records.
+          <p className="text-xs text-studio-secondary">
+            Manage your client profiles, nail architecture preferences, and lifetime appointment records.
           </p>
         </div>
 
         <button
           onClick={onOpenNewClient}
-          className="px-4 py-2.5 rounded-2xl bg-atelier-rose500 hover:bg-atelier-rose600 text-white text-xs font-semibold shadow-soft transition-all flex items-center justify-center gap-2 active:scale-95"
+          className="px-4 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio transition-all flex items-center justify-center gap-2 active:scale-95 shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>Add New Client</span>
@@ -63,16 +67,16 @@ export default function ClientsView({
       </div>
 
       {/* Filter / Search Bar */}
-      <div className="bg-white rounded-2xl p-4 border border-atelier-champagneBorder shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 text-xs">
+      <div className="bg-studio-surface rounded-2xl p-4 border border-studio-border shadow-studio flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 text-xs">
         {/* Search Input */}
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-atelier-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-studio-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Search by client name, phone, instagram, or style..."
+            placeholder="Search by client name, phone, instagram, or aesthetic..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-xl bg-atelier-cream/50 border border-atelier-champagneBorder focus:bg-white focus:border-atelier-rose400 outline-none transition-all text-base sm:text-xs"
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-studio-canvas/50 border border-studio-border focus:bg-studio-surface focus:border-studio-wine outline-none transition-all text-base sm:text-xs text-studio-ink"
           />
         </div>
 
@@ -80,10 +84,10 @@ export default function ClientsView({
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5 whitespace-nowrap">
           <button
             onClick={() => setFilterVip(!filterVip)}
-            className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0 ${
+            className={`px-3 py-2 rounded-xl border text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0 ${
               filterVip
-                ? 'bg-amber-50 text-amber-700 border-amber-300 shadow-sm'
-                : 'bg-white text-atelier-charcoal border-atelier-champagneBorder hover:bg-atelier-cream'
+                ? 'bg-amber-50 text-amber-800 border-amber-300 shadow-xs'
+                : 'bg-studio-surface text-studio-secondary border-studio-border hover:bg-studio-canvas'
             }`}
           >
             <span>VIP Only</span>
@@ -92,9 +96,9 @@ export default function ClientsView({
           <select
             value={filterShape}
             onChange={(e) => setFilterShape(e.target.value)}
-            className="px-3 py-1.5 rounded-xl border border-atelier-champagneBorder bg-white text-atelier-charcoal font-semibold text-xs outline-none focus:border-atelier-rose300 shrink-0"
+            className="px-3 py-2 rounded-xl border border-studio-border bg-studio-surface text-studio-secondary font-semibold text-xs outline-none focus:border-studio-wine shrink-0"
           >
-            <option value="ALL">All Shapes</option>
+            <option value="ALL">All Silhouettes</option>
             <option value="Almond">Almond</option>
             <option value="Coffin">Coffin</option>
             <option value="Squoval">Squoval</option>
@@ -103,7 +107,7 @@ export default function ClientsView({
             <option value="Stiletto">Stiletto</option>
           </select>
 
-          <span className="text-[11px] text-atelier-muted pl-1 shrink-0">
+          <span className="text-[11px] text-studio-muted pl-1 shrink-0 font-medium">
             {filteredClients.length} clients
           </span>
         </div>
@@ -111,19 +115,19 @@ export default function ClientsView({
 
       {/* Clients Grid */}
       {filteredClients.length === 0 ? (
-        <div className="bg-white rounded-3xl p-12 border border-atelier-champagneBorder text-center space-y-3">
-          <div className="w-12 h-12 mx-auto rounded-full bg-atelier-rose50 text-atelier-rose500 flex items-center justify-center">
+        <div className="bg-studio-surface rounded-3xl p-12 border border-studio-border text-center space-y-3">
+          <div className="w-12 h-12 mx-auto rounded-full bg-studio-wineLight text-studio-wine flex items-center justify-center">
             <Users className="w-6 h-6" />
           </div>
-          <p className="font-serif italic font-semibold text-lg text-atelier-noir">
+          <p className="font-display italic font-semibold text-lg text-studio-ink">
             No Clients Found
           </p>
-          <p className="text-xs text-atelier-muted max-w-sm mx-auto">
+          <p className="text-xs text-studio-secondary max-w-sm mx-auto">
             Try adjusting your search query or register a new client profile.
           </p>
           <button
             onClick={onOpenNewClient}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-atelier-rose500 text-white text-xs font-semibold hover:bg-atelier-rose600 shadow-soft"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-studio-wine text-white text-xs font-semibold hover:bg-studio-wineHover shadow-studio"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Client</span>
@@ -134,30 +138,30 @@ export default function ClientsView({
           {filteredClients.map((client) => (
             <div
               key={client.id}
-              className="bg-white rounded-3xl p-5 border border-atelier-champagneBorder hover:border-atelier-rose300 shadow-sm hover:shadow-soft transition-all flex flex-col justify-between group"
+              className="bg-studio-surface rounded-3xl p-5 border border-studio-border hover:border-studio-borderStrong shadow-studio transition-all flex flex-col justify-between group"
             >
               <div>
                 {/* Top: Avatar, Name & VIP */}
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-atelier-rose500 to-atelier-rose200 text-white flex items-center justify-center font-serif italic font-bold text-base shadow-sm">
+                    <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-studio-wine via-studio-wineHover to-studio-rose text-white flex items-center justify-center font-display italic font-bold text-base shadow-xs">
                       {client.name.charAt(0)}
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5">
                         <h3
                           onClick={() => onOpenClientProfile(client)}
-                          className="font-serif italic font-bold text-base text-atelier-noir hover:text-atelier-rose600 cursor-pointer transition-colors"
+                          className="font-display italic font-bold text-base text-studio-ink hover:text-studio-wine cursor-pointer transition-colors"
                         >
                           {client.name}
                         </h3>
                         {client.vip && (
-                          <span className="px-1.5 py-0.2 rounded-md text-[9px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                          <span className="px-1.5 py-0.2 rounded-md text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
                             VIP
                           </span>
                         )}
                       </div>
-                      <p className="text-[11px] text-atelier-muted font-medium">
+                      <p className="text-[11px] text-studio-muted font-medium">
                         {client.phone}
                       </p>
                     </div>
@@ -165,16 +169,17 @@ export default function ClientsView({
 
                   <button
                     onClick={() => onOpenClientProfile(client)}
-                    className="p-1.5 rounded-xl hover:bg-atelier-cream text-atelier-muted hover:text-atelier-noir transition-colors"
+                    className="p-1.5 rounded-xl hover:bg-studio-subtle text-studio-muted hover:text-studio-ink transition-colors"
+                    aria-label="View Client Profile"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
 
                 {/* Social & Contact */}
-                <div className="flex items-center gap-3 text-[11px] text-atelier-muted mb-3 font-medium">
+                <div className="flex items-center gap-3 text-[11px] text-studio-secondary mb-3 font-medium">
                   {client.instagram && (
-                    <span className="text-atelier-rose600 font-semibold">
+                    <span className="text-studio-wine font-semibold">
                       {client.instagram}
                     </span>
                   )}
@@ -184,24 +189,24 @@ export default function ClientsView({
                 </div>
 
                 {/* Nail Shape / Aesthetics Tags */}
-                <div className="space-y-2 py-2.5 border-y border-atelier-champagneBorder/60">
+                <div className="space-y-2 py-2.5 border-y border-studio-border">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-atelier-muted text-[10px]">Style Profile:</span>
-                    <span className="font-semibold text-atelier-charcoal text-[11px]">
+                    <span className="text-studio-muted text-[10px]">Style Profile:</span>
+                    <span className="font-semibold text-studio-ink text-[11px]">
                       {client.preferredShape || 'Almond'} • {client.preferredLength || 'Medium'}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-atelier-muted text-[10px]">Aesthetic:</span>
-                    <span className="px-2 py-0.5 rounded-lg bg-atelier-rose50 text-atelier-rose600 font-semibold text-[10px] border border-atelier-rose200/60">
+                    <span className="text-studio-muted text-[10px]">Aesthetic:</span>
+                    <span className="px-2 py-0.5 rounded-lg bg-studio-wineLight text-studio-wine font-semibold text-[10px] border border-studio-border">
                       {client.preferredAesthetic || '3D Chrome'}
                     </span>
                   </div>
 
                   {client.allergies && client.allergies !== 'None reported' && (
-                    <div className="flex items-center gap-1.5 p-1.5 bg-amber-50/70 rounded-lg text-[10px] text-amber-800 font-medium">
-                      <AlertCircle className="w-3 h-3 text-amber-600 shrink-0" />
+                    <div className="flex items-center gap-1.5 p-1.5 bg-amber-50 rounded-lg text-[10px] text-amber-900 font-medium border border-amber-200">
+                      <AlertCircle className="w-3 h-3 text-amber-700 shrink-0" />
                       <span className="truncate">{client.allergies}</span>
                     </div>
                   )}
@@ -210,12 +215,12 @@ export default function ClientsView({
 
               {/* Bottom: Lifetime stats & Action Buttons */}
               <div className="pt-3 mt-3 flex items-center justify-between gap-2">
-                <div className="text-[11px] text-atelier-muted">
-                  <span className="font-bold text-atelier-noir font-serif text-sm">
+                <div className="text-[11px] text-studio-muted">
+                  <span className="font-bold text-studio-ink font-display text-sm">
                     {client.totalVisits || 0}
                   </span>{' '}
                   visits •{' '}
-                  <span className="font-bold text-atelier-noir font-serif text-sm">
+                  <span className="font-bold text-studio-ink font-display text-sm">
                     ₹{(client.totalSpent || 0).toLocaleString('en-IN')}
                   </span>
                 </div>
@@ -224,14 +229,14 @@ export default function ClientsView({
                   <button
                     onClick={() => onBookAppointment(client)}
                     title="Book Appointment"
-                    className="px-2.5 py-1.5 rounded-xl bg-atelier-rose50 hover:bg-atelier-rose100 text-atelier-rose600 text-[11px] font-semibold border border-atelier-rose200 transition-colors"
+                    className="px-3 py-1.5 rounded-xl bg-studio-wineLight hover:bg-studio-subtle text-studio-wine text-[11px] font-semibold border border-studio-border transition-colors active:scale-95"
                   >
                     Book
                   </button>
                   <button
                     onClick={() => onCreateInvoice(client)}
                     title="Generate Invoice"
-                    className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-atelier-cream text-atelier-charcoal text-[11px] font-semibold border border-atelier-champagneBorder transition-colors"
+                    className="px-3 py-1.5 rounded-xl bg-studio-surface hover:bg-studio-canvas text-studio-secondary text-[11px] font-semibold border border-studio-border transition-colors active:scale-95"
                   >
                     Bill
                   </button>

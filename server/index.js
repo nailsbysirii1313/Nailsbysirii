@@ -17,6 +17,34 @@ app.use(express.json());
 
 // API Routes
 
+// Active owner sessions set (persists in process memory)
+const activeSessions = new Set();
+
+// Asia/Kolkata date helper
+function getKolkataDateString() {
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Kolkata',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+  return formatter.format(new Date());
+}
+
+// Studio Hub Owner Authentication Middleware
+function requireAuth(req, res, next) {
+  const authHeader = req.headers['authorization'] || '';
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : req.headers['x-studio-token'];
+  const directPasscode = req.headers['x-studio-passcode'];
+  const settings = db.getSettings();
+  const validPasscode = settings?.studioPasscode || process.env.STUDIO_PASSCODE || 'nbs0812';
+
+  if ((token && activeSessions.has(token)) || (directPasscode && directPasscode.trim() === validPasscode)) {
+    return next();
+  }
+  return res.status(401).json({ error: 'Unauthorized: Studio Hub owner access required' });
+}
+
 // Health Check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
@@ -29,13 +57,15 @@ app.post('/api/auth/verify', (req, res) => {
   const validPasscode = settings?.studioPasscode || process.env.STUDIO_PASSCODE || 'nbs0812';
 
   if (passcode && passcode.trim() === validPasscode) {
-    return res.json({ success: true, message: 'Studio Hub unlocked' });
+    const token = 'nbs_sess_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+    activeSessions.add(token);
+    return res.json({ success: true, token, message: 'Studio Hub unlocked' });
   }
   return res.status(401).json({ success: false, error: 'Incorrect passcode. Access denied.' });
 });
 
 // Studio Overview / Dashboard stats
-app.get('/api/overview', (req, res) => {
+app.get('/api/overview', requireAuth, (req, res) => {
   const clients = db.getClients();
   const appointments = db.getAppointments();
   const invoices = db.getInvoices();
@@ -45,7 +75,7 @@ app.get('/api/overview', (req, res) => {
   const checklist = db.getChecklist();
   const repairs = db.getRepairs();
 
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = getKolkataDateString();
   const todayAppointments = appointments.filter(a => a.date === todayStr);
   const pendingAppointments = appointments.filter(a => a.status === 'Confirmed');
   
@@ -84,7 +114,7 @@ app.get('/api/overview', (req, res) => {
       totalPaid: totalRevenue,
       pending: pendingRevenue
     },
-    todaySchedule: todayAppointments.sort((a, b) => a.time.localeCompare(b.time)),
+    todaySchedule: todayAppointments.sort((a, b) => (a.time || '').localeCompare(b.time || '')),
     recentInvoices: invoices.slice(0, 5),
     recentNotifications: notifications.slice(0, 5),
     lowStockItems: lowStockItems.slice(0, 5),
@@ -97,54 +127,82 @@ app.get('/api/overview', (req, res) => {
   });
 });
 
-// Clients API
-app.get('/api/clients', (req, res) => {
+// Clients API (Private to Studio Hub)
+app.get('/api/clients', requireAuth, (req, res) => {
   res.json(db.getClients());
 });
 
-app.post('/api/clients', (req, res) => {
+app.post('/api/clients', requireAuth, (req, res) => {
   const client = db.saveClient(req.body);
   res.status(201).json(client);
 });
 
-app.put('/api/clients/:id', (req, res) => {
+app.put('/api/clients/:id', requireAuth, (req, res) => {
   const client = db.saveClient({ ...req.body, id: req.params.id });
   res.json(client);
 });
 
-app.delete('/api/clients/:id', (req, res) => {
+app.delete('/api/clients/:id', requireAuth, (req, res) => {
   db.deleteClient(req.params.id);
   res.json({ success: true, id: req.params.id });
 });
 
-// Services API
+// Services API (Catalog public read, admin edit)
 app.get('/api/services', (req, res) => {
   res.json(db.getServices());
 });
 
-app.post('/api/services', (req, res) => {
+app.post('/api/services', requireAuth, (req, res) => {
   const service = db.saveService(req.body);
   res.status(201).json(service);
 });
 
-app.put('/api/services/:id', (req, res) => {
+app.put('/api/services/:id', requireAuth, (req, res) => {
   const service = db.saveService({ ...req.body, id: req.params.id });
   res.json(service);
 });
 
-app.delete('/api/services/:id', (req, res) => {
+app.delete('/api/services/:id', requireAuth, (req, res) => {
   db.deleteService(req.params.id);
   res.json({ success: true, id: req.params.id });
 });
 
-// Appointments API
-app.get('/api/appointments', (req, res) => {
+// Appointments API (POST is public for clients; listing/updating requires auth)
+app.get('/api/appointments', requireAuth, (req, res) => {
   const apts = db.getAppointments();
   res.json(apts);
 });
 
 app.post('/api/appointments', async (req, res) => {
-  const apt = db.saveAppointment(req.body);
+  // If client details are provided and client is not linked, auto-create/link client profile
+  let clientId = req.body.clientId;
+  if (!clientId && req.body.clientName && req.body.clientPhone) {
+    const clients = db.getClients();
+    const cleanPhone = req.body.clientPhone.replace(/[^0-9]/g, '');
+    let matchedClient = clients.find(
+      c => (c.phone && c.phone.replace(/[^0-9]/g, '') === cleanPhone) ||
+           (c.name && c.name.trim().toLowerCase() === req.body.clientName.trim().toLowerCase())
+    );
+    if (!matchedClient) {
+      matchedClient = db.saveClient({
+        name: req.body.clientName.trim(),
+        phone: req.body.clientPhone.trim(),
+        email: req.body.clientEmail || '',
+        instagram: req.body.clientInstagram || '',
+        preferredShape: req.body.shape || 'Medium Almond',
+        preferredAesthetic: req.body.aesthetic || '3D Chrome & Glaze',
+        notes: req.body.notes || '',
+        vip: false
+      });
+    }
+    clientId = matchedClient.id;
+  }
+
+  const aptData = {
+    ...req.body,
+    clientId: clientId || req.body.clientId
+  };
+  const apt = db.saveAppointment(aptData);
 
   // Optional: Auto-alert Sirii on booking
   const settings = db.getSettings();
@@ -161,12 +219,12 @@ app.post('/api/appointments', async (req, res) => {
   res.status(201).json(apt);
 });
 
-app.put('/api/appointments/:id', (req, res) => {
+app.put('/api/appointments/:id', requireAuth, (req, res) => {
   const apt = db.saveAppointment({ ...req.body, id: req.params.id });
   res.json(apt);
 });
 
-app.patch('/api/appointments/:id/status', (req, res) => {
+app.patch('/api/appointments/:id/status', requireAuth, (req, res) => {
   const apts = db.getAppointments();
   const target = apts.find(a => a.id === req.params.id);
   if (!target) return res.status(404).json({ error: 'Appointment not found' });
@@ -188,13 +246,13 @@ app.patch('/api/appointments/:id/status', (req, res) => {
   res.json(target);
 });
 
-app.delete('/api/appointments/:id', (req, res) => {
+app.delete('/api/appointments/:id', requireAuth, (req, res) => {
   db.deleteAppointment(req.params.id);
   res.json({ success: true, id: req.params.id });
 });
 
 // Trigger reminder for specific appointment
-app.post('/api/appointments/:id/remind', async (req, res) => {
+app.post('/api/appointments/:id/remind', requireAuth, async (req, res) => {
   const apts = db.getAppointments();
   const appointment = apts.find(a => a.id === req.params.id);
   if (!appointment) return res.status(404).json({ error: 'Appointment not found' });
@@ -215,10 +273,11 @@ app.post('/api/appointments/:id/remind', async (req, res) => {
 });
 
 // Invoices API
-app.get('/api/invoices', (req, res) => {
+app.get('/api/invoices', requireAuth, (req, res) => {
   res.json(db.getInvoices());
 });
 
+// Public receipt link /#invoice-:id
 app.get('/api/invoices/:id', (req, res) => {
   const invoices = db.getInvoices();
   const found = invoices.find(i => i.id === req.params.id || i.invoiceNumber === req.params.id);
@@ -226,17 +285,17 @@ app.get('/api/invoices/:id', (req, res) => {
   res.json(found);
 });
 
-app.post('/api/invoices', (req, res) => {
+app.post('/api/invoices', requireAuth, (req, res) => {
   const inv = db.saveInvoice(req.body);
   res.status(201).json(inv);
 });
 
-app.put('/api/invoices/:id', (req, res) => {
+app.put('/api/invoices/:id', requireAuth, (req, res) => {
   const inv = db.saveInvoice({ ...req.body, id: req.params.id });
   res.json(inv);
 });
 
-app.patch('/api/invoices/:id/status', (req, res) => {
+app.patch('/api/invoices/:id/status', requireAuth, (req, res) => {
   const invoices = db.getInvoices();
   const target = invoices.find(i => i.id === req.params.id);
   if (!target) return res.status(404).json({ error: 'Invoice not found' });
@@ -264,17 +323,17 @@ app.patch('/api/invoices/:id/status', (req, res) => {
   res.json(target);
 });
 
-app.delete('/api/invoices/:id', (req, res) => {
+app.delete('/api/invoices/:id', requireAuth, (req, res) => {
   db.deleteInvoice(req.params.id);
   res.json({ success: true, id: req.params.id });
 });
 
 // Notifications & NTFY API
-app.get('/api/notifications', (req, res) => {
+app.get('/api/notifications', requireAuth, (req, res) => {
   res.json(db.getNotifications());
 });
 
-app.post('/api/notifications/test', async (req, res) => {
+app.post('/api/notifications/test', requireAuth, async (req, res) => {
   const { topic, message, title } = req.body;
   const settings = db.getSettings();
   const targetTopic = topic || settings.ntfyTopic || 'nails-by-sirii-alerts';
@@ -291,32 +350,43 @@ app.post('/api/notifications/test', async (req, res) => {
   res.json(result);
 });
 
-// Settings API
+// Settings API (GET is public but sanitized; PUT requires auth)
 app.get('/api/settings', (req, res) => {
-  res.json(db.getSettings());
+  const raw = db.getSettings();
+  const sanitized = { ...raw };
+  delete sanitized.studioPasscode; // Redact passcode from public wire!
+  res.json(sanitized);
 });
 
-app.put('/api/settings', (req, res) => {
-  const updated = db.saveSettings(req.body);
-  res.json(updated);
+app.put('/api/settings', requireAuth, (req, res) => {
+  const currentSettings = db.getSettings();
+  const payload = { ...req.body };
+  // Preserve existing passcode if not provided or empty
+  if (!payload.studioPasscode || !payload.studioPasscode.trim()) {
+    payload.studioPasscode = currentSettings.studioPasscode;
+  }
+  const updated = db.saveSettings(payload);
+  const sanitized = { ...updated };
+  delete sanitized.studioPasscode;
+  res.json(sanitized);
 });
 
 // Inventory & Supplies API
-app.get('/api/inventory', (req, res) => {
+app.get('/api/inventory', requireAuth, (req, res) => {
   res.json(db.getInventory());
 });
 
-app.post('/api/inventory', (req, res) => {
+app.post('/api/inventory', requireAuth, (req, res) => {
   const item = db.saveInventoryItem(req.body);
   res.status(201).json(item);
 });
 
-app.put('/api/inventory/:id', (req, res) => {
+app.put('/api/inventory/:id', requireAuth, (req, res) => {
   const item = db.saveInventoryItem({ ...req.body, id: req.params.id });
   res.json(item);
 });
 
-app.patch('/api/inventory/:id/stock', async (req, res) => {
+app.patch('/api/inventory/:id/stock', requireAuth, async (req, res) => {
   const delta = Number(req.body.delta) || 0;
   const updated = db.adjustInventoryStock(req.params.id, delta);
   if (!updated) {
@@ -331,12 +401,12 @@ app.patch('/api/inventory/:id/stock', async (req, res) => {
   res.json(updated);
 });
 
-app.delete('/api/inventory/:id', (req, res) => {
+app.delete('/api/inventory/:id', requireAuth, (req, res) => {
   db.deleteInventoryItem(req.params.id);
   res.json({ success: true, id: req.params.id });
 });
 
-app.post('/api/inventory/alert', async (req, res) => {
+app.post('/api/inventory/alert', requireAuth, async (req, res) => {
   const inventory = db.getInventory();
   const lowStock = inventory.filter(i => (Number(i.quantity) || 0) <= (Number(i.minThreshold) || 0));
   if (lowStock.length === 0) {
@@ -347,11 +417,11 @@ app.post('/api/inventory/alert', async (req, res) => {
 });
 
 // Daily Sanitization Checklist API
-app.get('/api/checklist', (req, res) => {
+app.get('/api/checklist', requireAuth, (req, res) => {
   res.json(db.getChecklist());
 });
 
-app.post('/api/checklist/:id/toggle', (req, res) => {
+app.post('/api/checklist/:id/toggle', requireAuth, (req, res) => {
   const { signedBy } = req.body || {};
   const item = db.toggleChecklistItem(req.params.id, signedBy || 'Sirii');
   if (!item) {
@@ -360,13 +430,13 @@ app.post('/api/checklist/:id/toggle', (req, res) => {
   res.json(item);
 });
 
-app.post('/api/checklist/reset', (req, res) => {
+app.post('/api/checklist/reset', requireAuth, (req, res) => {
   const reset = db.resetChecklist();
   res.json(reset);
 });
 
-// Emergency Nail Repair Tickets API
-app.get('/api/repairs', (req, res) => {
+// Emergency Nail Repair Tickets API (POST is public for clients)
+app.get('/api/repairs', requireAuth, (req, res) => {
   res.json(db.getRepairs());
 });
 
@@ -377,7 +447,7 @@ app.post('/api/repairs', async (req, res) => {
   res.status(201).json(repair);
 });
 
-app.patch('/api/repairs/:id/status', (req, res) => {
+app.patch('/api/repairs/:id/status', requireAuth, (req, res) => {
   const { status } = req.body || {};
   const updated = db.updateRepairStatus(req.params.id, status || 'Resolved');
   if (!updated) {
@@ -386,17 +456,17 @@ app.patch('/api/repairs/:id/status', (req, res) => {
   res.json(updated);
 });
 
-app.delete('/api/repairs/:id', (req, res) => {
+app.delete('/api/repairs/:id', requireAuth, (req, res) => {
   db.deleteRepair(req.params.id);
   res.json({ success: true, id: req.params.id });
 });
 
-// Studio Gift Cards & Vouchers API
-app.get('/api/gift-cards', (req, res) => {
+// Studio Gift Cards & Vouchers API (Redeem is public)
+app.get('/api/gift-cards', requireAuth, (req, res) => {
   res.json(db.getGiftCards());
 });
 
-app.post('/api/gift-cards', async (req, res) => {
+app.post('/api/gift-cards', requireAuth, async (req, res) => {
   const card = db.saveGiftCard(req.body);
   await sendGiftCardIssuedAlert(card);
   res.status(201).json(card);
@@ -411,7 +481,7 @@ app.post('/api/gift-cards/redeem', (req, res) => {
   res.json(result);
 });
 
-app.delete('/api/gift-cards/:id', (req, res) => {
+app.delete('/api/gift-cards/:id', requireAuth, (req, res) => {
   db.deleteGiftCard(req.params.id);
   res.json({ success: true, id: req.params.id });
 });
@@ -426,20 +496,20 @@ app.post('/api/reviews', (req, res) => {
   res.status(201).json(review);
 });
 
-app.delete('/api/reviews/:id', (req, res) => {
+app.delete('/api/reviews/:id', requireAuth, (req, res) => {
   db.deleteReview(req.params.id);
   res.json({ success: true, id: req.params.id });
 });
 
 // Backup & Accounting CSV Export API
-app.get('/api/backup/export', (req, res) => {
+app.get('/api/backup/export', requireAuth, (req, res) => {
   const data = db.get();
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Content-Disposition', `attachment; filename=nails-by-sirii-backup-${new Date().toISOString().split('T')[0]}.json`);
   res.send(JSON.stringify(data, null, 2));
 });
 
-app.get('/api/backup/invoices-csv', (req, res) => {
+app.get('/api/backup/invoices-csv', requireAuth, (req, res) => {
   const invoices = db.getInvoices();
   const headers = ['Invoice Number', 'Date', 'Due Date', 'Client Name', 'Phone', 'Subtotal', 'Tax', 'Tip', 'Total', 'Deposit Deducted', 'Balance Due', 'Status', 'Payment Method'];
   const rows = invoices.map(i => [
@@ -474,7 +544,7 @@ function startReminderScheduler() {
 
       const appointments = db.getAppointments();
       const now = new Date();
-      const todayStr = now.toISOString().split('T')[0];
+      const todayStr = getKolkataDateString();
 
       for (const apt of appointments) {
         if (apt.date !== todayStr) continue;

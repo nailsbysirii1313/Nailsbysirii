@@ -1,23 +1,38 @@
 const API_BASE = '/api';
 
+function getAuthHeaders(customHeaders = {}) {
+  const headers = { ...customHeaders };
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('nbs_studio_token');
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+  }
+  return headers;
+}
+
 export const api = {
   // Overview
   async getOverview() {
-    const res = await fetch(`${API_BASE}/overview`);
+    const res = await fetch(`${API_BASE}/overview`, {
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to load overview');
     return res.json();
   },
 
   // Clients
   async getClients() {
-    const res = await fetch(`${API_BASE}/clients`);
+    const res = await fetch(`${API_BASE}/clients`, {
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to load clients');
     return res.json();
   },
   async createClient(data) {
     const res = await fetch(`${API_BASE}/clients`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error('Failed to create client');
@@ -26,14 +41,17 @@ export const api = {
   async updateClient(id, data) {
     const res = await fetch(`${API_BASE}/clients/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error('Failed to update client');
     return res.json();
   },
   async deleteClient(id) {
-    const res = await fetch(`${API_BASE}/clients/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_BASE}/clients/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to delete client');
     return res.json();
   },
@@ -47,7 +65,7 @@ export const api = {
   async createService(data) {
     const res = await fetch(`${API_BASE}/services`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error('Failed to create service');
@@ -56,28 +74,33 @@ export const api = {
   async updateService(id, data) {
     const res = await fetch(`${API_BASE}/services/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error('Failed to update service');
     return res.json();
   },
   async deleteService(id) {
-    const res = await fetch(`${API_BASE}/services/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_BASE}/services/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to delete service');
     return res.json();
   },
 
   // Appointments
   async getAppointments() {
-    const res = await fetch(`${API_BASE}/appointments`);
+    const res = await fetch(`${API_BASE}/appointments`, {
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to load appointments');
     return res.json();
   },
   async createAppointment(data) {
     const res = await fetch(`${API_BASE}/appointments`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error('Failed to create appointment');
@@ -86,7 +109,7 @@ export const api = {
   async updateAppointment(id, data) {
     const res = await fetch(`${API_BASE}/appointments/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error('Failed to update appointment');
@@ -95,20 +118,24 @@ export const api = {
   async updateAppointmentStatus(id, status) {
     const res = await fetch(`${API_BASE}/appointments/${id}/status`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ status })
     });
     if (!res.ok) throw new Error('Failed to update appointment status');
     return res.json();
   },
   async deleteAppointment(id) {
-    const res = await fetch(`${API_BASE}/appointments/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_BASE}/appointments/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to delete appointment');
     return res.json();
   },
   async remindAppointment(id) {
     const res = await fetch(`${API_BASE}/appointments/${id}/remind`, {
-      method: 'POST'
+      method: 'POST',
+      headers: getAuthHeaders()
     });
     if (!res.ok) throw new Error('Failed to send phone reminder');
     return res.json();
@@ -116,14 +143,21 @@ export const api = {
 
   // Invoices
   async getInvoices() {
-    const res = await fetch(`${API_BASE}/invoices`);
+    const res = await fetch(`${API_BASE}/invoices`, {
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to load invoices');
+    return res.json();
+  },
+  async getInvoiceById(id) {
+    const res = await fetch(`${API_BASE}/invoices/${id}`);
+    if (!res.ok) throw new Error('Failed to load invoice');
     return res.json();
   },
   async createInvoice(data) {
     const res = await fetch(`${API_BASE}/invoices`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error('Failed to create invoice');
@@ -132,7 +166,7 @@ export const api = {
   async updateInvoice(id, data) {
     const res = await fetch(`${API_BASE}/invoices/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error('Failed to update invoice');
@@ -142,28 +176,33 @@ export const api = {
     const payload = typeof details === 'string' ? { status, paymentMethod: details } : { status, ...details };
     const res = await fetch(`${API_BASE}/invoices/${id}/status`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(payload)
     });
     if (!res.ok) throw new Error('Failed to update invoice status');
     return res.json();
   },
   async deleteInvoice(id) {
-    const res = await fetch(`${API_BASE}/invoices/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_BASE}/invoices/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to delete invoice');
     return res.json();
   },
 
   // Notifications
   async getNotifications() {
-    const res = await fetch(`${API_BASE}/notifications`);
+    const res = await fetch(`${API_BASE}/notifications`, {
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to load notifications');
     return res.json();
   },
   async sendTestNotification(params) {
     const res = await fetch(`${API_BASE}/notifications/test`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(params)
     });
     if (!res.ok) throw new Error('Failed to send test alert');
@@ -179,7 +218,7 @@ export const api = {
   async updateSettings(data) {
     const res = await fetch(`${API_BASE}/settings`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error('Failed to update settings');
@@ -188,14 +227,16 @@ export const api = {
 
   // Inventory & Supplies
   async getInventory() {
-    const res = await fetch(`${API_BASE}/inventory`);
+    const res = await fetch(`${API_BASE}/inventory`, {
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to load inventory');
     return res.json();
   },
   async createInventoryItem(data) {
     const res = await fetch(`${API_BASE}/inventory`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error('Failed to create inventory item');
@@ -204,7 +245,7 @@ export const api = {
   async updateInventoryItem(id, data) {
     const res = await fetch(`${API_BASE}/inventory/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error('Failed to update inventory item');
@@ -213,47 +254,60 @@ export const api = {
   async adjustInventoryStock(id, delta, notify = false) {
     const res = await fetch(`${API_BASE}/inventory/${id}/stock`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ delta, notify })
     });
     if (!res.ok) throw new Error('Failed to adjust stock');
     return res.json();
   },
   async deleteInventoryItem(id) {
-    const res = await fetch(`${API_BASE}/inventory/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_BASE}/inventory/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to delete inventory item');
     return res.json();
   },
   async sendInventoryLowStockAlert() {
-    const res = await fetch(`${API_BASE}/inventory/alert`, { method: 'POST' });
+    const res = await fetch(`${API_BASE}/inventory/alert`, {
+      method: 'POST',
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to send inventory alert');
     return res.json();
   },
 
   // Daily Sanitization Checklist
   async getChecklist() {
-    const res = await fetch(`${API_BASE}/checklist`);
+    const res = await fetch(`${API_BASE}/checklist`, {
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to load checklist');
     return res.json();
   },
   async toggleChecklistItem(id, signedBy = 'Sirii') {
     const res = await fetch(`${API_BASE}/checklist/${id}/toggle`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ signedBy })
     });
     if (!res.ok) throw new Error('Failed to toggle checklist item');
     return res.json();
   },
   async resetChecklist() {
-    const res = await fetch(`${API_BASE}/checklist/reset`, { method: 'POST' });
+    const res = await fetch(`${API_BASE}/checklist/reset`, {
+      method: 'POST',
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to reset checklist');
     return res.json();
   },
 
   // Emergency Nail Repairs
   async getRepairs() {
-    const res = await fetch(`${API_BASE}/repairs`);
+    const res = await fetch(`${API_BASE}/repairs`, {
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to load emergency repairs');
     return res.json();
   },
@@ -269,28 +323,33 @@ export const api = {
   async updateRepairStatus(id, status) {
     const res = await fetch(`${API_BASE}/repairs/${id}/status`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ status })
     });
     if (!res.ok) throw new Error('Failed to update repair status');
     return res.json();
   },
   async deleteRepair(id) {
-    const res = await fetch(`${API_BASE}/repairs/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_BASE}/repairs/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to delete repair ticket');
     return res.json();
   },
 
   // Studio Gift Cards & Vouchers
   async getGiftCards() {
-    const res = await fetch(`${API_BASE}/gift-cards`);
+    const res = await fetch(`${API_BASE}/gift-cards`, {
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to load gift cards');
     return res.json();
   },
   async createGiftCard(data) {
     const res = await fetch(`${API_BASE}/gift-cards`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error('Failed to create gift card');
@@ -307,7 +366,10 @@ export const api = {
     return data;
   },
   async deleteGiftCard(id) {
-    const res = await fetch(`${API_BASE}/gift-cards/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_BASE}/gift-cards/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to delete gift card');
     return res.json();
   },
@@ -328,7 +390,10 @@ export const api = {
     return res.json();
   },
   async deleteReview(id) {
-    const res = await fetch(`${API_BASE}/reviews/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_BASE}/reviews/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
     if (!res.ok) throw new Error('Failed to delete review');
     return res.json();
   },
@@ -342,7 +407,10 @@ export const api = {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Incorrect passcode');
+    if (data.token && typeof window !== 'undefined') {
+      localStorage.setItem('nbs_studio_token', data.token);
+      localStorage.setItem('nbs_studio_auth', 'true');
+    }
     return data;
   }
 };
-

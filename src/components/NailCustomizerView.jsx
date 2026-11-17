@@ -1,54 +1,31 @@
 import React, { useState } from 'react';
 import { Sparkles, Clock, DollarSign, Check, Calendar, Receipt, RotateCcw } from 'lucide-react';
+import { SHAPES, LENGTHS, BASE_COLORS, FINISHES, calculateCustomSet } from '../utils/customizerCalculator';
+import NailTipSchematic from './NailTipSchematic';
 
 export default function NailCustomizerView({
   onBookCustomDesign,
   onCreateInvoiceFromDesign,
   onSwitchToStudio
 }) {
-  const shapes = [
-    { id: 'almond', name: 'Almond', desc: 'Classic, slender, highly flattering' },
-    { id: 'coffin', name: 'Coffin / Ballerina', desc: 'Tapered sides with crisp flat tip' },
-    { id: 'squoval', name: 'Squoval', desc: 'Square with gently rounded corners' },
-    { id: 'round', name: 'Round', desc: 'Natural, chic, everyday active length' },
-    { id: 'stiletto', name: 'Stiletto', desc: 'Dramatic pointed editorial statement' },
-    { id: 'square', name: 'Square', desc: 'Sharp, modern 90s aesthetic' }
-  ];
-
-  const lengths = [
-    { id: 'short', name: 'Short', extra: 0, time: 0 },
-    { id: 'medium', name: 'Medium', extra: 300, time: 15 },
-    { id: 'long', name: 'Long', extra: 600, time: 25 },
-    { id: 'xl', name: 'Extra Long', extra: 900, time: 35 }
-  ];
-
-  const baseColors = [
-    { id: 'milky', name: 'Milky Silk', hex: '#F8F1EB', border: '#E7DDD5' },
-    { id: 'blush', name: 'Strawberry Jelly', hex: '#F9D5DC', border: '#EBB4C0' },
-    { id: 'nude', name: 'Cashmere Nude', hex: '#E8CFBE', border: '#D6BAA6' },
-    { id: 'rose', name: 'French Sheer Rose', hex: '#F4BBC6', border: '#E59EA9' },
-    { id: 'espresso', name: 'Deep Noir Espresso', hex: '#312527', border: '#4E3E41' },
-    { id: 'matcha', name: 'Matcha Sage', hex: '#CBD2BC', border: '#B4BC9F' }
-  ];
-
-  const finishes = [
-    { id: 'chrome', name: 'Hailey Glazed Chrome', price: 600, time: 15, desc: 'Iridescent pearl powder glaze' },
-    { id: 'cateye', name: 'Cosmic Cat-Eye Velvet', price: 700, time: 20, desc: 'Dual-magnet silk shimmer reflection' },
-    { id: 'orbit3d', name: '3D Liquid Chrome Swirls', price: 1200, time: 30, desc: 'Sculpted metallic chrome relief art' },
-    { id: 'pearls', name: 'Baroque Pearls & Droplets', price: 1400, time: 25, desc: 'Hand-placed crystals & clear dewdrops' },
-    { id: 'french', name: 'Micro-French Line', price: 600, time: 15, desc: 'Razor-thin editorial tip smile' },
-    { id: 'gloss', name: 'Ultra High-Gloss Glass', price: 0, time: 0, desc: 'Mirror non-wipe glass topcoat' }
-  ];
+  const shapes = SHAPES;
+  const lengths = LENGTHS;
+  const baseColors = BASE_COLORS;
+  const finishes = FINISHES;
 
   const [selectedShape, setSelectedShape] = useState(shapes[0]);
   const [selectedLength, setSelectedLength] = useState(lengths[1]);
   const [selectedBase, setSelectedBase] = useState(baseColors[1]);
   const [selectedFinish, setSelectedFinish] = useState(finishes[0]);
 
-  // Pricing formula in Rupees
-  const baseServicePrice = 2200; // Signature BIAB
-  const totalPrice = baseServicePrice + selectedLength.extra + selectedFinish.price;
-  const totalDuration = 75 + selectedLength.time + selectedFinish.time;
+  // Pricing calculation from shared single source of truth
+  const calculation = calculateCustomSet({
+    length: selectedLength,
+    finish: selectedFinish
+  });
+  const baseServicePrice = calculation.basePrice;
+  const totalPrice = calculation.totalPrice;
+  const totalDuration = calculation.totalDuration;
 
   const handleBook = () => {
     onBookCustomDesign({
@@ -57,7 +34,8 @@ export default function NailCustomizerView({
       baseColor: selectedBase.name,
       finish: selectedFinish.name,
       price: totalPrice,
-      duration: totalDuration
+      duration: totalDuration,
+      lineItems: calculation.lineItems
     });
   };
 
@@ -68,7 +46,8 @@ export default function NailCustomizerView({
       baseColor: selectedBase.name,
       finish: selectedFinish.name,
       price: totalPrice,
-      duration: totalDuration
+      duration: totalDuration,
+      lineItems: calculation.lineItems
     });
   };
 
@@ -219,29 +198,30 @@ export default function NailCustomizerView({
         {/* Right Col: Live Atelier Aesthetic Showcase & Actions */}
         <div className="space-y-6">
           <div className="bg-white rounded-3xl p-6 border border-atelier-champagneBorder shadow-float space-y-6 sticky top-24">
-            <span className="text-xs font-bold uppercase tracking-wider text-atelier-rose600 block">
-              Live Custom Set Preview
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-atelier-rose600 block">
+                Live Custom Set Preview
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-atelier-rose50 text-atelier-rose600 font-bold border border-atelier-rose200">
+                Illustrative Schematic Preview
+              </span>
+            </div>
 
-            {/* Stylized Visual Display */}
+            {/* Honest Illustrative Schematic Preview */}
             <div
-              className="h-56 rounded-3xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden transition-all duration-300 border border-atelier-champagneBorder"
-              style={{ backgroundColor: selectedBase.hex }}
+              className="h-64 rounded-3xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden transition-all duration-300 border border-atelier-champagneBorder bg-atelier-cream/50"
             >
-              {/* Shimmer / chrome overlay effect */}
-              {selectedFinish.id === 'chrome' && (
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/30 via-pink-200/20 to-purple-200/20 mix-blend-overlay pointer-events-none" />
-              )}
-              {selectedFinish.id === 'cateye' && (
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -rotate-45 pointer-events-none" />
-              )}
+              <NailTipSchematic
+                shape={selectedShape}
+                length={selectedLength}
+                baseColor={selectedBase}
+                finish={selectedFinish}
+                size="md"
+              />
 
-              <div className="relative z-10 space-y-2 p-4 bg-white/80 backdrop-blur-md rounded-2xl border border-white/60 shadow-sm max-w-[220px]">
-                <span className="font-serif italic font-bold text-base text-atelier-noir block">
-                  {selectedShape.name}
-                </span>
-                <span className="text-[11px] font-semibold text-atelier-rose600 block">
-                  {selectedLength.name} Length
+              <div className="mt-3 relative z-10 space-y-1 p-3 bg-white/90 backdrop-blur-md rounded-2xl border border-white/80 shadow-xs max-w-[220px]">
+                <span className="font-serif italic font-bold text-sm text-atelier-noir block">
+                  {selectedShape.name} • {selectedLength.name}
                 </span>
                 <span className="text-[10px] text-atelier-charcoal font-medium block">
                   {selectedBase.name} • {selectedFinish.name}

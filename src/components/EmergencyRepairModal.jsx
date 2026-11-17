@@ -16,16 +16,16 @@ const HANDS = ['Right Hand', 'Left Hand', 'Both Hands'];
 const REPAIR_TYPES = [
   'Gel-X Extension Replacement',
   'Builder Gel (BIAB) Chip Fix',
-  'Cracked Real Nail Repair',
-  'Fell-Off Charm or Bow Fix',
+  'Cracked Natural Nail Repair',
+  'Fell-Off Charm or Crystal Fix',
   'Lifting Edge Catching Hair'
 ];
 
 const URGENCIES = [
   'Today ASAP (Urgent)',
   'Tomorrow Morning',
-  'In Next 2 Days',
-  'Next Available Quick Slot'
+  'Next 2 Days',
+  'Next Available Slot'
 ];
 
 export default function EmergencyRepairModal({
@@ -40,7 +40,7 @@ export default function EmergencyRepairModal({
     clientPhone: '',
     hand: 'Right Hand',
     finger: 'Index Finger',
-    serviceType: 'Gel-X Extension Replacement',
+    serviceType: 'Builder Gel (BIAB) Chip Fix',
     issue: '',
     urgency: 'Today ASAP (Urgent)'
   });
@@ -53,7 +53,7 @@ export default function EmergencyRepairModal({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.clientName.trim() || !formData.clientPhone.trim()) {
-      if (onAddToast) onAddToast('Required Fields', 'Please tell us your name and phone number', 'error');
+      if (onAddToast) onAddToast('Required Fields', 'Please provide your name and phone number', 'error');
       return;
     }
 
@@ -62,7 +62,7 @@ export default function EmergencyRepairModal({
       await onSubmitRepair(formData);
       setIsSuccess(true);
       if (onAddToast) {
-        onAddToast('Fix Request Sent', "Sirii has received your message on her phone!", 'success');
+        onAddToast('Repair Request Dispatched', "Sirii has received your urgent request on her phone.", 'success');
       }
     } catch (err) {
       if (onAddToast) onAddToast('Submission Failed', err.message, 'error');
@@ -77,12 +77,13 @@ export default function EmergencyRepairModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-atelier-noir/40 backdrop-blur-sm animate-fade-in overflow-y-auto">
-      <div className="bg-white rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 border-t sm:border border-atelier-champagneBorder shadow-2xl relative max-h-[92vh] overflow-y-auto">
-        <div className="w-10 h-1.5 rounded-full bg-stone-300 mx-auto mb-3 sm:hidden" />
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-sm animate-fade-in overflow-y-auto">
+      <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 border-t sm:border border-studio-border shadow-studio-float relative max-h-[92vh] overflow-y-auto">
+        <div className="w-10 h-1.5 rounded-full bg-studio-borderStrong mx-auto mb-3 sm:hidden" />
         <button
           onClick={handleClose}
-          className="absolute right-4 sm:right-5 top-4 sm:top-5 w-8 h-8 rounded-full bg-atelier-cream flex items-center justify-center text-atelier-muted hover:text-atelier-noir transition-colors"
+          className="absolute right-4 sm:right-5 top-4 sm:top-5 w-8 h-8 rounded-full bg-studio-subtle flex items-center justify-center text-studio-muted hover:text-studio-ink transition-colors"
+          aria-label="Close"
         >
           <X className="w-4 h-4" />
         </button>
@@ -90,37 +91,37 @@ export default function EmergencyRepairModal({
         {!isSuccess ? (
           <div>
             <div className="space-y-1.5 mb-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-rose-50 border border-rose-200 text-rose-600 text-[10px] font-bold">
-                <AlertTriangle className="w-3 h-3" />
-                <span>Quick Nail Fix Desk</span>
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-[10px] font-bold">
+                <AlertTriangle className="w-3 h-3 text-amber-600" />
+                <span>Urgent Repair Desk</span>
               </div>
-              <h3 className="font-serif italic font-bold text-2xl text-atelier-noir">
-                Broke or Chipped a Nail? Don't Worry Babe!
+              <h3 className="font-display italic font-bold text-2xl text-studio-ink">
+                Quick Nail Repair Request
               </h3>
-              <p className="text-xs text-atelier-muted leading-relaxed">
-                Accidents happen! Send a quick message to Sirii and she will squeeze you in for a quick 15-20 min fix.
+              <p className="text-xs text-studio-secondary leading-relaxed">
+                Accidents happen. Send a direct squeeze-in request to Sirii's phone and we will accommodate a quick 15–20 minute repair slot today or tomorrow.
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+            <form onSubmit={handleSubmit} className="space-y-4 text-xs font-sans">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-atelier-charcoal mb-1">
+                  <label className="block font-semibold text-studio-secondary mb-1">
                     Your Name *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Ananya, Priya..."
+                    placeholder="e.g. Ananya Sharma"
                     value={formData.clientName}
                     onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-atelier-champagneBorder focus:outline-none focus:border-atelier-rose400 text-atelier-noir text-base sm:text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border focus:outline-none focus:border-studio-wine text-studio-ink bg-studio-canvas/40 text-base sm:text-xs"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-atelier-charcoal mb-1">
-                    WhatsApp / Phone Number *
+                  <label className="block font-semibold text-studio-secondary mb-1">
+                    Phone Number (WhatsApp) *
                   </label>
                   <input
                     type="tel"
@@ -128,20 +129,20 @@ export default function EmergencyRepairModal({
                     placeholder="+91 98765 43210"
                     value={formData.clientPhone}
                     onChange={(e) => setFormData({ ...formData, clientPhone: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-atelier-champagneBorder focus:outline-none focus:border-atelier-rose400 text-atelier-noir text-base sm:text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border focus:outline-none focus:border-studio-wine text-studio-ink bg-studio-canvas/40 text-base sm:text-xs"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-atelier-charcoal mb-1">
+                  <label className="block font-semibold text-studio-secondary mb-1">
                     Which Hand? *
                   </label>
                   <select
                     value={formData.hand}
                     onChange={(e) => setFormData({ ...formData, hand: e.target.value })}
-                    className="w-full px-3 py-2.5 rounded-xl border border-atelier-champagneBorder focus:outline-none focus:border-atelier-rose400 text-atelier-noir bg-white text-base sm:text-xs"
+                    className="w-full px-3 py-2.5 rounded-xl border border-studio-border focus:outline-none focus:border-studio-wine text-studio-ink bg-studio-surface text-base sm:text-xs"
                   >
                     {HANDS.map((h) => (
                       <option key={h} value={h}>
@@ -152,13 +153,13 @@ export default function EmergencyRepairModal({
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-atelier-charcoal mb-1">
+                  <label className="block font-semibold text-studio-secondary mb-1">
                     Which Finger? *
                   </label>
                   <select
                     value={formData.finger}
                     onChange={(e) => setFormData({ ...formData, finger: e.target.value })}
-                    className="w-full px-3 py-2.5 rounded-xl border border-atelier-champagneBorder focus:outline-none focus:border-atelier-rose400 text-atelier-noir bg-white text-base sm:text-xs"
+                    className="w-full px-3 py-2.5 rounded-xl border border-studio-border focus:outline-none focus:border-studio-wine text-studio-ink bg-studio-surface text-base sm:text-xs"
                   >
                     {FINGERS.map((f) => (
                       <option key={f} value={f}>
@@ -170,13 +171,13 @@ export default function EmergencyRepairModal({
               </div>
 
               <div>
-                <label className="block font-semibold text-atelier-charcoal mb-1">
-                  What Needs Fixing? *
+                <label className="block font-semibold text-studio-secondary mb-1">
+                  Repair Type *
                 </label>
                 <select
                   value={formData.serviceType}
                   onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
-                  className="w-full px-3 py-2.5 rounded-xl border border-atelier-champagneBorder focus:outline-none focus:border-atelier-rose400 text-atelier-noir bg-white text-base sm:text-xs"
+                  className="w-full px-3 py-2.5 rounded-xl border border-studio-border focus:outline-none focus:border-studio-wine text-studio-ink bg-studio-surface text-base sm:text-xs"
                 >
                   {REPAIR_TYPES.map((t) => (
                     <option key={t} value={t}>
@@ -187,8 +188,8 @@ export default function EmergencyRepairModal({
               </div>
 
               <div>
-                <label className="block font-semibold text-atelier-charcoal mb-1">
-                  How Urgently Do You Need It? *
+                <label className="block font-semibold text-studio-secondary mb-1">
+                  Urgency Level *
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {URGENCIES.map((u) => (
@@ -198,8 +199,8 @@ export default function EmergencyRepairModal({
                       onClick={() => setFormData({ ...formData, urgency: u })}
                       className={`p-2.5 rounded-xl border text-left text-xs font-semibold transition-all ${
                         formData.urgency === u
-                          ? 'bg-rose-50 border-rose-300 text-rose-700 shadow-xs'
-                          : 'bg-atelier-cream/50 border-atelier-champagneBorder text-atelier-charcoal hover:border-atelier-rose200'
+                          ? 'bg-studio-wineLight border-studio-wine text-studio-wine shadow-xs'
+                          : 'bg-studio-canvas/50 border-studio-border text-studio-secondary hover:border-studio-borderStrong'
                       }`}
                     >
                       {u}
@@ -209,15 +210,15 @@ export default function EmergencyRepairModal({
               </div>
 
               <div>
-                <label className="block font-semibold text-atelier-charcoal mb-1">
-                  What Happened? (Optional)
+                <label className="block font-semibold text-studio-secondary mb-1">
+                  Details / What Happened (Optional)
                 </label>
                 <textarea
                   rows="2"
-                  placeholder="e.g. Corner chipped while travelling, have a party tomorrow night!"
+                  placeholder="e.g. Free-edge chipped, or need quick fix before tomorrow evening's event"
                   value={formData.issue}
                   onChange={(e) => setFormData({ ...formData, issue: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-xl border border-atelier-champagneBorder focus:outline-none focus:border-atelier-rose400 text-atelier-noir resize-none text-base sm:text-xs"
+                  className="w-full px-3.5 py-2 rounded-xl border border-studio-border focus:outline-none focus:border-studio-wine text-studio-ink bg-studio-canvas/40 resize-none text-base sm:text-xs"
                 />
               </div>
 
@@ -225,52 +226,52 @@ export default function EmergencyRepairModal({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs shadow-soft transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+                  className="w-full py-3 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>{isSubmitting ? 'Sending Request...' : 'Send Quick Fix Request to Sirii'}</span>
+                  <span>{isSubmitting ? 'Sending Alert...' : 'Dispatch Squeeze-in Request'}</span>
                 </button>
               </div>
             </form>
           </div>
         ) : (
           <div className="text-center py-6 space-y-4">
-            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto shadow-soft">
+            <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto shadow-studio">
               <CheckCircle2 className="w-8 h-8" />
             </div>
 
             <div className="space-y-1">
               <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 block">
-                Request Sent to Sirii!
+                Dispatched to Phone
               </span>
-              <h3 className="font-serif italic font-bold text-2xl text-atelier-noir">
-                Hang Tight Babe, We'll Fix It!
+              <h3 className="font-display italic font-bold text-2xl text-studio-ink">
+                Request Received by Sirii
               </h3>
-              <p className="text-xs text-atelier-muted max-w-sm mx-auto leading-relaxed">
-                Sirii has received your request on her phone! She will check her schedule and message you on WhatsApp at <span className="font-semibold text-atelier-noir">{formData.clientPhone}</span> shortly with a quick slot.
+              <p className="text-xs text-studio-secondary max-w-sm mx-auto leading-relaxed">
+                Sirii has received your urgent repair alert on her studio device. She will inspect today's schedule and reach out on WhatsApp at <span className="font-semibold text-studio-ink">{formData.clientPhone}</span> with a quick squeeze-in slot.
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-atelier-cream/60 border border-atelier-champagneBorder/80 max-w-xs mx-auto text-xs space-y-1 text-left">
+            <div className="p-4 rounded-2xl bg-studio-canvas border border-studio-border max-w-xs mx-auto text-xs space-y-1 text-left">
               <div className="flex justify-between">
-                <span className="text-atelier-muted">Finger:</span>
-                <span className="font-semibold text-atelier-noir">{formData.hand} • {formData.finger}</span>
+                <span className="text-studio-muted">Target:</span>
+                <span className="font-semibold text-studio-ink">{formData.hand} • {formData.finger}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-atelier-muted">Service:</span>
-                <span className="font-semibold text-atelier-rose600 truncate max-w-[150px]">{formData.serviceType}</span>
+                <span className="text-studio-muted">Type:</span>
+                <span className="font-semibold text-studio-wine truncate max-w-[150px]">{formData.serviceType}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-atelier-muted">Urgency:</span>
-                <span className="font-bold text-rose-700">{formData.urgency}</span>
+                <span className="text-studio-muted">Urgency:</span>
+                <span className="font-bold text-amber-800">{formData.urgency}</span>
               </div>
             </div>
 
             <button
               onClick={handleClose}
-              className="px-6 py-2.5 rounded-2xl bg-atelier-rose500 hover:bg-atelier-rose600 text-white font-semibold text-xs shadow-soft transition-all"
+              className="px-6 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio transition-all active:scale-95"
             >
-              Got It, Thanks!
+              Close
             </button>
           </div>
         )}
@@ -278,4 +279,3 @@ export default function EmergencyRepairModal({
     </div>
   );
 }
-

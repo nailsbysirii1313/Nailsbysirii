@@ -35,8 +35,8 @@ export default function ShareCatalogueModal({
     setCopiedType(type);
     if (onAddToast) {
       onAddToast(
-        type === 'noPrices' ? 'Copied Catalogue (No Prices) Link!' : 'Copied Full Price Catalogue Link!',
-        'Ready to paste in WhatsApp, Instagram DM, or client chat.',
+        type === 'noPrices' ? 'Copied Catalogue Link (Without Prices)' : 'Copied Full Price Catalogue Link',
+        'Ready to paste in WhatsApp, Instagram DM, or client consultation.',
         'success'
       );
     }
@@ -46,20 +46,21 @@ export default function ShareCatalogueModal({
   const getWhatsAppShareUrl = (includePrices) => {
     const studioName = settings?.studioName || 'Nails by Sirii';
     const text = includePrices
-      ? `*${studioName} — Cute Nail Services & Pricing Menu (Dehradun)*\n\nHey babe! Explore our natural builder gel (BIAB), Gel-X extensions, and cute nail art menu:\n${withPricesUrl}\n\nCan't wait to give you your dream nails!`
-      : `*${studioName} — Cute Nail Menu & Designs (Dehradun)*\n\nHey babe! Explore our signature builder gel nails, extensions, and cute hand-painted designs:\n${noPricesUrl}\n\nCheck out the designs and let me know which one you'd love to get done!`;
+      ? `*${studioName} — Bespoke Nail Architecture & Menu (Dehradun)*\n\nExplore our Japanese builder gel (BIAB), precision Gel-X extensions, and bespoke nail art catalogue:\n${withPricesUrl}\n\nTransparent pricing and honest time estimates.`
+      : `*${studioName} — Bespoke Nail Architecture & Lookbook (Dehradun)*\n\nExplore our signature nail sets, curated lookbook, and hand-painted art designs:\n${noPricesUrl}\n\nBrowse our portfolio and let us know which set you'd love to reserve!`;
 
     return `https://wa.me/?text=${encodeURIComponent(text)}`;
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-atelier-noir/60 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto">
-      <div className="bg-white rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-2xl border-t sm:border border-atelier-rose200/80 space-y-5 sm:space-y-6 relative max-h-[92vh] overflow-y-auto">
-        <div className="w-10 h-1.5 rounded-full bg-stone-300 mx-auto sm:hidden" />
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto">
+      <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-studio-float border-t sm:border border-studio-border space-y-5 sm:space-y-6 relative max-h-[92vh] overflow-y-auto">
+        <div className="w-10 h-1.5 rounded-full bg-studio-borderStrong mx-auto sm:hidden" />
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-atelier-cream/80 hover:bg-atelier-rose50 flex items-center justify-center text-atelier-charcoal hover:text-atelier-rose600 transition-colors"
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-studio-subtle hover:bg-studio-wineLight flex items-center justify-center text-studio-secondary hover:text-studio-wine transition-colors"
+          aria-label="Close"
         >
           <X className="w-4 h-4" />
         </button>
@@ -68,40 +69,37 @@ export default function ShareCatalogueModal({
         <div className="text-center space-y-2 pt-2">
           <StudioLogo logoUrl={settings?.studioLogoUrl} size="md" className="justify-center mb-1" />
           <div>
-            <span className="text-[10px] uppercase font-bold tracking-widest text-atelier-rose600 block">
-              Share With Clients
+            <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine block">
+              Client Portfolio Sharing
             </span>
-            <h2 className="font-serif italic font-bold text-2xl text-atelier-noir">
-              Share Nail Menu
+            <h2 className="font-display italic font-bold text-2xl text-studio-ink">
+              Share Studio Catalogue
             </h2>
-            <p className="text-xs text-atelier-muted max-w-sm mx-auto mt-0.5">
-              Send your nail menu and cute designs directly to clients on WhatsApp. You can choose to show or hide prices!
+            <p className="text-xs text-studio-secondary max-w-sm mx-auto mt-0.5">
+              Send your bespoke portfolio and service menu directly to clients on WhatsApp. Choose between transparent pricing or portfolio preview mode.
             </p>
           </div>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex rounded-2xl bg-atelier-cream/80 p-1 border border-atelier-champagneBorder/60 text-xs">
+        <div className="flex rounded-2xl bg-studio-subtle p-1 border border-studio-border text-xs">
           <button
             onClick={() => setActiveTab('noPrices')}
             className={`flex-1 py-2 rounded-xl font-semibold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'noPrices'
-                ? 'bg-white text-atelier-rose600 shadow-sm'
-                : 'text-atelier-charcoal hover:text-atelier-noir'
+                ? 'bg-studio-surface text-studio-wine shadow-studio'
+                : 'text-studio-secondary hover:text-studio-ink'
             }`}
           >
             <EyeOff className="w-3.5 h-3.5" />
             <span>Without Prices</span>
-            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-atelier-rose100 text-atelier-rose600 font-bold">
-              Cute
-            </span>
           </button>
           <button
             onClick={() => setActiveTab('withPrices')}
             className={`flex-1 py-2 rounded-xl font-semibold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'withPrices'
-                ? 'bg-white text-atelier-rose600 shadow-sm'
-                : 'text-atelier-charcoal hover:text-atelier-noir'
+                ? 'bg-studio-surface text-studio-wine shadow-studio'
+                : 'text-studio-secondary hover:text-studio-ink'
             }`}
           >
             <Eye className="w-3.5 h-3.5" />
@@ -111,8 +109,8 @@ export default function ShareCatalogueModal({
             onClick={() => setActiveTab('qr')}
             className={`flex-1 py-2 rounded-xl font-semibold transition-all flex items-center justify-center gap-1.5 ${
               activeTab === 'qr'
-                ? 'bg-white text-atelier-rose600 shadow-sm'
-                : 'text-atelier-charcoal hover:text-atelier-noir'
+                ? 'bg-studio-surface text-studio-wine shadow-studio'
+                : 'text-studio-secondary hover:text-studio-ink'
             }`}
           >
             <QrCode className="w-3.5 h-3.5" />
@@ -122,33 +120,33 @@ export default function ShareCatalogueModal({
 
         {/* Tab Content 1: WITHOUT Prices */}
         {activeTab === 'noPrices' && (
-          <div className="space-y-4 animate-in fade-in">
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-atelier-blush to-atelier-cream border border-atelier-rose200/70 space-y-2">
+          <div className="space-y-4 animate-in fade-in text-xs font-sans">
+            <div className="p-4 rounded-2xl bg-studio-wineLight/60 border border-studio-border space-y-1.5">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-atelier-rose500" />
-                <h3 className="font-semibold text-xs text-atelier-noir">
-                  Nail Menu Without Prices (Browse Designs)
+                <span className="w-2 h-2 rounded-full bg-studio-wine" />
+                <h3 className="font-semibold text-xs text-studio-ink">
+                  Portfolio Mode (Prices Hidden)
                 </h3>
               </div>
-              <p className="text-[11px] text-atelier-muted leading-relaxed">
-                Clients can see all your services, cute nail art ideas, and photos, with prices shown as <em>"Price on Request"</em>.
+              <p className="text-[11px] text-studio-secondary leading-relaxed">
+                Clients can browse all treatments, customizer shapes, and curated lookbook sets with prices shown as <em>"Price on Request"</em>.
               </p>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[11px] font-semibold text-atelier-charcoal">
-                Shareable Link (No Prices)
+              <label className="text-[11px] font-semibold text-studio-secondary">
+                Shareable Portfolio Link
               </label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   readOnly
                   value={noPricesUrl}
-                  className="flex-1 px-3 py-2.5 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/50 text-xs text-atelier-charcoal font-mono truncate"
+                  className="flex-1 px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 text-xs text-studio-secondary font-mono truncate"
                 />
                 <button
                   onClick={() => copyToClipboard(noPricesUrl, 'noPrices')}
-                  className="px-4 py-2.5 rounded-xl bg-atelier-rose500 hover:bg-atelier-rose600 text-white font-semibold text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-sm"
+                  className="px-4 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-studio"
                 >
                   {copiedType === 'noPrices' ? (
                     <>
@@ -170,7 +168,7 @@ export default function ShareCatalogueModal({
                 href={getWhatsAppShareUrl(false)}
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-all flex items-center justify-center gap-2 shadow-sm"
+                className="flex-1 py-2.5 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs transition-all flex items-center justify-center gap-2 shadow-studio"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Share via WhatsApp</span>
@@ -179,7 +177,7 @@ export default function ShareCatalogueModal({
                 href={noPricesUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="px-4 py-2.5 rounded-xl border border-atelier-champagneBorder hover:bg-atelier-cream text-atelier-charcoal font-semibold text-xs transition-all flex items-center gap-1.5"
+                className="px-4 py-2.5 rounded-xl border border-studio-border hover:bg-studio-subtle text-studio-secondary font-semibold text-xs transition-all flex items-center gap-1.5"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
                 <span>Preview</span>
@@ -190,33 +188,33 @@ export default function ShareCatalogueModal({
 
         {/* Tab Content 2: WITH Prices */}
         {activeTab === 'withPrices' && (
-          <div className="space-y-4 animate-in fade-in">
-            <div className="p-4 rounded-2xl bg-atelier-cream border border-atelier-champagneBorder space-y-2">
+          <div className="space-y-4 animate-in fade-in text-xs font-sans">
+            <div className="p-4 rounded-2xl bg-studio-subtle border border-studio-border space-y-1.5">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                <h3 className="font-semibold text-xs text-atelier-noir">
-                  Nail Menu With Prices
+                <span className="w-2 h-2 rounded-full bg-emerald-600" />
+                <h3 className="font-semibold text-xs text-studio-ink">
+                  Transparent Pricing Menu
                 </h3>
               </div>
-              <p className="text-[11px] text-atelier-muted leading-relaxed">
-                Shows exact prices for all your nail services, extensions, and cute nail art add-ons.
+              <p className="text-[11px] text-studio-secondary leading-relaxed">
+                Displays exact transparent pricing and honest session durations for every service and art add-on.
               </p>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[11px] font-semibold text-atelier-charcoal">
-                Shareable Link (With Prices)
+              <label className="text-[11px] font-semibold text-studio-secondary">
+                Shareable Pricing Link
               </label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   readOnly
                   value={withPricesUrl}
-                  className="flex-1 px-3 py-2.5 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/50 text-xs text-atelier-charcoal font-mono truncate"
+                  className="flex-1 px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 text-xs text-studio-secondary font-mono truncate"
                 />
                 <button
                   onClick={() => copyToClipboard(withPricesUrl, 'withPrices')}
-                  className="px-4 py-2.5 rounded-xl bg-atelier-noir hover:bg-black text-white font-semibold text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-sm"
+                  className="px-4 py-2.5 rounded-xl bg-studio-ink hover:bg-black text-white font-semibold text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-studio"
                 >
                   {copiedType === 'withPrices' ? (
                     <>
@@ -238,7 +236,7 @@ export default function ShareCatalogueModal({
                 href={getWhatsAppShareUrl(true)}
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-all flex items-center justify-center gap-2 shadow-sm"
+                className="flex-1 py-2.5 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs transition-all flex items-center justify-center gap-2 shadow-studio"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Share via WhatsApp</span>
@@ -247,7 +245,7 @@ export default function ShareCatalogueModal({
                 href={withPricesUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="px-4 py-2.5 rounded-xl border border-atelier-champagneBorder hover:bg-atelier-cream text-atelier-charcoal font-semibold text-xs transition-all flex items-center gap-1.5"
+                className="px-4 py-2.5 rounded-xl border border-studio-border hover:bg-studio-subtle text-studio-secondary font-semibold text-xs transition-all flex items-center gap-1.5"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
                 <span>Preview</span>
@@ -258,30 +256,30 @@ export default function ShareCatalogueModal({
 
         {/* Tab Content 3: QR Code */}
         {activeTab === 'qr' && (
-          <div className="space-y-4 text-center animate-in fade-in py-1">
-            <div className="p-4 bg-white rounded-2xl border border-atelier-champagneBorder inline-block shadow-sm">
+          <div className="space-y-4 text-center animate-in fade-in py-1 text-xs font-sans">
+            <div className="p-4 bg-white rounded-2xl border border-studio-border inline-block shadow-studio">
               <QRCodeSVG
                 value={noPricesUrl}
                 size={160}
                 level="M"
                 includeMargin
-                fgColor="#231F20"
+                fgColor="#1C1917"
               />
             </div>
             <div>
-              <p className="text-xs font-semibold text-atelier-noir">
-                Scan to View Cute Nail Menu (No Prices)
+              <p className="text-xs font-semibold text-studio-ink">
+                Scan to View Digital Studio Portfolio
               </p>
-              <p className="text-[10px] text-atelier-muted mt-0.5">
-                Print for your studio desk or share on your Instagram story!
+              <p className="text-[10px] text-studio-muted mt-0.5">
+                Display on your studio counter or post to Instagram highlights.
               </p>
             </div>
             <button
               onClick={() => copyToClipboard(noPricesUrl, 'noPrices')}
-              className="px-4 py-2 rounded-xl bg-atelier-cream border border-atelier-champagneBorder text-atelier-charcoal font-semibold text-xs hover:bg-atelier-rose50 transition-all inline-flex items-center gap-1.5"
+              className="px-4 py-2 rounded-xl bg-studio-subtle border border-studio-border text-studio-ink font-semibold text-xs hover:bg-studio-wineLight transition-all inline-flex items-center gap-1.5"
             >
               <Copy className="w-3.5 h-3.5" />
-              <span>Copy Catalogue Link</span>
+              <span>Copy Portfolio URL</span>
             </button>
           </div>
         )}

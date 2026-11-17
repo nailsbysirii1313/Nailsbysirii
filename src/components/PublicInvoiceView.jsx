@@ -389,7 +389,7 @@ export default function PublicInvoiceView({
             </p>
           </div>
 
-          {/* 1-Tap Mobile Intent & Simulated Settled */}
+          {/* 1-Tap Mobile Intent & Payment Resolution */}
           {!isPaid && (
             <div className="no-print pt-2 flex flex-col sm:flex-row items-center gap-3">
               <a
@@ -400,15 +400,24 @@ export default function PublicInvoiceView({
                 <span>Pay {currency}{Number(balanceDue).toLocaleString('en-IN')} with UPI (GPay / PhonePe / Paytm)</span>
               </a>
 
-              <button
-                type="button"
-                onClick={handlePayClick}
-                className="w-full sm:w-auto px-5 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-all shadow-soft active:scale-95 flex items-center justify-center gap-2 shrink-0"
-              >
-                <CheckCircle2 className="w-4 h-4" />
-                <span>Mark as Paid</span>
-              </button>
+              {/* Only Studio Owner can mark paid directly without a gateway webhook */}
+              {typeof window !== 'undefined' && localStorage.getItem('nbs_studio_auth') === 'true' && (
+                <button
+                  type="button"
+                  onClick={handlePayClick}
+                  className="w-full sm:w-auto px-5 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-all shadow-soft active:scale-95 flex items-center justify-center gap-2 shrink-0"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Mark Settled (Owner)</span>
+                </button>
+              )}
             </div>
+          )}
+
+          {!isPaid && (typeof window === 'undefined' || localStorage.getItem('nbs_studio_auth') !== 'true') && (
+            <p className="no-print text-center text-[11px] text-atelier-muted pt-1">
+              After completing payment in Google Pay, PhonePe, or Paytm, please share the transaction UTR or screenshot on WhatsApp with Sirii.
+            </p>
           )}
 
           {invoice.notes && (

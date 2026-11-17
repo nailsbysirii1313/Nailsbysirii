@@ -31,7 +31,11 @@ import MobileStudioHubSheet from './components/MobileStudioHubSheet';
 import ClientWebsite from './components/ClientWebsite';
 import PasscodeModal from './components/PasscodeModal';
 import ShareCatalogueModal from './components/ShareCatalogueModal';
+import PublicHomePilot from './components/PublicHomePilot';
+import StudioTodayPilot from './components/StudioTodayPilot';
 import { playStudioChime } from './utils/audio';
+import { customSetToInvoiceItems } from './utils/customizerCalculator';
+import { getKolkataTodayString } from './utils/dateTime';
 
 export default function App() {
   // Authentication & Passcode protection (nbs0812)
@@ -53,6 +57,9 @@ export default function App() {
       window.location.hash.includes('no-prices')
     );
   });
+
+  // Design Mode for Creative Redesign: 'redesigned' (Full Phase 3) | 'pilot' (Phase 2 Preview)
+  const [designMode, setDesignMode] = useState('redesigned');
 
   // Current View: defaults to client-facing website for clients
   const [currentTab, setTabState] = useState(() => {
@@ -92,6 +99,7 @@ export default function App() {
 
   const handleLockStudio = () => {
     localStorage.removeItem('nbs_studio_auth');
+    localStorage.removeItem('nbs_studio_token');
     setIsAuthenticated(false);
     setTabState('clientWebsite');
     addToast('Studio Hub Locked', 'Logged out and returned to public client website.', 'info');
@@ -737,30 +745,30 @@ export default function App() {
   };
 
   const handleBookFromCustomizer = (customData) => {
-    setAppointmentToEdit(null);
     setPreselectedClientForAppointment(null);
+    setAppointmentToEdit({
+      price: customData.price,
+      duration: customData.duration,
+      customSet: customData,
+      notes: `Custom Set: ${customData.shape}, ${customData.length}, ${customData.baseColor}, ${customData.finish}.`
+    });
     setIsNewAppointmentOpen(true);
     addToast(
       'Custom Design Loaded',
-      `Custom ${customData.shape} set ready to schedule.`
+      `Custom ${customData.shape} set (₹${Number(customData.price).toLocaleString('en-IN')}, ${customData.duration} mins) ready to schedule.`
     );
   };
 
   const handleInvoiceFromCustomizer = (customData) => {
     setPreselectedAppointmentForInvoice(null);
     setPreselectedClientForInvoice(null);
+    const lineItems = customSetToInvoiceItems(customData);
+    const subtotal = lineItems.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
     setInvoiceToEdit({
-      items: [
-        {
-          description: `Custom Set (${customData.shape} • ${customData.length} • ${customData.baseColor} • ${customData.finish})`,
-          quantity: 1,
-          unitPrice: customData.price,
-          amount: customData.price
-        }
-      ],
-      subtotal: customData.price,
-      total: customData.price,
-      balanceDue: customData.price,
+      items: lineItems,
+      subtotal: subtotal || customData.price,
+      total: subtotal || customData.price,
+      balanceDue: subtotal || customData.price,
       status: 'Unpaid',
       notes: `Consultation custom set: ${customData.shape}, ${customData.length}, ${customData.baseColor}, ${customData.finish}.`
     });
@@ -844,7 +852,7 @@ export default function App() {
   };
 
   // Compute live counts
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = getKolkataTodayString();
   const todayAppointments = appointments.filter((a) => a.date === todayStr);
   const pendingAppointments = appointments.filter(
     (a) => a.status === 'Confirmed' && a.date >= todayStr
@@ -854,30 +862,97 @@ export default function App() {
   // Main Client-Facing Website View (Default for Clients)
   if (currentTab === 'clientWebsite') {
     return (
-      <div className="min-h-screen bg-atelier-cream text-atelier-noir">
+      <div className="min-h-screen bg-studio-canvas text-studio-ink">
+        {/* Creative Redesign Switcher Bar */}
+        <div className="bg-stone-900 text-white px-3 py-1.5 text-xs flex items-center justify-between z-50 sticky top-0 border-b border-stone-800">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-semibold text-stone-100">Phase 3 Complete Redesign</span>
+            <span className="text-[11px] text-stone-400 hidden sm:inline">• Public Experience Active</span>
+          </div>
+          <div className="flex items-center gap-1 bg-stone-800 p-0.5 rounded-lg border border-stone-700">
+            <button
+              onClick={() => setDesignMode('redesigned')}
+              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
+                designMode === 'redesigned' ? 'bg-studio-wine text-white shadow-xs' : 'text-stone-300 hover:text-white'
+              }`}
+            >
+              Full Redesign (Phase 3)
+            </button>
+            <button
+              onClick={() => setDesignMode('pilot')}
+              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
+                designMode === 'pilot' ? 'bg-studio-wine text-white shadow-xs' : 'text-stone-300 hover:text-white'
+              }`}
+            >
+              Pilot Preview (Phase 2)
+            </button>
+          </div>
+        </div>
+
         {/* Toast Notifications */}
         <Toast toasts={toasts} onDismiss={removeToast} />
 
-        {/* Public Client Experience */}
-        <ClientWebsite
-          services={services}
-          settings={settings}
-          reviews={reviews}
-          hidePrices={hidePrices}
-          setHidePrices={setHidePrices}
-          onOpenPasscodeModal={() => {
-            if (isAuthenticated) {
-              setTabState('dashboard');
-            } else {
-              setPendingTab('dashboard');
-              setIsPasscodeModalOpen(true);
-            }
-          }}
-          onBookingComplete={handlePublicBookingComplete}
-          onSubmitRepair={handleCreateRepair}
-          onSaveReview={handleSaveReview}
-          onAddToast={addToast}
-        />
+        {/* Render Public Experience based on Design Mode */}
+        {designMode === 'pilot' ? (
+          <PublicHomePilot
+            services={services}
+            settings={settings}
+            reviews={reviews}
+            hidePrices={hidePrices}
+            setHidePrices={setHidePrices}
+            onOpenPasscodeModal={() => {
+              if (isAuthenticated) {
+                setTabState('dashboard');
+              } else {
+                setPendingTab('dashboard');
+                setIsPasscodeModalOpen(true);
+              }
+            }}
+            onSelectService={(srv) => {
+              setDesignMode('redesigned');
+              setTimeout(() => {
+                const el = document.getElementById('booking-section');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }, 120);
+            }}
+            onOpenCustomizer={() => {
+              setDesignMode('redesigned');
+              setTimeout(() => {
+                const el = document.getElementById('customizer');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }, 120);
+            }}
+            onOpenBooking={() => {
+              setDesignMode('redesigned');
+              setTimeout(() => {
+                const el = document.getElementById('booking-section');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }, 120);
+            }}
+            onOpenShareModal={() => setIsShareCatalogueOpen(true)}
+          />
+        ) : (
+          <ClientWebsite
+            services={services}
+            settings={settings}
+            reviews={reviews}
+            hidePrices={hidePrices}
+            setHidePrices={setHidePrices}
+            onOpenPasscodeModal={() => {
+              if (isAuthenticated) {
+                setTabState('dashboard');
+              } else {
+                setPendingTab('dashboard');
+                setIsPasscodeModalOpen(true);
+              }
+            }}
+            onBookingComplete={handlePublicBookingComplete}
+            onSubmitRepair={handleCreateRepair}
+            onSaveReview={handleSaveReview}
+            onAddToast={addToast}
+          />
+        )}
 
         {/* Studio Passcode Gate Modal (nbs0812) */}
         <PasscodeModal
@@ -947,28 +1022,76 @@ export default function App() {
           ) : (
             <>
               {currentTab === 'dashboard' && (
-                <DashboardView
-                  overview={overview}
-                  appointments={appointments}
-                  clients={clients}
-                  invoices={invoices}
-                  settings={settings}
-                  inventory={inventory}
-                  checklist={checklist}
-                  repairs={repairs}
-                  onUpdateRepairStatus={handleUpdateRepairStatus}
-                  onToggleChecklistItem={handleToggleChecklistItem}
-                  onRemindAppointment={handleRemindAppointment}
-                  onOpenNewAppointment={() => openNewAppointment(null)}
-                  onOpenNewClient={openNewClient}
-                  onOpenNewInvoice={openNewInvoice}
-                  onOpenInvoiceDetail={openInvoiceDetail}
-                  onOpenClientProfile={openClientProfile}
-                  onUpdateAppointmentStatus={handleUpdateAppointmentStatus}
-                  onTestAlert={handleTestAlert}
-                  onOpenQrModal={() => setIsQrModalOpen(true)}
-                  setTab={setTab}
-                />
+                <div className="space-y-4">
+                  {/* Phase 2 Design Pilot Switcher Header */}
+                  <div className="flex items-center justify-between p-2 rounded-2xl bg-studio-surface border border-studio-border">
+                    <div className="flex items-center gap-2 pl-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-xs font-semibold text-studio-ink">
+                        {designMode === 'pilot' ? 'Redesigned "Today" Pilot (Mobile-First)' : 'Classic Dashboard Baseline'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1 bg-studio-canvas p-1 rounded-xl border border-studio-border">
+                      <button
+                        onClick={() => setDesignMode('pilot')}
+                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                          designMode === 'pilot' ? 'bg-studio-wine text-white shadow-xs' : 'text-studio-secondary hover:text-studio-ink'
+                        }`}
+                      >
+                        Redesigned Pilot
+                      </button>
+                      <button
+                        onClick={() => setDesignMode('classic')}
+                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                          designMode === 'classic' ? 'bg-studio-wine text-white shadow-xs' : 'text-studio-secondary hover:text-studio-ink'
+                        }`}
+                      >
+                        Classic Baseline
+                      </button>
+                    </div>
+                  </div>
+
+                  {designMode === 'pilot' ? (
+                    <StudioTodayPilot
+                      appointments={appointments}
+                      clients={clients}
+                      invoices={invoices}
+                      repairs={repairs}
+                      checklist={checklist}
+                      settings={settings}
+                      onOpenNewAppointment={() => openNewAppointment(null)}
+                      onOpenNewInvoice={() => openNewInvoice(null)}
+                      onOpenClientProfile={openClientProfile}
+                      onUpdateStatus={handleUpdateAppointmentStatus}
+                      onTestAlert={handleTestAlert}
+                      onLockStudio={handleLockStudio}
+                      onSwitchTab={setTab}
+                    />
+                  ) : (
+                    <DashboardView
+                      overview={overview}
+                      appointments={appointments}
+                      clients={clients}
+                      invoices={invoices}
+                      settings={settings}
+                      inventory={inventory}
+                      checklist={checklist}
+                      repairs={repairs}
+                      onUpdateRepairStatus={handleUpdateRepairStatus}
+                      onToggleChecklistItem={handleToggleChecklistItem}
+                      onRemindAppointment={handleRemindAppointment}
+                      onOpenNewAppointment={() => openNewAppointment(null)}
+                      onOpenNewClient={openNewClient}
+                      onOpenNewInvoice={openNewInvoice}
+                      onOpenInvoiceDetail={openInvoiceDetail}
+                      onOpenClientProfile={openClientProfile}
+                      onUpdateAppointmentStatus={handleUpdateAppointmentStatus}
+                      onTestAlert={handleTestAlert}
+                      onOpenQrModal={() => setIsQrModalOpen(true)}
+                      setTab={setTab}
+                    />
+                  )}
+                </div>
               )}
 
               {currentTab === 'inventory' && (

@@ -61,25 +61,26 @@ export default function NewClientModal({ isOpen, onClose, onSave, clientToEdit }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-atelier-noir/40 backdrop-blur-sm animate-fade-in overflow-y-auto">
-      <div className="bg-white rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-8 shadow-float border-t sm:border border-atelier-champagneBorder relative max-h-[92vh] overflow-y-auto">
-        <div className="w-10 h-1.5 rounded-full bg-stone-300 mx-auto mb-3 sm:hidden" />
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md animate-fade-in overflow-y-auto">
+      <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-8 shadow-studio-float border-t sm:border border-studio-border relative max-h-[92vh] overflow-y-auto font-sans">
+        <div className="w-10 h-1.5 rounded-full bg-studio-borderStrong mx-auto mb-3 sm:hidden" />
         <button
           onClick={onClose}
-          className="absolute top-4 sm:top-5 right-4 sm:right-5 p-2 rounded-full text-atelier-muted hover:text-atelier-noir hover:bg-atelier-cream transition-colors"
+          className="absolute top-4 sm:top-5 right-4 sm:right-5 p-2 rounded-full text-studio-muted hover:text-studio-ink hover:bg-studio-subtle transition-colors"
+          aria-label="Close"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="mb-6">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-atelier-rose100 text-atelier-rose600 text-xs font-semibold mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight text-studio-wine text-xs font-semibold mb-2">
             <User className="w-3.5 h-3.5" />
             <span>{clientToEdit ? 'Update Profile' : 'New Client Profile'}</span>
           </div>
-          <h3 className="font-serif italic font-bold text-2xl text-atelier-noir">
+          <h3 className="font-display italic font-bold text-2xl text-studio-ink">
             {clientToEdit ? 'Edit Client Details' : 'Register New Client'}
           </h3>
-          <p className="text-xs text-atelier-muted mt-1">
+          <p className="text-xs text-studio-secondary mt-1">
             Store essential client preferences, nail anatomy notes, and contact details.
           </p>
         </div>
@@ -88,7 +89,7 @@ export default function NewClientModal({ isOpen, onClose, onSave, clientToEdit }
           {/* Basic Info */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block font-semibold text-atelier-charcoal mb-1.5">
+              <label className="block font-semibold text-studio-secondary mb-1.5">
                 Client Full Name *
               </label>
               <input
@@ -97,12 +98,12 @@ export default function NewClientModal({ isOpen, onClose, onSave, clientToEdit }
                 placeholder="e.g. Mia Sterling"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none transition-all text-base sm:text-xs"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none transition-all text-base sm:text-xs text-studio-ink"
               />
             </div>
 
             <div>
-              <label className="block font-semibold text-atelier-charcoal mb-1.5">
+              <label className="block font-semibold text-studio-secondary mb-1.5">
                 Phone Number *
               </label>
               <input
@@ -111,12 +112,12 @@ export default function NewClientModal({ isOpen, onClose, onSave, clientToEdit }
                 placeholder="e.g. +91 98765 43210"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none transition-all text-base sm:text-xs"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none transition-all text-base sm:text-xs text-studio-ink"
               />
             </div>
 
             <div>
-              <label className="block font-semibold text-atelier-charcoal mb-1.5">
+              <label className="block font-semibold text-studio-secondary mb-1.5">
                 Email Address
               </label>
               <input
@@ -124,12 +125,12 @@ export default function NewClientModal({ isOpen, onClose, onSave, clientToEdit }
                 placeholder="e.g. client@gmail.com"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none transition-all text-base sm:text-xs"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none transition-all text-base sm:text-xs text-studio-ink"
               />
             </div>
 
             <div>
-              <label className="block font-semibold text-atelier-charcoal mb-1.5">
+              <label className="block font-semibold text-studio-secondary mb-1.5">
                 Instagram Handle
               </label>
               <input
@@ -137,27 +138,27 @@ export default function NewClientModal({ isOpen, onClose, onSave, clientToEdit }
                 placeholder="e.g. @miasterling"
                 value={formData.instagram}
                 onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none transition-all text-base sm:text-xs"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none transition-all text-base sm:text-xs text-studio-ink"
               />
             </div>
           </div>
 
           {/* Nail Preferences */}
-          <div className="pt-2 border-t border-atelier-champagneBorder/60">
-            <h4 className="font-semibold text-atelier-noir text-xs mb-3 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-atelier-rose500" />
-              <span>Nail Anatomy & Style Preferences</span>
+          <div className="pt-2 border-t border-studio-border">
+            <h4 className="font-semibold text-studio-ink text-xs mb-3 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-studio-wine" />
+              <span>Nail Architecture & Style Preferences</span>
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="block font-medium text-atelier-muted mb-1">
-                  Preferred Shape
+                <label className="block font-medium text-studio-muted mb-1">
+                  Preferred Silhouette
                 </label>
                 <select
                   value={formData.preferredShape}
                   onChange={(e) => setFormData({ ...formData, preferredShape: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none text-base sm:text-xs"
+                  className="w-full px-3 py-2 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
                 >
                   <option value="Short Round">Short Round</option>
                   <option value="Short Squoval">Short Squoval</option>
@@ -171,13 +172,13 @@ export default function NewClientModal({ isOpen, onClose, onSave, clientToEdit }
               </div>
 
               <div>
-                <label className="block font-medium text-atelier-muted mb-1">
+                <label className="block font-medium text-studio-muted mb-1">
                   Preferred Length
                 </label>
                 <select
                   value={formData.preferredLength}
                   onChange={(e) => setFormData({ ...formData, preferredLength: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none text-base sm:text-xs"
+                  className="w-full px-3 py-2 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
                 >
                   <option value="Short">Short (Active)</option>
                   <option value="Medium">Medium (Balanced)</option>
@@ -187,19 +188,19 @@ export default function NewClientModal({ isOpen, onClose, onSave, clientToEdit }
               </div>
 
               <div>
-                <label className="block font-medium text-atelier-muted mb-1">
-                  Signature Style
+                <label className="block font-medium text-studio-muted mb-1">
+                  Signature Aesthetic
                 </label>
                 <select
                   value={formData.preferredAesthetic}
                   onChange={(e) => setFormData({ ...formData, preferredAesthetic: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none text-base sm:text-xs"
+                  className="w-full px-3 py-2 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
                 >
                   <option value="3D Chrome & Glaze">3D Chrome & Glaze</option>
-                  <option value="BIAB Natural Look">BIAB Clean Natural</option>
+                  <option value="BIAB Clean Natural">BIAB Clean Natural</option>
                   <option value="French Ombre Minimalist">French Ombre Minimalist</option>
                   <option value="Velvet Cat Eye">Velvet Cat Eye</option>
-                  <option value="Y2K Kawaii 3D Charms">Y2K Kawaii 3D Charms</option>
+                  <option value="Sculptural Charms">Sculptural Charms</option>
                   <option value="Hand-Painted Abstract">Hand-Painted Abstract</option>
                   <option value="High Fashion Editorial">High Fashion Editorial</option>
                 </select>
@@ -209,8 +210,8 @@ export default function NewClientModal({ isOpen, onClose, onSave, clientToEdit }
 
           {/* Health & Allergies */}
           <div className="pt-2">
-            <label className="block font-semibold text-atelier-charcoal mb-1.5 flex items-center gap-1.5">
-              <AlertCircle className="w-3.5 h-3.5 text-atelier-rose500" />
+            <label className="block font-semibold text-studio-secondary mb-1.5 flex items-center gap-1.5">
+              <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
               <span>Allergies or Nail Sensitivities</span>
             </label>
             <input
@@ -218,21 +219,21 @@ export default function NewClientModal({ isOpen, onClose, onSave, clientToEdit }
               placeholder="e.g. HEMA-free gel only, delicate cuticles, acetone sensitivity"
               value={formData.allergies}
               onChange={(e) => setFormData({ ...formData, allergies: e.target.value })}
-              className="w-full px-3.5 py-2 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none text-base sm:text-xs"
+              className="w-full px-3.5 py-2 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
             />
           </div>
 
           {/* Notes & VIP */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
             <div>
-              <label className="block font-semibold text-atelier-charcoal mb-1">
-                Client Birthday (for special studio perks)
+              <label className="block font-semibold text-studio-secondary mb-1">
+                Client Birthday (optional)
               </label>
               <input
                 type="date"
                 value={formData.birthday}
                 onChange={(e) => setFormData({ ...formData, birthday: e.target.value })}
-                className="w-full px-3.5 py-2 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none text-base sm:text-xs"
+                className="w-full px-3.5 py-2 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
               />
             </div>
 
@@ -242,38 +243,38 @@ export default function NewClientModal({ isOpen, onClose, onSave, clientToEdit }
                   type="checkbox"
                   checked={formData.vip}
                   onChange={(e) => setFormData({ ...formData, vip: e.target.checked })}
-                  className="w-4 h-4 rounded text-atelier-rose500 focus:ring-atelier-rose400 border-atelier-champagneBorder accent-atelier-rose500"
+                  className="w-4 h-4 rounded text-studio-wine focus:ring-studio-wine border-studio-border accent-studio-wine"
                 />
-                <span className="font-semibold text-atelier-noir">Designate as VIP Client</span>
+                <span className="font-semibold text-studio-ink">Designate as VIP Client</span>
               </label>
             </div>
           </div>
 
           <div>
-            <label className="block font-semibold text-atelier-charcoal mb-1.5">
+            <label className="block font-semibold text-studio-secondary mb-1.5">
               Studio Notes & Favorites
             </label>
             <textarea
               rows={2}
-              placeholder="e.g. Prefers matcha latte, books 3 weeks in advance, loves milky pink jelly tones"
+              placeholder="e.g. Books 3 weeks in advance, loves sheer strawberry jelly tones"
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none text-base sm:text-xs"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
             />
           </div>
 
           {/* Submit */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-atelier-champagneBorder/60">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-studio-border">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl border border-atelier-champagneBorder text-atelier-charcoal hover:bg-atelier-cream text-xs font-semibold transition-all"
+              className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary hover:bg-studio-subtle text-xs font-semibold transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-xl bg-atelier-rose500 hover:bg-atelier-rose600 text-white text-xs font-semibold shadow-soft transition-all active:scale-95"
+              className="px-6 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio transition-all active:scale-95"
             >
               {clientToEdit ? 'Save Changes' : 'Register Client'}
             </button>

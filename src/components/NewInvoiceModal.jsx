@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Receipt, Plus, Trash2, Sparkles, User, Tag } from 'lucide-react';
+import { getKolkataTodayString } from '../utils/dateTime';
+import { customSetToInvoiceItems } from '../utils/customizerCalculator';
 
 export default function NewInvoiceModal({
   isOpen,
@@ -15,8 +17,8 @@ export default function NewInvoiceModal({
   const [clientName, setClientName] = useState('');
   const [clientPhone, setClientPhone] = useState('');
   const [clientEmail, setClientEmail] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [dueDate, setDueDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState(getKolkataTodayString());
+  const [dueDate, setDueDate] = useState(getKolkataTodayString());
   const [status, setStatus] = useState('Unpaid');
   const [paymentMethod, setPaymentMethod] = useState('Pending UPI');
   const [items, setItems] = useState([
@@ -56,36 +58,54 @@ export default function NewInvoiceModal({
       const client = clients.find((c) => c.id === apt.clientId);
       if (client?.email) setClientEmail(client.email);
 
-      // Build line items from appointment service and addons
-      let totalAddonsPrice = 0;
-      const addonItems = (apt.addonServiceNames || []).map((addon) => {
-        const foundAddon = (services || []).find((s) => s.name === addon);
-        const addonPrice = Number(foundAddon?.price || 500);
-        totalAddonsPrice += addonPrice;
-        return {
-          description: addon,
-          quantity: 1,
-          unitPrice: addonPrice,
-          amount: addonPrice
-        };
-      });
+      // Build line items from appointment service, customSet, and addons
+      let lineItems = [];
+      if (apt.customSet) {
+        lineItems = customSetToInvoiceItems(apt.customSet);
+        if (apt.addonServiceNames && apt.addonServiceNames.length > 0) {
+          const addonItems = apt.addonServiceNames.map((addon) => {
+            const foundAddon = (services || []).find((s) => s.name === addon);
+            const addonPrice = Number(foundAddon?.price || 500);
+            return {
+              description: addon,
+              quantity: 1,
+              unitPrice: addonPrice,
+              amount: addonPrice
+            };
+          });
+          lineItems = [...lineItems, ...addonItems];
+        }
+      } else {
+        let totalAddonsPrice = 0;
+        const addonItems = (apt.addonServiceNames || []).map((addon) => {
+          const foundAddon = (services || []).find((s) => s.name === addon);
+          const addonPrice = Number(foundAddon?.price || 500);
+          totalAddonsPrice += addonPrice;
+          return {
+            description: addon,
+            quantity: 1,
+            unitPrice: addonPrice,
+            amount: addonPrice
+          };
+        });
 
-      const baseEstimate = apt.price
-        ? Math.max(300, Number(apt.price) - totalAddonsPrice)
-        : (() => {
-            const foundSrv = (services || []).find((s) => s.id === apt.serviceId || s.name === apt.serviceName);
-            return Number(foundSrv?.price || 1400);
-          })();
+        const baseEstimate = apt.price
+          ? Math.max(300, Number(apt.price) - totalAddonsPrice)
+          : (() => {
+              const foundSrv = (services || []).find((s) => s.id === apt.serviceId || s.name === apt.serviceName);
+              return Number(foundSrv?.price || 1400);
+            })();
 
-      const lineItems = [
-        {
-          description: apt.serviceName || 'Signature Nail Treatment',
-          quantity: 1,
-          unitPrice: baseEstimate,
-          amount: baseEstimate
-        },
-        ...addonItems
-      ];
+        lineItems = [
+          {
+            description: apt.serviceName || 'Signature Nail Treatment',
+            quantity: 1,
+            unitPrice: baseEstimate,
+            amount: baseEstimate
+          },
+          ...addonItems
+        ];
+      }
 
       setItems(lineItems);
       setDepositDeducted(Number(apt.depositPaid || apt.advancePaid) || 0);

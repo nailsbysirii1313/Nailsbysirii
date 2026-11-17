@@ -115,10 +115,138 @@
       "popular": false
     }
   ],
-  "clients": [],
-  "appointments": [],
+  "clients": [
+    {
+      "name": "Phase3 TestClient",
+      "phone": "+91 98765 43210",
+      "email": "testclient@example.com",
+      "instagram": "@testclient",
+      "preferredShape": "Medium Almond",
+      "preferredAesthetic": "3D Chrome & Glaze",
+      "notes": "Updated note test",
+      "vip": false,
+      "id": "cl_1794928415038",
+      "totalVisits": 0,
+      "totalSpent": 0,
+      "createdAt": "2026-11-17T15:13:35.038Z",
+      "updatedAt": "2026-11-17T15:35:33.801Z"
+    }
+  ],
+  "appointments": [
+    {
+      "clientName": "Phase3 TestClient",
+      "clientPhone": "+91 98765 43210",
+      "clientEmail": "testclient@example.com",
+      "clientInstagram": "@testclient",
+      "serviceId": "srv_custom",
+      "serviceName": "Custom Set: Almond (Medium)",
+      "addonServiceNames": [],
+      "date": "2026-11-18",
+      "time": "14:00",
+      "duration": 105,
+      "price": 3100,
+      "depositPaid": 500,
+      "advancePaid": 500,
+      "hasAdvancePayment": true,
+      "advancePaymentMethod": "UPI (Google Pay / PhonePe)",
+      "pendingAmount": 2600,
+      "balanceDue": 2600,
+      "customSet": {
+        "shape": "Almond",
+        "length": "Medium",
+        "baseColor": "Strawberry Jelly Pink",
+        "finish": "Hailey Glazed Chrome",
+        "price": 3100,
+        "duration": 105,
+        "lineItems": [
+          {
+            "name": "Natural Builder Gel / Overlay (Almond)",
+            "price": 2200,
+            "duration": 60
+          },
+          {
+            "name": "Medium Length Surcharge",
+            "price": 300,
+            "duration": 15
+          },
+          {
+            "name": "Hailey Glazed Chrome Art",
+            "price": 600,
+            "duration": 30
+          }
+        ]
+      },
+      "notes": "Preferences: Almond, Medium, 3D Chrome & Glaze. Allergies: None. Note: Phase 3 Verification",
+      "notifyImmediate": false,
+      "status": "Confirmed",
+      "clientId": "cl_1794928415038",
+      "id": "apt_1794928415040",
+      "reminderSent": false,
+      "lastReminderAt": null,
+      "createdAt": "2026-11-17T15:13:35.040Z",
+      "updatedAt": "2026-11-17T15:35:33.799Z"
+    }
+  ],
   "invoices": [],
-  "notifications": [],
+  "notifications": [
+    {
+      "type": "emergency_repair",
+      "title": "URGENT REPAIR: Emergency TestClient (Index Finger)",
+      "message": "Emergency TestClient submitted an urgent repair request!\n\nHand & Finger: Right Hand Index Finger\nService: Builder Gel (BIAB) Chip Fix\nIssue: Corner chipped while travelling\nUrgency: Today ASAP (Urgent)\nPhone: +91 98765 43210",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "repairId": "rep_1794928415042",
+      "clientName": "Emergency TestClient",
+      "finger": "Index Finger",
+      "id": "notif_1794928419002",
+      "sentAt": "2026-11-17T15:13:39.002Z"
+    },
+    {
+      "type": "test_alert",
+      "title": "Nails by Sirii • Client Alert",
+      "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "id": "notif_1794925233921",
+      "sentAt": "2026-11-17T14:20:33.921Z"
+    },
+    {
+      "type": "test_alert",
+      "title": "Nails by Sirii • Client Alert",
+      "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "id": "notif_1794925018054",
+      "sentAt": "2026-11-17T14:16:58.054Z"
+    },
+    {
+      "type": "test_alert",
+      "title": "Nails by Sirii • Client Alert",
+      "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "id": "notif_1794924410496",
+      "sentAt": "2026-11-17T14:06:50.496Z"
+    },
+    {
+      "type": "test_alert",
+      "title": "Nails by Sirii • Client Alert",
+      "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "id": "notif_1794924383238",
+      "sentAt": "2026-11-17T14:06:23.238Z"
+    },
+    {
+      "type": "test_alert",
+      "title": "Nails by Sirii • Client Alert",
+      "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "id": "notif_1794924351816",
+      "sentAt": "2026-11-17T14:05:51.816Z"
+    }
+  ],
   "inventory": [
     {
       "id": "inv_1",
@@ -374,9 +502,34 @@
       "signedBy": null
     }
   ],
-  "repairs": [],
+  "repairs": [
+    {
+      "clientName": "Emergency TestClient",
+      "clientPhone": "+91 98765 43210",
+      "hand": "Right Hand",
+      "finger": "Index Finger",
+      "serviceType": "Builder Gel (BIAB) Chip Fix",
+      "issue": "Corner chipped while travelling",
+      "urgency": "Today ASAP (Urgent)",
+      "id": "rep_1794928415042",
+      "status": "Pending Squeeze-in",
+      "createdAt": "2026-11-17T15:13:35.042Z",
+      "updatedAt": "2026-11-17T15:13:35.042Z"
+    }
+  ],
   "giftCards": [],
   "reviews": [
+    {
+      "clientName": "Reviewer Test",
+      "rating": 5,
+      "serviceRendered": "Signature BIAB Overlay",
+      "aestheticTag": "Glazed Pearl Donut",
+      "comment": "Stunning architecture and retention! Lasted 4 weeks without any lifting.",
+      "verified": true,
+      "date": "2026-11-17",
+      "id": "rev_1794928419012",
+      "createdAt": "2026-11-17T15:13:39.012Z"
+    },
     {
       "id": "rev_google_1",
       "clientName": "Paaky Biswas",

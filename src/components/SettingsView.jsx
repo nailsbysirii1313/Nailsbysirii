@@ -41,7 +41,7 @@ export default function SettingsView({ settings, onSaveSettings }) {
       settings?.paymentInstructions ||
       'UPI: 7302623493 / nailsbysirii@okaxis (GPay, PhonePe, Paytm) • Cash accepted at studio',
     depositRequirement: settings?.depositRequirement || 500,
-    studioPasscode: settings?.studioPasscode || 'nbs0812'
+    studioPasscode: ''
   });
 
   const [saving, setSaving] = useState(false);
@@ -68,7 +68,7 @@ export default function SettingsView({ settings, onSaveSettings }) {
         autoRemindersEnabled: Boolean(settings.autoRemindersEnabled ?? prev.autoRemindersEnabled),
         paymentInstructions: settings.paymentInstructions || prev.paymentInstructions,
         depositRequirement: settings.depositRequirement ?? prev.depositRequirement,
-        studioPasscode: settings.studioPasscode || prev.studioPasscode
+        studioPasscode: ''
       }));
     }
   }, [settings]);
@@ -334,14 +334,14 @@ export default function SettingsView({ settings, onSaveSettings }) {
                 <span>Studio Hub Security Passcode</span>
               </label>
               <input
-                type="text"
+                type="password"
                 value={formData.studioPasscode}
                 onChange={(e) => setFormData({ ...formData, studioPasscode: e.target.value })}
-                placeholder="nbs0812"
+                placeholder="Enter new passcode (leave blank to keep current)"
                 className="w-full px-3.5 py-2.5 rounded-xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none text-base sm:text-xs font-mono font-bold tracking-wider"
               />
               <p className="text-[10px] text-atelier-muted mt-1">
-                Password required to unlock your private Studio Hub (Default: nbs0812)
+                Private passcode required to unlock Studio Hub. Leave blank to keep existing passcode.
               </p>
             </div>
 
