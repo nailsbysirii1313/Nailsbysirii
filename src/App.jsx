@@ -31,6 +31,8 @@ import MobileStudioHubSheet from './components/MobileStudioHubSheet';
 import ClientWebsite from './components/ClientWebsite';
 import PasscodeModal from './components/PasscodeModal';
 import ShareCatalogueModal from './components/ShareCatalogueModal';
+import CataloguePageView from './components/CataloguePageView';
+import CatalogueManagerView from './components/CatalogueManagerView';
 import PublicHomePilot from './components/PublicHomePilot';
 import StudioTodayPilot from './components/StudioTodayPilot';
 import PressOnsView from './components/PressOnsView';
@@ -71,6 +73,9 @@ export default function App() {
     if (hash.startsWith('#invoice-')) {
       return 'publicInvoice';
     }
+    if (hash.startsWith('#catalogue') || params.get('page') === 'catalogue') {
+      return 'catalogue';
+    }
     if ((params.get('view') === 'studio' || hash.startsWith('#studio')) && authed) {
       return 'dashboard';
     }
@@ -81,6 +86,10 @@ export default function App() {
   const setTab = (targetTab) => {
     if (targetTab === 'clientWebsite' || targetTab === 'publicBooking') {
       setTabState('clientWebsite');
+      return;
+    }
+    if (targetTab === 'catalogue') {
+      setTabState('catalogue');
       return;
     }
     // Studio admin views require authentication
@@ -123,6 +132,7 @@ export default function App() {
   const [reviews, setReviews] = useState([]);
   const [pressOnProducts, setPressOnProducts] = useState([]);
   const [pressOnOrders, setPressOnOrders] = useState([]);
+  const [catalogueDesigns, setCatalogueDesigns] = useState([]);
 
   // Aftercare Modal State
   const [isAftercareModalOpen, setIsAftercareModalOpen] = useState(false);
@@ -190,6 +200,8 @@ export default function App() {
           setSelectedInvoice(target);
         }
         setTabState('publicInvoice');
+      } else if (hash.startsWith('#catalogue') || params.get('page') === 'catalogue') {
+        setTabState('catalogue');
       } else if (params.get('view') === 'studio' || hash.startsWith('#studio')) {
         if (authed) {
           setTabState('dashboard');
@@ -197,6 +209,8 @@ export default function App() {
           setPendingTab('dashboard');
           setIsPasscodeModalOpen(true);
         }
+      } else if (hash === '' || hash === '#home' || hash === '#') {
+        setTabState((prev) => (prev === 'catalogue' || prev === 'publicInvoice' ? 'clientWebsite' : prev));
       }
     };
 
@@ -250,7 +264,8 @@ export default function App() {
         giftCardsData,
         reviewsData,
         pressOnProductsData,
-        pressOnOrdersData
+        pressOnOrdersData,
+        catalogueDesignsData
       ] = await Promise.all([
         api.getOverview().catch(() => null),
         api.getClients().catch(() => []),
@@ -265,7 +280,8 @@ export default function App() {
         api.getGiftCards().catch(() => []),
         api.getReviews().catch(() => []),
         api.getPressOnProducts().catch(() => []),
-        api.getPressOnOrders().catch(() => [])
+        api.getPressOnOrders().catch(() => []),
+        api.getCatalogueDesigns().catch(() => [])
       ]);
 
       if (overviewData) setOverview(overviewData);
@@ -282,6 +298,7 @@ export default function App() {
       setReviews(reviewsData);
       setPressOnProducts(pressOnProductsData);
       setPressOnOrders(pressOnOrdersData);
+      setCatalogueDesigns(catalogueDesignsData || []);
 
       // Deep link to client invoice if opened with #invoice-xxx
       if (typeof window !== 'undefined' && window.location.hash.startsWith('#invoice-')) {
@@ -826,6 +843,39 @@ export default function App() {
     }
   };
 
+  // Catalogue Management Handlers (Studio Hub CRUD)
+  const handleSaveCatalogueDesign = async (formData) => {
+    try {
+      if (formData.id) {
+        const updated = await api.updateCatalogueDesign(formData.id, formData);
+        setCatalogueDesigns((prev) => prev.map((d) => (d.id === formData.id ? updated : d)));
+        addToast('Design Saved', `"${updated.title}" updated in catalogue.`);
+        return updated;
+      } else {
+        const created = await api.createCatalogueDesign(formData);
+        setCatalogueDesigns((prev) => [created, ...prev]);
+        addToast('Design Added', `"${created.title}" added to catalogue.`);
+        return created;
+      }
+    } catch (err) {
+      console.error('Failed to save catalogue design:', err);
+      addToast('Error', 'Failed to save design to catalogue', 'error');
+      throw err;
+    }
+  };
+
+  const handleDeleteCatalogueDesign = async (id) => {
+    try {
+      await api.deleteCatalogueDesign(id);
+      setCatalogueDesigns((prev) => prev.filter((d) => d.id !== id));
+      addToast('Design Removed', 'Deleted from catalogue.', 'info');
+    } catch (err) {
+      console.error('Failed to delete catalogue design:', err);
+      addToast('Error', 'Failed to remove design', 'error');
+      throw err;
+    }
+  };
+
   // Public Booking & Customizer Handlers
   const handlePublicBookingComplete = async (bookingPayload) => {
     try {
@@ -983,6 +1033,65 @@ export default function App() {
   );
   const unpaidInvoices = invoices.filter((i) => i.status !== 'Paid');
 
+  // Standalone Client-Facing Design Catalogue & Lookbook View (/#catalogue)
+  if (currentTab === 'catalogue') {
+    return (
+      <div className="min-h-screen bg-studio-canvas text-studio-ink">
+        {/* Toast Notifications */}
+        <Toast toasts={toasts} onDismiss={removeToast} />
+
+        <CataloguePageView
+          designs={catalogueDesigns}
+          settings={settings}
+          onGoHome={() => {
+            window.location.hash = '';
+            setTabState('clientWebsite');
+          }}
+          onSelectLook={(design) => {
+            window.location.hash = '#booking-section';
+            setTabState('clientWebsite');
+            setTimeout(() => {
+              const el = document.getElementById('booking-section') || document.getElementById('book') || document.getElementById('booking');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+          }}
+          onSelectCustomInspo={() => {
+            window.location.hash = '#booking-section';
+            setTabState('clientWebsite');
+            setTimeout(() => {
+              const el = document.getElementById('booking-section') || document.getElementById('book') || document.getElementById('booking');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+          }}
+          onBookAppointment={() => {
+            window.location.hash = '#booking-section';
+            setTabState('clientWebsite');
+            setTimeout(() => {
+              const el = document.getElementById('booking-section') || document.getElementById('book') || document.getElementById('booking');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+          }}
+        />
+
+        {/* Studio Passcode Gate Modal (nbs0812) */}
+        <PasscodeModal
+          isOpen={isPasscodeModalOpen}
+          onClose={() => setIsPasscodeModalOpen(false)}
+          onSuccess={handleAuthSuccess}
+          settings={settings}
+        />
+
+        {/* Share Catalogue Modal (With & Without Prices) */}
+        <ShareCatalogueModal
+          isOpen={isShareCatalogueOpen}
+          onClose={() => setIsShareCatalogueOpen(false)}
+          settings={settings}
+          onAddToast={addToast}
+        />
+      </div>
+    );
+  }
+
   // Main Client-Facing Website View (Default for Clients)
   if (currentTab === 'clientWebsite') {
     return (
@@ -1010,6 +1119,10 @@ export default function App() {
           onSubmitRepair={handleCreateRepair}
           onSaveReview={handleSaveReview}
           onAddToast={addToast}
+          onOpenCatalogue={() => {
+            window.location.hash = '#catalogue';
+            setTabState('catalogue');
+          }}
         />
 
         {/* Studio Passcode Gate Modal (nbs0812) */}
@@ -1049,7 +1162,8 @@ export default function App() {
           pendingAppointments: pendingAppointments.length,
           unpaidInvoices: unpaidInvoices.length,
           pressOnOrders: pressOnOrders.filter((o) => o.fulfillmentStatus === 'New Order').length,
-          lowStockCount: inventory.filter((i) => (Number(i.quantity) || 0) <= (Number(i.minThreshold) || 0)).length
+          lowStockCount: inventory.filter((i) => (Number(i.quantity) || 0) <= (Number(i.minThreshold) || 0)).length,
+          catalogueCount: catalogueDesigns.length
         }}
       />
 
@@ -1218,6 +1332,15 @@ export default function App() {
                   services={services}
                   onSaveService={handleSaveService}
                   onDeleteService={handleDeleteService}
+                />
+              )}
+
+              {currentTab === 'catalogueManager' && (
+                <CatalogueManagerView
+                  designs={catalogueDesigns}
+                  onSaveDesign={handleSaveCatalogueDesign}
+                  onDeleteDesign={handleDeleteCatalogueDesign}
+                  onAddToast={addToast}
                 />
               )}
 
@@ -1413,6 +1536,11 @@ export default function App() {
           else if (actId === 'new_client') openNewClient();
           else if (actId === 'new_invoice') openNewInvoice(null);
           else if (actId === 'giftcards') setTab('giftcards');
+          else if (actId === 'catalogue_manager') setTab('catalogueManager');
+          else if (actId === 'view_catalogue') {
+            window.location.hash = '#catalogue';
+            setTabState('catalogue');
+          }
           else if (actId === 'repairs_queue') setTab('appointments');
           else if (actId === 'aftercare') openAftercareModal(clients[0] || null, appointments[0] || null);
           else if (actId === 'inventory' || actId === 'sanitization') setTab('inventory');

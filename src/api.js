@@ -488,5 +488,38 @@ export const api = {
       localStorage.setItem('nbs_studio_auth', 'true');
     }
     return data;
+  },
+
+  // Design Catalogue & Lookbook
+  async getCatalogueDesigns() {
+    const res = await fetch(`${API_BASE}/catalogue`);
+    if (!res.ok) throw new Error('Failed to load catalogue designs');
+    return res.json();
+  },
+  async createCatalogueDesign(data) {
+    const res = await fetch(`${API_BASE}/catalogue`, {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('Failed to create catalogue design');
+    return res.json();
+  },
+  async updateCatalogueDesign(id, data) {
+    const res = await fetch(`${API_BASE}/catalogue/${id}`, {
+      method: 'PUT',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('Failed to update catalogue design');
+    return res.json();
+  },
+  async deleteCatalogueDesign(id) {
+    const res = await fetch(`${API_BASE}/catalogue/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error('Failed to delete catalogue design');
+    return res.json();
   }
 };

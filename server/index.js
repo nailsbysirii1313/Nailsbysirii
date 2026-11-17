@@ -588,6 +588,38 @@ app.delete('/api/press-on-orders/:id', requireAuth, (req, res) => {
   res.json({ success: true, id: req.params.id });
 });
 
+// Design Catalogue & Lookbook API
+app.get('/api/catalogue', (req, res) => {
+  res.json(db.getCatalogueDesigns());
+});
+
+app.post('/api/catalogue', requireAuth, (req, res) => {
+  try {
+    const item = db.saveCatalogueDesign(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.put('/api/catalogue/:id', requireAuth, (req, res) => {
+  try {
+    const item = db.saveCatalogueDesign({ ...req.body, id: req.params.id });
+    res.json(item);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.delete('/api/catalogue/:id', requireAuth, (req, res) => {
+  try {
+    db.deleteCatalogueDesign(req.params.id);
+    res.json({ success: true, id: req.params.id });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 // Backup & Accounting CSV Export API
 app.get('/api/backup/export', requireAuth, (req, res) => {
   const data = db.get();

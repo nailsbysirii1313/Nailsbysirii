@@ -14,7 +14,8 @@ import {
   FileText,
   Gift,
   X,
-  ArrowRight
+  ArrowRight,
+  BookOpen
 } from 'lucide-react';
 
 export default function CommandPalette({
@@ -67,6 +68,8 @@ export default function CommandPalette({
     { id: 'new_apt', label: 'Book New Appointment', icon: Calendar, category: 'Action' },
     { id: 'new_client', label: 'Register New Client', icon: User, category: 'Action' },
     { id: 'new_invoice', label: 'Create New Invoice', icon: Receipt, category: 'Action' },
+    { id: 'catalogue_manager', label: 'Curate Design Catalogue (Studio Lookbook)', icon: BookOpen, category: 'Catalogue' },
+    { id: 'view_catalogue', label: 'View Standalone Client Design Catalogue', icon: BookOpen, category: 'Navigation' },
     { id: 'giftcards', label: 'Studio Gift Cards & Vouchers', icon: Gift, category: 'Navigation' },
     { id: 'repairs_queue', label: 'Emergency Nail Repair Requests Queue', icon: AlertTriangle, category: 'Urgent' },
     { id: 'aftercare', label: 'Client Aftercare & Longevity Guide Generator', icon: FileText, category: 'Care' },

@@ -266,7 +266,8 @@ export default function ClientWebsite({
   onBookingComplete,
   onSubmitRepair,
   onSaveReview,
-  onAddToast
+  onAddToast,
+  onOpenCatalogue
 }) {
   // Navigation & Modals
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -778,8 +779,14 @@ export default function ClientWebsite({
     ? allReviews
     : allReviews.filter((r) => classifyReview(r) === reviewFilter);
 
-  // Smooth scroll helper
+  // Smooth scroll helper / standalone page router
   const scrollTo = (id) => {
+    if (id === 'catalogue') {
+      if (onOpenCatalogue) onOpenCatalogue();
+      else window.location.hash = '#catalogue';
+      setMobileMenuOpen(false);
+      return;
+    }
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
@@ -1099,9 +1106,12 @@ export default function ClientWebsite({
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-studio-secondary">
-            <a href="#catalogue" className="hover:text-studio-wine transition-colors">
+            <button
+              onClick={() => (onOpenCatalogue ? onOpenCatalogue() : (window.location.hash = '#catalogue'))}
+              className="hover:text-studio-wine transition-colors text-xs font-semibold text-studio-secondary"
+            >
               Nail Ideas
-            </a>
+            </button>
             <a href="#customizer" className="hover:text-studio-wine transition-colors">
               Design Your Nails
             </a>
@@ -1192,14 +1202,17 @@ export default function ClientWebsite({
 
               {/* Navigation Links */}
               <nav className="space-y-1.5 text-xs font-semibold text-studio-secondary font-sans">
-                <a
-                  href="#catalogue"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-2xl bg-studio-wineLight text-studio-wine font-bold"
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    if (onOpenCatalogue) onOpenCatalogue();
+                    else window.location.hash = '#catalogue';
+                  }}
+                  className="w-full flex items-center gap-3 p-3 rounded-2xl bg-studio-wineLight text-studio-wine font-bold text-left text-xs font-sans"
                 >
                   <Palette className="w-4 h-4 text-studio-wine" />
-                  <span>Nail Ideas</span>
-                </a>
+                  <span>Nail Ideas & Catalogue</span>
+                </button>
                 <a
                   href="#customizer"
                   onClick={() => setMobileMenuOpen(false)}
@@ -1473,13 +1486,13 @@ export default function ClientWebsite({
               <span>Book Your Nails</span>
             </a>
 
-            <a
-              href="#catalogue"
+            <button
+              onClick={() => (onOpenCatalogue ? onOpenCatalogue() : (window.location.hash = '#catalogue'))}
               className="text-xs sm:text-sm font-semibold text-studio-secondary hover:text-studio-wine transition-colors inline-flex items-center gap-1 py-1 underline-offset-4 hover:underline"
             >
               <span>See All Nail Ideas</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </a>
+            </button>
           </div>
         </div>
 
@@ -1513,13 +1526,13 @@ export default function ClientWebsite({
                 <span>Book Your Nails</span>
               </a>
 
-              <a
-                href="#catalogue"
+              <button
+                onClick={() => (onOpenCatalogue ? onOpenCatalogue() : (window.location.hash = '#catalogue'))}
                 className="text-sm font-semibold text-studio-secondary hover:text-studio-wine transition-colors inline-flex items-center gap-1.5 py-1 underline-offset-4 hover:underline"
               >
                 <span>See All Nail Ideas</span>
                 <ArrowRight className="w-3.5 h-3.5" />
-              </a>
+              </button>
             </div>
           </div>
 
@@ -1647,8 +1660,8 @@ export default function ClientWebsite({
         </div>
       </section>
 
-      {/* 3. THE MAIN ATELIER DESIGN CATALOGUE (PRIMARY CENTERPIECE) */}
-      <section id="catalogue" className="py-10 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto border-t border-studio-border">
+      {/* 3. ATELIER DESIGN CATALOGUE SHOWCASE & LOOKBOOK GATEWAY */}
+      <section id="catalogue-showcase" className="py-10 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto border-t border-studio-border">
         <div className="space-y-6 sm:space-y-8">
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-2.5">
@@ -1657,10 +1670,10 @@ export default function ClientWebsite({
               <span>Atelier Design Booklet & Catalogue</span>
             </div>
             <h2 className="font-display italic font-bold text-2xl sm:text-4xl text-studio-ink">
-              Browse Signature Designs & Options
+              Signature Nail Designs & Lookbook
             </h2>
             <p className="text-xs sm:text-sm text-studio-secondary leading-relaxed font-sans">
-              We have created this booklet to make choosing your nails effortless. Select any design below, customize your desired length and shape, or bring your own photo!
+              We have created a dedicated design catalogue to make choosing your nails effortless. Browse sculpted acrylics, BIAB builder gels, Gel-X extensions, or bring your own reference photo!
             </p>
           </div>
 
@@ -1693,65 +1706,9 @@ export default function ClientWebsite({
             </button>
           </div>
 
-          {/* Interactive Category Selector & Search */}
-          <div className="space-y-4">
-            <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
-              {/* Category Pills (Touch scrollable) */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
-                {catalogueCategories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`px-4 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap transition-all min-h-[40px] flex items-center gap-1.5 ${activeCategory === cat || (activeCategory === 'All' && cat === 'All Designs')
-                      ? 'bg-studio-wine text-white shadow-studio'
-                      : 'bg-studio-surface border border-studio-border hover:border-studio-borderStrong text-studio-secondary'
-                      }`}
-                  >
-                    {cat === 'All Designs' && <Layers className="w-3.5 h-3.5" />}
-                    {cat === 'Acrylic Nails' && <Gem className="w-3.5 h-3.5" />}
-                    {cat === 'Natural Nails & BIAB' && <Feather className="w-3.5 h-3.5" />}
-                    {cat === 'Gel & Soft Gel (Gel-X)' && <Crown className="w-3.5 h-3.5" />}
-                    {cat === 'Hand-Painted Art' && <Paintbrush className="w-3.5 h-3.5" />}
-                    {cat === 'Ready-to-Wear Press-Ons' && <Ribbon className="w-3.5 h-3.5" />}
-                    <span>{cat}</span>
-                    {cat === 'Acrylic Nails' && (
-                      <span className={`text-[9px] px-1.5 py-0.2 rounded-full ${activeCategory === 'Acrylic Nails' ? 'bg-white/20 text-white' : 'bg-studio-wineLight text-studio-wine font-bold'
-                        }`}>
-                        5
-                      </span>
-                    )}
-                  </button>
-                ))}
-              </div>
-
-              {/* Search Bar */}
-              <div className="relative md:w-72 shrink-0">
-                <Search className="w-4 h-4 text-studio-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Search acrylic, glazed, french, 3D..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-3.5 py-2.5 bg-studio-surface border border-studio-border rounded-2xl text-base sm:text-xs text-studio-ink focus:outline-none focus:border-studio-wine font-sans min-h-[42px]"
-                />
-              </div>
-            </div>
-
-            {/* Category Note when Acrylic Nails is selected */}
-            {activeCategory === 'Acrylic Nails' && (
-              <div className="p-4 rounded-2xl bg-studio-surface border border-studio-border text-xs text-studio-secondary flex items-start gap-2.5 animate-in fade-in">
-                <Gem className="w-4 h-4 text-studio-wine shrink-0 mt-0.5" />
-                <div>
-                  <strong className="text-studio-ink font-semibold">Acrylic Nails Atelier Collection:</strong>{' '}
-                  Explore our signature sculpted acrylic designs below. Every acrylic set is customized to your desired length and nail silhouette, or you can bring an external reference image from the internet.
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Design Booklet Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {filteredCatalogue.map((item) => (
+          {/* Featured Teaser Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+            {catalogueBooklet.slice(0, 3).map((item) => (
               <div
                 key={item.id}
                 className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border hover:border-studio-wine/40 shadow-studio transition-all flex flex-col justify-between group space-y-4"
@@ -1799,7 +1756,7 @@ export default function ClientWebsite({
 
                   {/* Highlights Checklist */}
                   <div className="pt-2 border-t border-studio-border/60 space-y-1.5 text-[11px] text-studio-secondary font-medium">
-                    {item.highlights.map((h, i) => (
+                    {item.highlights.slice(0, 2).map((h, i) => (
                       <div key={i} className="flex items-center gap-2">
                         <Check className="w-3 h-3 text-studio-wine shrink-0" />
                         <span>{h}</span>
@@ -1810,39 +1767,33 @@ export default function ClientWebsite({
 
                 {/* Card Action: Book This Look */}
                 <div className="pt-4 border-t border-studio-border flex items-center justify-between gap-3">
-                  <div className="text-[11px] text-studio-muted font-medium">
-                    Customizable shape & length
+                  <div className="text-[11px] text-studio-wine font-medium">
+                    Connect for Pricing
                   </div>
 
                   <button
                     onClick={() => handleSelectLook(item)}
-                    className="px-4 py-2.5 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio transition-all flex items-center gap-1.5 active:scale-95 min-h-[40px]"
+                    className="px-4 py-2 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio transition-all flex items-center gap-1.5 active:scale-95"
                   >
-                    <Heart className="w-3.5 h-3.5 fill-white text-white" />
-                    <span>Select This Look</span>
+                    <Heart className="w-3 h-3 fill-white text-white" />
+                    <span>Select Look</span>
                   </button>
                 </div>
               </div>
             ))}
           </div>
 
-          {filteredCatalogue.length === 0 && (
-            <div className="text-center py-12 bg-studio-surface rounded-3xl border border-studio-border p-6 space-y-3">
-              <BookOpen className="w-10 h-10 text-studio-muted mx-auto" />
-              <h3 className="font-display font-semibold text-lg text-studio-ink">
-                No matching designs found for "{searchQuery}"
-              </h3>
-              <p className="text-xs text-studio-secondary max-w-sm mx-auto">
-                Remember, you are not limited to our booklet! Tap below to bring any photo or screenshot you found online.
-              </p>
-              <button
-                onClick={handleSelectCustomInspo}
-                className="px-5 py-2.5 rounded-2xl bg-studio-wine text-white text-xs font-semibold shadow-studio"
-              >
-                Bring Your Own Inspo
-              </button>
-            </div>
-          )}
+          {/* Open Full Dedicated Catalogue Page Button */}
+          <div className="text-center pt-2">
+            <button
+              onClick={() => (onOpenCatalogue ? onOpenCatalogue() : (window.location.hash = '#catalogue'))}
+              className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-sm font-bold shadow-studio hover:shadow-glow transition-all active:scale-95"
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Explore All Signature Looks in Design Catalogue</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </section>
 

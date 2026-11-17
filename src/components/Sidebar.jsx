@@ -15,7 +15,8 @@ import {
   Lock,
   ShoppingBag,
   Ribbon,
-  Gem
+  Gem,
+  BookOpen
 } from 'lucide-react';
 
 export default function Sidebar({
@@ -78,6 +79,12 @@ export default function Sidebar({
       id: 'services',
       label: 'Services & Art Menu',
       icon: Palette
+    },
+    {
+      id: 'catalogueManager',
+      label: 'Design Catalogue',
+      icon: BookOpen,
+      badge: counts?.catalogueCount ? `${counts.catalogueCount} looks` : 'Booklet'
     },
     {
       id: 'reminders',

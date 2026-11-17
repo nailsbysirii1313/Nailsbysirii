@@ -11,7 +11,8 @@ import {
   Settings,
   FileSpreadsheet,
   ChevronRight,
-  AlertTriangle
+  AlertTriangle,
+  BookOpen
 } from 'lucide-react';
 
 export default function MobileStudioHubSheet({
@@ -62,6 +63,13 @@ export default function MobileStudioHubSheet({
           desc: 'Configure nail sets, BIAB overlays, tiers & pricing',
           icon: Palette,
           color: 'text-pink-600 bg-pink-50'
+        },
+        {
+          id: 'catalogueManager',
+          label: 'Design Catalogue Lookbook',
+          desc: 'Curate signature nail designs for the client booklet',
+          icon: BookOpen,
+          color: 'text-amber-600 bg-amber-50'
         }
       ]
     },
