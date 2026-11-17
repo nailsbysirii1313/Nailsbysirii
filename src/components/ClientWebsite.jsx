@@ -26,6 +26,8 @@ import {
   Heart,
   Share2,
   Lock,
+  Eye,
+  EyeOff,
   AlertTriangle,
   MessageSquare,
   X,
@@ -214,12 +216,50 @@ function classifyReview(r) {
   return 'Extensions & BIAB';
 }
 
+const HERO_STYLES = [
+  {
+    id: 'soft',
+    label: 'Soft & Simple',
+    title: 'Clean Glazed Donut',
+    shape: 'almond',
+    length: 'short',
+    baseColor: '#FDF2F8',
+    finish: 'chrome',
+    subtitle: 'Sheer strawberry nude • Natural almond',
+    tag: 'Design ideas'
+  },
+  {
+    id: 'sparkle',
+    label: 'A Little Sparkle',
+    title: 'Golden Pearl Chrome',
+    shape: 'coffin',
+    length: 'medium',
+    baseColor: '#FFFBEB',
+    finish: 'chrome',
+    subtitle: 'Champagne porcelain • Molten chrome shine',
+    tag: 'Design ideas'
+  },
+  {
+    id: 'statement',
+    label: 'Make a Statement',
+    title: 'Velvet Cat-Eye Stiletto',
+    shape: 'stiletto',
+    length: 'long',
+    baseColor: '#7D2838',
+    finish: 'cat-eye',
+    subtitle: 'Magnetic silk shimmer • Sculpted stiletto',
+    tag: 'Design ideas'
+  }
+];
+
 export default function ClientWebsite({
   services = [],
   settings,
   reviews = [],
   pressOnProducts = [],
   onOrderPressOn,
+  hidePrices = false,
+  setHidePrices,
   onOpenPasscodeModal,
   onBookingComplete,
   onSubmitRepair,
@@ -231,6 +271,9 @@ export default function ClientWebsite({
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isRepairModalOpen, setIsRepairModalOpen] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
+
+  // Hero Interactive Fan State
+  const [activeHeroStyle, setActiveHeroStyle] = useState('sparkle');
 
   // Catalogue Filters
   const [activeCategory, setActiveCategory] = useState('All');
@@ -255,7 +298,7 @@ export default function ClientWebsite({
   const [inspoDescription, setInspoDescription] = useState('');
   const [selectedShape, setSelectedShape] = useState('Almond');
   const [selectedLength, setSelectedLength] = useState('Medium');
-  const [selectedAesthetic, setSelectedAesthetic] = useState('Bespoke Nail Art');
+  const [selectedAesthetic, setSelectedAesthetic] = useState('Hand-Painted Nail Art');
   const [bookingDate, setBookingDate] = useState(() => getKolkataTomorrowString());
   const [bookingTime, setBookingTime] = useState('12:00');
   const [clientName, setClientName] = useState('');
@@ -769,6 +812,31 @@ export default function ClientWebsite({
     }
   };
 
+  // Hero Look Quick Booking Handler
+  const handleBookHeroStyle = (styleId) => {
+    const styleObj = HERO_STYLES.find((s) => s.id === styleId) || HERO_STYLES[1];
+    let matchedLook = null;
+    if (styleObj.id === 'soft') {
+      matchedLook = catalogueBooklet.find((b) => b.id === 'biab_1') || catalogueBooklet[5];
+    } else if (styleObj.id === 'sparkle') {
+      matchedLook = catalogueBooklet.find((b) => b.id === 'acrylic_3') || catalogueBooklet[0];
+    } else {
+      matchedLook = catalogueBooklet.find((b) => b.id === 'acrylic_4') || catalogueBooklet[3];
+    }
+
+    setBookingMode('lookbook');
+    setSelectedLook(matchedLook);
+    setSelectedAesthetic(`${styleObj.label} (${styleObj.title})`);
+    setSelectedShape(styleObj.shape.charAt(0).toUpperCase() + styleObj.shape.slice(1));
+    setSelectedLength(styleObj.length.charAt(0).toUpperCase() + styleObj.length.slice(1));
+    setClientNotes(`Hero Selection: ${styleObj.label} — ${styleObj.title} (${styleObj.subtitle})`);
+    scrollTo('booking-section');
+    setBookingStep(1);
+    if (onAddToast) {
+      onAddToast('Look Selected', `"${styleObj.label}" loaded into booking reservation.`, 'success');
+    }
+  };
+
   // Apply custom set from Customizer
   const handleBookCustomSet = () => {
     setBookingMode('customSet');
@@ -1003,95 +1071,93 @@ export default function ClientWebsite({
 
   return (
     <div className="min-h-screen bg-studio-canvas text-studio-ink font-sans selection:bg-studio-wineLight selection:text-studio-wine overflow-x-hidden pb-24 sm:pb-0">
-      {/* 1. TOP CLIENT HEADER / NAVIGATION */}
-      <header className="sticky top-0 z-40 bg-studio-canvas/90 backdrop-blur-md border-b border-studio-border px-3.5 sm:px-6 py-2.5 sm:py-3 transition-all pt-[calc(0.6rem+env(safe-area-inset-top))]">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+      {/* 1. TOP CLIENT HEADER / NAVIGATION (~60px tall) */}
+      <header className="sticky top-0 z-40 bg-studio-canvas/95 backdrop-blur-md border-b border-studio-border h-[60px] px-4 sm:px-6 transition-all pt-[env(safe-area-inset-top)] flex items-center">
+        <div className="max-w-7xl mx-auto w-full flex items-center justify-between gap-3">
           {/* Logo & Atelier Brand */}
-          <a href="#" className="flex items-center gap-2.5 sm:gap-3 group shrink-0 min-w-0">
-            <StudioLogo logoUrl={settings?.studioLogoUrl} size="md" />
+          <a href="#" className="flex items-center gap-2.5 sm:gap-3 group shrink-0 min-w-0" aria-label="Nails by Sirii Home">
+            <StudioLogo logoUrl={settings?.studioLogoUrl} size="sm" />
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <span className="font-display italic font-bold text-base sm:text-xl text-studio-ink tracking-tight group-hover:text-studio-wine transition-colors truncate">
+                <span className="font-sans font-bold text-base sm:text-lg text-studio-ink tracking-tight group-hover:text-studio-wine transition-colors truncate">
                   {settings?.studioName || 'Nails by Sirii'}
                 </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-studio-wine animate-pulse shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-studio-wine shrink-0" />
               </div>
-              <p className="text-[9px] sm:text-[10px] text-studio-secondary tracking-wider font-semibold truncate">
-                Contemporary Nail Atelier • Dehradun
+              <p className="text-[10px] text-studio-muted font-medium truncate hidden sm:block">
+                Nail Studio • Dehradun
               </p>
             </div>
           </a>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-studio-secondary">
-            <a href="#catalogue" className="text-studio-wine hover:underline transition-colors flex items-center gap-1.5 font-bold">
-              <Sparkles className="w-3.5 h-3.5 text-studio-wine" />
-              <span>Design Catalogue</span>
+            <a href="#catalogue" className="hover:text-studio-wine transition-colors">
+              Nail Ideas
             </a>
-            <button
-              onClick={handleSelectCustomInspo}
-              className="hover:text-studio-wine transition-colors flex items-center gap-1.5"
-            >
-              <Wand2 className="w-3.5 h-3.5 text-studio-wine" />
-              <span>Bring Your Own Inspo</span>
-            </button>
-            <a href="#press-ons" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
-              <Ribbon className="w-3.5 h-3.5 text-studio-wine" />
-              <span>Press-On Boutique</span>
+            <a href="#customizer" className="hover:text-studio-wine transition-colors">
+              Design Your Nails
             </a>
-            <a href="#booking-section" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-studio-muted" />
-              <span>Reserve Appointment</span>
+            <a href="#press-ons" className="hover:text-studio-wine transition-colors">
+              Press-On Boutique
             </a>
-            <a href="#reviews" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
-              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-100" />
-              <span>Client Reviews</span>
+            <a href="#reviews" className="hover:text-studio-wine transition-colors">
+              Reviews
             </a>
-            <a href="#studio-info" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Hygiene & Visit</span>
+            <a href="#studio-info" className="hover:text-studio-wine transition-colors">
+              Visit Us
             </a>
           </nav>
 
           {/* Header Action Buttons */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-            {/* Share Catalogue Button */}
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Desktop Share Booklet */}
             <button
               onClick={() => setIsShareModalOpen(true)}
-              className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-studio-surface border border-studio-border hover:border-studio-borderStrong text-studio-secondary text-xs font-semibold shadow-studio transition-all flex items-center gap-1.5 active:scale-95"
-              title="Share catalogue"
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-studio-surface border border-studio-border hover:border-studio-borderStrong text-studio-secondary text-xs font-semibold shadow-xs transition-all active:scale-95"
+              title="Share Design Booklet"
             >
               <Ribbon className="w-3.5 h-3.5 text-studio-wine" />
-              <span className="hidden sm:inline">Share Booklet</span>
+              <span>Share Booklet</span>
             </button>
 
-            {/* Book Now Primary CTA */}
+            {/* Desktop Price Visibility Toggle */}
+            <button
+              onClick={() => setHidePrices && setHidePrices(!hidePrices)}
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-studio-surface border border-studio-border hover:border-studio-borderStrong text-studio-secondary text-xs font-semibold shadow-xs transition-all active:scale-95"
+              title={hidePrices ? "Show Prices" : "Hide Prices (Portfolio Mode)"}
+            >
+              {hidePrices ? <EyeOff className="w-3.5 h-3.5 text-amber-600" /> : <Eye className="w-3.5 h-3.5 text-emerald-600" />}
+              <span>{hidePrices ? 'Prices Hidden' : 'Prices Shown'}</span>
+            </button>
+
+            {/* Book Appointment Primary CTA */}
             <a
               href="#booking-section"
-              className="px-3.5 sm:px-4 py-1.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio active:scale-95 transition-all flex items-center gap-1.5"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-bold shadow-studio active:scale-95 transition-all"
             >
               <Sparkles className="w-3.5 h-3.5 fill-white" />
-              <span className="hidden sm:inline">Reserve Slot</span>
-              <span className="sm:hidden">Reserve</span>
+              <span>Book Appointment</span>
             </a>
 
-            {/* Studio Hub (Owner Passcode Protected) */}
+            {/* Studio Hub (Owner Passcode Protected - Discreet) */}
             <button
               onClick={onOpenPasscodeModal}
-              className="w-8 h-8 rounded-xl bg-studio-ink hover:bg-black text-white flex items-center justify-center transition-all active:scale-95 shadow-studio"
-              title="Studio Hub Owner Access"
+              className="hidden lg:flex w-8 h-8 rounded-xl bg-studio-surface border border-studio-border hover:border-studio-borderStrong text-studio-secondary items-center justify-center transition-all active:scale-95 shadow-xs"
+              title="Studio Hub (Owner Access)"
               aria-label="Studio Hub Owner Access"
             >
-              <Lock className="w-3.5 h-3.5 text-studio-gold" />
+              <Lock className="w-3.5 h-3.5 text-studio-muted" />
             </button>
 
-            {/* Mobile Menu Hamburger */}
+            {/* Mobile Clearly Labelled Menu Control */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden w-8 h-8 rounded-xl bg-studio-surface border border-studio-border flex items-center justify-center text-studio-secondary hover:text-studio-ink active:scale-95"
-              aria-label="Open Navigation Menu"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-studio-surface border border-studio-border text-studio-ink text-xs font-bold shadow-xs hover:border-studio-wine/40 active:scale-95 transition-all lg:hidden"
+              aria-label="Open navigation menu"
             >
-              <Menu className="w-4 h-4" />
+              <Menu className="w-4 h-4 text-studio-wine" />
+              <span>Menu</span>
             </button>
           </div>
         </div>
@@ -1112,10 +1178,10 @@ export default function ClientWebsite({
                 <div className="flex items-center gap-2.5">
                   <StudioLogo logoUrl={settings?.studioLogoUrl} size="sm" />
                   <div>
-                    <span className="font-display italic font-bold text-sm text-studio-ink block">
+                    <span className="font-sans font-bold text-sm text-studio-ink block">
                       {settings?.studioName || 'Nails by Sirii'}
                     </span>
-                    <span className="text-[10px] text-studio-muted">Design Booklet</span>
+                    <span className="text-[10px] text-studio-muted">Nail Studio • Dehradun</span>
                   </div>
                 </div>
                 <button
@@ -1135,26 +1201,23 @@ export default function ClientWebsite({
                   className="flex items-center gap-3 p-3 rounded-2xl bg-studio-wineLight text-studio-wine font-bold"
                 >
                   <Sparkles className="w-4 h-4 text-studio-wine" />
-                  <span>Design Catalogue & Booklet</span>
+                  <span>Nail Ideas</span>
                 </a>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    handleSelectCustomInspo();
-                  }}
-                  className="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors text-left"
+                <a
+                  href="#customizer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
                 >
                   <Wand2 className="w-4 h-4 text-studio-wine" />
-                  <span>Bring Your Own Inspo (Found Online)</span>
-                </button>
+                  <span>Design Your Nails</span>
+                </a>
                 <a
                   href="#press-ons"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
                 >
                   <Ribbon className="w-4 h-4 text-studio-wine" />
-                  <span>Luxury Press-On Boutique</span>
+                  <span>Press-On Boutique</span>
                 </a>
                 <a
                   href="#booking-section"
@@ -1162,7 +1225,7 @@ export default function ClientWebsite({
                   className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
                 >
                   <Calendar className="w-4 h-4 text-studio-wine" />
-                  <span>Reserve Appointment</span>
+                  <span>Book Appointment</span>
                 </a>
                 <a
                   href="#reviews"
@@ -1170,7 +1233,7 @@ export default function ClientWebsite({
                   className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
                 >
                   <Heart className="w-4 h-4 text-rose-500 fill-rose-100" />
-                  <span>Client Reviews ({reviews.length})</span>
+                  <span>Reviews ({reviews.length})</span>
                 </a>
                 <a
                   href="#studio-info"
@@ -1178,32 +1241,86 @@ export default function ClientWebsite({
                   className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
                 >
                   <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  <span>Hygiene & Studio Standards</span>
+                  <span>Visit Us</span>
                 </a>
               </nav>
 
-              {/* Quick Actions in Drawer */}
+              {/* Secondary Utilities in Drawer */}
               <div className="pt-4 border-t border-studio-border space-y-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-studio-muted block px-1">
+                  Utilities
+                </span>
+
+                {/* Share Booklet */}
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setIsShareModalOpen(true);
+                  }}
+                  className="w-full py-2.5 px-3 rounded-xl bg-studio-surface border border-studio-border text-xs font-semibold text-studio-ink flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-2">
+                    <Ribbon className="w-3.5 h-3.5 text-studio-wine" />
+                    <span>Share Booklet</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-studio-muted" />
+                </button>
+
+                {/* Price Visibility Toggle */}
+                <button
+                  onClick={() => setHidePrices && setHidePrices(!hidePrices)}
+                  className="w-full py-2.5 px-3 rounded-xl bg-studio-surface border border-studio-border text-xs font-semibold text-studio-ink flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-2">
+                    {hidePrices ? <EyeOff className="w-3.5 h-3.5 text-amber-600" /> : <Eye className="w-3.5 h-3.5 text-emerald-600" />}
+                    <span>{hidePrices ? 'Prices: Hidden' : 'Prices: Visible'}</span>
+                  </div>
+                  <span className="text-[10px] font-bold text-studio-wine uppercase">{hidePrices ? 'Show' : 'Hide'}</span>
+                </button>
+
+                {/* Emergency Nail Repair */}
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
                     setIsRepairModalOpen(true);
                   }}
-                  className="w-full py-2.5 px-3 rounded-xl bg-red-50 text-red-800 border border-red-200 text-xs font-semibold flex items-center justify-center gap-2"
+                  className="w-full py-2.5 px-3 rounded-xl bg-red-50 text-red-800 border border-red-200 text-xs font-semibold flex items-center justify-between"
                 >
-                  <HeartHandshake className="w-3.5 h-3.5 text-red-600" />
-                  <span>Emergency Nail Repair</span>
+                  <div className="flex items-center gap-2">
+                    <HeartHandshake className="w-3.5 h-3.5 text-red-600" />
+                    <span>Emergency Nail Repair</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-red-400" />
                 </button>
 
+                {/* Direct WhatsApp Chat */}
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full py-2.5 px-3 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold flex items-center justify-center gap-2"
+                  className="w-full py-2.5 px-3 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold flex items-center justify-between"
                 >
-                  <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Direct WhatsApp Chat</span>
+                  <div className="flex items-center gap-2">
+                    <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>WhatsApp Chat</span>
+                  </div>
+                  <ExternalLink className="w-3.5 h-3.5 text-emerald-600" />
                 </a>
+
+                {/* Discreet Studio Hub Owner Access */}
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenPasscodeModal();
+                  }}
+                  className="w-full py-2.5 px-3 rounded-xl bg-studio-subtle/80 text-studio-ink text-xs font-semibold flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-2">
+                    <Lock className="w-3.5 h-3.5 text-studio-muted" />
+                    <span>Studio Hub (Owner)</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-studio-muted" />
+                </button>
               </div>
             </div>
 
@@ -1217,66 +1334,299 @@ export default function ClientWebsite({
         </div>
       )}
 
-      {/* 2. HERO SECTION */}
-      <section className="relative pt-8 sm:pt-14 pb-12 sm:pb-16 px-4 sm:px-6 max-w-7xl mx-auto">
-        <div className="max-w-3xl mx-auto text-center space-y-4 sm:space-y-6">
-          {/* Atelier Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-studio-surface border border-studio-border shadow-xs text-studio-wine text-xs font-semibold">
-            <Crown className="w-3.5 h-3.5 text-studio-wine" />
-            <span>Curated Nail Design Catalogue & Atelier</span>
-          </div>
-
-          {/* Main Headline */}
-          <h1 className="font-display italic font-bold text-3xl sm:text-5xl md:text-6xl text-studio-ink leading-tight tracking-tight">
-            Artisan Nail Catalogue <br className="hidden sm:inline" />
-            <span className="text-studio-wine">& Bespoke Design Booklet</span>
-          </h1>
-
-          {/* Core Concept Narrative */}
-          <p className="text-sm sm:text-base text-studio-secondary max-w-2xl mx-auto leading-relaxed font-sans">
-            Browse our signature design booklet for inspiration, customize your preferred shape and length, or <strong className="text-studio-ink">bring your own design you found on Instagram or Pinterest</strong>. Dedicated one-on-one natural nail architecture and hand-painted art by Sirii in Dehradun.
+      {/* 2. HERO SECTION: "YOUR NEXT NAIL CRUSH" */}
+      <section className="relative pt-6 sm:pt-10 lg:pt-14 pb-10 sm:pb-14 px-5 sm:px-6 max-w-6xl mx-auto overflow-hidden">
+        {/* MOBILE VIEW (< lg) */}
+        <div className="flex flex-col items-center text-center space-y-5 lg:hidden animate-hero-fade-up">
+          {/* 1. Small location line */}
+          <p className="text-xs font-bold uppercase tracking-wider text-studio-wine">
+            Nail studio in Dehradun
           </p>
 
-          {/* Primary Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <a
-              href="#catalogue"
-              className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs sm:text-sm font-semibold shadow-studio transition-all active:scale-95 flex items-center justify-center gap-2 min-h-[44px]"
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>Explore Design Booklet</span>
-            </a>
+          {/* 2. Short headline with deliberate line breaks */}
+          <h1 className="font-sans font-extrabold text-[42px] sm:text-5xl text-studio-ink leading-[1.08] tracking-tight">
+            Your next<br />nail crush.
+          </h1>
 
-            <button
-              onClick={handleSelectCustomInspo}
-              className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-studio-surface hover:bg-studio-subtle text-studio-ink border border-studio-border text-xs sm:text-sm font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center gap-2 min-h-[44px]"
-            >
-              <Wand2 className="w-4 h-4 text-studio-wine" />
-              <span>Bring Your Own Inspo (Found Online)</span>
-            </button>
+          {/* 3. One supporting sentence */}
+          <p className="text-base text-studio-secondary leading-relaxed max-w-sm px-1">
+            Simple, sparkly, or something totally you. Let’s find your next look.
+          </p>
+
+          {/* 4. Interactive nail-card fan */}
+          <div className="relative w-full max-w-[320px] sm:max-w-[360px] h-[255px] sm:h-[275px] flex items-center justify-center my-1 select-none">
+            {/* Restrained blush backdrop with single curved line and sparkle */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10" aria-hidden="true">
+              <div className="w-[280px] h-[220px] rounded-full bg-studio-wineLight/60 blur-2xl" />
+              <svg className="absolute w-[240px] h-[140px] text-studio-wine/15" fill="none" viewBox="0 0 240 140">
+                <path d="M 15 120 C 70 30 170 30 225 120" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
+              </svg>
+              <Sparkle className="absolute top-2 right-6 w-3.5 h-3.5 text-studio-wine/40" />
+            </div>
+
+            {/* Three Overlapping Cards */}
+            {HERO_STYLES.map((style) => {
+              const isFront = activeHeroStyle === style.id;
+              const activeIdx = HERO_STYLES.findIndex(s => s.id === activeHeroStyle);
+              const thisIdx = HERO_STYLES.findIndex(s => s.id === style.id);
+              const diff = (thisIdx - activeIdx + 3) % 3;
+
+              let positionClass = '';
+              if (isFront) {
+                positionClass = 'z-20 scale-100 rotate-0 translate-x-0 shadow-lg border-studio-wine/40 opacity-100';
+              } else if (diff === 1) {
+                positionClass = 'z-10 scale-[0.88] rotate-[8deg] translate-x-[54px] sm:translate-x-[68px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
+              } else {
+                positionClass = 'z-10 scale-[0.88] -rotate-[8deg] -translate-x-[54px] sm:-translate-x-[68px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
+              }
+
+              return (
+                <div
+                  key={style.id}
+                  onClick={() => setActiveHeroStyle(style.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setActiveHeroStyle(style.id);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-pressed={isFront}
+                  aria-label={`Select ${style.label} look`}
+                  className={`absolute w-[155px] sm:w-[175px] h-[230px] sm:h-[250px] rounded-[22px] bg-studio-surface border p-3 flex flex-col justify-between transition-all duration-[320ms] ease-out outline-none focus-visible:ring-2 focus-visible:ring-studio-wine ${positionClass}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-studio-wine bg-studio-wineLight/90 border border-studio-wine/10 px-2 py-0.5 rounded-full">
+                      {style.tag}
+                    </span>
+                    <span className="text-[10px] text-studio-muted font-medium capitalize">
+                      {style.shape}
+                    </span>
+                  </div>
+
+                  <div className="flex-1 flex items-center justify-center relative py-1">
+                    <div className="w-16 h-28 rounded-full bg-studio-canvas/50 border border-border-subtle/50 flex items-center justify-center shadow-inner overflow-hidden">
+                      <NailTipSchematic
+                        shape={style.shape}
+                        length={style.length}
+                        baseColor={style.baseColor}
+                        finish={style.finish}
+                        size="sm"
+                        className="scale-90"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="text-center pt-1 border-t border-border-subtle/60">
+                    <h4 className="font-sans font-bold text-xs sm:text-[13px] text-studio-ink leading-tight truncate">
+                      {style.title}
+                    </h4>
+                    <p className="text-[10px] text-studio-muted mt-0.5 truncate">
+                      {style.subtitle}
+                    </p>
+                  </div>
+
+                  {isFront && (
+                    <div className="absolute inset-0 pointer-events-none rounded-[22px] overflow-hidden" aria-hidden="true">
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent animate-hero-shine" />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
-          {/* Atelier Standards Bar */}
-          <div className="pt-4 flex flex-wrap items-center justify-center gap-4 sm:gap-7 text-xs text-studio-secondary">
-            <div className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
-              <span>Medical Autoclave Sterilized</span>
+          {/* 5. Three style buttons with hint */}
+          <div className="space-y-2 w-full pt-1">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-studio-muted block">
+              Pick your mood
+            </span>
+            <div className="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
+              {HERO_STYLES.map((style) => {
+                const isSelected = activeHeroStyle === style.id;
+                return (
+                  <button
+                    key={style.id}
+                    onClick={() => setActiveHeroStyle(style.id)}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 ${
+                      isSelected
+                        ? 'bg-studio-wine text-white shadow-studio font-bold'
+                        : 'bg-studio-surface border border-studio-border text-studio-secondary hover:text-studio-ink hover:border-studio-borderStrong'
+                    }`}
+                  >
+                    {style.label}
+                  </button>
+                );
+              })}
             </div>
-            <div className="flex items-center gap-1.5">
-              <Heart className="w-4 h-4 text-rose-500 fill-rose-100 shrink-0" />
-              <span>100% Dedicated 1-on-1</span>
+          </div>
+
+          {/* 6. Primary booking button & 7. Secondary nail-ideas link */}
+          <div className="w-full pt-2 flex flex-col items-center gap-3">
+            <a
+              href="#booking-section"
+              onClick={() => handleBookHeroStyle(activeHeroStyle)}
+              className="w-full max-w-xs py-3.5 px-6 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-sm font-bold shadow-studio transition-all active:scale-95 flex items-center justify-center gap-2"
+            >
+              <Sparkles className="w-4 h-4 fill-white" />
+              <span>Book Your Nails</span>
+            </a>
+
+            <a
+              href="#catalogue"
+              className="text-xs sm:text-sm font-semibold text-studio-secondary hover:text-studio-wine transition-colors inline-flex items-center gap-1 py-1 underline-offset-4 hover:underline"
+            >
+              <span>See All Nail Ideas</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        </div>
+
+        {/* DESKTOP TWO-COLUMN VIEW (lg+) */}
+        <div className="hidden lg:grid lg:grid-cols-12 lg:items-center lg:gap-12 animate-hero-fade-up">
+          {/* Left Column: Copy & Actions */}
+          <div className="lg:col-span-6 space-y-6 text-left">
+            <p className="text-xs font-bold uppercase tracking-wider text-studio-wine">
+              Nail studio in Dehradun
+            </p>
+
+            <h1 className="font-sans font-extrabold text-5xl xl:text-6xl text-studio-ink leading-[1.08] tracking-tight">
+              Your next<br />nail crush.
+            </h1>
+
+            <p className="text-base text-studio-secondary leading-relaxed max-w-md">
+              Simple, sparkly, or something totally you. Let’s find your next look.
+            </p>
+
+            <div className="pt-2 flex items-center gap-4">
+              <a
+                href="#booking-section"
+                onClick={() => handleBookHeroStyle(activeHeroStyle)}
+                className="py-3.5 px-7 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-sm font-bold shadow-studio transition-all active:scale-95 inline-flex items-center justify-center gap-2"
+              >
+                <Sparkles className="w-4 h-4 fill-white" />
+                <span>Book Your Nails</span>
+              </a>
+
+              <a
+                href="#catalogue"
+                className="text-sm font-semibold text-studio-secondary hover:text-studio-wine transition-colors inline-flex items-center gap-1.5 py-1 underline-offset-4 hover:underline"
+              >
+                <span>See All Nail Ideas</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </a>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Wand2 className="w-4 h-4 text-purple-600 shrink-0" />
-              <span>Internet Inspo Recreated</span>
+          </div>
+
+          {/* Right Column: Card Fan & Style Buttons */}
+          <div className="lg:col-span-6 flex flex-col items-center justify-center space-y-5">
+            <div className="relative w-full max-w-[380px] h-[280px] flex items-center justify-center select-none">
+              {/* Restrained blush backdrop with single curved line and sparkle */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10" aria-hidden="true">
+                <div className="w-[340px] h-[240px] rounded-full bg-studio-wineLight/60 blur-2xl" />
+                <svg className="absolute w-[280px] h-[160px] text-studio-wine/15" fill="none" viewBox="0 0 280 160">
+                  <path d="M 15 135 C 80 30 200 30 265 135" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
+                </svg>
+                <Sparkle className="absolute top-2 right-8 w-4 h-4 text-studio-wine/40" />
+              </div>
+
+              {/* Three Overlapping Cards */}
+              {HERO_STYLES.map((style) => {
+                const isFront = activeHeroStyle === style.id;
+                const activeIdx = HERO_STYLES.findIndex(s => s.id === activeHeroStyle);
+                const thisIdx = HERO_STYLES.findIndex(s => s.id === style.id);
+                const diff = (thisIdx - activeIdx + 3) % 3;
+
+                let positionClass = '';
+                if (isFront) {
+                  positionClass = 'z-20 scale-100 rotate-0 translate-x-0 shadow-xl border-studio-wine/40 opacity-100';
+                } else if (diff === 1) {
+                  positionClass = 'z-10 scale-[0.88] rotate-[8deg] translate-x-[74px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
+                } else {
+                  positionClass = 'z-10 scale-[0.88] -rotate-[8deg] -translate-x-[74px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
+                }
+
+                return (
+                  <div
+                    key={style.id}
+                    onClick={() => setActiveHeroStyle(style.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setActiveHeroStyle(style.id);
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={isFront}
+                    aria-label={`Select ${style.label} look`}
+                    className={`absolute w-[180px] h-[255px] rounded-[22px] bg-studio-surface border p-3.5 flex flex-col justify-between transition-all duration-[320ms] ease-out outline-none focus-visible:ring-2 focus-visible:ring-studio-wine ${positionClass}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-studio-wine bg-studio-wineLight/90 border border-studio-wine/10 px-2 py-0.5 rounded-full">
+                        {style.tag}
+                      </span>
+                      <span className="text-[10px] text-studio-muted font-medium capitalize">
+                        {style.shape}
+                      </span>
+                    </div>
+
+                    <div className="flex-1 flex items-center justify-center relative py-1">
+                      <div className="w-18 h-30 rounded-full bg-studio-canvas/50 border border-border-subtle/50 flex items-center justify-center shadow-inner overflow-hidden">
+                        <NailTipSchematic
+                          shape={style.shape}
+                          length={style.length}
+                          baseColor={style.baseColor}
+                          finish={style.finish}
+                          size="sm"
+                          className="scale-95"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="text-center pt-1.5 border-t border-border-subtle/60">
+                      <h4 className="font-sans font-bold text-xs sm:text-[13px] text-studio-ink leading-tight truncate">
+                        {style.title}
+                      </h4>
+                      <p className="text-[10px] text-studio-muted mt-0.5 truncate">
+                        {style.subtitle}
+                      </p>
+                    </div>
+
+                    {isFront && (
+                      <div className="absolute inset-0 pointer-events-none rounded-[22px] overflow-hidden" aria-hidden="true">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent animate-hero-shine" />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-            <div className="flex items-center gap-1.5">
-              <Feather className="w-4 h-4 text-amber-600 shrink-0" />
-              <span>Gentle Russian Cuticle Care</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Gem className="w-4 h-4 text-studio-wine shrink-0" />
-              <span>4+ Week Retention</span>
+
+            {/* Style Buttons with Hint */}
+            <div className="space-y-2 text-center w-full">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-studio-muted block">
+                Pick your mood
+              </span>
+              <div className="flex items-center justify-center gap-2">
+                {HERO_STYLES.map((style) => {
+                  const isSelected = activeHeroStyle === style.id;
+                  return (
+                    <button
+                      key={style.id}
+                      onClick={() => setActiveHeroStyle(style.id)}
+                      className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 ${
+                        isSelected
+                          ? 'bg-studio-wine text-white shadow-studio font-bold'
+                          : 'bg-studio-surface border border-studio-border text-studio-secondary hover:text-studio-ink hover:border-studio-borderStrong'
+                      }`}
+                    >
+                      {style.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -1346,7 +1696,7 @@ export default function ClientWebsite({
                     {cat === 'Acrylic Nails' && <Gem className="w-3.5 h-3.5" />}
                     {cat === 'Natural Nails & BIAB' && <Feather className="w-3.5 h-3.5" />}
                     {cat === 'Gel & Soft Gel (Gel-X)' && <Crown className="w-3.5 h-3.5" />}
-                    {cat === 'Bespoke Nail Art' && <Paintbrush className="w-3.5 h-3.5" />}
+                    {cat === 'Hand-Painted Art' && <Paintbrush className="w-3.5 h-3.5" />}
                     {cat === 'Ready-to-Wear Press-Ons' && <Ribbon className="w-3.5 h-3.5" />}
                     <span>{cat}</span>
                     {cat === 'Acrylic Nails' && (

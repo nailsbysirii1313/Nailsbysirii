@@ -87,7 +87,7 @@ const initialData = {
       category: "Extensions",
       duration: 75,
       price: 1500,
-      description: "Full cover soft gel extensions that feel lightweight, look natural, and cause zero damage to your real nail beds.",
+      description: "Full cover soft gel extensions that feel lightweight, look natural, and protect your natural nails with gentle care.",
       popular: true
     },
     {

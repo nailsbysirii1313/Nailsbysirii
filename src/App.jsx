@@ -983,8 +983,8 @@ export default function App() {
           reviews={reviews}
           pressOnProducts={pressOnProducts}
           onOrderPressOn={handleCreatePressOnOrder}
-          hidePrices={true}
-          setHidePrices={() => { }}
+          hidePrices={hidePrices}
+          setHidePrices={setHidePrices}
           onOpenPasscodeModal={() => {
             if (isAuthenticated) {
               setTabState('dashboard');

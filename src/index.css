@@ -50,6 +50,40 @@
   padding-top: env(safe-area-inset-top, 0px);
 }
 
+/* Hero Specific Single-Run Entrance Animations */
+@keyframes singleHeroShine {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateX(250%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+.animate-hero-shine {
+  animation: singleHeroShine 850ms ease-out 600ms 1 normal forwards;
+}
+
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-fade-up {
+  animation: heroFadeUp 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* Reduced Motion Respect */
 @media (prefers-reduced-motion: reduce) {
   *,

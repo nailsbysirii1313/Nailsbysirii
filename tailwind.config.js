@@ -51,7 +51,7 @@ export default {
       fontFamily: {
         display: ['"Fraunces"', 'serif'],
         serif: ['"Fraunces"', '"Playfair Display"', 'Georgia', 'serif'],
-        sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['"Manrope"', '"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
       },
       boxShadow: {
         'soft': '0 4px 20px -2px rgba(184, 91, 114, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04)',
