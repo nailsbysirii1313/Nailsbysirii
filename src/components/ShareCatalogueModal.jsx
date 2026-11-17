@@ -46,8 +46,8 @@ export default function ShareCatalogueModal({
   const getWhatsAppShareUrl = (includePrices) => {
     const studioName = settings?.studioName || 'Nails by Sirii';
     const text = includePrices
-      ? `✨ *${studioName} — Cute Nail Services & Pricing Menu (Dehradun 💕)*\n\nHey babe! Explore our natural builder gel (BIAB), Gel-X extensions, and cute nail art menu:\n${withPricesUrl}\n\nCan't wait to give you your dream nails!`
-      : `✨ *${studioName} — Cute Nail Menu & Designs (Dehradun 💕)*\n\nHey babe! Explore our signature builder gel nails, extensions, and cute hand-painted designs:\n${noPricesUrl}\n\nCheck out the designs and let me know which one you'd love to get done!`;
+      ? `*${studioName} — Cute Nail Services & Pricing Menu (Dehradun)*\n\nHey babe! Explore our natural builder gel (BIAB), Gel-X extensions, and cute nail art menu:\n${withPricesUrl}\n\nCan't wait to give you your dream nails!`
+      : `*${studioName} — Cute Nail Menu & Designs (Dehradun)*\n\nHey babe! Explore our signature builder gel nails, extensions, and cute hand-painted designs:\n${noPricesUrl}\n\nCheck out the designs and let me know which one you'd love to get done!`;
 
     return `https://wa.me/?text=${encodeURIComponent(text)}`;
   };
@@ -69,10 +69,10 @@ export default function ShareCatalogueModal({
           <StudioLogo logoUrl={settings?.studioLogoUrl} size="md" className="justify-center mb-1" />
           <div>
             <span className="text-[10px] uppercase font-bold tracking-widest text-atelier-rose600 block">
-              Share With Clients 💕
+              Share With Clients
             </span>
             <h2 className="font-serif italic font-bold text-2xl text-atelier-noir">
-              Share Nail Menu 💕
+              Share Nail Menu
             </h2>
             <p className="text-xs text-atelier-muted max-w-sm mx-auto mt-0.5">
               Send your nail menu and cute designs directly to clients on WhatsApp. You can choose to show or hide prices!
@@ -93,7 +93,7 @@ export default function ShareCatalogueModal({
             <EyeOff className="w-3.5 h-3.5" />
             <span>Without Prices</span>
             <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-atelier-rose100 text-atelier-rose600 font-bold">
-              Cute 💕
+              Cute
             </span>
           </button>
           <button
@@ -131,7 +131,7 @@ export default function ShareCatalogueModal({
                 </h3>
               </div>
               <p className="text-[11px] text-atelier-muted leading-relaxed">
-                Clients can see all your services, cute nail art ideas, and photos, with prices shown as <em>"Price on Request 💕"</em>.
+                Clients can see all your services, cute nail art ideas, and photos, with prices shown as <em>"Price on Request"</em>.
               </p>
             </div>
 

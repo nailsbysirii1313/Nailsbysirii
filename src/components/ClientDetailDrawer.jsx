@@ -195,7 +195,7 @@ export default function ClientDetailDrawer({
                 <div className="flex items-center gap-1.5">
                   <Award className="w-4 h-4 text-atelier-rose500" />
                   <span className="font-bold text-atelier-noir text-xs">
-                    Studio VIP Loyalty Rewards 💕
+                    Studio VIP Loyalty Rewards
                   </span>
                 </div>
                 <span className="text-[10px] font-semibold text-atelier-rose600 bg-atelier-rose100 px-2 py-0.5 rounded-full">

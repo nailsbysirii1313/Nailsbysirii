@@ -40,7 +40,7 @@ const yesterdayStr = yesterday.toISOString().split('T')[0];
 const initialData = {
   settings: {
     studioName: "Nails by Sirii",
-    tagline: "Affordable Nail Studio & Academy in Dehradun 💕",
+    tagline: "Affordable Nail Studio & Academy in Dehradun",
     ownerName: "Simran (Sirii)",
     phone: "+91 73026 23493",
     email: "hello@nailsbysirii.com",
@@ -123,7 +123,7 @@ const initialData = {
       category: "Nail Art",
       duration: 45,
       price: 700,
-      description: "Cute 3D bows, water drop art, crystal rhinestones, and metallic chrome charms when you want extra pretty nails! 🎀",
+      description: "Cute 3D bows, water drop art, crystal rhinestones, and metallic chrome charms when you want extra pretty nails!",
       popular: true
     },
     {
@@ -132,7 +132,7 @@ const initialData = {
       category: "Press-Ons",
       duration: 30,
       price: 999,
-      description: "Handmade reusable luxury press-ons customized to your exact nail sizes! Comes with application kit, glue, and wear instructions 🦋",
+      description: "Handmade reusable luxury press-ons customized to your exact nail sizes! Comes with application kit, glue, and wear instructions",
       popular: true
     },
     {
@@ -141,7 +141,7 @@ const initialData = {
       category: "Academy",
       duration: 180,
       price: 14999,
-      description: "Comprehensive 1-on-1 certified masterclass by Simran mam. Learn Russian manicure, acrylics, gel extensions, and nail art from beginner to pro! 🦋🎓",
+      description: "Comprehensive 1-on-1 certified masterclass by Simran mam. Learn Russian manicure, acrylics, gel extensions, and nail art from beginner to pro!",
       popular: false
     },
     {

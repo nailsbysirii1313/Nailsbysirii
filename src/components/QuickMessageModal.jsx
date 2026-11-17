@@ -25,15 +25,15 @@ export default function QuickMessageModal({
 
     let text = '';
     if (template === 'confirmation') {
-      text = `Hey ${cName}! 💕 Your nail appointment with Sirii is confirmed for ${aptDate} at ${aptTime}!\n\n💅 Service: ${aptService}\n📍 Studio: ${address}\n\nPlease reach on time babe! If you need old gel removed, please let Sirii know beforehand. Can't wait to do your nails! ✨`;
+      text = `Hey ${cName}! Your nail appointment with Sirii is confirmed for ${aptDate} at ${aptTime}!\n\nService: ${aptService}\nStudio: ${address}\n\nPlease reach on time babe! If you need old gel removed, please let Sirii know beforehand. Can't wait to do your nails!`;
     } else if (template === 'reminder') {
-      text = `Hey ${cName}! 💕 Just a sweet reminder about your nail appointment with Sirii tomorrow at ${aptTime}!\n\nIf you have any cute nail inspo or Pinterest photos, keep them ready! See you soon babe ✨`;
+      text = `Hey ${cName}! Just a sweet reminder about your nail appointment with Sirii tomorrow at ${aptTime}!\n\nIf you have any cute nail inspo or Pinterest photos, keep them ready! See you soon babe`;
     } else if (template === 'aftercare') {
-      text = `Hey ${cName}! 💕 Thank you so much for getting your nails done with Sirii today! Loved having you!\n\nHere are a few quick tips to keep them looking fresh & lasting 3-4 weeks:\n1. Apply cuticle oil or coconut oil daily 🌸\n2. Treat your nails like jewels, not tools (don't pop cans with them!) 💅\n3. Wear gloves when washing dishes 🧤\n\nShow off your cute nails and tag us on Instagram! ✨`;
+      text = `Hey ${cName}! Thank you so much for getting your nails done with Sirii today! Loved having you!\n\nHere are a few quick tips to keep them looking fresh & lasting 3-4 weeks:\n1. Apply cuticle oil or coconut oil daily\n2. Treat your nails like jewels, not tools (don't pop cans with them!)\n3. Wear gloves when washing dishes\n\nShow off your cute nails and tag us on Instagram!`;
     } else if (template === 'birthday') {
-      text = `Happy Birthday ${cName}! 🎂🎉 Sending you lots of love from Nails by Sirii! To celebrate, you get a free cute nail art upgrade on your next set with Sirii anytime this month! Book your birthday slot soon 💕`;
+      text = `Happy Birthday ${cName}! Sending you lots of love from Nails by Sirii! To celebrate, you get a free cute nail art upgrade on your next set with Sirii anytime this month! Book your birthday slot soon`;
     } else {
-      text = `Hey ${cName}! 💕 `;
+      text = `Hey ${cName}! `;
     }
 
     setMessageText(text);

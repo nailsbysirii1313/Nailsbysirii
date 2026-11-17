@@ -44,7 +44,7 @@ export default function AftercareCardModal({
   const isExtensions = sName.includes('gel-x') || sName.includes('extension');
   const isBIAB = sName.includes('biab') || sName.includes('builder');
 
-  const aftercareTextPlain = `CUTE NAIL AFTERCARE GUIDE 💕
+  const aftercareTextPlain = `CUTE NAIL AFTERCARE GUIDE
 Nails by Sirii • Garhi Cantt, Dehradun
 Client: ${clientName}
 Session: ${serviceName} (${sessionDate})
@@ -53,16 +53,16 @@ Recommended Refill Date: ${infillDateStr} (Around 3 Weeks)
 1. BE GENTLE FOR FIRST 24-48 HOURS ⏰
 Avoid very hot steaming baths or saunas for the first 48 hours while your gel cures completely.
 
-2. OIL YOUR CUTICLES DAILY 🌸
+2. OIL YOUR CUTICLES DAILY
 Apply cuticle oil or coconut oil twice a day to keep your cuticles soft, healthy, and hydrated!
 
-3. JEWELS, NOT TOOLS 💅
+3. JEWELS, NOT TOOLS
 Don't use your nails to open drink cans or scrape things. Use finger pads instead!
 
-4. WEAR GLOVES FOR DISHES 🧤
+4. WEAR GLOVES FOR DISHES
 Protect your glossy shine by wearing gloves when doing dishes or handling harsh cleaning liquids.
 
-5. NEVER PEEL OFF GEL 💕
+5. NEVER PEEL OFF GEL
 Peeling gel can harm your natural nails. If a nail lifts or chips, message Sirii for a quick fix or gentle removal!
 
 Studio Inquiries & Quick Nail Fixes:
@@ -102,7 +102,7 @@ ${settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi 
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-atelier-rose500" />
             <span className="text-xs font-bold text-atelier-noir uppercase tracking-wider">
-              Cute Nail Aftercare Card 💕
+              Cute Nail Aftercare Card
             </span>
           </div>
 
@@ -131,7 +131,7 @@ ${settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi 
           {/* Card Top Branding */}
           <div className="text-center space-y-1">
             <span className="text-[10px] tracking-widest uppercase text-atelier-rose600 font-bold block">
-              Cute & Aesthetic Nail Studio in Dehradun 💕
+              Cute & Aesthetic Nail Studio in Dehradun
             </span>
             <h3 className="font-serif italic font-bold text-2xl text-atelier-noir tracking-tight">
               Nails by Sirii
@@ -172,7 +172,7 @@ ${settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi 
                 <Droplets className="w-3.5 h-3.5" />
               </div>
               <div className="space-y-0.5">
-                <h4 className="font-bold text-atelier-noir text-xs">2. Oil Your Cuticles Daily 🌸</h4>
+                <h4 className="font-bold text-atelier-noir text-xs">2. Oil Your Cuticles Daily</h4>
                 <p className="text-[11px] text-atelier-muted leading-relaxed">
                   Massage cuticle oil or coconut oil around your nails twice daily. Hydrated nails stay flexible and won't lift or break!
                 </p>
@@ -184,7 +184,7 @@ ${settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi 
                 <Sparkles className="w-3.5 h-3.5" />
               </div>
               <div className="space-y-0.5">
-                <h4 className="font-bold text-atelier-noir text-xs">3. Nails Are Jewels, Not Tools 💅</h4>
+                <h4 className="font-bold text-atelier-noir text-xs">3. Nails Are Jewels, Not Tools</h4>
                 <p className="text-[11px] text-atelier-muted leading-relaxed">
                   Never use your nail tips to open soda cans, peel stickers, or scrape things. Use finger pads instead!
                 </p>
@@ -196,7 +196,7 @@ ${settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi 
                 <ShieldCheck className="w-3.5 h-3.5" />
               </div>
               <div className="space-y-0.5">
-                <h4 className="font-bold text-atelier-noir text-xs">4. Protect Your Glossy Shine 🧤</h4>
+                <h4 className="font-bold text-atelier-noir text-xs">4. Protect Your Glossy Shine</h4>
                 <p className="text-[11px] text-atelier-muted leading-relaxed">
                   Wear rubber gloves when washing dishes or using cleaning liquids so your top coat stays ultra shiny and chip-free.
                 </p>
@@ -208,7 +208,7 @@ ${settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi 
                 <Heart className="w-3.5 h-3.5" />
               </div>
               <div className="space-y-0.5">
-                <h4 className="font-bold text-atelier-noir text-xs">5. Never Peel or Pick Off Gel 💕</h4>
+                <h4 className="font-bold text-atelier-noir text-xs">5. Never Peel or Pick Off Gel</h4>
                 <p className="text-[11px] text-atelier-muted leading-relaxed">
                   Peeling gel pulls off layers of your real nail! If an edge lifts or catches hair, text Sirii for a quick fix or gentle removal.
                 </p>
@@ -219,7 +219,7 @@ ${settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi 
           {/* Recommended Infill Date Footer */}
           <div className="p-4 rounded-xl bg-atelier-rose50 border border-atelier-rose200/80 text-center space-y-1">
             <span className="text-[10px] uppercase font-bold tracking-wider text-atelier-rose600 block">
-              Keep Your Nails Healthy & Strong 💕
+              Keep Your Nails Healthy & Strong
             </span>
             <p className="text-xs font-semibold text-atelier-noir">
               Recommended Refill / Touch-up: <span className="font-bold text-atelier-rose600">{infillDateStr}</span> (Around 3 Weeks)
@@ -230,7 +230,7 @@ ${settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi 
           </div>
 
           <div className="text-center pt-2 text-[10px] text-atelier-muted font-serif italic">
-            Handcrafted with love at Nails by Sirii, Dehradun 💕
+            Handcrafted with love at Nails by Sirii, Dehradun
           </div>
         </div>
       </div>

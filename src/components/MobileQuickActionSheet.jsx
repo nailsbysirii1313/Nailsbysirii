@@ -134,7 +134,7 @@ export default function MobileQuickActionSheet({
               </h3>
             </div>
             <p className="text-xs text-stone-400 mt-0.5">
-              Instant studio shortcuts for Nails by Sirii 💕
+              Instant studio shortcuts for Nails by Sirii
             </p>
           </div>
           <button

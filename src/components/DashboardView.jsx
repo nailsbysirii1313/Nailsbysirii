@@ -95,7 +95,7 @@ export default function DashboardView({
           <div className="space-y-2 max-w-xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 border border-atelier-rose200 text-atelier-rose600 text-xs font-semibold shadow-sm">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Studio Hub Dashboard 💕</span>
+              <span>Studio Hub Dashboard</span>
             </div>
             <h2 className="font-serif italic font-bold text-2xl sm:text-3xl text-atelier-noir tracking-tight">
               Welcome to Nails by Sirii
@@ -235,7 +235,7 @@ export default function DashboardView({
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-serif italic font-bold text-xl text-atelier-noir">
-                Today's Studio Schedule 💕
+                Today's Studio Schedule
               </h3>
               <p className="text-xs text-atelier-muted">
                 {todayAppointments.length} appointment{todayAppointments.length === 1 ? '' : 's'} scheduled for today

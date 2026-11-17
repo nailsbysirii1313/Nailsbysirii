@@ -86,7 +86,7 @@ export default function ClientWebsite({
   ];
 
   const finishes = [
-    { id: 'chrome', name: 'Hailey Glazed Chrome', price: 600, time: 15, desc: 'Shiny pearly glaze over your nails ✨' },
+    { id: 'chrome', name: 'Hailey Glazed Chrome', price: 600, time: 15, desc: 'Shiny pearly glaze over your nails' },
     { id: 'cateye', name: 'Velvet Cat-Eye Sparkle', price: 700, time: 20, desc: 'Shimmery magnetic silk glow in the light' },
     { id: 'orbit3d', name: '3D Metallic Chrome Swirls', price: 1200, time: 30, desc: 'Raised silver/gold chrome swirls & stars' },
     { id: 'pearls', name: 'Cute Pearls & Crystal Gems', price: 1400, time: 25, desc: 'Sparkly rhinestones, cute pearls & waterdrops' },
@@ -207,14 +207,14 @@ export default function ClientWebsite({
     e.preventDefault();
     if (!clientName.trim() || !clientPhone.trim()) {
       if (onAddToast) {
-        onAddToast('Missing Details 💕', 'Please provide your name and phone number to reserve your appointment.', 'error');
+        onAddToast('Missing Details', 'Please provide your name and phone number to reserve your appointment.', 'error');
       }
       return;
     }
     const cleanDigits = clientPhone.replace(/[^0-9]/g, '');
     if (cleanDigits.length < 10) {
       if (onAddToast) {
-        onAddToast('Invalid Phone Number', 'Please enter a valid 10-digit mobile number for appointment confirmation 💕', 'error');
+        onAddToast('Invalid Phone Number', 'Please enter a valid 10-digit mobile number for appointment confirmation', 'error');
       }
       return;
     }
@@ -368,7 +368,7 @@ export default function ClientWebsite({
 
   const whatsappPhone = settings?.phone ? settings.phone.replace(/[^0-9]/g, '') : '917302623493';
   const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
-    `Hi Sirii! 💕 I saw your cute nail designs on your website and would love to book an appointment with you in Dehradun!`
+    `Hi Sirii! I saw your cute nail designs on your website and would love to book an appointment with you in Dehradun!`
   )}`;
 
   return (
@@ -387,7 +387,7 @@ export default function ClientWebsite({
                 <span className="w-1.5 h-1.5 rounded-full bg-atelier-rose500 animate-pulse shrink-0" />
               </div>
               <p className="text-[9px] sm:text-[10px] text-atelier-rose600 tracking-wider font-semibold truncate">
-                Cute Nail Studio • Dehradun 💕
+                Cute Nail Studio • Dehradun
               </p>
             </div>
           </a>
@@ -407,7 +407,7 @@ export default function ClientWebsite({
               Book Appointment
             </a>
             <a href="#reviews" className="hover:text-atelier-rose600 transition-colors">
-              Client Love 💕
+              Client Love
             </a>
             <a href="#studio-info" className="hover:text-atelier-rose600 transition-colors">
               Nail Care Tips
@@ -551,7 +551,7 @@ export default function ClientWebsite({
                   className="flex items-center gap-3 p-3 rounded-2xl hover:bg-atelier-rose50 hover:text-atelier-rose600 transition-colors"
                 >
                   <Calendar className="w-4 h-4 text-emerald-500" />
-                  <span>Book Your Slot 💕</span>
+                  <span>Book Your Slot</span>
                 </a>
                 <a
                   href="#reviews"
@@ -644,7 +644,7 @@ export default function ClientWebsite({
           <div className="inline-flex flex-wrap items-center justify-center gap-2">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-atelier-rose200 shadow-xs text-atelier-rose600 text-[11px] sm:text-xs font-semibold">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Nails by Sirii • Garhi Cantt, Dehradun 💕</span>
+              <span>Nails by Sirii • Garhi Cantt, Dehradun</span>
             </div>
             <a
               href="https://maps.google.com/?q=Nails+by+Sirii+Laxmi+Navraj+Plaza+Garhi+Cantonment+Dehradun"
@@ -663,26 +663,26 @@ export default function ClientWebsite({
 
           <h1 className="font-serif italic font-bold text-3xl sm:text-5xl md:text-6xl text-atelier-noir tracking-tight leading-[1.15]">
             Affordable, Cute & Aesthetic Nails <br className="hidden sm:inline" /> in{' '}
-            <span className="text-atelier-rose600 not-italic font-normal">Dehradun</span> 💕
+            <span className="text-atelier-rose600 not-italic font-normal">Dehradun</span>
           </h1>
 
           <p className="text-xs sm:text-sm text-atelier-muted max-w-xl mx-auto leading-relaxed">
-            Hey babe! Welcome to Nails by Sirii ✨ We do beautiful acrylic & soft gel extensions, strong natural builder gel, detailed hand-painted nail art, customized press-on nails, and 1:1 certified nail courses by Simran mam!
+            Hey babe! Welcome to Nails by Sirii We do beautiful acrylic & soft gel extensions, strong natural builder gel, detailed hand-painted nail art, customized press-on nails, and 1:1 certified nail courses by Simran mam!
           </p>
 
           {/* Key Standards Badges */}
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2 text-[10px] sm:text-[11px] text-atelier-charcoal font-semibold">
             <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-atelier-champagneBorder shadow-xs">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>100% Clean & Sanitized Tools 🌸</span>
+              <span>100% Clean & Sanitized Tools</span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-atelier-champagneBorder shadow-xs">
               <Sparkles className="w-3.5 h-3.5 text-atelier-rose500" />
-              <span>1:1 Certified Nail Academy 🦋</span>
+              <span>1:1 Certified Nail Academy</span>
             </div>
             <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-atelier-champagneBorder shadow-xs">
               <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <span>Lasts 3-4 Weeks Without Chipping 💕</span>
+              <span>Lasts 3-4 Weeks Without Chipping</span>
             </div>
           </div>
 
@@ -692,7 +692,7 @@ export default function ClientWebsite({
               href="#booking-section"
               className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-atelier-rose500 to-atelier-rose600 hover:from-atelier-rose600 hover:to-atelier-rose500 text-white font-semibold text-xs shadow-soft hover:shadow-float active:scale-95 transition-all flex items-center justify-center gap-2"
             >
-              <span>Book Your Nail Slot 💕</span>
+              <span>Book Your Nail Slot</span>
               <ArrowRight className="w-4 h-4" />
             </a>
 
@@ -725,13 +725,13 @@ export default function ClientWebsite({
             <div className="space-y-1.5">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-atelier-rose100 text-atelier-rose600 text-[11px] font-semibold">
                 <Sparkles className="w-3 h-3" />
-                <span>🌸 Studio Nail Menu</span>
+                <span>Studio Nail Menu</span>
               </div>
               <h2 className="font-serif italic font-bold text-2xl sm:text-4xl text-atelier-noir">
                 Nail Services & Pricing
               </h2>
               <p className="text-xs text-atelier-muted max-w-lg leading-relaxed">
-                Every nail session includes super clean Russian cuticle cleanup, strong nail prep so your nails last 3+ weeks without chipping, and soothing cuticle oil! 💕
+                Every nail session includes super clean Russian cuticle cleanup, strong nail prep so your nails last 3+ weeks without chipping, and soothing cuticle oil!
               </p>
             </div>
 
@@ -850,7 +850,7 @@ export default function ClientWebsite({
                     </h3>
                     {srv.popular && (
                       <span className="inline-block mt-1 text-[9px] font-bold px-2 py-0.2 rounded-full bg-rose-50 text-rose-600 border border-rose-200">
-                        Most Popular 💕
+                        Most Popular
                       </span>
                     )}
                   </div>
@@ -882,7 +882,7 @@ export default function ClientWebsite({
                           Nail Service
                         </span>
                         <span className="text-xs font-serif italic font-bold text-atelier-rose600">
-                          Price on Request 💕
+                          Price on Request
                         </span>
                       </div>
                     ) : (
@@ -901,7 +901,7 @@ export default function ClientWebsite({
                     onClick={() => handleSelectFromCatalogue(srv)}
                     className="px-4 py-2.5 sm:py-2 rounded-xl bg-atelier-cream hover:bg-atelier-rose50 text-atelier-charcoal hover:text-atelier-rose600 border border-atelier-champagneBorder font-semibold text-xs transition-all flex items-center gap-1.5 active:scale-95 shadow-xs"
                   >
-                    <span>Book This 💕</span>
+                    <span>Book This</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -917,10 +917,10 @@ export default function ClientWebsite({
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-atelier-rose100 text-atelier-rose600 text-[11px] font-semibold">
               <Palette className="w-3 h-3" />
-              <span>✨ Try Your Nails Online</span>
+              <span>Try Your Nails Online</span>
             </div>
             <h2 className="font-serif italic font-bold text-2xl sm:text-4xl text-atelier-noir">
-              Design Your Dream Nail Set 💕
+              Design Your Dream Nail Set
             </h2>
             <p className="text-xs text-atelier-muted leading-relaxed">
               Play around with pretty shapes, lengths, soft jelly shades, and sparkly chrome finishes to see what looks cute on your hands!
@@ -934,7 +934,7 @@ export default function ClientWebsite({
               <div className="bg-white rounded-3xl p-5 sm:p-6 border border-atelier-champagneBorder shadow-float space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider text-atelier-rose600 block">
-                    Live Nail Preview ✨
+                    Live Nail Preview
                   </span>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-atelier-rose50 text-atelier-rose600 font-bold border border-atelier-rose200">
                     Interactive
@@ -1008,7 +1008,7 @@ export default function ClientWebsite({
 
                   {hidePrices && (
                     <div className="pt-2 border-t border-atelier-rose200 text-center text-[11px] text-atelier-rose600 font-serif italic">
-                      Price shared on request 💕
+                      Price shared on request
                     </div>
                   )}
                 </div>
@@ -1019,7 +1019,7 @@ export default function ClientWebsite({
                   className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-atelier-rose500 to-atelier-rose600 hover:from-atelier-rose600 hover:to-atelier-rose500 text-white font-semibold text-xs shadow-soft transition-all active:scale-95 flex items-center justify-center gap-2"
                 >
                   <Sparkles className="w-4 h-4" />
-                  <span>Book This Custom Set 💕</span>
+                  <span>Book This Custom Set</span>
                 </button>
               </div>
             </div>
@@ -1150,10 +1150,10 @@ export default function ClientWebsite({
         <div className="space-y-6 sm:space-y-8">
           <div className="text-center space-y-2">
             <span className="text-[10px] uppercase font-bold tracking-widest text-atelier-rose600 block">
-              💖 Client Favorites
+ Client Favorites
             </span>
             <h2 className="font-serif italic font-bold text-2xl sm:text-4xl text-atelier-noir">
-              Trending Nail Inspo 💕
+              Trending Nail Inspo
             </h2>
             <p className="text-xs text-atelier-muted max-w-md mx-auto">
               Cute nail designs loved by our Dehradun girls! Pick any design below, or bring any Pinterest photo you love to your appointment.
@@ -1204,7 +1204,7 @@ export default function ClientWebsite({
                   }}
                   className="w-full py-2.5 rounded-xl bg-atelier-cream hover:bg-atelier-rose50 text-atelier-charcoal hover:text-atelier-rose600 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5 active:scale-95 border border-atelier-champagneBorder/60"
                 >
-                  <span>Book This Look 💕</span>
+                  <span>Book This Look</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </a>
               </div>
@@ -1218,10 +1218,10 @@ export default function ClientWebsite({
         <div className="space-y-6">
           <div className="text-center space-y-2">
             <span className="text-[10px] uppercase font-bold tracking-widest text-atelier-rose600 block">
-              ✨ Quick & Easy Booking
+ Quick & Easy Booking
             </span>
             <h2 className="font-serif italic font-bold text-2xl sm:text-4xl text-atelier-noir">
-              Book Your Appointment with Sirii 💕
+              Book Your Appointment with Sirii
             </h2>
             <p className="text-xs text-atelier-muted max-w-md mx-auto">
               Pick your nail service, choose your favorite shape, and reserve your time slot in just a few taps!
@@ -1279,7 +1279,7 @@ export default function ClientWebsite({
                             </span>
                             {srv.popular && (
                               <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-rose-50 text-rose-600 border border-rose-200">
-                                Most Loved 💕
+                                Most Loved
                               </span>
                             )}
                           </div>
@@ -1308,7 +1308,7 @@ export default function ClientWebsite({
                 {/* Addons Selection */}
                 <div className="pt-4 border-t border-atelier-champagneBorder/60 space-y-3">
                   <span className="font-semibold text-atelier-noir block">
-                    Add Cute Nail Art & Charms (Optional) ✨
+                    Add Cute Nail Art & Charms (Optional)
                   </span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {addonsList.map((addon) => {
@@ -1469,7 +1469,7 @@ export default function ClientWebsite({
               <div className="space-y-5 sm:space-y-6 animate-fade-in text-xs">
                 <div>
                   <h3 className="font-serif italic font-bold text-lg sm:text-xl text-atelier-noir mb-1">
-                    3. Pick Your Day & Time Slot 💕
+                    3. Pick Your Day & Time Slot
                   </h3>
                   <p className="text-atelier-muted text-xs">
                     Estimated session time: ~{totalDuration} mins. Pick a slot that works best for you!
@@ -1536,7 +1536,7 @@ export default function ClientWebsite({
                         Pricing
                       </span>
                       <span className="font-serif italic font-bold text-sm text-atelier-rose600">
-                        Price on request 💕
+                        Price on request
                       </span>
                     </div>
                   )}
@@ -1566,7 +1566,7 @@ export default function ClientWebsite({
               <form onSubmit={handleBookingSubmit} className="space-y-4 sm:space-y-5 animate-fade-in text-xs">
                 <div>
                   <h3 className="font-serif italic font-bold text-lg sm:text-xl text-atelier-noir mb-1">
-                    4. Your Details & Confirmation 💕
+                    4. Your Details & Confirmation
                   </h3>
                   <p className="text-atelier-muted text-xs">
                     Sirii will review your booking and send a sweet confirmation message on WhatsApp!
@@ -1644,7 +1644,7 @@ export default function ClientWebsite({
 
                 <div>
                   <label className="block font-semibold text-atelier-charcoal mb-1">
-                    Cute Nail Ideas / Special Requests for Sirii 💕
+                    Cute Nail Ideas / Special Requests for Sirii
                   </label>
                   <textarea
                     rows={2}
@@ -1661,7 +1661,7 @@ export default function ClientWebsite({
                     <div className="space-y-0.5">
                       <span className="font-semibold text-atelier-noir text-xs flex items-center gap-1.5">
                         <Wallet className="w-3.5 h-3.5 text-atelier-rose500" />
-                        <span>Pay Small Advance to Hold Slot (Optional) 💳</span>
+                        <span>Pay Small Advance to Hold Slot (Optional)</span>
                       </span>
                       <p className="text-[11px] text-atelier-muted">
                         Transfer a small advance via GPay / PhonePe to confirm your slot. Deducted from final bill!
@@ -1755,7 +1755,7 @@ export default function ClientWebsite({
                     </div>
                   ) : (
                     <p className="text-[11px] text-atelier-muted italic">
-                      No advance required right now babe! You can pay the full amount at the studio after your nails are done 💕
+                      No advance required right now babe! You can pay the full amount at the studio after your nails are done
                     </p>
                   )}
                 </div>
@@ -1774,7 +1774,7 @@ export default function ClientWebsite({
                     className="px-8 py-3 rounded-xl bg-atelier-rose500 hover:bg-atelier-rose600 text-white font-semibold text-xs shadow-soft transition-all active:scale-95 disabled:opacity-50 flex items-center gap-2"
                   >
                     <Sparkles className="w-4 h-4" />
-                    <span>{isSubmittingBooking ? 'Saving Your Slot 💕...' : 'Book My Appointment 💕'}</span>
+                    <span>{isSubmittingBooking ? 'Saving Your Slot...' : 'Book My Appointment'}</span>
                   </button>
                 </div>
               </form>
@@ -1789,10 +1789,10 @@ export default function ClientWebsite({
 
                 <div className="space-y-1.5">
                   <span className="text-[10px] uppercase font-bold tracking-widest text-atelier-rose600 block">
-                    Yay, You're Booked! 💕
+                    Yay, You're Booked!
                   </span>
                   <h3 className="font-serif italic font-bold text-2xl text-atelier-noir">
-                    See You Soon, {confirmedBooking.clientName}! 💕
+                    See You Soon, {confirmedBooking.clientName}!
                   </h3>
                   <p className="text-atelier-muted text-xs max-w-md mx-auto">
                     Your appointment is reserved with Nails by Sirii in Dehradun! Sirii has received your booking on her phone and will message you shortly on WhatsApp.
@@ -1810,7 +1810,7 @@ export default function ClientWebsite({
                     )}
                     {hidePrices && (
                       <span className="font-serif italic text-atelier-rose600 text-xs">
-                        Price on Request 💕
+                        Price on Request
                       </span>
                     )}
                   </div>
@@ -1843,16 +1843,16 @@ export default function ClientWebsite({
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
                   <a
                     href={`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
-                      `Hi Sirii! 💕 I just booked an appointment on your website!\n\nName: ${confirmedBooking.clientName}\nService: ${confirmedBooking.serviceName}\nDate & Time: ${confirmedBooking.date} at ${confirmedBooking.time}\nPhone: ${confirmedBooking.clientPhone}${
+                      `Hi Sirii! I just booked an appointment on your website!\n\nName: ${confirmedBooking.clientName}\nService: ${confirmedBooking.serviceName}\nDate & Time: ${confirmedBooking.date} at ${confirmedBooking.time}\nPhone: ${confirmedBooking.clientPhone}${
                         Number(confirmedBooking.depositPaid || 0) > 0 ? `\nAdvance Paid: ₹${confirmedBooking.depositPaid}` : ''
-                      }\n\nLooking forward to seeing you at your Garhi Cantt studio! ✨`
+                      }\n\nLooking forward to seeing you at your Garhi Cantt studio!`
                     )}`}
                     target="_blank"
                     rel="noreferrer"
                     className="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-soft transition-all active:scale-95 flex items-center justify-center gap-2"
                   >
                     <MessageCircle className="w-4 h-4" />
-                    <span>Message Sirii on WhatsApp to Confirm 💕</span>
+                    <span>Message Sirii on WhatsApp to Confirm</span>
                   </a>
 
                   <button
@@ -1860,7 +1860,7 @@ export default function ClientWebsite({
                     onClick={() => setBookingStep(1)}
                     className="w-full sm:w-auto px-5 py-3 rounded-xl border border-atelier-champagneBorder bg-white hover:bg-atelier-cream text-xs font-semibold text-atelier-charcoal active:scale-95"
                   >
-                    Book Another Set 💕
+                    Book Another Set
                   </button>
                 </div>
               </div>
@@ -1876,7 +1876,7 @@ export default function ClientWebsite({
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className="text-[10px] uppercase font-bold tracking-widest text-atelier-rose600 block">
-                  💕 Real Client Love
+ Real Client Love
                 </span>
                 <a
                   href="https://maps.google.com/?q=Nails+by+Sirii+Laxmi+Navraj+Plaza+Garhi+Cantonment+Dehradun"
@@ -1889,7 +1889,7 @@ export default function ClientWebsite({
                 </a>
               </div>
               <h2 className="font-serif italic font-bold text-2xl sm:text-4xl text-atelier-noir">
-                What Dehradun Girls Say About Us 💕
+                What Dehradun Girls Say About Us
               </h2>
               <p className="text-xs text-atelier-muted max-w-md">
                 Sweet reviews from our clients who love their cute, long-lasting gel nails & nail art!
@@ -1901,7 +1901,7 @@ export default function ClientWebsite({
               className="self-start sm:self-auto px-4 py-2 rounded-xl bg-atelier-blush hover:bg-atelier-rose100 text-atelier-rose600 border border-atelier-rose200/80 text-xs font-semibold transition-all flex items-center gap-1.5 shadow-sm active:scale-95"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Leave a Sweet Review 💕</span>
+              <span>Leave a Sweet Review</span>
             </button>
           </div>
 
@@ -1912,7 +1912,7 @@ export default function ClientWebsite({
               </div>
               <div className="space-y-1">
                 <h3 className="font-serif italic font-bold text-lg text-atelier-noir">
-                  Be the First to Review Nails by Sirii 💕
+                  Be the First to Review Nails by Sirii
                 </h3>
                 <p className="text-xs text-atelier-muted max-w-md mx-auto leading-relaxed">
                   Got your nails done by Sirii recently? We'd love to hear how much you loved your fresh set!
@@ -1923,7 +1923,7 @@ export default function ClientWebsite({
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-atelier-noir hover:bg-atelier-charcoal text-white text-xs font-semibold shadow-soft transition-all active:scale-95"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Write a Review 💕</span>
+                <span>Write a Review</span>
               </button>
             </div>
           ) : (
@@ -1991,7 +1991,7 @@ export default function ClientWebsite({
 
             <div className="space-y-2 p-5 rounded-3xl bg-atelier-cream/60 border border-atelier-champagneBorder/60">
               <span className="font-serif italic font-bold text-sm text-atelier-noir block">
-                100% Clean & Sanitized 🧼
+                100% Clean & Sanitized
               </span>
               <p className="text-atelier-muted leading-relaxed">
                 Your health & safety come first! All our nail tools are thoroughly sanitized and sterilized for each client. We use fresh disposable files and buffers every single time.
@@ -2000,7 +2000,7 @@ export default function ClientWebsite({
 
             <div className="space-y-2 p-5 rounded-3xl bg-atelier-cream/60 border border-atelier-champagneBorder/60">
               <span className="font-serif italic font-bold text-sm text-atelier-noir block">
-                How to Keep Your Nails Lasting 3-4 Weeks 💅
+                How to Keep Your Nails Lasting 3-4 Weeks
               </span>
               <p className="text-atelier-muted leading-relaxed">
                 Apply cuticle oil or coconut oil daily to keep your nail beds hydrated and glowing. Don't pick or peel gel off, and treat your nails like jewels, not tools!
@@ -2076,12 +2076,12 @@ export default function ClientWebsite({
               className="px-3 py-1.5 rounded-xl bg-atelier-cream hover:bg-atelier-rose50 border border-atelier-champagneBorder text-[11px] font-semibold text-atelier-charcoal hover:text-atelier-rose600 transition-all flex items-center gap-1.5 shadow-xs active:scale-95"
             >
               <Lock className="w-3 h-3 text-atelier-muted" />
-              <span>Studio Hub (Sirii Only 🔒)</span>
+              <span>Studio Hub (Sirii Only)</span>
             </button>
           </div>
 
           <div className="text-center text-[10px] text-atelier-muted pt-3 border-t border-atelier-champagneBorder/40">
-            © {new Date().getFullYear()} {settings?.studioName || 'Nails by Sirii'} • Handcrafted with love at Garhi Cantt, Dehradun 💕. All rights reserved.
+            © {new Date().getFullYear()} {settings?.studioName || 'Nails by Sirii'} • Handcrafted with love at Garhi Cantt, Dehradun. All rights reserved.
           </div>
         </div>
       </footer>
@@ -2095,7 +2095,7 @@ export default function ClientWebsite({
             className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-atelier-rose500 to-atelier-rose600 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-sm active:scale-95"
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>Book Slot 💕</span>
+            <span>Book Slot</span>
           </a>
 
           {/* Quick WhatsApp Link */}
@@ -2147,7 +2147,7 @@ export default function ClientWebsite({
                   <Star className="w-4 h-4 fill-amber-400" />
                 </div>
                 <div>
-                  <h3 className="font-serif font-bold text-stone-900">Share Your Nail Experience 💕</h3>
+                  <h3 className="font-serif font-bold text-stone-900">Share Your Nail Experience</h3>
                   <p className="text-[11px] text-stone-400">Tell Sirii how much you loved your new nails!</p>
                 </div>
               </div>
@@ -2195,7 +2195,7 @@ export default function ClientWebsite({
                     </button>
                   ))}
                   <span className="text-xs font-semibold text-amber-700 ml-1">
-                    {reviewForm.rating} / 5 Stars 💕
+                    {reviewForm.rating} / 5 Stars
                   </span>
                 </div>
               </div>
@@ -2229,12 +2229,12 @@ export default function ClientWebsite({
 
               <div>
                 <label className="block font-semibold text-stone-700 mb-1">
-                  Your Review / Experience 💕 *
+                  Your Review / Experience *
                 </label>
                 <textarea
                   required
                   rows={3}
-                  placeholder="Tell us what you loved about your nails, how long they lasted, or how sweet the experience was! 💕"
+                  placeholder="Tell us what you loved about your nails, how long they lasted, or how sweet the experience was!"
                   value={reviewForm.comment}
                   onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
                   className="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-200 focus:bg-white resize-none text-base sm:text-xs"
@@ -2255,7 +2255,7 @@ export default function ClientWebsite({
                   className="px-5 py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-medium shadow-sm flex items-center gap-1.5 disabled:opacity-50 active:scale-95"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>{isSubmittingReview ? 'Submitting...' : 'Post Review 💕'}</span>
+                  <span>{isSubmittingReview ? 'Submitting...' : 'Post Review'}</span>
                 </button>
               </div>
             </form>

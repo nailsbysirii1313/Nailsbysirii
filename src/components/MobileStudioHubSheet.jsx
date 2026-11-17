@@ -130,7 +130,7 @@ export default function MobileStudioHubSheet({
         <div className="flex items-center justify-between pb-2 border-b border-stone-100">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-rose-500 block">
-              Studio Operating System 💕
+              Studio Operating System
             </span>
             <h3 className="font-serif font-bold text-xl text-stone-900">
               Studio Hub & Modules

@@ -23,7 +23,7 @@ import StudioLogo from './StudioLogo';
 export default function SettingsView({ settings, onSaveSettings }) {
   const [formData, setFormData] = useState({
     studioName: settings?.studioName || 'Nails by Sirii',
-    tagline: settings?.tagline || 'Affordable Nail Studio & Academy in Dehradun 💕',
+    tagline: settings?.tagline || 'Affordable Nail Studio & Academy in Dehradun',
     ownerName: settings?.ownerName || 'Simran (Sirii)',
     phone: settings?.phone || '+91 73026 23493',
     email: settings?.email || 'hello@nailsbysirii.com',

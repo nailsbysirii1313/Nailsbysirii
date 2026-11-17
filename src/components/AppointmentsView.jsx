@@ -170,7 +170,7 @@ export default function AppointmentsView({
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-atelier-rose100 text-atelier-rose600 text-xs font-semibold mb-1.5">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Studio Bookings Schedule 💕</span>
+            <span>Studio Bookings Schedule</span>
           </div>
           <h2 className="font-serif italic font-bold text-2xl sm:text-3xl text-atelier-noir tracking-tight">
             Bookings & Calendar

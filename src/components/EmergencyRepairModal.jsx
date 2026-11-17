@@ -14,15 +14,15 @@ import {
 const FINGERS = ['Thumb', 'Index Finger', 'Middle Finger', 'Ring Finger', 'Pinky'];
 const HANDS = ['Right Hand', 'Left Hand', 'Both Hands'];
 const REPAIR_TYPES = [
-  'Gel-X Extension Replacement 💅',
-  'Builder Gel (BIAB) Chip Fix ✨',
-  'Cracked Real Nail Repair 🩹',
-  'Fell-Off Charm or Bow Fix 🎀',
-  'Lifting Edge Catching Hair 🌸'
+  'Gel-X Extension Replacement',
+  'Builder Gel (BIAB) Chip Fix',
+  'Cracked Real Nail Repair',
+  'Fell-Off Charm or Bow Fix',
+  'Lifting Edge Catching Hair'
 ];
 
 const URGENCIES = [
-  'Today ASAP (Urgent) 💕',
+  'Today ASAP (Urgent)',
   'Tomorrow Morning',
   'In Next 2 Days',
   'Next Available Quick Slot'
@@ -40,9 +40,9 @@ export default function EmergencyRepairModal({
     clientPhone: '',
     hand: 'Right Hand',
     finger: 'Index Finger',
-    serviceType: 'Gel-X Extension Replacement 💅',
+    serviceType: 'Gel-X Extension Replacement',
     issue: '',
-    urgency: 'Today ASAP (Urgent) 💕'
+    urgency: 'Today ASAP (Urgent)'
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,7 +53,7 @@ export default function EmergencyRepairModal({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.clientName.trim() || !formData.clientPhone.trim()) {
-      if (onAddToast) onAddToast('Required Fields', 'Please tell us your name and phone number 💕', 'error');
+      if (onAddToast) onAddToast('Required Fields', 'Please tell us your name and phone number', 'error');
       return;
     }
 
@@ -62,7 +62,7 @@ export default function EmergencyRepairModal({
       await onSubmitRepair(formData);
       setIsSuccess(true);
       if (onAddToast) {
-        onAddToast('Fix Request Sent 💕', "Sirii has received your message on her phone!", 'success');
+        onAddToast('Fix Request Sent', "Sirii has received your message on her phone!", 'success');
       }
     } catch (err) {
       if (onAddToast) onAddToast('Submission Failed', err.message, 'error');
@@ -92,10 +92,10 @@ export default function EmergencyRepairModal({
             <div className="space-y-1.5 mb-6">
               <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-rose-50 border border-rose-200 text-rose-600 text-[10px] font-bold">
                 <AlertTriangle className="w-3 h-3" />
-                <span>Quick Nail Fix Desk 💕</span>
+                <span>Quick Nail Fix Desk</span>
               </div>
               <h3 className="font-serif italic font-bold text-2xl text-atelier-noir">
-                Broke or Chipped a Nail? Don't Worry Babe! 💕
+                Broke or Chipped a Nail? Don't Worry Babe!
               </h3>
               <p className="text-xs text-atelier-muted leading-relaxed">
                 Accidents happen! Send a quick message to Sirii and she will squeeze you in for a quick 15-20 min fix.
@@ -228,7 +228,7 @@ export default function EmergencyRepairModal({
                   className="w-full py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs shadow-soft transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>{isSubmitting ? 'Sending Request...' : 'Send Quick Fix Request to Sirii 💕'}</span>
+                  <span>{isSubmitting ? 'Sending Request...' : 'Send Quick Fix Request to Sirii'}</span>
                 </button>
               </div>
             </form>
@@ -241,10 +241,10 @@ export default function EmergencyRepairModal({
 
             <div className="space-y-1">
               <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-700 block">
-                Request Sent to Sirii! 💕
+                Request Sent to Sirii!
               </span>
               <h3 className="font-serif italic font-bold text-2xl text-atelier-noir">
-                Hang Tight Babe, We'll Fix It! 💕
+                Hang Tight Babe, We'll Fix It!
               </h3>
               <p className="text-xs text-atelier-muted max-w-sm mx-auto leading-relaxed">
                 Sirii has received your request on her phone! She will check her schedule and message you on WhatsApp at <span className="font-semibold text-atelier-noir">{formData.clientPhone}</span> shortly with a quick slot.
@@ -270,7 +270,7 @@ export default function EmergencyRepairModal({
               onClick={handleClose}
               className="px-6 py-2.5 rounded-2xl bg-atelier-rose500 hover:bg-atelier-rose600 text-white font-semibold text-xs shadow-soft transition-all"
             >
-              Got It, Thanks! 💕
+              Got It, Thanks!
             </button>
           </div>
         )}

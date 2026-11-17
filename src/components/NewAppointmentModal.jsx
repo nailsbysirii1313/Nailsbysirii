@@ -157,7 +157,7 @@ export default function NewAppointmentModal({
         <div className="mb-6">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-atelier-rose100 text-atelier-rose600 text-xs font-semibold mb-2">
             <Calendar className="w-3.5 h-3.5" />
-            <span>{appointmentToEdit ? 'Edit Booking' : 'Schedule Nail Appointment 💕'}</span>
+            <span>{appointmentToEdit ? 'Edit Booking' : 'Schedule Nail Appointment'}</span>
           </div>
           <h3 className="font-serif italic font-bold text-2xl text-atelier-noir">
             {appointmentToEdit ? 'Update Appointment' : 'Book Client Appointment'}

@@ -29,7 +29,7 @@ const VOUCHER_THEMES = {
     cardBorder: 'border-rose-200/50',
     accent: 'text-rose-600',
     pill: 'bg-rose-100 text-rose-700',
-    tag: 'Most Loved 💕'
+    tag: 'Most Loved'
   },
   'Bridal Velvet Silk': {
     name: 'Bridal Velvet Silk',
@@ -45,7 +45,7 @@ const VOUCHER_THEMES = {
     cardBorder: 'border-neutral-700',
     accent: 'text-stone-800',
     pill: 'bg-stone-100 text-stone-800',
-    tag: 'Studio VIP 💕'
+    tag: 'Studio VIP'
   },
   'Lavender Celestial': {
     name: 'Lavender Celestial',
@@ -87,7 +87,7 @@ export default function GiftCardsView({
     senderEmail: '',
     initialAmount: 2000,
     theme: 'Blush Rose Quartz',
-    personalMessage: 'Enjoy a cute & pampering gel manicure at Nails by Sirii! 💕',
+    personalMessage: 'Enjoy a cute & pampering gel manicure at Nails by Sirii!',
     validityMonths: 12
   });
 
@@ -140,10 +140,10 @@ export default function GiftCardsView({
         senderEmail: '',
         initialAmount: 2000,
         theme: 'Blush Rose Quartz',
-        personalMessage: 'Enjoy a cute & pampering gel manicure at Nails by Sirii! 💕',
+        personalMessage: 'Enjoy a cute & pampering gel manicure at Nails by Sirii!',
         validityMonths: 12
       });
-      if (onAddToast) onAddToast('Gift voucher issued and alert sent to phone! 💕', 'success');
+      if (onAddToast) onAddToast('Gift voucher issued and alert sent to phone!', 'success');
     } catch (err) {
       if (onAddToast) onAddToast(err.message || 'Failed to issue gift voucher', 'error');
     }
@@ -195,12 +195,12 @@ export default function GiftCardsView({
           <div className="flex items-center gap-2">
             <span className="px-3 py-1 bg-rose-100 text-rose-700 text-xs font-semibold uppercase tracking-wider rounded-full flex items-center gap-1.5">
               <Gift className="w-3.5 h-3.5 text-rose-500" />
-              Gift Cards 💕
+              Gift Cards
             </span>
             <span className="text-xs text-rose-400 font-medium">Nails by Sirii</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-serif text-stone-900 tracking-tight">
-            Gift Cards & Studio Vouchers 💕
+            Gift Cards & Studio Vouchers
           </h1>
           <p className="text-stone-500 text-sm max-w-xl">
             Issue cute digital gift vouchers, manage live balances, and verify instant in-studio redemptions with phone alerts.
@@ -736,7 +736,7 @@ export default function GiftCardsView({
             >
               <div className="text-center space-y-1 mb-6">
                 <div className="text-[11px] uppercase tracking-widest text-white/80 font-serif">
-                  Nail Studio Gift Voucher 💕
+                  Nail Studio Gift Voucher
                 </div>
                 <h2 className="text-2xl font-serif font-bold tracking-tight text-white">
                   Nails by Sirii

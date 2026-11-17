@@ -40,7 +40,7 @@ class ErrorBoundary extends React.Component {
             boxShadow: '0 10px 25px rgba(217, 110, 133, 0.12)',
             border: '1px solid #F3C5CE'
           }}>
-            <div style={{ fontSize: '36px', marginBottom: '12px' }}>💅✨</div>
+            <div style={{ fontSize: '15px', fontWeight: 'bold', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#D96E85', marginBottom: '12px' }}>Nails by Sirii</div>
             <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: '0 0 8px', color: '#1a1817' }}>
               Nails by Sirii Studio
             </h2>
@@ -80,7 +80,7 @@ class ErrorBoundary extends React.Component {
                 cursor: 'pointer'
               }}
             >
-              Reload Website 💕
+              Reload Website
             </button>
           </div>
         </div>

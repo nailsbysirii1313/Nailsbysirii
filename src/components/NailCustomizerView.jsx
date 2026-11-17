@@ -79,7 +79,7 @@ export default function NailCustomizerView({
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-atelier-rose100 text-atelier-rose600 text-xs font-semibold mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Interactive Studio Consultation Tool 💕</span>
+            <span>Interactive Studio Consultation Tool</span>
           </div>
           <h2 className="font-serif italic font-bold text-2xl text-atelier-noir">
             Nail Set Customizer & Cost Calculator
@@ -186,7 +186,7 @@ export default function NailCustomizerView({
           {/* 4. Finish & Nail Art Tier */}
           <div className="bg-white rounded-3xl p-6 border border-atelier-champagneBorder shadow-sm space-y-3">
             <span className="text-xs font-bold text-atelier-noir uppercase tracking-wider block">
-              4. Cute Nail Art & Shimmer Finishes 💕
+              4. Cute Nail Art & Shimmer Finishes
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {finishes.map((f) => (

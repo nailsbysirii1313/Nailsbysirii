@@ -45,7 +45,7 @@ export default function PublicInvoiceView({
   }
 
   const studioName = settings?.studioName || 'Nails by Sirii';
-  const tagline = settings?.tagline || 'Affordable Nail Studio & Academy in Dehradun 💕';
+  const tagline = settings?.tagline || 'Affordable Nail Studio & Academy in Dehradun';
   const phone = settings?.phone || '+91 73026 23493';
   const email = settings?.email || 'hello@nailsbysirii.com';
   const address = settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi Cantt, Dehradun 248003';
@@ -420,7 +420,7 @@ export default function PublicInvoiceView({
           {/* Luxury Aftercare Instructions Card */}
           <div className="pt-4 border-t border-dashed border-stone-200 text-[10px] text-atelier-muted space-y-1">
             <p className="font-semibold text-atelier-charcoal">
-              Cute Nail Longevity Tips 💕:
+              Cute Nail Longevity Tips:
             </p>
             <p>1. Oil daily — apply cuticle oil or coconut oil daily to keep your cuticles soft & hydrated.</p>
             <p>2. Treat your nails like jewels, not tools — avoid opening cans with nail tips.</p>

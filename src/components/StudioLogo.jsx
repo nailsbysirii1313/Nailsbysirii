@@ -62,7 +62,7 @@ export default function StudioLogo({
               Nails by Sirii
             </span>
             <span className={`tracking-widest uppercase text-atelier-rose600 font-semibold block ${current.sub}`}>
-              Cute Nail Studio • Dehradun 💕
+              Cute Nail Studio • Dehradun
             </span>
           </div>
         )}
@@ -84,7 +84,7 @@ export default function StudioLogo({
             Nails by Sirii
           </span>
           <span className={`tracking-widest uppercase text-atelier-rose600 font-semibold block ${current.sub}`}>
-            Cute Nail Studio • Dehradun 💕
+            Cute Nail Studio • Dehradun
           </span>
         </div>
       )}

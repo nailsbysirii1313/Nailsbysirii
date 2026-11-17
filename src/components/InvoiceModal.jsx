@@ -38,7 +38,7 @@ export default function InvoiceModal({
   if (!isOpen || !invoice) return null;
 
   const studioName = settings?.studioName || 'Nails by Sirii';
-  const tagline = settings?.tagline || 'Affordable Nail Studio & Academy in Dehradun 💕';
+  const tagline = settings?.tagline || 'Affordable Nail Studio & Academy in Dehradun';
   const phone = settings?.phone || '+91 73026 23493';
   const email = settings?.email || 'hello@nailsbysirii.com';
   const address = settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi Cantt, Dehradun 248003';
@@ -70,7 +70,7 @@ export default function InvoiceModal({
       .join('\n');
 
     return `*${studioName.toUpperCase()}*
-Cute & Aesthetic Nail Studio in Dehradun 💕
+Cute & Aesthetic Nail Studio in Dehradun
 -----------------------------------
 Studio Bill / Receipt: ${invoice.invoiceNumber}
 Client: ${invoice.clientName}
