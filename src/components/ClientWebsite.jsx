@@ -1079,9 +1079,30 @@ export default function ClientWebsite({
   };
 
   const whatsappPhone = settings?.phone ? settings.phone.replace(/[^0-9]/g, '') : '917302623493';
+  const studioFormattedPhone = settings?.phone || '+91 73026 23493';
+  const cleanTelPhone = studioFormattedPhone.replace(/[^0-9+]/g, '');
+
   const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
     `Hello Sirii! I am viewing your design catalogue on your website and would like to reserve an appointment at your studio in Garhi Cantt, Dehradun.`
   )}`;
+
+  const getBookingWhatsAppUrl = () => {
+    let msg = `Hello Sirii! I would like to book an appointment at Nails by Sirii in Dehradun.`;
+    if (selectedLook) {
+      msg = `Hello Sirii! I am viewing your website and would love to book an appointment for "${selectedLook.title}" (${selectedLook.category || 'Atelier Set'}).\n\n• Desired Silhouette: ${selectedShape || 'Almond'}\n• Desired Length: ${selectedLength || 'Medium'}\n\nCould you please share your upcoming availability and confirm the slot?`;
+    } else if (bookingMode === 'customInspo') {
+      msg = `Hello Sirii! I would like to book an appointment with my own nail inspiration reference photo. Could you please check your availability?`;
+      if (inspoUrl) {
+        msg += `\n\n• Reference Link: ${inspoUrl}`;
+      }
+      if (inspoDescription) {
+        msg += `\n• Design Notes: ${inspoDescription}`;
+      }
+    } else if (bookingMode === 'customSet') {
+      msg = `Hello Sirii! I customized a nail set on your website:\n• Shape: ${selectedShape || customShape.name}\n• Length: ${selectedLength || customLength.name}\n• Base: ${customBase.name}\n• Finish: ${customFinish.name}\n\nCould you please share your available appointment slots?`;
+    }
+    return `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(msg)}`;
+  };
 
   return (
     <div className="min-h-screen bg-studio-canvas text-studio-ink font-sans selection:bg-studio-wineLight selection:text-studio-wine overflow-x-hidden pb-24 sm:pb-0">
@@ -1961,492 +1982,174 @@ export default function ClientWebsite({
         </div>
       </section>
 
-      {/* 5. MULTI-STEP RESERVATION WIZARD (NO FIXED PRICE RATES) */}
+      {/* 5. DIRECT APPOINTMENT BOOKING: WHATSAPP & PHONE CALL */}
       <section id="booking-section" className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto border-t border-studio-border">
         <div className="bg-studio-surface rounded-3xl border border-studio-border p-6 sm:p-10 shadow-studio space-y-8">
           {/* Header */}
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-2.5 max-w-xl mx-auto">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight text-studio-wine text-[11px] font-semibold">
               <Calendar className="w-3.5 h-3.5" />
-              <span>Dedicated Studio Session</span>
+              <span>Dedicated Studio Consultation</span>
             </div>
             <h2 className="font-display italic font-bold text-2xl sm:text-4xl text-studio-ink">
               Reserve Your Appointment
             </h2>
-            <p className="text-xs sm:text-sm text-studio-secondary max-w-md mx-auto leading-relaxed">
-              Every appointment is reserved exclusively for you with dedicated sterilization buffers. No upfront payment required to request your slot.
+            <p className="text-xs sm:text-sm text-studio-secondary leading-relaxed font-sans">
+              To ensure dedicated focus and customized artistry for every client, all appointments are scheduled directly with Sirii. Reach out on WhatsApp or call to discuss your look, share reference photos, and lock in your slot.
             </p>
           </div>
 
-          {/* Step Progress Pills */}
-          {bookingStep < 5 && (
-            <div className="flex items-center justify-between max-w-md mx-auto pt-2">
-              {[
-                { num: 1, label: 'Design' },
-                { num: 2, label: 'Date & Time' },
-                { num: 3, label: 'Your Details' }
-              ].map((s) => (
-                <div key={s.num} className="flex items-center gap-2">
-                  <div
-                    className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${bookingStep === s.num
-                      ? 'bg-studio-wine text-white shadow-xs ring-4 ring-studio-wineLight'
-                      : bookingStep > s.num
-                        ? 'bg-emerald-700 text-white'
-                        : 'bg-studio-canvas text-studio-muted border border-studio-border'
-                      }`}
-                  >
-                    {bookingStep > s.num ? <Check className="w-3.5 h-3.5" /> : s.num}
-                  </div>
-                  <span className={`text-xs font-semibold hidden sm:inline ${bookingStep === s.num ? 'text-studio-ink font-bold' : 'text-studio-muted'
-                    }`}>
-                    {s.label}
+          {/* Context Banner if client pre-selected a look or custom inspo */}
+          {selectedLook && (
+            <div className="p-4 sm:p-5 rounded-2xl bg-studio-wineLight/60 border border-studio-wine/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-xl bg-studio-surface border border-studio-wine/20 flex items-center justify-center shrink-0 text-studio-wine shadow-xs">
+                  <Palette className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-studio-wine block">
+                    Your Inquired Design
                   </span>
+                  <strong className="text-studio-ink text-sm font-display font-semibold">
+                    {selectedLook.title}
+                  </strong>
+                  <p className="text-[11px] text-studio-secondary">
+                    {selectedShape || 'Almond'} • {selectedLength || 'Medium'} • {selectedLook.category || 'Atelier Set'}
+                  </p>
                 </div>
-              ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedLook(null);
+                  if (onOpenCatalogue) onOpenCatalogue();
+                  else window.location.hash = '#catalogue';
+                }}
+                className="text-xs text-studio-wine hover:underline font-semibold shrink-0 self-start sm:self-auto"
+              >
+                Change Look
+              </button>
             </div>
           )}
 
-          {/* STEP 1: Selected Design & Custom Inspo */}
-          {bookingStep === 1 && (
-            <div className="space-y-6 animate-fade-in text-xs font-sans">
-              {/* Mode 1: Lookbook Design Selected */}
-              {bookingMode === 'lookbook' && selectedLook && (
-                <div className="p-5 rounded-2xl border-2 border-studio-wine bg-studio-wineLight/60 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Palette className="w-4 h-4 text-studio-wine" />
-                      <span className="font-display italic font-bold text-base text-studio-ink">
-                        {selectedLook.title}
-                      </span>
-                    </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-studio-surface text-studio-wine font-bold border border-studio-border">
-                      {selectedLook.category}
-                    </span>
-                  </div>
-
-                  <p className="text-xs text-studio-secondary leading-relaxed">
-                    {selectedLook.desc}
-                  </p>
-
-                  <div className="text-[11px] text-studio-secondary pt-1 flex items-center justify-between">
-                    <span>Suggested: <strong>{selectedLook.shape.name} • {selectedLook.length.name}</strong></span>
-                    <span>Session: <strong>~{selectedLook.durationNum} mins</strong></span>
-                  </div>
-
-                  <div className="pt-2 border-t border-studio-border flex flex-wrap items-center justify-between gap-2 text-xs">
-                    <button
-                      type="button"
-                      onClick={() => scrollTo('catalogue')}
-                      className="text-studio-wine hover:underline font-semibold"
-                    >
-                      ← Browse other booklet designs
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleSelectCustomInspo}
-                      className="text-studio-secondary hover:text-studio-ink font-medium"
-                    >
-                      Or switch to "Bring Your Own Inspo"
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Mode 2: Custom Internet Inspo */}
-              {bookingMode === 'customInspo' && (
-                <div className="p-5 rounded-2xl border-2 border-studio-wine bg-studio-wineLight/60 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Camera className="w-4 h-4 text-studio-wine" />
-                      <span className="font-display italic font-bold text-base text-studio-ink">
-                        Bring Your Own Internet Inspo
-                      </span>
-                    </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-studio-surface text-studio-wine font-bold border border-studio-border">
-                      Custom Online Reference
-                    </span>
-                  </div>
-
-                  <p className="text-xs text-studio-secondary leading-relaxed">
-                    Share a link to an Instagram post, Pinterest pin, or describe the look you'd like. You can also show reference photos directly to Sirii during your appointment.
-                  </p>
-
-                  <div className="space-y-3 pt-1">
-                    <div>
-                      <label className="block font-semibold text-studio-ink mb-1">
-                        Link to Photo / Pin / Post (Optional)
-                      </label>
-                      <input
-                        type="url"
-                        placeholder="https://pinterest.com/pin/... or Instagram link"
-                        value={inspoUrl}
-                        onChange={(e) => setInspoUrl(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-surface text-base sm:text-xs text-studio-ink focus:border-studio-wine outline-none font-sans"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block font-semibold text-studio-ink mb-1">
-                        Describe the Look / Colors / Art Details
-                      </label>
-                      <textarea
-                        rows={2}
-                        placeholder="e.g. 3D metallic chrome ribbons on milky nude almond nails, similar to French tips..."
-                        value={inspoDescription}
-                        onChange={(e) => setInspoDescription(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-surface text-base sm:text-xs text-studio-ink focus:border-studio-wine outline-none font-sans"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="pt-2 border-t border-studio-border flex justify-between text-xs">
-                    <button
-                      type="button"
-                      onClick={() => scrollTo('catalogue')}
-                      className="text-studio-wine hover:underline font-semibold"
-                    >
-                      ← Browse studio catalogue instead
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Mode 3: Custom Set Silhouette */}
-              {bookingMode === 'customSet' && (
-                <div className="p-5 rounded-2xl border-2 border-studio-wine bg-studio-wineLight/60 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Palette className="w-4 h-4 text-studio-wine" />
-                      <span className="font-display italic font-bold text-base text-studio-ink">
-                        Custom Silhouette: {customShape.name} ({customLength.name})
-                      </span>
-                    </div>
-                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-studio-surface text-studio-wine font-bold border border-studio-border">
-                      Customizer Build
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div>
-                      <span className="text-studio-muted block text-[10px]">Base Tint:</span>
-                      <span className="font-semibold text-studio-ink">{customBase.name}</span>
-                    </div>
-                    <div>
-                      <span className="text-studio-muted block text-[10px]">Finish:</span>
-                      <span className="font-semibold text-studio-ink">{customFinish.name}</span>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 border-t border-studio-border text-xs">
-                    <button
-                      type="button"
-                      onClick={() => scrollTo('catalogue')}
-                      className="text-studio-wine hover:underline font-semibold flex items-center gap-1.5"
-                    >
-                      <Palette className="w-3.5 h-3.5" />
-                      <span>Adjust specifications in catalogue</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Preferences: Preferred Shape & Length */}
-              <div className="space-y-4 pt-2">
-                <div>
-                  <label className="block font-semibold text-studio-ink mb-1.5">
-                    Confirm Desired Shape
-                  </label>
-                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                    {shapes.map((s) => (
-                      <button
-                        type="button"
-                        key={s.id}
-                        onClick={() => setSelectedShape(s.name)}
-                        className={`p-2 rounded-xl border text-center transition-all text-xs min-h-[40px] flex items-center justify-center ${selectedShape === s.name
-                          ? 'bg-studio-wine text-white font-bold border-studio-wine shadow-xs'
-                          : 'bg-studio-surface border-studio-border text-studio-secondary hover:bg-studio-subtle'
-                          }`}
-                      >
-                        {s.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-studio-ink mb-1.5">
-                    Confirm Desired Length
-                  </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {lengths.map((l) => (
-                      <button
-                        type="button"
-                        key={l.id}
-                        onClick={() => setSelectedLength(l.name)}
-                        className={`p-2 rounded-xl border text-center transition-all text-xs min-h-[40px] flex items-center justify-center ${selectedLength === l.name
-                          ? 'bg-studio-wine text-white font-bold border-studio-wine shadow-xs'
-                          : 'bg-studio-surface border-studio-border text-studio-secondary hover:bg-studio-subtle'
-                          }`}
-                      >
-                        {l.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+          {bookingMode === 'customInspo' && !selectedLook && (
+            <div className="p-4 sm:p-5 rounded-2xl bg-studio-wineLight/60 border border-studio-wine/30 flex items-start gap-3 text-xs">
+              <div className="w-9 h-9 rounded-xl bg-studio-surface border border-studio-wine/20 flex items-center justify-center shrink-0 text-studio-wine shadow-xs">
+                <Wand2 className="w-4 h-4" />
               </div>
-
-              {/* Continue to Step 2 */}
-              <div className="flex justify-end pt-4">
-                <button
-                  type="button"
-                  onClick={() => setBookingStep(2)}
-                  className="w-full sm:w-auto px-7 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio transition-all active:scale-95 flex items-center justify-center gap-2 min-h-[44px]"
-                >
-                  <span>Select Date & Time</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 2: Date & Time Picker */}
-          {bookingStep === 2 && (
-            <div className="space-y-6 animate-fade-in text-xs font-sans">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {/* Date Picker */}
-                <div className="space-y-2">
-                  <label className="block font-semibold text-studio-ink text-xs">
-                    Choose Appointment Date
-                  </label>
-                  <input
-                    type="date"
-                    min={getKolkataTodayString()}
-                    value={bookingDate}
-                    onChange={(e) => setBookingDate(e.target.value)}
-                    className="w-full p-3.5 rounded-2xl border border-studio-border bg-studio-surface text-base sm:text-xs text-studio-ink focus:border-studio-wine outline-none font-medium min-h-[44px]"
-                  />
-                  <p className="text-[11px] text-studio-muted">
-                    Studio opens Tuesday through Sunday (12:00 PM – 7:00 PM).
-                  </p>
-                </div>
-
-                {/* Time Slot Picker */}
-                <div className="space-y-2">
-                  <label className="block font-semibold text-studio-ink text-xs flex items-center justify-between">
-                    <span>Available Starting Slots</span>
-                    <span className="text-[11px] text-studio-muted">Duration: ~{totalDuration}m</span>
-                  </label>
-                  <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto p-1 border border-studio-border rounded-2xl bg-studio-canvas/50">
-                    {timeSlots.map((slot) => (
-                      <button
-                        type="button"
-                        key={slot}
-                        onClick={() => setBookingTime(slot)}
-                        className={`p-2.5 rounded-xl border text-center transition-all text-xs font-semibold min-h-[40px] flex items-center justify-center ${bookingTime === slot
-                          ? 'bg-studio-wine text-white border-studio-wine shadow-xs'
-                          : 'bg-studio-surface border-studio-border text-studio-secondary hover:bg-studio-subtle'
-                          }`}
-                      >
-                        {formatTime12h(slot) || slot}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex justify-between pt-4 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setBookingStep(1)}
-                  className="px-5 py-2.5 rounded-2xl border border-studio-border text-studio-secondary hover:bg-studio-subtle text-xs font-semibold min-h-[44px]"
-                >
-                  Back
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setBookingStep(3)}
-                  className="px-7 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio transition-all active:scale-95 flex items-center gap-2 min-h-[44px]"
-                >
-                  <span>Continue to Details</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 3: Client Details & Submission (No price rates or deposit inputs) */}
-          {bookingStep === 3 && (
-            <form onSubmit={handleBookingSubmit} className="space-y-5 animate-fade-in text-xs font-sans">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-semibold text-studio-ink mb-1.5">
-                    Your Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Ananya Sharma"
-                    value={clientName}
-                    onChange={(e) => setClientName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink font-semibold"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-studio-ink mb-1.5">
-                    WhatsApp Phone Number *
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="e.g. 98765 43210"
-                    value={clientPhone}
-                    onChange={(e) => setClientPhone(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink font-semibold"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-studio-ink mb-1.5">
-                    Email Address (Optional)
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="for confirmation receipts"
-                    value={clientEmail}
-                    onChange={(e) => setClientEmail(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-studio-ink mb-1.5">
-                    Instagram Handle (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="@yourhandle"
-                    value={clientInstagram}
-                    onChange={(e) => setClientInstagram(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
-                  />
-                </div>
-              </div>
-
               <div>
-                <label className="block font-semibold text-studio-ink mb-1.5">
-                  Any Notes or Design Requests for Sirii
-                </label>
-                <textarea
-                  rows={2}
-                  placeholder="Share any special preferences, previous gel on nails, or questions for your session..."
-                  value={clientNotes}
-                  onChange={(e) => setClientNotes(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink leading-relaxed"
-                />
-              </div>
-
-              {/* Reservation Reassurance Card */}
-              <div className="p-4 rounded-2xl bg-studio-canvas/70 border border-studio-border text-xs text-studio-secondary space-y-1.5">
-                <div className="flex items-center gap-2 text-studio-ink font-semibold">
-                  <ShieldCheck className="w-4 h-4 text-emerald-700" />
-                  <span>No Upfront Payment Required</span>
-                </div>
-                <p className="leading-relaxed">
-                  Your appointment request will be reviewed by Sirii. You will receive a direct confirmation on WhatsApp with studio directions and slot verification.
-                </p>
-              </div>
-
-              {/* Actions */}
-              <div className="flex justify-between pt-4 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setBookingStep(2)}
-                  className="px-5 py-2.5 rounded-2xl border border-studio-border text-studio-secondary hover:bg-studio-subtle text-xs font-semibold min-h-[44px]"
-                >
-                  Back
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmittingBooking}
-                  className="px-8 py-3.5 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs sm:text-sm shadow-studio transition-all active:scale-95 disabled:opacity-50 flex items-center gap-2 min-h-[44px]"
-                >
-                  <Heart className="w-4 h-4 fill-white text-white" />
-                  <span>{isSubmittingBooking ? 'Submitting Reservation...' : 'Confirm Appointment Request'}</span>
-                </button>
-              </div>
-            </form>
-          )}
-
-          {/* STEP 5: Booking Confirmed Screen */}
-          {bookingStep === 5 && confirmedBooking && (
-            <div className="text-center space-y-6 py-6 animate-fade-in text-xs font-sans">
-              <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mx-auto shadow-studio">
-                <CheckCircle2 className="w-8 h-8" />
-              </div>
-
-              <div className="space-y-1.5">
-                <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine block">
-                  Reservation Dispatched
+                <span className="text-[10px] uppercase font-bold tracking-wider text-studio-wine block">
+                  Reference Image Booking
                 </span>
-                <h3 className="font-display italic font-bold text-2xl text-studio-ink">
-                  Thank You, {confirmedBooking.clientName}
-                </h3>
-                <p className="text-studio-secondary text-xs max-w-md mx-auto leading-relaxed">
-                  Your appointment request has been dispatched to Sirii's studio console. Sirii will review your chosen design and confirm your slot on WhatsApp.
+                <strong className="text-studio-ink text-sm font-display font-semibold">
+                  Bring Your Own Inspo Photo
+                </strong>
+                <p className="text-[11px] text-studio-secondary">
+                  Send your screenshot or Pinterest/Instagram link directly over WhatsApp for an exact quote and slot reservation.
                 </p>
-              </div>
-
-              {/* Summary Card */}
-              <div className="p-5 rounded-2xl bg-studio-canvas border border-studio-border max-w-md mx-auto text-left space-y-2.5">
-                <div className="flex justify-between items-baseline pb-2 border-b border-studio-border">
-                  <span className="font-semibold text-studio-ink">{confirmedBooking.serviceName}</span>
-                  <span className="text-xs text-studio-wine font-semibold">Reserved</span>
-                </div>
-                <div className="text-studio-secondary space-y-1 text-xs">
-                  <p>
-                    <strong className="text-studio-ink">Date & Time:</strong> {confirmedBooking.date} at {confirmedBooking.time}
-                  </p>
-                  <p>
-                    <strong className="text-studio-ink">Silhouette:</strong> {selectedShape} • {selectedLength}
-                  </p>
-                  <p>
-                    <strong className="text-studio-ink">Studio:</strong> Nails by Sirii
-                  </p>
-                  <p>
-                    <strong className="text-studio-ink">Location:</strong> Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, Dehradun 248003
-                  </p>
-                </div>
-              </div>
-
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a
-                  href={`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
-                    `Hello Sirii! I just requested an appointment for ${confirmedBooking.date} at ${confirmedBooking.time} for "${confirmedBooking.serviceName}". My name is ${confirmedBooking.clientName}.`
-                  )}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs shadow-studio flex items-center justify-center gap-2 min-h-[44px]"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>Message Sirii on WhatsApp</span>
-                </a>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setConfirmedBooking(null);
-                    setBookingStep(1);
-                    scrollTo('catalogue');
-                  }}
-                  className="w-full sm:w-auto px-6 py-3 rounded-2xl border border-studio-border bg-studio-surface hover:bg-studio-subtle text-studio-ink font-semibold text-xs transition-colors min-h-[44px]"
-                >
-                  Return to Catalogue
-                </button>
               </div>
             </div>
           )}
+
+          {/* Primary Direct Contact Channels Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            {/* WhatsApp Booking Card */}
+            <a
+              href={getBookingWhatsAppUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group p-6 rounded-3xl bg-gradient-to-br from-emerald-500/10 via-studio-surface to-studio-canvas border border-emerald-500/30 hover:border-emerald-600 shadow-studio transition-all flex flex-col justify-between space-y-5 hover:-translate-y-0.5"
+            >
+              <div className="space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-xs">
+                  <MessageCircle className="w-6 h-6" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                      Recommended
+                    </span>
+                    <span className="text-[11px] text-studio-muted font-medium">Fast Response</span>
+                  </div>
+                  <h3 className="font-display font-bold text-xl sm:text-2xl text-studio-ink mt-1.5 group-hover:text-emerald-700 transition-colors">
+                    Book on WhatsApp
+                  </h3>
+                  <p className="text-xs text-studio-secondary leading-relaxed font-sans mt-1">
+                    Send your inspo photos, check available slots, and discuss nail prep directly with Sirii on WhatsApp.
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <div className="w-full py-3.5 px-5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-studio transition-all flex items-center justify-center gap-2 group-hover:shadow-glow">
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Chat on WhatsApp</span>
+                  <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+            </a>
+
+            {/* Direct Call Card */}
+            <a
+              href={`tel:${cleanTelPhone}`}
+              className="group p-6 rounded-3xl bg-gradient-to-br from-studio-wineLight/70 via-studio-surface to-studio-canvas border border-studio-wine/30 hover:border-studio-wine shadow-studio transition-all flex flex-col justify-between space-y-5 hover:-translate-y-0.5"
+            >
+              <div className="space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-studio-wine text-white flex items-center justify-center shadow-xs">
+                  <Phone className="w-6 h-6" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine bg-studio-wineLight px-2 py-0.5 rounded-full">
+                      Instant Confirmation
+                    </span>
+                    <span className="text-[11px] text-studio-muted font-medium">12 PM – 7 PM</span>
+                  </div>
+                  <h3 className="font-display font-bold text-xl sm:text-2xl text-studio-ink mt-1.5 group-hover:text-studio-wine transition-colors">
+                    Call Studio Directly
+                  </h3>
+                  <p className="text-xs text-studio-secondary leading-relaxed font-sans mt-1">
+                    Speak directly with Sirii for immediate inquiries, same-week slots, or studio directions in Garhi Cantt.
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <div className="w-full py-3.5 px-5 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs sm:text-sm font-bold shadow-studio transition-all flex items-center justify-center gap-2 group-hover:shadow-glow">
+                  <Phone className="w-4 h-4" />
+                  <span>Call {studioFormattedPhone}</span>
+                  <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+            </a>
+          </div>
+
+          {/* Helpful Atelier Booking Guidelines */}
+          <div className="pt-4 border-t border-studio-border grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-studio-canvas border border-studio-border">
+              <Clock className="w-4 h-4 text-studio-wine shrink-0 mt-0.5" />
+              <div>
+                <strong className="text-studio-ink font-semibold block">Studio Hours</strong>
+                <span className="text-[11px] text-studio-secondary">Tue – Sun: 12:00 PM – 7:00 PM<br />(Monday Closed)</span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-studio-canvas border border-studio-border">
+              <MapPin className="w-4 h-4 text-studio-wine shrink-0 mt-0.5" />
+              <div>
+                <strong className="text-studio-ink font-semibold block">Studio Location</strong>
+                <span className="text-[11px] text-studio-secondary">Laxmi Navraj Plaza, Garhi Cantt, Dehradun</span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-studio-canvas border border-studio-border">
+              <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
+              <div>
+                <strong className="text-studio-ink font-semibold block">Sterilization Buffers</strong>
+                <span className="text-[11px] text-studio-secondary">Dedicated clinical sanitation buffer between each client.</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
