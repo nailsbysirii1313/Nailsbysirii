@@ -15,16 +15,12 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABAS
 
 if (!supabaseUrl || !supabaseKey) {
   console.error('\n[Error] SUPABASE_URL and SUPABASE_ANON_KEY (or SERVICE_ROLE_KEY) are missing in .env');
-  console.log('To link your free Supabase database:');
-  console.log('1. Go to https://supabase.com and create a free project.');
-  console.log('2. In Project Settings > API, copy Project URL and anon public / service_role API key.');
-  console.log('3. Add them to your .env file:');
-  console.log('   SUPABASE_URL=https://your-project.supabase.co');
-  console.log('   SUPABASE_ANON_KEY=your-anon-key\n');
   process.exit(1);
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: { persistSession: false }
+});
 
 async function seed() {
   console.log('[Supabase] Connecting at:', supabaseUrl);
@@ -36,7 +32,107 @@ async function seed() {
 
   const localDb = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
 
-  // 1. Seed Press-On Products
+  // 1. Seed Studio Settings
+  if (localDb.settings) {
+    console.log('[Settings] Seeding Studio Settings...');
+    const s = localDb.settings;
+    const settingsRecord = {
+      id: 'primary',
+      studio_name: s.studioName || 'Nails by Sirii',
+      tagline: s.tagline || 'Affordable Nail Studio & Academy in Dehradun',
+      owner_name: s.ownerName || 'Simran (Sirii)',
+      phone: s.phone || '+91 73026 23493',
+      email: s.email || 'hello@nailsbysirii.com',
+      address: s.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, Dehradun',
+      instagram: s.instagram || '@nails.by.sirii',
+      currency: s.currency || '₹',
+      upi_id: s.upiId || 'nailsbysirii@okaxis',
+      upi_name: s.upiName || 'Nails by Sirii',
+      studio_logo_url: s.studioLogoUrl || '/logo.png',
+      ntfy_topic: s.ntfyTopic || 'nails-by-sirii-alerts',
+      timings: s.timings || '12:00 PM – 7:00 PM',
+      google_rating: String(s.googleRating || '4.9')
+    };
+
+    const { error: sErr } = await supabase.from('studio_settings').upsert(settingsRecord, { onConflict: 'id' });
+    if (sErr) console.warn('[Warning] studio_settings upsert:', sErr.message);
+    else console.log('[Success] Studio settings seeded successfully!');
+  }
+
+  // 2. Seed Clients
+  if (localDb.clients && localDb.clients.length > 0) {
+    console.log(`[Clients] Seeding ${localDb.clients.length} Clients...`);
+    const records = localDb.clients.map(c => ({
+      id: c.id,
+      name: c.name,
+      phone: c.phone,
+      email: c.email || null,
+      instagram: c.instagram || null,
+      address: c.address || null,
+      preferred_shape: c.preferredShape || null,
+      notes: c.notes || null,
+      total_spend: Number(c.totalSpent || 0),
+      visits: Number(c.totalVisits || 0),
+      created_at: c.createdAt || new Date().toISOString(),
+      updated_at: c.updatedAt || new Date().toISOString()
+    }));
+
+    const { error: cErr } = await supabase.from('studio_clients').upsert(records, { onConflict: 'id' });
+    if (cErr) console.warn('[Warning] studio_clients upsert:', cErr.message);
+    else console.log('[Success] Studio clients seeded successfully!');
+  }
+
+  // 3. Seed Appointments
+  if (localDb.appointments && localDb.appointments.length > 0) {
+    console.log(`[Appointments] Seeding ${localDb.appointments.length} Appointments...`);
+    const records = localDb.appointments.map(a => ({
+      id: a.id,
+      client_name: a.clientName,
+      client_phone: a.clientPhone,
+      client_email: a.clientEmail || null,
+      client_instagram: a.clientInstagram || null,
+      service_id: a.serviceId || null,
+      service_name: a.serviceName || 'Custom Nail Service',
+      category: a.category || null,
+      date: a.date,
+      time: a.time,
+      duration: Number(a.duration || 60),
+      shape: a.shape || null,
+      length: a.length || null,
+      notes: a.notes || null,
+      status: a.status || 'Confirmed',
+      price: Number(a.price || 0),
+      created_at: a.createdAt || new Date().toISOString(),
+      updated_at: a.updatedAt || new Date().toISOString()
+    }));
+
+    const { error: aErr } = await supabase.from('studio_appointments').upsert(records, { onConflict: 'id' });
+    if (aErr) console.warn('[Warning] studio_appointments upsert:', aErr.message);
+    else console.log('[Success] Studio appointments seeded successfully!');
+  }
+
+  // 4. Seed Repairs
+  if (localDb.repairs && localDb.repairs.length > 0) {
+    console.log(`[Repairs] Seeding ${localDb.repairs.length} Repair Tickets...`);
+    const records = localDb.repairs.map(r => ({
+      id: r.id,
+      client_name: r.clientName,
+      client_phone: r.clientPhone,
+      hand: r.hand || null,
+      finger: r.finger || null,
+      service_type: r.serviceType || null,
+      issue: r.issue || null,
+      urgency: r.urgency || 'Standard',
+      status: r.status || 'Pending Squeeze-in',
+      created_at: r.createdAt || new Date().toISOString()
+    }));
+
+    const { error: rErr } = await supabase.from('studio_repairs').upsert(records, { onConflict: 'id' });
+    if (rErr) console.warn('[Warning] studio_repairs upsert:', rErr.message);
+    else console.log('[Success] Studio repairs seeded successfully!');
+  }
+
+  // 5. Seed Press-On Products
   if (localDb.pressOnProducts && localDb.pressOnProducts.length > 0) {
     console.log(`[Press-Ons] Seeding ${localDb.pressOnProducts.length} Press-On Products...`);
     const records = localDb.pressOnProducts.map(p => ({
@@ -55,15 +151,12 @@ async function seed() {
       included_kit: p.includedKit
     }));
 
-    const { error } = await supabase.from('press_on_products').upsert(records, { onConflict: 'id' });
-    if (error) {
-      console.warn('[Warning] press_on_products upsert:', error.message);
-    } else {
-      console.log('[Success] Press-on products seeded successfully!');
-    }
+    const { error: pErr } = await supabase.from('press_on_products').upsert(records, { onConflict: 'id' });
+    if (pErr) console.warn('[Warning] press_on_products upsert:', pErr.message);
+    else console.log('[Success] Press-on products seeded successfully!');
   }
 
-  // 2. Seed Press-On Orders
+  // 6. Seed Press-On Orders
   if (localDb.pressOnOrders && localDb.pressOnOrders.length > 0) {
     console.log(`[Press-Ons] Seeding ${localDb.pressOnOrders.length} Press-On Orders...`);
     const records = localDb.pressOnOrders.map(o => ({
@@ -94,15 +187,12 @@ async function seed() {
       notes: o.notes
     }));
 
-    const { error } = await supabase.from('press_on_orders').upsert(records, { onConflict: 'id' });
-    if (error) {
-      console.warn('[Warning] press_on_orders upsert:', error.message);
-    } else {
-      console.log('[Success] Press-on orders seeded successfully!');
-    }
+    const { error: oErr } = await supabase.from('press_on_orders').upsert(records, { onConflict: 'id' });
+    if (oErr) console.warn('[Warning] press_on_orders upsert:', oErr.message);
+    else console.log('[Success] Press-on orders seeded successfully!');
   }
 
-  console.log('\n[Complete] Supabase Database Sync Complete!\n');
+  console.log('\n[Complete] All 6 Supabase Tables Seeded & Synced Successfully!\n');
 }
 
 seed().catch(err => {

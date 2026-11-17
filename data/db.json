@@ -149,6 +149,7 @@
   ],
   "clients": [
     {
+      "id": "cl_1794934257817",
       "name": "Sanya Malhotra",
       "phone": "9811223344",
       "email": "sanya@example.com",
@@ -156,13 +157,13 @@
       "address": "14 Cross Road, Dalanwala, Dehradun 248001",
       "preferredShape": "Almond",
       "notes": "Press-On Order #ORD-2026-003: Hailey Glazed Pearl Chrome (Size: S)",
-      "id": "cl_1794934257817",
-      "totalVisits": 0,
       "totalSpent": 0,
-      "createdAt": "2026-11-17T16:50:57.817Z",
-      "updatedAt": "2026-11-17T16:50:57.817Z"
+      "totalVisits": 0,
+      "createdAt": "2026-11-17T16:50:57.817+00:00",
+      "updatedAt": "2026-11-17T16:50:57.817+00:00"
     },
     {
+      "id": "cl_1794933305768",
       "name": "Ananya Sen",
       "phone": "9876543210",
       "email": "ananya@example.com",
@@ -170,60 +171,43 @@
       "address": "House 12, Canal Road, Kishanpur, Dehradun 248001",
       "preferredShape": "Almond",
       "notes": "Press-On Order #ORD-2026-002: Hailey Glazed Pearl Chrome (Size: M)",
-      "id": "cl_1794933305768",
-      "totalVisits": 0,
       "totalSpent": 0,
-      "createdAt": "2026-11-17T16:35:05.768Z",
-      "updatedAt": "2026-11-17T16:35:05.768Z"
+      "totalVisits": 0,
+      "createdAt": "2026-11-17T16:35:05.768+00:00",
+      "updatedAt": "2026-11-17T16:35:05.768+00:00"
     },
     {
+      "id": "cl_1794932673409",
       "name": "Meera Kapoor",
       "phone": "9876501234",
       "email": "meera@example.com",
       "instagram": "@meera.k",
+      "address": "",
       "preferredShape": "Coffin",
-      "preferredAesthetic": "3D Chrome & Glaze",
       "notes": "Selected Design: Custom Internet Inspo. Preferred Shape: Coffin, Length: Medium. Inspo Link: https://pinterest.com/pin/1234567890. Allergies: None.",
-      "vip": false,
-      "id": "cl_1794932673409",
-      "totalVisits": 0,
       "totalSpent": 0,
-      "createdAt": "2026-11-17T16:24:33.409Z",
-      "updatedAt": "2026-11-17T16:24:33.409Z"
+      "totalVisits": 0,
+      "createdAt": "2026-11-17T16:24:33.409+00:00",
+      "updatedAt": "2026-11-17T16:24:33.409+00:00"
     },
     {
+      "id": "cl_1794932673404",
       "name": "Kavya Singhania",
       "phone": "9897123456",
       "email": "kavya@example.com",
       "instagram": "@kavya_styles",
+      "address": "",
       "preferredShape": "Almond",
-      "preferredAesthetic": "3D Chrome & Glaze",
       "notes": "Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
-      "vip": false,
-      "id": "cl_1794932673404",
-      "totalVisits": 0,
       "totalSpent": 0,
-      "createdAt": "2026-11-17T16:24:33.404Z",
-      "updatedAt": "2026-11-17T16:24:33.404Z"
-    },
-    {
-      "name": "Phase3 TestClient",
-      "phone": "+91 98765 43210",
-      "email": "testclient@example.com",
-      "instagram": "@testclient",
-      "preferredShape": "Medium Almond",
-      "preferredAesthetic": "3D Chrome & Glaze",
-      "notes": "Updated note test",
-      "vip": false,
-      "id": "cl_1794928415038",
       "totalVisits": 0,
-      "totalSpent": 0,
-      "createdAt": "2026-11-17T15:13:35.038Z",
-      "updatedAt": "2026-11-17T15:35:33.801Z"
+      "createdAt": "2026-11-17T16:24:33.404+00:00",
+      "updatedAt": "2026-11-17T16:24:33.404+00:00"
     }
   ],
   "appointments": [
     {
+      "id": "apt_1794932673409",
       "clientName": "Meera Kapoor",
       "clientPhone": "9876501234",
       "clientEmail": "meera@example.com",
@@ -236,17 +220,14 @@
       "duration": 75,
       "shape": "Coffin",
       "length": "Medium",
-      "inspoUrl": "https://pinterest.com/pin/1234567890",
       "notes": "Selected Design: Custom Internet Inspo. Preferred Shape: Coffin, Length: Medium. Inspo Link: https://pinterest.com/pin/1234567890. Allergies: None.",
       "status": "Confirmed",
-      "clientId": "cl_1794932673409",
-      "id": "apt_1794932673409",
-      "reminderSent": false,
-      "lastReminderAt": null,
-      "createdAt": "2026-11-17T16:24:33.409Z",
-      "updatedAt": "2026-11-17T16:24:33.409Z"
+      "price": 0,
+      "createdAt": "2026-11-17T16:24:33.409+00:00",
+      "updatedAt": "2026-11-17T16:24:33.409+00:00"
     },
     {
+      "id": "apt_1794932673405",
       "clientName": "Kavya Singhania",
       "clientPhone": "9897123456",
       "clientEmail": "kavya@example.com",
@@ -261,69 +242,57 @@
       "length": "Long",
       "notes": "Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
       "status": "Confirmed",
-      "clientId": "cl_1794932673404",
-      "id": "apt_1794932673405",
-      "reminderSent": false,
-      "lastReminderAt": null,
-      "createdAt": "2026-11-17T16:24:33.405Z",
-      "updatedAt": "2026-11-17T16:24:33.405Z"
+      "price": 0,
+      "createdAt": "2026-11-17T16:24:33.405+00:00",
+      "updatedAt": "2026-11-17T16:24:33.405+00:00"
     },
     {
+      "id": "apt_1794928415040",
       "clientName": "Phase3 TestClient",
       "clientPhone": "+91 98765 43210",
       "clientEmail": "testclient@example.com",
       "clientInstagram": "@testclient",
       "serviceId": "srv_custom",
       "serviceName": "Custom Set: Almond (Medium)",
-      "addonServiceNames": [],
+      "category": "",
       "date": "2026-11-18",
       "time": "14:00",
       "duration": 105,
-      "price": 3100,
-      "depositPaid": 500,
-      "advancePaid": 500,
-      "hasAdvancePayment": true,
-      "advancePaymentMethod": "UPI (Google Pay / PhonePe)",
-      "pendingAmount": 2600,
-      "balanceDue": 2600,
-      "customSet": {
-        "shape": "Almond",
-        "length": "Medium",
-        "baseColor": "Strawberry Jelly Pink",
-        "finish": "Hailey Glazed Chrome",
-        "price": 3100,
-        "duration": 105,
-        "lineItems": [
-          {
-            "name": "Natural Builder Gel / Overlay (Almond)",
-            "price": 2200,
-            "duration": 60
-          },
-          {
-            "name": "Medium Length Surcharge",
-            "price": 300,
-            "duration": 15
-          },
-          {
-            "name": "Hailey Glazed Chrome Art",
-            "price": 600,
-            "duration": 30
-          }
-        ]
-      },
+      "shape": "",
+      "length": "",
       "notes": "Preferences: Almond, Medium, 3D Chrome & Glaze. Allergies: None. Note: Phase 3 Verification",
-      "notifyImmediate": false,
       "status": "Confirmed",
-      "clientId": "cl_1794928415038",
-      "id": "apt_1794928415040",
-      "reminderSent": false,
-      "lastReminderAt": null,
-      "createdAt": "2026-11-17T15:13:35.040Z",
-      "updatedAt": "2026-11-17T15:35:33.799Z"
+      "price": 3100,
+      "createdAt": "2026-11-17T15:13:35.04+00:00",
+      "updatedAt": "2026-11-17T15:35:33.799+00:00"
     }
   ],
   "invoices": [],
   "notifications": [
+    {
+      "type": "press_on_order",
+      "title": "New Press-On Order: Test Order Client (INR 1299)",
+      "message": "Test Order Client ordered \"Hailey Glazed Pearl Chrome\"!\n\nSize: M (Qty: 1)\nTotal: INR 1299\nPhone: +91 99999 33333\nAddress: 123 Rajpur Road, Dehradun 248001\nWear Kit: Adhesive Tabs",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "orderId": "ORD-2026-004",
+      "clientName": "Test Order Client",
+      "totalAmount": 1299,
+      "id": "notif_1794947176370",
+      "sentAt": "2026-11-17T20:26:16.370Z"
+    },
+    {
+      "type": "emergency_repair",
+      "title": "URGENT REPAIR: Test Client Repair (Ring Finger)",
+      "message": "Test Client Repair submitted an urgent repair request!\n\nHand & Finger: Left Ring Finger\nService: Acrylic Extension\nIssue: Corner chipped\nUrgency: Standard\nPhone: +91 99999 22222",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "repairId": "rep_1794947175347",
+      "clientName": "Test Client Repair",
+      "finger": "Ring Finger",
+      "id": "notif_1794947176107",
+      "sentAt": "2026-11-17T20:26:16.107Z"
+    },
     {
       "type": "press_on_order",
       "title": "New Press-On Order: Sanya Malhotra (INR 1299)",
@@ -673,6 +642,7 @@
   ],
   "repairs": [
     {
+      "id": "rep_1794928415042",
       "clientName": "Emergency TestClient",
       "clientPhone": "+91 98765 43210",
       "hand": "Right Hand",
@@ -680,10 +650,9 @@
       "serviceType": "Builder Gel (BIAB) Chip Fix",
       "issue": "Corner chipped while travelling",
       "urgency": "Today ASAP (Urgent)",
-      "id": "rep_1794928415042",
       "status": "Pending Squeeze-in",
-      "createdAt": "2026-11-17T15:13:35.042Z",
-      "updatedAt": "2026-11-17T15:13:35.042Z"
+      "createdAt": "2026-11-17T15:13:35.042+00:00",
+      "updatedAt": "2026-11-17T15:13:35.042+00:00"
     }
   ],
   "giftCards": [],
@@ -811,12 +780,12 @@
       "baseColor": "#FDF2F8",
       "finish": "Hailey Glazed Chrome",
       "price": 1299,
-      "stock": 6,
+      "stock": 5,
       "isAvailable": true,
       "tag": "Bestseller",
       "description": "Ultra-popular pearlescent glazed chrome over sheer strawberry milk builder gel. Hand-buffed with salon chrome powder for an ethereal mirror shine.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "createdAt": "2026-11-17T16:33:34.391Z"
+      "imageUrl": null
     },
     {
       "id": "pop_2",
@@ -832,7 +801,7 @@
       "tag": "Studio Pick",
       "description": "Deep dimensional velvet magnetic shimmer refracting light across long sculpted stilettos. Dramatic, luxurious, and chip-proof.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "createdAt": "2026-11-17T16:33:34.392Z"
+      "imageUrl": null
     },
     {
       "id": "pop_3",
@@ -848,7 +817,7 @@
       "tag": "Luxury Edition",
       "description": "Hand-sculpted 3D liquid molten gold curves and real freshwater baroque pearl accents encrusted over an ivory porcelain bed.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "createdAt": "2026-11-17T16:33:34.392Z"
+      "imageUrl": null
     },
     {
       "id": "pop_4",
@@ -864,7 +833,7 @@
       "tag": "Clean Aesthetic",
       "description": "Seamless airbrushed baby boomer pink-and-white ombré gradient with high-apex reinforcement. Natural, clean, and workplace ready.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "createdAt": "2026-11-17T16:33:34.392Z"
+      "imageUrl": null
     },
     {
       "id": "pop_5",
@@ -880,7 +849,7 @@
       "tag": "Trending",
       "description": "High-shine liquid silver chrome starbursts, cross-stars, and geometric cyber accents set against a sheer neutral canvas.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "createdAt": "2026-11-17T16:33:34.392Z"
+      "imageUrl": null
     },
     {
       "id": "pop_6",
@@ -896,57 +865,67 @@
       "tag": "Handcrafted",
       "description": "Subtle translucent white marble veining swirled with pure 24K gold foil flecks suspended in crystal clear gel depth.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "createdAt": "2026-11-17T16:33:34.392Z"
+      "imageUrl": null
     }
   ],
   "pressOnOrders": [
     {
+      "id": "ORD-2026-003",
+      "orderNumber": "ORD-2026-003",
       "productId": "pop_1",
       "productTitle": "Hailey Glazed Pearl Chrome",
       "shape": "Almond",
       "length": "Medium",
       "size": "S",
+      "customSizes": null,
       "wearMethod": "24 Jelly Sticky Tabs (Temporary Wear)",
       "quantity": 1,
       "totalAmount": 1299,
       "clientName": "Sanya Malhotra",
       "clientPhone": "9811223344",
       "clientEmail": "sanya@example.com",
+      "clientInstagram": null,
       "addressStreet": "14 Cross Road, Dalanwala",
       "addressCity": "Dehradun",
       "addressState": "Uttarakhand",
       "addressPincode": "248001",
-      "id": "ORD-2026-003",
-      "orderNumber": "ORD-2026-003",
       "paymentStatus": "Paid (UPI)",
+      "paymentRef": null,
       "fulfillmentStatus": "Shipped",
-      "createdAt": "2026-11-17T16:50:57.816Z",
-      "updatedAt": "2026-11-17T16:50:58.646Z",
       "courierPartner": "Delhivery Express",
-      "trackingNumber": "DLV9988776655IN"
+      "trackingNumber": "DLV9988776655IN",
+      "notes": null,
+      "createdAt": "2026-11-17T18:10:32.479343+00:00",
+      "updatedAt": "2026-11-17T18:10:32.479343+00:00"
     },
     {
+      "id": "ORD-2026-002",
+      "orderNumber": "ORD-2026-002",
       "productId": "pop_1",
       "productTitle": "Hailey Glazed Pearl Chrome",
       "shape": "Almond",
       "length": "Medium",
       "size": "M",
+      "customSizes": null,
       "wearMethod": "Adhesive Jelly Tabs",
       "quantity": 1,
       "totalAmount": 1299,
       "clientName": "Ananya Sen",
       "clientPhone": "9876543210",
       "clientEmail": "ananya@example.com",
+      "clientInstagram": null,
       "addressStreet": "House 12, Canal Road, Kishanpur",
       "addressCity": "Dehradun",
       "addressState": "Uttarakhand",
       "addressPincode": "248001",
-      "id": "ORD-2026-002",
-      "orderNumber": "ORD-2026-002",
       "paymentStatus": "Pending UPI",
+      "paymentRef": null,
       "fulfillmentStatus": "New Order",
-      "createdAt": "2026-11-17T16:35:05.767Z",
-      "updatedAt": "2026-11-17T16:35:05.767Z"
+      "courierPartner": null,
+      "trackingNumber": null,
+      "notes": null,
+      "createdAt": "2026-11-17T18:10:32.479343+00:00",
+      "updatedAt": "2026-11-17T18:10:32.479343+00:00"
     },
     {
       "id": "ORD-2026-001",
@@ -963,6 +942,7 @@
       "clientName": "Rhea Kapoor",
       "clientPhone": "9812345678",
       "clientEmail": "rhea@example.com",
+      "clientInstagram": null,
       "addressStreet": "Flat 402, Pine Crest Apartments, Rajpur Road",
       "addressCity": "Dehradun",
       "addressState": "Uttarakhand",
@@ -973,8 +953,8 @@
       "courierPartner": "Delhivery",
       "trackingNumber": "DLV9876543210IN",
       "notes": "Please pack with extra adhesive tabs if possible.",
-      "createdAt": "2026-11-17T12:33:34.392Z",
-      "updatedAt": "2026-11-17T12:33:34.392Z"
+      "createdAt": "2026-11-17T18:10:32.479343+00:00",
+      "updatedAt": "2026-11-17T18:10:32.479343+00:00"
     }
   ]
 }

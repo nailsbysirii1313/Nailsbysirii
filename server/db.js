@@ -1,6 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { supabase, isSupabaseConfigured } from './supabase.js';
+import {
+  rowToClient, cloudSyncClient, cloudDeleteClient,
+  rowToApt, cloudSyncAppointment, cloudDeleteAppointment,
+  rowToRepair, cloudSyncRepair, cloudDeleteRepair,
+  rowToPressOnProd, cloudSyncPressOnProduct, cloudDeletePressOnProduct,
+  rowToPressOnOrder, cloudSyncPressOnOrder, cloudDeletePressOnOrder,
+  cloudSyncSettings
+} from './supabaseSync.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -509,6 +518,87 @@ function writeDb(data) {
   }
 }
 
+let supabaseSyncCompleted = false;
+let supabaseSyncPromise = null;
+
+export async function initSupabaseSync() {
+  if (!isSupabaseConfigured || !supabase) return;
+  if (supabaseSyncCompleted) return;
+  if (supabaseSyncPromise) return supabaseSyncPromise;
+
+  supabaseSyncPromise = (async () => {
+    try {
+      const [clientsRes, aptsRes, repairsRes, prodRes, ordersRes, settingsRes] = await Promise.all([
+        supabase.from('studio_clients').select('*'),
+        supabase.from('studio_appointments').select('*'),
+        supabase.from('studio_repairs').select('*'),
+        supabase.from('press_on_products').select('*'),
+        supabase.from('press_on_orders').select('*'),
+        supabase.from('studio_settings').select('*').limit(1)
+      ]);
+
+      const data = readDb();
+      let changed = false;
+
+      if (clientsRes.data && clientsRes.data.length > 0) {
+        data.clients = clientsRes.data.map(rowToClient);
+        changed = true;
+      }
+      if (aptsRes.data && aptsRes.data.length > 0) {
+        data.appointments = aptsRes.data.map(rowToApt);
+        changed = true;
+      }
+      if (repairsRes.data && repairsRes.data.length > 0) {
+        data.repairs = repairsRes.data.map(rowToRepair);
+        changed = true;
+      }
+      if (prodRes.data && prodRes.data.length > 0) {
+        data.pressOnProducts = prodRes.data.map(rowToPressOnProd);
+        changed = true;
+      }
+      if (ordersRes.data && ordersRes.data.length > 0) {
+        data.pressOnOrders = ordersRes.data.map(rowToPressOnOrder);
+        changed = true;
+      }
+      if (settingsRes.data && settingsRes.data.length > 0) {
+        const s = settingsRes.data[0];
+        data.settings = {
+          ...data.settings,
+          studioName: s.studio_name || data.settings.studioName,
+          tagline: s.tagline || data.settings.tagline,
+          ownerName: s.owner_name || data.settings.ownerName,
+          phone: s.phone || data.settings.phone,
+          email: s.email || data.settings.email,
+          address: s.address || data.settings.address,
+          instagram: s.instagram || data.settings.instagram,
+          currency: s.currency || data.settings.currency,
+          upiId: s.upi_id || data.settings.upiId,
+          upiName: s.upi_name || data.settings.upiName,
+          studioLogoUrl: s.studio_logo_url || data.settings.studioLogoUrl,
+          ntfyTopic: s.ntfy_topic || data.settings.ntfyTopic,
+          timings: s.timings || data.settings.timings,
+          googleRating: s.google_rating || data.settings.googleRating
+        };
+        changed = true;
+      }
+
+      if (changed) {
+        writeDb(data);
+      }
+      supabaseSyncCompleted = true;
+      console.log('[Supabase Sync] Synced cloud database into local cache successfully.');
+    } catch (err) {
+      console.warn('[Supabase Sync] Startup sync warning:', err.message);
+    }
+  })();
+
+  return supabaseSyncPromise;
+}
+
+if (isSupabaseConfigured) {
+  initSupabaseSync();
+}
+
 export const db = {
   get() {
     return readDb();
@@ -544,12 +634,14 @@ export const db = {
       data.clients.unshift(record);
     }
     writeDb(data);
+    cloudSyncClient(record);
     return record;
   },
   deleteClient(id) {
     const data = readDb();
     data.clients = (data.clients || []).filter(c => c.id !== id);
     writeDb(data);
+    cloudDeleteClient(id);
   },
 
   // Services
@@ -600,12 +692,14 @@ export const db = {
       data.appointments.unshift(record);
     }
     writeDb(data);
+    cloudSyncAppointment(record);
     return record;
   },
   deleteAppointment(id) {
     const data = readDb();
     data.appointments = (data.appointments || []).filter(a => a.id !== id);
     writeDb(data);
+    cloudDeleteAppointment(id);
   },
 
   // Invoices
@@ -671,6 +765,7 @@ export const db = {
     const data = readDb();
     data.settings = { ...data.settings, ...settings };
     writeDb(data);
+    cloudSyncSettings(data.settings);
     return data.settings;
   },
 
@@ -777,6 +872,7 @@ export const db = {
       data.repairs.unshift(record);
     }
     writeDb(data);
+    cloudSyncRepair(record);
     return record;
   },
   updateRepairStatus(id, status) {
@@ -787,6 +883,7 @@ export const db = {
       item.status = status;
       item.updatedAt = new Date().toISOString();
       writeDb(data);
+      cloudSyncRepair(item);
       return item;
     }
     return null;
@@ -795,6 +892,7 @@ export const db = {
     const data = readDb();
     data.repairs = (data.repairs || []).filter(r => r.id !== id);
     writeDb(data);
+    cloudDeleteRepair(id);
   },
 
   // Studio Gift Cards & Vouchers
@@ -916,12 +1014,14 @@ export const db = {
       data.pressOnProducts.unshift(record);
     }
     writeDb(data);
+    cloudSyncPressOnProduct(record);
     return record;
   },
   deletePressOnProduct(id) {
     const data = readDb();
     data.pressOnProducts = (data.pressOnProducts || []).filter(p => p.id !== id);
     writeDb(data);
+    cloudDeletePressOnProduct(id);
   },
 
   // Press-On Nails Customer Orders
@@ -969,6 +1069,7 @@ export const db = {
       }
     }
     writeDb(data);
+    cloudSyncPressOnOrder(record);
     return record;
   },
   updatePressOnOrderStatus(id, updates = {}) {
@@ -979,11 +1080,13 @@ export const db = {
 
     Object.assign(order, updates, { updatedAt: new Date().toISOString() });
     writeDb(data);
+    cloudSyncPressOnOrder(order);
     return order;
   },
   deletePressOnOrder(id) {
     const data = readDb();
     data.pressOnOrders = (data.pressOnOrders || []).filter(o => o.id !== id);
     writeDb(data);
+    cloudDeletePressOnOrder(id);
   }
 };
