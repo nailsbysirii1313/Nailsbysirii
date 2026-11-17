@@ -21,9 +21,9 @@ import {
 export default function CommandPalette({
   isOpen,
   onClose,
-  clients,
-  appointments,
-  invoices,
+  clients = [],
+  appointments = [],
+  invoices = [],
   onSelectClient,
   onSelectAppointment,
   onSelectInvoice,
@@ -37,8 +37,6 @@ export default function CommandPalette({
         e.preventDefault();
         if (isOpen) {
           onClose();
-        } else {
-          // Open handled by parent listener
         }
       } else if (e.key === 'Escape' && isOpen) {
         onClose();
@@ -75,32 +73,32 @@ export default function CommandPalette({
     { id: 'aftercare', label: 'Client Aftercare & Longevity Guide Generator', icon: FileText, category: 'Care' },
     { id: 'inventory', label: 'Studio Inventory & Supplies', icon: Package, category: 'Navigation' },
     { id: 'sanitization', label: 'Daily Sanitization Protocols Checklist', icon: ShieldCheck, category: 'Compliance' },
-    { id: 'restock_alert', label: 'Send Low-Stock Phone Alert (ntfy)', icon: Bell, category: 'Action' },
+    { id: 'restock_alert', label: 'Send Low-Stock Phone Alert (NTFY)', icon: Bell, category: 'Action' },
     { id: 'customizer', label: 'Open Nail Customizer Tool', icon: Palette, category: 'Navigation' },
     { id: 'portal', label: 'View Public Client Portal', icon: Globe, category: 'Navigation' },
-    { id: 'test_phone', label: 'Test Phone Alert (ntfy)', icon: Bell, category: 'Action' },
+    { id: 'test_phone', label: 'Test Phone Alert (NTFY)', icon: Bell, category: 'Action' },
     { id: 'export_csv', label: 'Export Invoices to CSV Spreadsheet', icon: FileSpreadsheet, category: 'Data' }
   ].filter((act) => act.label.toLowerCase().includes(q) || act.category.toLowerCase().includes(q));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 bg-atelier-noir/40 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white rounded-3xl max-w-xl w-full shadow-float border border-atelier-champagneBorder overflow-hidden relative">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-20 p-4 bg-text-ink/50 backdrop-blur-sm animate-fade-in">
+      <div className="bg-studio-surface rounded-3xl max-w-xl w-full shadow-studio border border-border-subtle overflow-hidden relative">
         {/* Search Input Bar */}
-        <div className="p-4 border-b border-atelier-champagneBorder/80 flex items-center gap-3">
-          <Search className="w-5 h-5 text-atelier-rose500 shrink-0" />
+        <div className="p-4 border-b border-border-subtle flex items-center gap-3">
+          <Search className="w-5 h-5 text-brand-wine shrink-0" />
           <input
             type="text"
             autoFocus
-            placeholder="Type a client name, service, date, or quick action..."
+            placeholder="Search clients, services, dates, or quick actions..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full text-xs font-medium text-atelier-noir placeholder:text-atelier-muted outline-none bg-transparent"
+            className="w-full text-base sm:text-xs font-medium text-text-ink placeholder:text-text-muted outline-none bg-transparent"
           />
           <button
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-atelier-cream text-atelier-muted text-xs"
+            className="p-1 rounded-lg hover:bg-studio-canvas text-text-muted text-xs min-h-[32px] min-w-[32px] flex items-center justify-center"
           >
-            <span className="font-mono text-[10px] bg-atelier-cream px-1.5 py-0.5 rounded border border-atelier-champagneBorder">
+            <span className="font-mono text-[10px] bg-studio-canvas px-1.5 py-0.5 rounded border border-border-subtle">
               ESC
             </span>
           </button>
@@ -111,7 +109,7 @@ export default function CommandPalette({
           {/* Quick Actions Section */}
           {quickActions.length > 0 && (
             <div className="space-y-1">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-atelier-muted px-2.5 block">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-text-muted px-2.5 block">
                 Quick Commands
               </span>
               {quickActions.slice(0, 4).map((act) => {
@@ -123,13 +121,13 @@ export default function CommandPalette({
                       onClose();
                       onAction(act.id);
                     }}
-                    className="w-full p-2.5 rounded-xl hover:bg-atelier-rose50 text-left flex items-center justify-between text-atelier-charcoal hover:text-atelier-noir transition-colors group"
+                    className="w-full p-2.5 rounded-2xl hover:bg-studio-canvas text-left flex items-center justify-between text-text-ink transition-colors group min-h-[44px]"
                   >
                     <div className="flex items-center gap-2.5">
-                      <Icon className="w-4 h-4 text-atelier-rose500" />
+                      <Icon className="w-4 h-4 text-brand-wine" />
                       <span className="font-semibold text-xs">{act.label}</span>
                     </div>
-                    <ArrowRight className="w-3.5 h-3.5 text-atelier-muted group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-3.5 h-3.5 text-text-muted group-hover:translate-x-1 transition-transform" />
                   </button>
                 );
               })}
@@ -139,7 +137,7 @@ export default function CommandPalette({
           {/* Matched Clients */}
           {filteredClients.length > 0 && (
             <div className="space-y-1">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-atelier-muted px-2.5 block">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-text-muted px-2.5 block">
                 Clients ({filteredClients.length})
               </span>
               {filteredClients.slice(0, 4).map((c) => (
@@ -149,23 +147,23 @@ export default function CommandPalette({
                     onClose();
                     onSelectClient(c);
                   }}
-                  className="w-full p-2.5 rounded-xl hover:bg-atelier-cream text-left flex items-center justify-between transition-colors group"
+                  className="w-full p-2.5 rounded-2xl hover:bg-studio-canvas text-left flex items-center justify-between transition-colors group min-h-[44px]"
                 >
                   <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-xl bg-atelier-rose100 text-atelier-rose600 font-serif font-bold text-xs flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-xl bg-brand-wine text-white font-display font-bold text-xs flex items-center justify-center shrink-0">
                       {c.name.charAt(0)}
                     </div>
                     <div>
-                      <span className="font-semibold text-atelier-noir text-xs block">
+                      <span className="font-semibold text-text-ink text-xs block">
                         {c.name}
                       </span>
-                      <span className="text-[10px] text-atelier-muted">
+                      <span className="text-[10px] text-text-muted">
                         {c.phone} • {c.preferredShape || 'Almond'}
                       </span>
                     </div>
                   </div>
                   {c.vip && (
-                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
                       VIP
                     </span>
                   )}
@@ -177,7 +175,7 @@ export default function CommandPalette({
           {/* Matched Appointments */}
           {filteredAppointments.length > 0 && (
             <div className="space-y-1">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-atelier-muted px-2.5 block">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-text-muted px-2.5 block">
                 Appointments ({filteredAppointments.length})
               </span>
               {filteredAppointments.slice(0, 3).map((a) => (
@@ -187,20 +185,20 @@ export default function CommandPalette({
                     onClose();
                     onSelectAppointment(a);
                   }}
-                  className="w-full p-2.5 rounded-xl hover:bg-atelier-cream text-left flex items-center justify-between transition-colors"
+                  className="w-full p-2.5 rounded-2xl hover:bg-studio-canvas text-left flex items-center justify-between transition-colors min-h-[44px]"
                 >
                   <div className="flex items-center gap-2.5">
-                    <Calendar className="w-4 h-4 text-atelier-rose500 shrink-0" />
+                    <Calendar className="w-4 h-4 text-brand-wine shrink-0" />
                     <div>
-                      <span className="font-semibold text-atelier-noir text-xs block">
+                      <span className="font-semibold text-text-ink text-xs block">
                         {a.clientName} — {a.serviceName}
                       </span>
-                      <span className="text-[10px] text-atelier-muted">
+                      <span className="text-[10px] text-text-muted">
                         {a.date} at {a.time} (₹{Number(a.price).toLocaleString('en-IN')})
                       </span>
                     </div>
                   </div>
-                  <span className="text-[10px] font-bold text-atelier-rose600">
+                  <span className="text-[10px] font-bold text-brand-wine">
                     {a.status}
                   </span>
                 </button>
@@ -209,19 +207,18 @@ export default function CommandPalette({
           )}
 
           {quickActions.length === 0 && filteredClients.length === 0 && filteredAppointments.length === 0 && (
-            <p className="text-center py-6 text-atelier-muted italic">
+            <p className="text-center py-6 text-text-muted italic">
               No matching clients or actions found for "{query}".
             </p>
           )}
         </div>
 
         {/* Footer info */}
-        <div className="p-3 bg-atelier-cream/50 border-t border-atelier-champagneBorder/60 text-[10px] text-atelier-muted flex items-center justify-between px-4">
-          <span>Tip: Press <kbd className="font-mono bg-white px-1 py-0.5 rounded border">↑</kbd> <kbd className="font-mono bg-white px-1 py-0.5 rounded border">↓</kbd> to navigate</span>
-          <span>Nails by Sirii Command OS</span>
+        <div className="p-3 bg-studio-canvas/50 border-t border-border-subtle text-[11px] text-text-muted flex items-center justify-between px-4">
+          <span>Tip: Press <kbd className="font-mono bg-white px-1.5 py-0.5 rounded border border-border-subtle">↑</kbd> <kbd className="font-mono bg-white px-1.5 py-0.5 rounded border border-border-subtle">↓</kbd> to navigate</span>
+          <span className="font-medium text-brand-wine">Nails by Sirii Command Palette</span>
         </div>
       </div>
     </div>
   );
 }
-

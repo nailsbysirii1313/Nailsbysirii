@@ -9,9 +9,11 @@
     "dev": "concurrently -n \"SERVER,CLIENT\" -c \"magenta,cyan\" \"npm run dev:server\" \"npm run dev:client\"",
     "build": "vite build",
     "preview": "vite preview",
+    "seed:supabase": "node scripts/seed-supabase.js",
     "start": "NODE_ENV=production node server/index.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
@@ -38,4 +40,3 @@
     "vite": "^6.2.0"
   }
 }
-

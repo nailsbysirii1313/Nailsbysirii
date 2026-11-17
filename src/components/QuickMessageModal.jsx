@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Send, Copy, Check, MessageSquare, Phone, Sparkles } from 'lucide-react';
+import { formatTime12h } from '../utils/dateTime';
 
 export default function QuickMessageModal({
   isOpen,
@@ -20,24 +21,25 @@ export default function QuickMessageModal({
 
     const cName = client.name;
     const aptDate = appointment ? appointment.date : 'your upcoming date';
-    const aptTime = appointment ? appointment.time : 'your scheduled time';
-    const aptService = appointment ? appointment.serviceName : 'your cute nail set';
+    const rawTime = appointment ? appointment.time : 'your scheduled time';
+    const aptTime = appointment ? (formatTime12h(appointment.time) || appointment.time) : rawTime;
+    const aptService = appointment ? appointment.serviceName : 'your bespoke nail treatment';
 
     let text = '';
     if (template === 'confirmation') {
-      text = `Hey ${cName}! Your nail appointment with Sirii is confirmed for ${aptDate} at ${aptTime}!\n\nService: ${aptService}\nStudio: ${address}\n\nPlease reach on time babe! If you need old gel removed, please let Sirii know beforehand. Can't wait to do your nails!`;
+      text = `Hello ${cName}! Your appointment at Nails by Sirii is confirmed for ${aptDate} at ${aptTime}.\n\nTreatment: ${aptService}\nStudio: ${address}\n\nEach session is reserved exclusively for you with sterile preparation. If you require previous gel removal or have design references, please let Sirii know beforehand. We look forward to welcoming you!`;
     } else if (template === 'reminder') {
-      text = `Hey ${cName}! Just a sweet reminder about your nail appointment with Sirii tomorrow at ${aptTime}!\n\nIf you have any cute nail inspo or Pinterest photos, keep them ready! See you soon babe`;
+      text = `Hello ${cName}! Friendly reminder regarding your appointment tomorrow at ${aptTime} at Nails by Sirii.\n\nIf you have reference art or moodboard ideas, feel free to share them in advance. Looking forward to your session!`;
     } else if (template === 'aftercare') {
-      text = `Hey ${cName}! Thank you so much for getting your nails done with Sirii today! Loved having you!\n\nHere are a few quick tips to keep them looking fresh & lasting 3-4 weeks:\n1. Apply cuticle oil or coconut oil daily\n2. Treat your nails like jewels, not tools (don't pop cans with them!)\n3. Wear gloves when washing dishes\n\nShow off your cute nails and tag us on Instagram!`;
+      text = `Hello ${cName}! Thank you for visiting Nails by Sirii today. To preserve your manicure architecture and ensure 3–4 weeks of wear:\n\n1. Apply cuticle oil daily to nourish the nail matrix\n2. Avoid using nails as tools to open cans or containers\n3. Wear gloves during household cleaning\n4. Never peel or force off gel coatings\n\nTag us on Instagram @nails.by.sirii if you share your fresh set!`;
     } else if (template === 'birthday') {
-      text = `Happy Birthday ${cName}! Sending you lots of love from Nails by Sirii! To celebrate, you get a free cute nail art upgrade on your next set with Sirii anytime this month! Book your birthday slot soon`;
+      text = `Happy Birthday ${cName}! Warmest wishes from Nails by Sirii! To celebrate your special month, enjoy a complimentary nail art upgrade on your next visit anytime this month. Let us know when you'd like to book your birthday session!`;
     } else {
-      text = `Hey ${cName}! `;
+      text = `Hello ${cName}! `;
     }
 
     setMessageText(text);
-  }, [template, client, appointment, isOpen]);
+  }, [template, client, appointment, isOpen, address]);
 
   if (!isOpen || !client) return null;
 
@@ -60,32 +62,32 @@ export default function QuickMessageModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-atelier-noir/40 backdrop-blur-sm animate-fade-in overflow-y-auto">
-      <div className="bg-white rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 shadow-float border-t sm:border border-atelier-champagneBorder relative max-h-[92vh] overflow-y-auto">
-        <div className="w-10 h-1.5 rounded-full bg-stone-300 mx-auto mb-3 sm:hidden" />
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-text-ink/50 backdrop-blur-sm animate-fade-in overflow-y-auto">
+      <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 shadow-studio border-t sm:border border-border-subtle relative max-h-[92vh] overflow-y-auto">
+        <div className="w-12 h-1.5 rounded-full bg-border-subtle mx-auto mb-3 sm:hidden" />
         <button
           onClick={onClose}
-          className="absolute top-4 sm:top-5 right-4 sm:right-5 p-2 rounded-full text-atelier-muted hover:text-atelier-noir hover:bg-atelier-cream transition-colors"
+          className="absolute top-4 sm:top-5 right-4 sm:right-5 p-2 rounded-full text-text-muted hover:text-text-ink hover:bg-studio-canvas transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="mb-5">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-atelier-rose100 text-atelier-rose600 text-xs font-semibold mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-canvas border border-border-subtle text-brand-wine text-xs font-semibold mb-2">
             <MessageSquare className="w-3.5 h-3.5" />
             <span>Direct Client Messaging</span>
           </div>
-          <h3 className="font-serif italic font-bold text-2xl text-atelier-noir">
+          <h3 className="font-display font-semibold text-2xl text-text-ink">
             Message {client.name}
           </h3>
-          <p className="text-xs text-atelier-muted mt-0.5">
-            Send polished, pre-formatted confirmations, 24-hr reminders, or aftercare protocols.
+          <p className="text-xs text-text-muted mt-0.5 leading-relaxed">
+            Send polished, pre-formatted confirmations, reminders, or aftercare protocols.
           </p>
         </div>
 
         {/* Template Selector Chips */}
         <div className="space-y-2 mb-4 text-xs">
-          <span className="font-semibold text-atelier-charcoal block">Select Template</span>
+          <span className="font-semibold text-text-ink block">Select Template</span>
           <div className="flex flex-wrap gap-2">
             {[
               { id: 'reminder', label: '24-Hour Reminder' },
@@ -98,10 +100,10 @@ export default function QuickMessageModal({
                 key={t.id}
                 type="button"
                 onClick={() => setTemplate(t.id)}
-                className={`px-3 py-1.5 rounded-xl font-semibold transition-all ${
+                className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all min-h-[38px] ${
                   template === t.id
-                    ? 'bg-atelier-rose500 text-white shadow-sm'
-                    : 'bg-atelier-cream/60 text-atelier-charcoal border border-atelier-champagneBorder hover:bg-white'
+                    ? 'bg-brand-wine text-white shadow-xs'
+                    : 'bg-studio-canvas text-text-ink border border-border-subtle hover:bg-studio-subtle'
                 }`}
               >
                 {t.label}
@@ -112,42 +114,42 @@ export default function QuickMessageModal({
 
         {/* Message Editor */}
         <div className="space-y-2 mb-5 text-xs">
-          <label className="font-semibold text-atelier-charcoal block">
+          <label className="font-semibold text-text-ink block">
             Message Preview (Editable)
           </label>
           <textarea
             rows={6}
             value={messageText}
             onChange={(e) => setMessageText(e.target.value)}
-            className="w-full p-3.5 rounded-2xl border border-atelier-champagneBorder bg-atelier-cream/40 focus:bg-white focus:border-atelier-rose400 outline-none leading-relaxed text-base sm:text-xs font-medium"
+            className="w-full p-3.5 rounded-2xl border border-border-subtle bg-studio-canvas/50 focus:bg-white focus:border-brand-wine outline-none leading-relaxed text-base sm:text-xs font-medium text-text-ink"
           />
         </div>
 
         {/* Actions */}
-        <div className="space-y-2 text-xs">
+        <div className="space-y-2.5 text-xs">
           <div className="grid grid-cols-2 gap-2.5">
             <button
               onClick={handleWhatsApp}
-              className="py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-95"
+              className="py-3 px-4 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold transition-all flex items-center justify-center gap-2 shadow-xs active:scale-95 min-h-[44px]"
             >
-              <Send className="w-3.5 h-3.5" />
+              <Send className="w-4 h-4" />
               <span>Send on WhatsApp</span>
             </button>
 
             <button
               onClick={handleSms}
-              className="py-2.5 px-4 rounded-xl bg-atelier-noir hover:bg-atelier-charcoal text-white font-semibold transition-all flex items-center justify-center gap-1.5 shadow-sm active:scale-95"
+              className="py-3 px-4 rounded-2xl bg-text-ink hover:bg-stone-800 text-white font-semibold transition-all flex items-center justify-center gap-2 shadow-xs active:scale-95 min-h-[44px]"
             >
-              <Phone className="w-3.5 h-3.5" />
-              <span>Send via iMessage / SMS</span>
+              <Phone className="w-4 h-4" />
+              <span>Send via SMS</span>
             </button>
           </div>
 
           <button
             onClick={handleCopy}
-            className="w-full py-2.5 rounded-xl border border-atelier-champagneBorder bg-white hover:bg-atelier-cream text-atelier-charcoal font-semibold transition-colors flex items-center justify-center gap-1.5"
+            className="w-full py-3 rounded-2xl border border-border-subtle bg-studio-surface hover:bg-studio-canvas text-text-ink font-semibold transition-colors flex items-center justify-center gap-2 shadow-xs min-h-[44px]"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-4 h-4 text-emerald-700" /> : <Copy className="w-4 h-4 text-text-muted" />}
             <span>{copied ? 'Copied to Clipboard' : 'Copy Message Text'}</span>
           </button>
         </div>
@@ -155,4 +157,3 @@ export default function QuickMessageModal({
     </div>
   );
 }
-

@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {
   Sparkles,
+  Sparkle,
+  Gem,
+  Crown,
+  Flower2,
+  Wand2,
+  Paintbrush,
+  Ribbon,
+  Feather,
+  Stars,
+  PackageCheck,
+  HeartHandshake,
   Calendar,
   Clock,
   User,
@@ -15,8 +26,6 @@ import {
   Heart,
   Share2,
   Lock,
-  Eye,
-  EyeOff,
   AlertTriangle,
   MessageSquare,
   X,
@@ -29,23 +38,188 @@ import {
   Droplets,
   Layers,
   ChevronDown,
-  Wallet
+  Camera,
+  Image as ImageIcon,
+  Compass,
+  BookOpen,
+  ShoppingBag,
+  Package,
+  Truck,
+  Ruler,
+  HelpCircle,
+  Copy,
+  QrCode,
+  Quote,
+  ThumbsUp
 } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import { InstagramIcon } from './Icons';
 import StudioLogo from './StudioLogo';
 import EmergencyRepairModal from './EmergencyRepairModal';
 import ShareCatalogueModal from './ShareCatalogueModal';
 import confetti from 'canvas-confetti';
 import { calculateCustomSet, SHAPES, LENGTHS, BASE_COLORS, FINISHES } from '../utils/customizerCalculator';
-import { getKolkataTodayString, getKolkataTomorrowString, getAvailableSlotsForDuration } from '../utils/dateTime';
+import { getKolkataTodayString, getKolkataTomorrowString, getAvailableSlotsForDuration, formatTime12h } from '../utils/dateTime';
 import NailTipSchematic from './NailTipSchematic';
+
+const DEFAULT_STUDIO_REVIEWS = [
+  {
+    id: 'rev_google_5',
+    clientName: 'Da Suttiwanna',
+    rating: 5,
+    serviceRendered: 'Hand-Painted Floral Nail Art',
+    aestheticTag: 'Detailed Hand Art',
+    comment: "It was my first time getting my nails done at Nails by Sirii and I can't get over how gorgeous these nails turned out! I showed them the inspiration pictures and they executed it perfectly. The artistry and precision in the hand painted flowers are truly impressive. Thank you so much, I love them!",
+    date: 'Verified Client',
+    source: 'Google Review',
+    likes: 42
+  },
+  {
+    id: 'rev_google_3',
+    clientName: 'Simran Thapa',
+    rating: 5,
+    serviceRendered: 'Almond Nude & Chrome French',
+    aestheticTag: 'Classy & Neat Finishing',
+    comment: "Got my nails done by siri and I'm in love! I chose almond shape with nude base and golden chrome French tips. Finishing is super neat and classy, exactly like the reference picture. The couple was very polite and hygienic. Totally worth it, highly recommend!",
+    date: '4 weeks ago',
+    source: 'Google Review',
+    likes: 31
+  },
+  {
+    id: 'rev_google_1',
+    clientName: 'Paaky Biswas',
+    rating: 5,
+    serviceRendered: 'Nail Extensions & Gel Overlay',
+    aestheticTag: 'Super Clean & Friendly',
+    comment: 'The studio is super clean, the vibe is very friendly. Simran mam is amazing at understanding what you want. She gives such great ideas and helps you find the perfect design and colour! Definitely coming back again. Highly recommend!',
+    date: '2 months ago',
+    source: 'Google Review',
+    likes: 24
+  },
+  {
+    id: 'rev_google_8',
+    clientName: 'Jyoti Mehta',
+    rating: 5,
+    serviceRendered: 'Nail Extensions & Inspo Set',
+    aestheticTag: 'Exact Match to Inspo',
+    comment: 'I had a great experience with both of them. They are not just great at what they do but very humble and calm human beings. I just showed them a picture of what I wanted and I got the exact same. Definitely going to revisit. Much love',
+    date: '6 months ago',
+    source: 'Google Review',
+    likes: 22
+  },
+  {
+    id: 'rev_google_2',
+    clientName: 'Pratiksha Raturi',
+    rating: 5,
+    serviceRendered: 'Custom Nail Art & Manicure',
+    aestheticTag: 'Relaxing & Cosy Studio',
+    comment: "Absolutely loved my nails! They turned out so pretty, and I'm genuinely happy with how they look. The owners were super sweet, friendly, and helpful with their suggestions, which made the whole experience even better. They really understand what suits you and help you choose the best design.",
+    date: '4 weeks ago',
+    source: 'Google Review',
+    likes: 19
+  },
+  {
+    id: 'rev_google_7',
+    clientName: 'Boby-Kabo Rana',
+    rating: 5,
+    serviceRendered: '1:1 Certified Nail Course',
+    aestheticTag: 'Nail Tech Academy',
+    comment: "Simran ma'am is so good in teaching Nail Course. I was a beginner to understand the whole things about Nails, but Ma'am and Sir both made me super Pro and trust me everyone now I am doing so good. If you are planning to get your nails done or take a Nail Tech Course, I'll genuinely suggest Nails by Sirii — super reasonable!",
+    date: '4 months ago',
+    source: 'Google Review',
+    likes: 29
+  },
+  {
+    id: 'rev_google_4',
+    clientName: 'Ashutosh Duklan',
+    rating: 5,
+    serviceRendered: 'Nail Extensions',
+    aestheticTag: 'Warm Hospitality',
+    comment: "Recently visited Nails by Siri with my sister, and this review isn't just about the amazing nail services, it's also about the incredible hospitality we experienced there. The couple running the studio was genuinely warm, sweet, and extremely welcoming. The services were absolutely top-notch!",
+    date: '7 months ago',
+    source: 'Google Review',
+    likes: 15
+  },
+  {
+    id: 'rev_google_6',
+    clientName: 'Rohini Rwt',
+    rating: 5,
+    serviceRendered: 'Sculpted Acrylic Extensions',
+    aestheticTag: 'Neat & Polite Staff',
+    comment: 'I had a wonderful experience! The nail extensions turned out so beautiful and exactly how I wanted. The work was neat, the finishing was perfect, and the staff was very polite and friendly. They paid attention to every little detail. Highly recommended!',
+    date: '1 week ago',
+    source: 'Google Review',
+    likes: 18
+  },
+  {
+    id: 'rev_google_9',
+    clientName: 'Tannu Dhiman',
+    rating: 5,
+    serviceRendered: 'Custom Gel Extensions',
+    aestheticTag: 'Sweet Owners & Exact Nails',
+    comment: 'I have done the nails exactly as told and they look very nice to me and the owner, both are very sweet, thank you so much, nails by Siri!',
+    date: '2 months ago',
+    source: 'Google Review',
+    likes: 14
+  }
+];
+
+const REVIEW_CATEGORIES = [
+  'All Reviews',
+  'Exact Inspo Match',
+  'Extensions & BIAB',
+  'Hand-Painted Art',
+  'Hygiene & Hospitality',
+  'Nail Tech Academy'
+];
+
+const AVATAR_BG_COLORS = [
+  'bg-rose-100 text-rose-800 border-rose-200',
+  'bg-amber-100 text-amber-800 border-amber-200',
+  'bg-emerald-100 text-emerald-800 border-emerald-200',
+  'bg-purple-100 text-purple-800 border-purple-200',
+  'bg-sky-100 text-sky-800 border-sky-200',
+  'bg-orange-100 text-orange-800 border-orange-200'
+];
+
+function getInitials(name) {
+  if (!name) return 'NB';
+  const parts = name.trim().split(' ');
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function getAvatarColor(name) {
+  let hash = 0;
+  for (let i = 0; i < (name || '').length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return AVATAR_BG_COLORS[Math.abs(hash) % AVATAR_BG_COLORS.length];
+}
+
+function classifyReview(r) {
+  const text = `${r.comment || ''} ${r.serviceRendered || ''} ${r.aestheticTag || ''}`.toLowerCase();
+  if (text.includes('course') || text.includes('teaching') || text.includes('academy') || text.includes('student') || text.includes('pro')) {
+    return 'Nail Tech Academy';
+  }
+  if (text.includes('inspo') || text.includes('picture') || text.includes('photo') || text.includes('reference') || text.includes('exact') || text.includes('same')) {
+    return 'Exact Inspo Match';
+  }
+  if (text.includes('art') || text.includes('flower') || text.includes('chrome') || text.includes('painted') || text.includes('tips') || text.includes('design')) {
+    return 'Hand-Painted Art';
+  }
+  if (text.includes('clean') || text.includes('hygien') || text.includes('polite') || text.includes('sweet') || text.includes('hospitality') || text.includes('welcoming') || text.includes('vibe') || text.includes('owners')) {
+    return 'Hygiene & Hospitality';
+  }
+  return 'Extensions & BIAB';
+}
 
 export default function ClientWebsite({
   services = [],
   settings,
   reviews = [],
-  hidePrices = false,
-  setHidePrices,
+  pressOnProducts = [],
+  onOrderPressOn,
   onOpenPasscodeModal,
   onBookingComplete,
   onSubmitRepair,
@@ -68,20 +242,20 @@ export default function ClientWebsite({
   const baseColors = BASE_COLORS;
   const finishes = FINISHES;
 
-  const [customShape, setCustomShape] = useState(shapes[0]);
-  const [customLength, setCustomLength] = useState(lengths[1]);
-  const [customBase, setCustomBase] = useState(baseColors[1]);
-  const [customFinish, setCustomFinish] = useState(finishes[0]);
+  const [customShape, setCustomShape] = useState(shapes[0]); // Almond
+  const [customLength, setCustomLength] = useState(lengths[1]); // Medium
+  const [customBase, setCustomBase] = useState(baseColors[1]); // Strawberry Jelly
+  const [customFinish, setCustomFinish] = useState(finishes[0]); // Hailey Glazed Chrome
 
   // Booking Flow State
   const [bookingStep, setBookingStep] = useState(1);
-  const [bookingMode, setBookingMode] = useState('service'); // 'service' | 'customSet' | 'lookbook'
+  const [bookingMode, setBookingMode] = useState('lookbook'); // 'lookbook' | 'customInspo' | 'customSet'
   const [selectedLook, setSelectedLook] = useState(null);
-  const [selectedServiceId, setSelectedServiceId] = useState(services[0]?.id || '');
-  const [selectedAddons, setSelectedAddons] = useState([]);
+  const [inspoUrl, setInspoUrl] = useState('');
+  const [inspoDescription, setInspoDescription] = useState('');
   const [selectedShape, setSelectedShape] = useState('Almond');
   const [selectedLength, setSelectedLength] = useState('Medium');
-  const [selectedAesthetic, setSelectedAesthetic] = useState('3D Chrome & Glaze');
+  const [selectedAesthetic, setSelectedAesthetic] = useState('Bespoke Nail Art');
   const [bookingDate, setBookingDate] = useState(() => getKolkataTomorrowString());
   const [bookingTime, setBookingTime] = useState('12:00');
   const [clientName, setClientName] = useState('');
@@ -90,9 +264,6 @@ export default function ClientWebsite({
   const [clientInstagram, setClientInstagram] = useState('');
   const [allergies, setAllergies] = useState('None');
   const [clientNotes, setClientNotes] = useState('');
-  const [clientAdvanceToggle, setClientAdvanceToggle] = useState(false);
-  const [clientAdvanceAmount, setClientAdvanceAmount] = useState(500);
-  const [clientUpiRef, setClientUpiRef] = useState('');
   const [isSubmittingBooking, setIsSubmittingBooking] = useState(false);
   const [confirmedBooking, setConfirmedBooking] = useState(null);
 
@@ -100,56 +271,438 @@ export default function ClientWebsite({
   const [reviewForm, setReviewForm] = useState({
     clientName: '',
     rating: 5,
-    serviceRendered: 'Signature BIAB Overlay',
-    aestheticTag: 'Glazed Pearl Donut',
+    serviceRendered: 'Acrylic Nail Sculpting',
+    aestheticTag: 'French Ombré Acrylic',
     comment: ''
   });
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
 
-  // Synchronize initial service selection
-  useEffect(() => {
-    if (!selectedServiceId && services.length > 0) {
-      setSelectedServiceId(services[0].id);
-    }
-  }, [services]);
+  // Reviews & Testimonials Filter and Interaction States
+  const [reviewFilter, setReviewFilter] = useState('All Reviews');
+  const [reviewLikes, setReviewLikes] = useState({
+    rev_google_5: 42,
+    rev_google_3: 31,
+    rev_google_1: 24,
+    rev_google_8: 22,
+    rev_google_2: 19,
+    rev_google_7: 29,
+    rev_google_4: 15,
+    rev_google_6: 18,
+    rev_google_9: 14,
+    rev_1794928419012: 16
+  });
+  const [likedReviews, setLikedReviews] = useState(new Set());
 
-  const selectedService = services.find((s) => s.id === selectedServiceId) || services[0];
-  const addonsList = services.filter((s) => s.category === 'Nail Art' || s.category === 'Add-on');
-
-  const toggleAddon = (name) => {
-    if (selectedAddons.includes(name)) {
-      setSelectedAddons(selectedAddons.filter((n) => n !== name));
-    } else {
-      setSelectedAddons([...selectedAddons, name]);
-    }
+  const handleToggleLikeReview = (reviewId) => {
+    setLikedReviews((prev) => {
+      const next = new Set(prev);
+      const isLiked = next.has(reviewId);
+      if (isLiked) {
+        next.delete(reviewId);
+        setReviewLikes((l) => ({ ...l, [reviewId]: Math.max(0, (l[reviewId] || 1) - 1) }));
+      } else {
+        next.add(reviewId);
+        setReviewLikes((l) => ({ ...l, [reviewId]: (l[reviewId] || 0) + 1 }));
+        if (onAddToast) {
+          onAddToast('Thank you!', 'Appreciation recorded for this client review.', 'success');
+        }
+      }
+      return next;
+    });
   };
 
-  // Customizer Calculation from shared Single Source of Truth
-  const customCalculation = calculateCustomSet({
-    length: customLength,
-    finish: customFinish
+  // Press-On Nails Boutique E-Commerce State
+  const defaultPressOnCatalog = [
+    {
+      id: 'pop_1',
+      title: 'Hailey Glazed Pearl Chrome',
+      collection: 'Signature Ethereal',
+      shape: 'Almond',
+      length: 'Medium',
+      baseColor: '#FDF2F8',
+      finish: 'Hailey Glazed Chrome',
+      price: 1299,
+      stock: 8,
+      isAvailable: true,
+      tag: 'Bestseller',
+      description: 'Ultra-popular pearlescent glazed chrome over sheer strawberry milk builder gel. Hand-buffed with salon chrome powder for an ethereal mirror shine.',
+      includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
+    },
+    {
+      id: 'pop_2',
+      title: 'Velvet Rose Quartz Cat-Eye',
+      collection: 'Magnetic Silk',
+      shape: 'Almond',
+      length: 'Long',
+      baseColor: '#BE185D',
+      finish: 'Velvet Cat-Eye',
+      price: 1499,
+      stock: 6,
+      isAvailable: true,
+      tag: 'Studio Pick',
+      description: 'Deep dimensional velvet magnetic shimmer refracting light across long sculpted stilettos. Dramatic, luxurious, and chip-proof.',
+      includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
+    },
+    {
+      id: 'pop_3',
+      title: '3D Molten Gold & Baroque Pearls',
+      collection: 'Artisan Couture',
+      shape: 'Coffin',
+      length: 'Medium',
+      baseColor: '#FFFBEB',
+      finish: 'Sculpted 3D Chrome',
+      price: 1699,
+      stock: 5,
+      isAvailable: true,
+      tag: 'Luxury Edition',
+      description: 'Hand-sculpted 3D liquid molten gold curves and real freshwater baroque pearl accents encrusted over an ivory porcelain bed.',
+      includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
+    },
+    {
+      id: 'pop_4',
+      title: 'French Ombré Classic Porcelain',
+      collection: 'Everyday Minimalist',
+      shape: 'Squoval',
+      length: 'Short',
+      baseColor: '#FCE7F3',
+      finish: 'High-Gloss Glass',
+      price: 1199,
+      stock: 10,
+      isAvailable: true,
+      tag: 'Clean Aesthetic',
+      description: 'Seamless airbrushed baby boomer pink-and-white ombré gradient with high-apex reinforcement. Natural, clean, and workplace ready.',
+      includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
+    },
+    {
+      id: 'pop_5',
+      title: 'Y2K Cyber Chrome Starbursts',
+      collection: 'Streetwear Art',
+      shape: 'Stiletto',
+      length: 'Long',
+      baseColor: '#F3F4F6',
+      finish: 'Reflective Chrome',
+      price: 1599,
+      stock: 4,
+      isAvailable: true,
+      tag: 'Trending',
+      description: 'High-shine liquid silver chrome starbursts, cross-stars, and geometric cyber accents set against a sheer neutral canvas.',
+      includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
+    },
+    {
+      id: 'pop_6',
+      title: 'Milky Quartz & Gold Leaf Inlay',
+      collection: 'Mineral Geode',
+      shape: 'Coffin',
+      length: 'Long',
+      baseColor: '#F5F5F4',
+      finish: 'Encapsulated Leaf',
+      price: 1499,
+      stock: 7,
+      isAvailable: true,
+      tag: 'Handcrafted',
+      description: 'Subtle translucent white marble veining swirled with pure 24K gold foil flecks suspended in crystal clear gel depth.',
+      includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
+    }
+  ];
+
+  // Active products in the store
+  const activePressOnProducts = (pressOnProducts && pressOnProducts.length > 0)
+    ? pressOnProducts
+    : defaultPressOnCatalog;
+
+  const [isSizingModalOpen, setIsSizingModalOpen] = useState(false);
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [selectedPressOnForOrder, setSelectedPressOnForOrder] = useState(null);
+  const [checkoutStep, setCheckoutStep] = useState(1); // 1: Size & Kit, 2: Address, 3: Payment, 4: Confirmed
+  const [copiedUpi, setCopiedUpi] = useState(false);
+
+  const [pressOnOrderForm, setPressOnOrderForm] = useState({
+    size: 'S',
+    customSizes: '',
+    wearMethod: 'Adhesive Jelly Tabs (Temporary 3–5 days, 100% reusable)',
+    quantity: 1,
+    clientName: '',
+    clientPhone: '',
+    clientEmail: '',
+    addressStreet: '',
+    addressCity: 'Dehradun',
+    addressState: 'Uttarakhand',
+    addressPincode: '',
+    notes: '',
+    paymentRef: ''
   });
-  const customizerTotalPrice = customCalculation.totalPrice;
-  const customizerTotalDuration = customCalculation.totalDuration;
+  const [isPlacingPressOnOrder, setIsPlacingPressOnOrder] = useState(false);
+  const [confirmedPressOnOrder, setConfirmedPressOnOrder] = useState(null);
 
-  const addonServices = addonsList.filter((a) => selectedAddons.includes(a.name));
-  const addonDuration = addonServices.reduce((sum, a) => sum + (a.duration || 0), 0);
-  const addonPrice = addonServices.reduce((sum, a) => sum + (a.price || 0), 0);
+  // Curated Design Booklet Items (Grouped by Category for clients browsing ideas)
+  const catalogueBooklet = [
+    // 1. ACRYLIC NAILS
+    {
+      id: 'acrylic_1',
+      category: 'Acrylic Nails',
+      title: 'French Ombré Acrylic Sculpture',
+      tag: 'Studio Classic',
+      desc: 'Seamless airbrushed transition of soft white powder into a translucent blush pink acrylic bed. Sculpted with strong structural apex architecture.',
+      shape: SHAPES[0], // Almond
+      length: LENGTHS[2], // Long
+      base: BASE_COLORS[1],
+      finish: FINISHES[5],
+      durationNum: 90,
+      highlights: ['Seamless pink-and-white ombré blend', 'Structural apex reinforcement', 'Russian dry e-file prep included']
+    },
+    {
+      id: 'acrylic_2',
+      category: 'Acrylic Nails',
+      title: '3D Sculpted Acrylic Floral Bouquet',
+      tag: 'Hand-Carved Art',
+      desc: 'Hand-carved dimensional acrylic petals with micro freshwater pearl and gold bead centers over a soft nude acrylic base.',
+      shape: SHAPES[1], // Coffin
+      length: LENGTHS[2], // Long
+      base: BASE_COLORS[2],
+      finish: FINISHES[3],
+      durationNum: 105,
+      highlights: ['Hand-sculpted 3D acrylic florals', 'Micro pearl & crystal accents', 'Customizable petal placement']
+    },
+    {
+      id: 'acrylic_3',
+      category: 'Acrylic Nails',
+      title: 'Encapsulated Gold Leaf & Glitter Acrylic',
+      tag: 'Depth Encapsulation',
+      desc: 'Pure metallic gold foils and holographic iridescent glitter suspended under crystal-clear sculptured acrylic glass tips.',
+      shape: SHAPES[4], // Stiletto
+      length: LENGTHS[3], // Extra Long
+      base: BASE_COLORS[5],
+      finish: FINISHES[0],
+      durationNum: 100,
+      highlights: ['Internal depth encapsulation', 'Zero snag, ultra-smooth surface', 'High-gloss mirror finish']
+    },
+    {
+      id: 'acrylic_4',
+      category: 'Acrylic Nails',
+      title: 'Velvet Cat-Eye Stiletto Acrylics',
+      tag: 'Magnetic Silk Shift',
+      desc: 'Deep dimensional velvet magnetic shimmer refracting light across long sculpted stilettos. Dramatic, luxurious, and chip-proof.',
+      shape: SHAPES[4], // Stiletto
+      length: LENGTHS[2], // Long
+      base: BASE_COLORS[4],
+      finish: FINISHES[1],
+      durationNum: 95,
+      highlights: ['Multi-angle magnetic illumination', 'Precision razor stiletto apex', 'Lasts 4+ weeks effortlessly']
+    },
+    {
+      id: 'acrylic_5',
+      category: 'Acrylic Nails',
+      title: 'Milky Quartz Marble Acrylic Inlay',
+      tag: 'Smoky Mineral Veins',
+      desc: 'Subtle translucent white and rose-tinted marble veining swirled throughout the acrylic body, finished with micro gold foil flecks.',
+      shape: SHAPES[1], // Coffin
+      length: LENGTHS[1], // Medium
+      base: BASE_COLORS[0],
+      finish: FINISHES[5],
+      durationNum: 90,
+      highlights: ['Dual-tone acrylic blending', 'Organic mineral marble veining', 'Reinforced stress zone']
+    },
 
-  const basePrice = bookingMode === 'customSet'
-    ? customizerTotalPrice
-    : bookingMode === 'lookbook'
-      ? (selectedLook?.priceNum || 2800)
-      : (selectedService?.price || 0);
+    // 2. BIAB / NATURAL BUILDER GEL
+    {
+      id: 'biab_1',
+      category: 'BIAB / Builder Gel',
+      title: 'Glazed Pearl Donut BIAB',
+      tag: 'Studio Signature',
+      desc: 'Pearlescent glazed chrome powder hand-buffed over sheer strawberry jelly builder gel. The quintessential ethereal modern manicure.',
+      shape: SHAPES[0], // Almond
+      length: LENGTHS[1], // Medium
+      base: BASE_COLORS[1],
+      finish: FINISHES[0],
+      durationNum: 75,
+      highlights: ['Micro-fine iridescent chrome buff', 'Flexible natural apex reinforcement', 'Gentle non-damaging soak-off']
+    },
+    {
+      id: 'biab_2',
+      category: 'BIAB / Builder Gel',
+      title: 'Milky White Clean Chrome BIAB',
+      tag: 'Clean Aesthetic',
+      desc: 'Semi-translucent porcelain white builder gel with a soft champagne reflection. Elegant, minimalist, and flattering on any skin tone.',
+      shape: SHAPES[2], // Squoval
+      length: LENGTHS[0], // Short
+      base: BASE_COLORS[0],
+      finish: FINISHES[0],
+      durationNum: 75,
+      highlights: ['Porcelain semi-sheer overlay', 'Reinforces weak natural nails', 'Ultra-clean cuticle framing']
+    },
+    {
+      id: 'biab_3',
+      category: 'BIAB / Builder Gel',
+      title: 'Micro-French Porcelain BIAB',
+      tag: 'Precision Line',
+      desc: 'Ultra-thin, razor-sharp white smile line painted along the free edge over a natural cashmere nude builder gel overlay.',
+      shape: SHAPES[3], // Round
+      length: LENGTHS[0], // Short
+      base: BASE_COLORS[2],
+      finish: FINISHES[4],
+      durationNum: 75,
+      highlights: ['Hand-painted micro tip detailing', 'High-apex natural curve', 'Zero lifting for 3–4 weeks']
+    },
+    {
+      id: 'biab_4',
+      category: 'BIAB / Builder Gel',
+      title: 'Aura Halo Soft Gradient BIAB',
+      tag: 'Blush Gradient',
+      desc: 'Soft airbrushed rose blush aura glow diffused from the nail center outward onto a translucent milk builder base.',
+      shape: SHAPES[0], // Almond
+      length: LENGTHS[1], // Medium
+      base: BASE_COLORS[3],
+      finish: FINISHES[5],
+      durationNum: 80,
+      highlights: ['Seamless aura gradient transition', 'Gentle builder gel protection', 'High-shine glass topcoat']
+    },
 
-  const baseDuration = bookingMode === 'customSet'
-    ? customizerTotalDuration
-    : bookingMode === 'lookbook'
-      ? (selectedLook?.durationNum || 75)
-      : (selectedService?.duration || 60);
+    // 3. GEL-X SOFT GEL EXTENSIONS
+    {
+      id: 'gelx_1',
+      category: 'Gel-X Extensions',
+      title: 'Sculpted 3D Liquid Chrome Gel-X',
+      tag: 'Futuristic Organic',
+      desc: 'Raised molten silver 3D gel curves winding along the contours of lightweight full-cover soft gel extension tips.',
+      shape: SHAPES[1], // Coffin
+      length: LENGTHS[2], // Long
+      base: BASE_COLORS[0],
+      finish: FINISHES[2],
+      durationNum: 90,
+      highlights: ['Raised 3D liquid metal textures', 'Apres-style lightweight soft gel', 'Zero natural nail damage']
+    },
+    {
+      id: 'gelx_2',
+      category: 'Gel-X Extensions',
+      title: 'Glass Aura Jelly Gel-X',
+      tag: 'Prismatic Glass',
+      desc: 'High-transparency jelly tinted tips with multi-tonal holographic chrome reflection that shifts with sunlight.',
+      shape: SHAPES[0], // Almond
+      length: LENGTHS[1], // Medium
+      base: BASE_COLORS[5],
+      finish: FINISHES[0],
+      durationNum: 85,
+      highlights: ['Crystal-clear glass transparency', 'Custom fitted to nail sidewalls', 'Featherlight comfortable feel']
+    },
+    {
+      id: 'gelx_3',
+      category: 'Gel-X Extensions',
+      title: 'Tortoiseshell Amber Inlay Gel-X',
+      tag: 'Vintage Luxury',
+      desc: 'Rich amber, caramel, and black layered tortoiseshell pattern suspended with dimensional depth between clear gel coats.',
+      shape: SHAPES[5], // Square
+      length: LENGTHS[1], // Medium
+      base: BASE_COLORS[2],
+      finish: FINISHES[5],
+      durationNum: 90,
+      highlights: ['Multi-layer depth technique', 'Warm vintage amber palette', 'Finished with gold micro accents']
+    },
 
-  const totalPrice = basePrice + addonPrice;
-  const totalDuration = baseDuration + addonDuration;
+    // 4. HAND-PAINTED NAIL ART
+    {
+      id: 'art_1',
+      category: 'Hand-Painted Art',
+      title: 'Intricate Wildflower Botanicals',
+      tag: 'Micro-Fine Floral',
+      desc: 'Delicate hand-painted micro botanical vines, leaves, and wildflower blossoms individually rendered with fine artist brushes.',
+      shape: SHAPES[0], // Almond
+      length: LENGTHS[1], // Medium
+      base: BASE_COLORS[3],
+      finish: FINISHES[5],
+      durationNum: 95,
+      highlights: ['100% hand-painted with micro brush', 'Unique composition per nail', 'Matte or high-gloss finish']
+    },
+    {
+      id: 'art_2',
+      category: 'Hand-Painted Art',
+      title: 'Y2K Cyber Chrome Starbursts',
+      tag: 'Reflective Stars',
+      desc: 'High-shine silver chrome starbursts, cross-stars, and geometric cyber accents set against a sheer neutral canvas.',
+      shape: SHAPES[1], // Coffin
+      length: LENGTHS[2], // Long
+      base: BASE_COLORS[1],
+      finish: FINISHES[2],
+      durationNum: 90,
+      highlights: ['Ultra-reflective chrome pigment', 'Symmetrical star placements', 'Modern streetwear aesthetic']
+    },
+
+    // 5. BRIDAL & OCCASION
+    {
+      id: 'bridal_1',
+      category: 'Bridal & Occasion',
+      title: 'Luxe Pearl & Crystal Pavé',
+      tag: 'Wedding & Celebration',
+      desc: 'Graduated real freshwater-look pearls and genuine Swarovski crystal placements clustered along the cuticle and free edge.',
+      shape: SHAPES[0], // Almond
+      length: LENGTHS[1], // Medium
+      base: BASE_COLORS[1],
+      finish: FINISHES[3],
+      durationNum: 100,
+      highlights: ['Secure crystal encapsulation', 'Soft bridal blush nude base', 'Photograph-perfect elegance']
+    },
+    {
+      id: 'bridal_2',
+      category: 'Bridal & Occasion',
+      title: 'Romantic White Ribbon & Bows',
+      tag: 'Couture Feminine',
+      desc: 'Raised hand-formed 3D gel ribbon bows and delicate white lace detailing over a sheer milk-bath ombré background.',
+      shape: SHAPES[0], // Almond
+      length: LENGTHS[2], // Long
+      base: BASE_COLORS[0],
+      finish: FINISHES[3],
+      durationNum: 95,
+      highlights: ['3D sculpted gel ribbon bows', 'Airy lace pattern accents', 'Bridal trousseau ready']
+    },
+
+    // 6. PRESS-ON NAILS
+    {
+      id: 'presson_1',
+      category: 'Press-On Nails',
+      title: 'Custom-Fitted Luxury Press-On Set',
+      tag: 'Reusable Handcrafted',
+      desc: 'Custom-sized, reusable artisan nail set handcrafted with salon-quality builder gel and hand-painted art. Delivered with application kit.',
+      shape: SHAPES[0], // Almond
+      length: LENGTHS[1], // Medium
+      base: BASE_COLORS[1],
+      finish: FINISHES[0],
+      durationNum: 60,
+      highlights: ['Made to your exact nail measurements', 'Reusable 5+ times with proper care', 'Shipped with complete prep kit']
+    }
+  ];
+
+  // Catalogue Category Options
+  const catalogueCategories = [
+    'All Designs',
+    'Acrylic Nails',
+    'BIAB / Builder Gel',
+    'Gel-X Extensions',
+    'Hand-Painted Art',
+    'Bridal & Occasion',
+    'Press-On Nails'
+  ];
+
+  // Filtered catalogue items
+  const filteredCatalogue = catalogueBooklet.filter((item) => {
+    const q = (searchQuery || '').toLowerCase();
+    const matchesCategory =
+      activeCategory === 'All' ||
+      activeCategory === 'All Designs' ||
+      item.category === activeCategory;
+    const matchesSearch =
+      (item.title || '').toLowerCase().includes(q) ||
+      (item.category || '').toLowerCase().includes(q) ||
+      (item.desc || '').toLowerCase().includes(q) ||
+      (item.tag || '').toLowerCase().includes(q);
+    return matchesCategory && matchesSearch;
+  });
+
+  // Calculate duration
+  const totalDuration =
+    bookingMode === 'customSet'
+      ? 90
+      : bookingMode === 'lookbook' && selectedLook
+        ? selectedLook.durationNum
+        : 75;
 
   // Operating Hours (12:00 PM – 7:00 PM): Filter slots so service finishes before closing
   const timeSlots = getAvailableSlotsForDuration(totalDuration);
@@ -161,10 +714,21 @@ export default function ClientWebsite({
     }
   }, [totalDuration]);
 
-  // Reviews avg
-  const avgRating = reviews.length > 0
-    ? (reviews.reduce((sum, r) => sum + (Number(r.rating) || 5), 0) / reviews.length).toFixed(1)
+  // Reviews data & classification
+  const allReviews = (reviews && reviews.length > 0) ? reviews : DEFAULT_STUDIO_REVIEWS;
+
+  const avgRating = allReviews.length > 0
+    ? (allReviews.reduce((sum, r) => sum + (Number(r.rating) || 5), 0) / allReviews.length).toFixed(1)
     : '4.9';
+
+  const getCategoryCount = (category) => {
+    if (category === 'All Reviews') return allReviews.length;
+    return allReviews.filter((r) => classifyReview(r) === category).length;
+  };
+
+  const filteredReviews = reviewFilter === 'All Reviews'
+    ? allReviews
+    : allReviews.filter((r) => classifyReview(r) === reviewFilter);
 
   // Smooth scroll helper
   const scrollTo = (id) => {
@@ -175,50 +739,53 @@ export default function ClientWebsite({
     setMobileMenuOpen(false);
   };
 
-  // Handle select service from catalogue
-  const handleSelectFromCatalogue = (srv) => {
-    setBookingMode('service');
-    setSelectedLook(null);
-    setSelectedServiceId(srv.id);
+  // Select design from catalogue
+  const handleSelectLook = (item) => {
+    setBookingMode('lookbook');
+    setSelectedLook(item);
+    setSelectedAesthetic(item.title);
+    setSelectedShape(item.shape.name);
+    setSelectedLength(item.length.name);
+    setClientNotes(`Catalogue Look: ${item.title} (${item.category})`);
+
     scrollTo('booking-section');
     setBookingStep(1);
     if (onAddToast) {
-      onAddToast('Treatment Selected', `${srv.name} ready for reservation.`, 'success');
+      onAddToast('Design Selected', `"${item.title}" loaded into reservation.`, 'success');
     }
   };
 
-  // Handle apply custom set into booking
+  // Bring Your Own Inspo (Found online)
+  const handleSelectCustomInspo = () => {
+    setBookingMode('customInspo');
+    setSelectedLook(null);
+    setSelectedAesthetic('Custom Internet Inspo (Pinterest / Instagram)');
+    setClientNotes('Custom design found online. Image reference provided.');
+
+    scrollTo('booking-section');
+    setBookingStep(1);
+    if (onAddToast) {
+      onAddToast('Custom Inspo Mode', 'Ready to upload or describe your reference photo.', 'info');
+    }
+  };
+
+  // Apply custom set from Customizer
   const handleBookCustomSet = () => {
     setBookingMode('customSet');
     setSelectedLook(null);
     setSelectedShape(customShape.name);
     setSelectedLength(customLength.name);
     setSelectedAesthetic(`${customBase.name} with ${customFinish.name}`);
-    setClientNotes(`Custom Set: ${customShape.name}, ${customLength.name}, ${customBase.name}, ${customFinish.name}`);
+    setClientNotes(`Custom Silhouette: ${customShape.name}, ${customLength.name}, ${customBase.name}, ${customFinish.name}`);
 
     scrollTo('booking-section');
     setBookingStep(1);
     if (onAddToast) {
-      onAddToast('Custom Set Configured', `${customShape.name} (${customLength.name}) at ₹${customizerTotalPrice.toLocaleString('en-IN')} ready for reservation.`, 'success');
+      onAddToast('Silhouette Configured', `${customShape.name} (${customLength.name}) ready for reservation.`, 'success');
     }
   };
 
-  const handleBookLook = (item) => {
-    setBookingMode('lookbook');
-    setSelectedLook(item);
-    setSelectedAesthetic(item.title);
-    setSelectedShape(item.shape.name);
-    setSelectedLength(item.length.name);
-    setClientNotes(`Inspo Look: ${item.title} (${item.shape.name})`);
-
-    scrollTo('booking-section');
-    setBookingStep(1);
-    if (onAddToast) {
-      onAddToast('Look Selected', `${item.title} ready for reservation.`, 'success');
-    }
-  };
-
-  // Handle booking form submission
+  // Handle booking form submission (NO price calculation or deposit requirements)
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     if (!clientName.trim() || !clientPhone.trim()) {
@@ -238,49 +805,29 @@ export default function ClientWebsite({
     setIsSubmittingBooking(true);
 
     try {
-      const advanceNum = clientAdvanceToggle ? Math.min(totalPrice, Math.max(0, Number(clientAdvanceAmount) || 0)) : 0;
-      const pendingAmt = Math.max(0, totalPrice - advanceNum);
-
-      const serviceName = bookingMode === 'customSet'
-        ? `Custom Set: ${customShape.name} (${customLength.name})`
-        : bookingMode === 'lookbook'
-          ? `Inspo Look: ${selectedLook?.title || selectedAesthetic}`
-          : (selectedService?.name || 'Signature Nail Service');
-
-      const serviceId = bookingMode === 'customSet'
-        ? 'srv_custom'
-        : bookingMode === 'lookbook'
-          ? (selectedLook?.id || 'srv_look')
-          : (selectedService?.id || 'srv_1');
+      const designTitle =
+        bookingMode === 'customInspo'
+          ? `Custom Internet Inspo: ${inspoDescription.slice(0, 40) || 'Client Photo Reference'}`
+          : bookingMode === 'customSet'
+            ? `Custom Silhouette: ${customShape.name} (${customLength.name})`
+            : selectedLook?.title || selectedAesthetic;
 
       const payload = {
         clientName: clientName.trim(),
         clientPhone: clientPhone.trim(),
         clientEmail: clientEmail.trim(),
         clientInstagram: clientInstagram.trim(),
-        serviceId,
-        serviceName,
-        addonServiceNames: selectedAddons,
+        serviceId: selectedLook?.id || 'srv_catalogue',
+        serviceName: designTitle,
+        category: selectedLook?.category || 'Custom Request',
         date: bookingDate,
         time: bookingTime,
         duration: totalDuration,
-        price: totalPrice,
-        depositPaid: advanceNum,
-        advancePaid: advanceNum,
-        hasAdvancePayment: clientAdvanceToggle,
-        advancePaymentMethod: clientAdvanceToggle ? 'UPI (Google Pay / PhonePe)' : null,
-        pendingAmount: pendingAmt,
-        balanceDue: pendingAmt,
-        customSet: bookingMode === 'customSet' ? {
-          shape: customShape.name,
-          length: customLength.name,
-          baseColor: customBase.name,
-          finish: customFinish.name,
-          price: customizerTotalPrice,
-          duration: customizerTotalDuration,
-          lineItems: customCalculation.lineItems
-        } : null,
-        notes: `Preferences: ${selectedShape}, ${selectedLength}, ${selectedAesthetic}. Allergies: ${allergies}.${clientUpiRef ? ` Advance UPI UTR: ${clientUpiRef}.` : ''} Note: ${clientNotes}`,
+        shape: selectedShape,
+        length: selectedLength,
+        aesthetic: selectedAesthetic,
+        inspoUrl: inspoUrl.trim(),
+        notes: `Selected Design: ${designTitle}. Preferred Shape: ${selectedShape}, Length: ${selectedLength}. Inspo Link: ${inspoUrl || 'None'}. Allergies: ${allergies}. Notes: ${clientNotes} ${inspoDescription}`,
         notifyImmediate: true,
         status: 'Confirmed'
       };
@@ -299,152 +846,164 @@ export default function ClientWebsite({
       }
     } catch (err) {
       if (onAddToast) {
-        onAddToast('Failed to submit reservation', err.message, 'error');
+        onAddToast('Booking Error', err.message || 'Failed to submit reservation. Please try again.', 'error');
       }
     } finally {
       setIsSubmittingBooking(false);
     }
   };
 
-  // Handle Review submission
+  // Submit client review
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
     if (!reviewForm.clientName.trim() || !reviewForm.comment.trim()) {
-      if (onAddToast) onAddToast('Please fill in your name and review', 'error');
+      if (onAddToast) {
+        onAddToast('Incomplete Review', 'Please include your name and review experience.', 'error');
+      }
       return;
     }
+
     setIsSubmittingReview(true);
     try {
-      if (onSaveReview) {
-        await onSaveReview({
-          ...reviewForm,
-          verified: true,
-          date: getKolkataTodayString()
-        });
-      }
+      await onSaveReview({
+        ...reviewForm,
+        date: getKolkataTodayString()
+      });
       setShowReviewModal(false);
       setReviewForm({
         clientName: '',
         rating: 5,
-        serviceRendered: 'Signature BIAB Overlay',
-        aestheticTag: 'Glazed Pearl Donut',
+        serviceRendered: 'Acrylic Nail Sculpting',
+        aestheticTag: 'French Ombré Acrylic',
         comment: ''
       });
-      if (onAddToast) onAddToast('Thank you for sharing your experience!', 'success');
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 60,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+      if (onAddToast) {
+        onAddToast('Thank You!', 'Your review has been verified and added to the atelier showcase.', 'success');
+      }
     } catch (err) {
-      if (onAddToast) onAddToast(err.message || 'Failed to submit review', 'error');
+      if (onAddToast) {
+        onAddToast('Submission Failed', err.message, 'error');
+      }
     } finally {
       setIsSubmittingReview(false);
     }
   };
 
-  // Curated Lookbook items with geometric silhouettes
-  const lookbookItems = [
-    {
-      id: 'look_1',
-      title: 'Glazed Pearl Donut',
-      tag: 'Studio Signature',
-      desc: 'Pearlescent glazed chrome buffed over sheer strawberry jelly builder gel.',
-      shape: SHAPES[0], // Almond
-      length: LENGTHS[1], // Medium
-      base: BASE_COLORS[1], // Strawberry Jelly
-      finish: FINISHES[0], // Hailey Glazed Chrome
-      price: '₹2,800',
-      priceNum: 2800,
-      duration: '75 mins',
-      durationNum: 75
-    },
-    {
-      id: 'look_2',
-      title: 'Sculpted 3D Liquid Chrome',
-      tag: 'Editorial Art',
-      desc: 'Raised sculptural silver chrome ribbons over a milky semi-translucent base.',
-      shape: SHAPES[1], // Coffin
-      length: LENGTHS[2], // Long
-      base: BASE_COLORS[0], // Milky Silk
-      finish: FINISHES[2], // 3D Liquid Chrome
-      price: '₹3,800',
-      priceNum: 3800,
-      duration: '90 mins',
-      durationNum: 90
-    },
-    {
-      id: 'look_3',
-      title: 'Cosmic Cat-Eye Velvet',
-      tag: 'Magnetic Silk',
-      desc: 'Deep multi-dimensional magnetic shimmer with fluid velvet light refraction.',
-      shape: SHAPES[0], // Almond
-      length: LENGTHS[1], // Medium
-      base: BASE_COLORS[4], // Deep Noir
-      finish: FINISHES[1], // Cat-Eye Velvet
-      price: '₹3,100',
-      priceNum: 3100,
-      duration: '80 mins',
-      durationNum: 80
-    },
-    {
-      id: 'look_4',
-      title: 'Micro-French Porcelain',
-      tag: 'Clean Architecture',
-      desc: 'Precision micro-fine white tips over high-apex natural nude BIAB overlay.',
-      shape: SHAPES[2], // Squoval
-      length: LENGTHS[0], // Short
-      base: BASE_COLORS[2], // Cashmere Nude
-      finish: FINISHES[4], // Micro-French
-      price: '₹2,600',
-      priceNum: 2600,
-      duration: '75 mins',
-      durationNum: 75
-    },
-    {
-      id: 'look_5',
-      title: 'Dewdrop Glass Crystal',
-      tag: 'Reflective Art',
-      desc: 'Crystal-clear 3D gel droplets with micro pearl accents and glass shine.',
-      shape: SHAPES[4], // Stiletto
-      length: LENGTHS[2], // Long
-      base: BASE_COLORS[5], // Frosted Glaze
-      finish: FINISHES[3], // Crystal Dewdrops
-      price: '₹3,600',
-      priceNum: 3600,
-      duration: '105 mins',
-      durationNum: 105
-    },
-    {
-      id: 'look_6',
-      title: 'Aura Halo Soft Gradient',
-      tag: 'Soft Minimal',
-      desc: 'Diffused pastel aura gradient centered on clean rounded natural architecture.',
-      shape: SHAPES[3], // Round
-      length: LENGTHS[0], // Short
-      base: BASE_COLORS[3], // Bare Petal
-      finish: FINISHES[5], // Clean Gloss
-      price: '₹2,700',
-      priceNum: 2700,
-      duration: '70 mins',
-      durationNum: 70
-    }
-  ];
+  // Open Press-On Checkout Modal
+  const handleOpenPressOnCheckout = (product) => {
+    setSelectedPressOnForOrder(product);
+    setCheckoutStep(1);
+    setPressOnOrderForm({
+      size: 'S',
+      customSizes: '',
+      wearMethod: 'Adhesive Jelly Tabs (Temporary 3–5 days, 100% reusable)',
+      quantity: 1,
+      clientName: '',
+      clientPhone: '',
+      clientEmail: '',
+      addressStreet: '',
+      addressCity: 'Dehradun',
+      addressState: 'Uttarakhand',
+      addressPincode: '',
+      notes: '',
+      paymentRef: ''
+    });
+    setIsCheckoutModalOpen(true);
+  };
 
-  // Dynamic categories
-  const categories = ['All', ...Array.from(new Set(services.map((s) => s.category).filter(Boolean)))];
-  const filteredServices = services.filter((s) => {
-    const q = (searchQuery || '').toLowerCase();
-    const matchesCategory = activeCategory === 'All' || s.category === activeCategory;
-    const matchesSearch =
-      (s.name || '').toLowerCase().includes(q) ||
-      (s.description && s.description.toLowerCase().includes(q));
-    return matchesCategory && matchesSearch;
-  });
+  // Submit Press-On Order
+  const handlePressOnOrderSubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedPressOnForOrder) return;
+    if (!pressOnOrderForm.clientName.trim() || !pressOnOrderForm.clientPhone.trim() || !pressOnOrderForm.addressStreet.trim()) {
+      if (onAddToast) onAddToast('Missing Details', 'Please provide your name, phone number, and delivery street address.', 'error');
+      return;
+    }
+
+    const cleanDigits = pressOnOrderForm.clientPhone.replace(/[^0-9]/g, '');
+    if (cleanDigits.length < 10) {
+      if (onAddToast) onAddToast('Invalid Mobile Number', 'Please enter a valid 10-digit phone number for delivery updates.', 'error');
+      return;
+    }
+
+    setIsPlacingPressOnOrder(true);
+    try {
+      const total = Number(selectedPressOnForOrder.price || 1299) * Number(pressOnOrderForm.quantity || 1);
+      const payload = {
+        productId: selectedPressOnForOrder.id,
+        productTitle: selectedPressOnForOrder.title,
+        shape: selectedPressOnForOrder.shape || 'Almond',
+        length: selectedPressOnForOrder.length || 'Medium',
+        size: pressOnOrderForm.size,
+        customSizes: pressOnOrderForm.size === 'Custom' ? pressOnOrderForm.customSizes : null,
+        wearMethod: pressOnOrderForm.wearMethod,
+        quantity: Number(pressOnOrderForm.quantity || 1),
+        totalAmount: total,
+        clientName: pressOnOrderForm.clientName.trim(),
+        clientPhone: pressOnOrderForm.clientPhone.trim(),
+        clientEmail: pressOnOrderForm.clientEmail.trim(),
+        addressStreet: pressOnOrderForm.addressStreet.trim(),
+        addressCity: pressOnOrderForm.addressCity.trim(),
+        addressState: pressOnOrderForm.addressState.trim(),
+        addressPincode: pressOnOrderForm.addressPincode.trim(),
+        notes: pressOnOrderForm.notes.trim(),
+        paymentRef: pressOnOrderForm.paymentRef.trim(),
+        paymentStatus: pressOnOrderForm.paymentRef ? 'Paid (UPI Verified)' : 'Pending UPI'
+      };
+
+      let result;
+      if (onOrderPressOn) {
+        result = await onOrderPressOn(payload);
+      } else {
+        const res = await fetch('/api/press-on-orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        result = await res.json();
+      }
+
+      setConfirmedPressOnOrder(result);
+      setCheckoutStep(4);
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      } catch {
+        // Confetti fallback
+      }
+    } catch (err) {
+      if (onAddToast) onAddToast('Order Error', err.message || 'Could not place order. Please try again.', 'error');
+    } finally {
+      setIsPlacingPressOnOrder(false);
+    }
+  };
+
+  const copyUpiId = () => {
+    const upi = settings?.upiId || 'nailsbysirii@okaxis';
+    navigator.clipboard.writeText(upi);
+    setCopiedUpi(true);
+    if (onAddToast) onAddToast('UPI ID Copied', `${upi} copied to clipboard.`, 'success');
+    setTimeout(() => setCopiedUpi(false), 3000);
+  };
 
   const whatsappPhone = settings?.phone ? settings.phone.replace(/[^0-9]/g, '') : '917302623493';
   const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
-    `Hello Sirii! I am viewing your portfolio on your website and would like to reserve an appointment at your studio in Garhi Cantt, Dehradun.`
+    `Hello Sirii! I am viewing your design catalogue on your website and would like to reserve an appointment at your studio in Garhi Cantt, Dehradun.`
   )}`;
 
   return (
     <div className="min-h-screen bg-studio-canvas text-studio-ink font-sans selection:bg-studio-wineLight selection:text-studio-wine overflow-x-hidden pb-24 sm:pb-0">
-      {/* 1. TOP CLIENT HEADER / NAVIGATION (Mobile First, 390px Optimized) */}
+      {/* 1. TOP CLIENT HEADER / NAVIGATION */}
       <header className="sticky top-0 z-40 bg-studio-canvas/90 backdrop-blur-md border-b border-studio-border px-3.5 sm:px-6 py-2.5 sm:py-3 transition-all pt-[calc(0.6rem+env(safe-area-inset-top))]">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
           {/* Logo & Atelier Brand */}
@@ -458,78 +1017,52 @@ export default function ClientWebsite({
                 <span className="w-1.5 h-1.5 rounded-full bg-studio-wine animate-pulse shrink-0" />
               </div>
               <p className="text-[9px] sm:text-[10px] text-studio-secondary tracking-wider font-semibold truncate">
-                Bespoke Nail Atelier • Dehradun
+                Contemporary Nail Atelier • Dehradun
               </p>
             </div>
           </a>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-studio-secondary">
-            <a href="#catalogue" className="hover:text-studio-wine transition-colors">
-              Menu & Services
+            <a href="#catalogue" className="text-studio-wine hover:underline transition-colors flex items-center gap-1.5 font-bold">
+              <Sparkles className="w-3.5 h-3.5 text-studio-wine" />
+              <span>Design Catalogue</span>
             </a>
-            <a href="#customizer" className="hover:text-studio-wine transition-colors">
-              Interactive Customizer
+            <button
+              onClick={handleSelectCustomInspo}
+              className="hover:text-studio-wine transition-colors flex items-center gap-1.5"
+            >
+              <Wand2 className="w-3.5 h-3.5 text-studio-wine" />
+              <span>Bring Your Own Inspo</span>
+            </button>
+            <a href="#press-ons" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+              <Ribbon className="w-3.5 h-3.5 text-studio-wine" />
+              <span>Press-On Boutique</span>
             </a>
-            <a href="#lookbook" className="hover:text-studio-wine transition-colors">
-              Curated Looks
+            <a href="#booking-section" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-studio-muted" />
+              <span>Reserve Appointment</span>
             </a>
-            <a href="#booking-section" className="hover:text-studio-wine transition-colors">
-              Reserve Appointment
+            <a href="#reviews" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-100" />
+              <span>Client Reviews</span>
             </a>
-            <a href="#reviews" className="hover:text-studio-wine transition-colors">
-              Client Feedback
-            </a>
-            <a href="#studio-info" className="hover:text-studio-wine transition-colors">
-              Hygiene & Visit
+            <a href="#studio-info" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Hygiene & Visit</span>
             </a>
           </nav>
 
           {/* Header Action Buttons */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-            {/* Price Visibility Switch (Desktop) */}
-            <button
-              onClick={() => {
-                const nextState = !hidePrices;
-                setHidePrices(nextState);
-                if (onAddToast) {
-                  onAddToast(
-                    nextState ? 'Catalogue Mode: Prices Hidden' : 'Transparent Pricing Enabled',
-                    nextState
-                      ? 'Displaying treatments without prices. Ideal for client previews.'
-                      : 'Displaying complete price list.',
-                    'info'
-                  );
-                }
-              }}
-              className={`hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
-                hidePrices
-                  ? 'bg-amber-50 border-amber-200 text-amber-800'
-                  : 'bg-studio-surface border-studio-border text-studio-secondary hover:border-studio-borderStrong'
-              }`}
-              title={hidePrices ? 'Click to show prices' : 'Click to hide prices for catalogue sharing'}
-            >
-              {hidePrices ? (
-                <>
-                  <EyeOff className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Prices: Hidden</span>
-                </>
-              ) : (
-                <>
-                  <Eye className="w-3.5 h-3.5 text-studio-muted" />
-                  <span>Prices: Visible</span>
-                </>
-              )}
-            </button>
-
             {/* Share Catalogue Button */}
             <button
               onClick={() => setIsShareModalOpen(true)}
               className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-studio-surface border border-studio-border hover:border-studio-borderStrong text-studio-secondary text-xs font-semibold shadow-studio transition-all flex items-center gap-1.5 active:scale-95"
-              title="Share catalogue without prices"
+              title="Share catalogue"
             >
-              <Share2 className="w-3.5 h-3.5 text-studio-wine" />
-              <span className="hidden sm:inline">Share</span>
+              <Ribbon className="w-3.5 h-3.5 text-studio-wine" />
+              <span className="hidden sm:inline">Share Booklet</span>
             </button>
 
             {/* Book Now Primary CTA */}
@@ -537,7 +1070,7 @@ export default function ClientWebsite({
               href="#booking-section"
               className="px-3.5 sm:px-4 py-1.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio active:scale-95 transition-all flex items-center gap-1.5"
             >
-              <Calendar className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5 fill-white" />
               <span className="hidden xs:inline">Reserve Slot</span>
               <span className="xs:hidden">Reserve</span>
             </a>
@@ -582,7 +1115,7 @@ export default function ClientWebsite({
                     <span className="font-display italic font-bold text-sm text-studio-ink block">
                       {settings?.studioName || 'Nails by Sirii'}
                     </span>
-                    <span className="text-[10px] text-studio-muted">Client Menu</span>
+                    <span className="text-[10px] text-studio-muted">Design Booklet</span>
                   </div>
                 </div>
                 <button
@@ -599,33 +1132,36 @@ export default function ClientWebsite({
                 <a
                   href="#catalogue"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
+                  className="flex items-center gap-3 p-3 rounded-2xl bg-studio-wineLight text-studio-wine font-bold"
                 >
                   <Sparkles className="w-4 h-4 text-studio-wine" />
-                  <span>Menu & Services</span>
+                  <span>Design Catalogue & Booklet</span>
                 </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    handleSelectCustomInspo();
+                  }}
+                  className="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors text-left"
+                >
+                  <Wand2 className="w-4 h-4 text-studio-wine" />
+                  <span>Bring Your Own Inspo (Found Online)</span>
+                </button>
                 <a
-                  href="#customizer"
+                  href="#press-ons"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
                 >
-                  <Palette className="w-4 h-4 text-purple-600" />
-                  <span>Interactive Customizer</span>
-                </a>
-                <a
-                  href="#lookbook"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
-                >
-                  <Eye className="w-4 h-4 text-studio-gold" />
-                  <span>Curated Looks</span>
+                  <Ribbon className="w-4 h-4 text-studio-wine" />
+                  <span>Luxury Press-On Boutique</span>
                 </a>
                 <a
                   href="#booking-section"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
                 >
-                  <Calendar className="w-4 h-4 text-emerald-600" />
+                  <Calendar className="w-4 h-4 text-studio-wine" />
                   <span>Reserve Appointment</span>
                 </a>
                 <a
@@ -633,1954 +1169,2120 @@ export default function ClientWebsite({
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
                 >
-                  <Star className="w-4 h-4 text-amber-500 fill-amber-400" />
-                  <span>Client Feedback ({avgRating} ★)</span>
+                  <Heart className="w-4 h-4 text-rose-500 fill-rose-100" />
+                  <span>Client Reviews ({reviews.length})</span>
                 </a>
                 <a
                   href="#studio-info"
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
                 >
-                  <ShieldCheck className="w-4 h-4 text-blue-600" />
-                  <span>Hygiene & Location</span>
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <span>Hygiene & Studio Standards</span>
                 </a>
               </nav>
 
-              {/* Price Visibility Switch inside Drawer */}
-              <div className="p-3.5 rounded-2xl bg-studio-subtle border border-studio-border space-y-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-studio-muted block">
-                  Catalogue Presentation
-                </span>
-                <div className="flex rounded-xl bg-studio-surface p-1 border border-studio-border text-[11px] font-semibold">
-                  <button
-                    onClick={() => setHidePrices(false)}
-                    className={`flex-1 py-1.5 rounded-lg transition-all ${
-                      !hidePrices ? 'bg-studio-wine text-white shadow-xs' : 'text-studio-muted'
-                    }`}
-                  >
-                    With Prices
-                  </button>
-                  <button
-                    onClick={() => setHidePrices(true)}
-                    className={`flex-1 py-1.5 rounded-lg transition-all ${
-                      hidePrices ? 'bg-amber-700 text-white shadow-xs' : 'text-studio-muted'
-                    }`}
-                  >
-                    No Prices
-                  </button>
-                </div>
-              </div>
-
               {/* Quick Actions in Drawer */}
-              <div className="space-y-2 pt-2">
+              <div className="pt-4 border-t border-studio-border space-y-2">
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
-                    setIsShareModalOpen(true);
+                    setIsRepairModalOpen(true);
                   }}
-                  className="w-full py-2.5 px-4 rounded-xl bg-studio-surface border border-studio-border text-studio-wine hover:bg-studio-wineLight text-xs font-semibold flex items-center justify-center gap-2 shadow-xs"
+                  className="w-full py-2.5 px-3 rounded-xl bg-red-50 text-red-800 border border-red-200 text-xs font-semibold flex items-center justify-center gap-2"
                 >
-                  <Share2 className="w-4 h-4" />
-                  <span>Share Catalogue (No Prices)</span>
+                  <HeartHandshake className="w-3.5 h-3.5 text-red-600" />
+                  <span>Emergency Nail Repair</span>
                 </button>
 
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full py-2.5 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs"
+                  className="w-full py-2.5 px-3 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold flex items-center justify-center gap-2"
                 >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>WhatsApp Sirii Directly</span>
+                  <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Direct WhatsApp Chat</span>
                 </a>
               </div>
             </div>
 
-            {/* Bottom Owner Link */}
-            <div className="pt-6 border-t border-studio-border text-center">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenPasscodeModal();
-                }}
-                className="text-[11px] font-semibold text-studio-muted hover:text-studio-ink flex items-center justify-center gap-1.5 mx-auto"
-              >
-                <Lock className="w-3.5 h-3.5" />
-                <span>Studio Hub Owner Access</span>
-              </button>
+            {/* Bottom Studio Info */}
+            <div className="pt-6 border-t border-studio-border space-y-1 text-[11px] text-studio-muted">
+              <p className="font-semibold text-studio-ink">Nails by Sirii</p>
+              <p>Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, Dehradun</p>
+              <p className="text-studio-wine font-semibold">12:00 PM – 7:00 PM • Dedicated 1-on-1</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* 2. HERO SECTION & POSITIONING STATEMENT */}
-      <section className="relative overflow-hidden pt-8 pb-12 sm:pt-14 sm:pb-16 px-4 sm:px-6">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-b from-studio-subtle via-studio-wineLight/20 to-transparent blur-3xl pointer-events-none -z-10" />
-
-        <div className="max-w-4xl mx-auto text-center space-y-4">
-          <div className="inline-flex flex-wrap items-center justify-center gap-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-surface border border-studio-border shadow-xs text-studio-wine text-[11px] sm:text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Nails by Sirii • Garhi Cantt, Dehradun</span>
-            </div>
-            <a
-              href="https://maps.google.com/?q=Nails+by+Sirii+Laxmi+Navraj+Plaza+Garhi+Cantonment+Dehradun"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 shadow-xs text-amber-800 text-[11px] sm:text-xs font-bold hover:bg-amber-100 transition-colors"
-            >
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-500" />
-              <span>4.9 ★ (344 Google Reviews)</span>
-            </a>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] sm:text-xs font-semibold">
-              <Clock className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Open Daily: {settings?.timings || '12:00 PM – 7:00 PM'}</span>
-            </div>
+      {/* 2. HERO SECTION */}
+      <section className="relative pt-8 sm:pt-14 pb-12 sm:pb-16 px-4 sm:px-6 max-w-7xl mx-auto">
+        <div className="max-w-3xl mx-auto text-center space-y-4 sm:space-y-6">
+          {/* Atelier Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-studio-surface border border-studio-border shadow-xs text-studio-wine text-xs font-semibold">
+            <Crown className="w-3.5 h-3.5 text-studio-wine" />
+            <span>Curated Nail Design Catalogue & Atelier</span>
           </div>
 
-          <h1 className="font-display italic font-bold text-3xl sm:text-5xl md:text-6xl text-studio-ink tracking-tight leading-[1.12]">
-            Sculptural Nail Architecture & <br className="hidden sm:inline" />
-            <span className="not-italic text-studio-wine">Bespoke Hand-Painted Art</span>
+          {/* Main Headline */}
+          <h1 className="font-display italic font-bold text-3xl sm:text-5xl md:text-6xl text-studio-ink leading-tight tracking-tight">
+            Artisan Nail Catalogue <br className="hidden sm:inline" />
+            <span className="text-studio-wine">& Bespoke Design Booklet</span>
           </h1>
 
-          <p className="text-xs sm:text-sm text-studio-secondary max-w-xl mx-auto leading-relaxed font-sans">
-            An intimate studio in Garhi Cantt dedicated to natural nail health, Japanese builder gel (BIAB) overlays, precision sculpted extensions, and thoughtful editorial art. Transparent pricing and honest time estimates.
+          {/* Core Concept Narrative */}
+          <p className="text-sm sm:text-base text-studio-secondary max-w-2xl mx-auto leading-relaxed font-sans">
+            Browse our signature design booklet for inspiration, customize your preferred shape and length, or <strong className="text-studio-ink">bring your own design you found on Instagram or Pinterest</strong>. Dedicated one-on-one natural nail architecture and hand-painted art by Sirii in Dehradun.
           </p>
 
-          {/* Key Standards Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-1 text-[10px] sm:text-[11px] text-studio-secondary font-semibold font-sans">
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-surface border border-studio-border shadow-xs">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              <span>100% Autoclave-Sterilized Tools</span>
-            </div>
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-surface border border-studio-border shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-studio-wine" />
-              <span>Zero Natural Nail Damage</span>
-            </div>
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-surface border border-studio-border shadow-xs">
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-500" />
-              <span>3–4 Week Retention</span>
-            </div>
-          </div>
-
-          {/* Call to Actions on Mobile / Desktop */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3 pt-3 max-w-md sm:max-w-none mx-auto">
+          {/* Primary Action Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <a
-              href="#booking-section"
-              className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio active:scale-95 transition-all flex items-center justify-center gap-2"
+              href="#catalogue"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs sm:text-sm font-semibold shadow-studio transition-all active:scale-95 flex items-center justify-center gap-2 min-h-[44px]"
             >
-              <span>Reserve Your Appointment</span>
-              <ArrowRight className="w-4 h-4" />
-            </a>
-
-            <a
-              href="#customizer"
-              className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-studio-surface border border-studio-border hover:border-studio-borderStrong text-studio-ink font-semibold text-xs shadow-studio transition-all flex items-center justify-center gap-2"
-            >
-              <Palette className="w-3.5 h-3.5 text-purple-600" />
-              <span>Interactive Customizer</span>
+              <Sparkles className="w-4 h-4" />
+              <span>Explore Design Booklet</span>
             </a>
 
             <button
-              onClick={() => setIsRepairModalOpen(true)}
-              className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 font-semibold text-xs shadow-xs transition-all flex items-center justify-center gap-2 hover:bg-amber-100"
+              onClick={handleSelectCustomInspo}
+              className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-studio-surface hover:bg-studio-subtle text-studio-ink border border-studio-border text-xs sm:text-sm font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center gap-2 min-h-[44px]"
             >
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
-              <span>Urgent Repair Desk</span>
+              <Wand2 className="w-4 h-4 text-studio-wine" />
+              <span>Bring Your Own Inspo (Found Online)</span>
             </button>
           </div>
-        </div>
 
-        {/* 3. IMMEDIATE VISUAL SHOWCASE (Above the Fold Engagement) */}
-        <div className="max-w-5xl mx-auto mt-10">
-          <div className="flex items-center justify-between pb-3">
-            <div>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-studio-wine block">
-                Signature Portfolio
-              </span>
-              <h2 className="font-display italic font-bold text-lg sm:text-xl text-studio-ink">
-                Featured Atelier Sets
-              </h2>
+          {/* Atelier Standards Bar */}
+          <div className="pt-4 flex flex-wrap items-center justify-center gap-4 sm:gap-7 text-xs text-studio-secondary">
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
+              <span>Medical Autoclave Sterilized</span>
             </div>
-            <a
-              href="#lookbook"
-              className="text-xs font-semibold text-studio-wine hover:underline flex items-center gap-1"
-            >
-              <span>View All Looks</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </a>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-            {lookbookItems.slice(0, 4).map((look) => (
-              <div
-                key={look.id}
-                className="bg-studio-surface rounded-2xl p-3.5 sm:p-4 border border-studio-border hover:border-studio-borderStrong shadow-studio transition-all flex flex-col justify-between group"
-              >
-                <div className="space-y-2.5">
-                  {/* Schematic Silhouette Visual */}
-                  <div className="h-36 sm:h-40 rounded-xl bg-studio-subtle/60 flex items-center justify-center relative overflow-hidden group-hover:bg-studio-wineLight/40 transition-colors">
-                    <NailTipSchematic
-                      shape={look.shape}
-                      length={look.length}
-                      baseColor={look.base}
-                      finish={look.finish}
-                      size="sm"
-                    />
-                    <span className="absolute top-2 left-2 text-[9px] px-2 py-0.5 rounded-full bg-studio-surface/90 text-studio-ink font-semibold border border-studio-border">
-                      {look.shape.name}
-                    </span>
-                  </div>
-
-                  <div>
-                    <span className="text-[9px] font-bold uppercase tracking-wider text-studio-wine block">
-                      {look.tag}
-                    </span>
-                    <h3 className="font-display italic font-bold text-sm text-studio-ink truncate">
-                      {look.title}
-                    </h3>
-                    <p className="text-[11px] text-studio-muted line-clamp-2 leading-snug mt-0.5">
-                      {look.desc}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="pt-3 mt-2 border-t border-studio-border/60 flex items-center justify-between gap-1">
-                  <div>
-                    {!hidePrices ? (
-                      <span className="font-display font-bold text-sm text-studio-ink block">
-                        {look.price}
-                      </span>
-                    ) : (
-                      <span className="text-[10px] font-display italic text-studio-wine block">
-                        On request
-                      </span>
-                    )}
-                    <span className="text-[9px] text-studio-muted block">
-                      {look.duration}
-                    </span>
-                  </div>
-
-                  <button
-                    onClick={() => handleBookLook(look)}
-                    className="px-2.5 py-1.5 rounded-lg bg-studio-wine hover:bg-studio-wineHover text-white text-[10px] font-semibold transition-all active:scale-95 shadow-xs flex items-center gap-1"
-                  >
-                    <span>Reserve</span>
-                    <ChevronRight className="w-3 h-3" />
-                  </button>
-                </div>
-              </div>
-            ))}
+            <div className="flex items-center gap-1.5">
+              <Heart className="w-4 h-4 text-rose-500 fill-rose-100 shrink-0" />
+              <span>100% Dedicated 1-on-1</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Wand2 className="w-4 h-4 text-purple-600 shrink-0" />
+              <span>Internet Inspo Recreated</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Feather className="w-4 h-4 text-amber-600 shrink-0" />
+              <span>Gentle Russian Cuticle Care</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Gem className="w-4 h-4 text-studio-wine shrink-0" />
+              <span>4+ Week Retention</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 4. DEDICATED SERVICES & ART CATALOGUE */}
-      <section id="catalogue" className="py-12 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto border-t border-studio-border">
+      {/* 3. THE MAIN ATELIER DESIGN CATALOGUE (PRIMARY CENTERPIECE) */}
+      <section id="catalogue" className="py-10 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto border-t border-studio-border">
         <div className="space-y-6 sm:space-y-8">
           {/* Section Header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div className="space-y-1.5">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight text-studio-wine text-[11px] font-semibold">
-                <Sparkles className="w-3 h-3" />
-                <span>Atelier Service Menu</span>
-              </div>
-              <h2 className="font-display italic font-bold text-2xl sm:text-4xl text-studio-ink">
-                Services & Transparent Pricing
-              </h2>
-              <p className="text-xs text-studio-secondary max-w-lg leading-relaxed font-sans">
-                Every service includes comprehensive dry Russian e-file cuticle detailing, high-adhesion nail preparation, structural apex balance, and deep cuticle nourishment.
-              </p>
+          <div className="text-center max-w-3xl mx-auto space-y-2.5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight text-studio-wine text-[11px] font-semibold">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Atelier Design Booklet & Catalogue</span>
             </div>
-
-            {/* Catalogue Control Bar: Hide Prices Switcher & Share */}
-            <div className="flex items-center gap-2">
-              <div className="flex items-center rounded-2xl bg-studio-surface border border-studio-border p-1 shadow-xs">
-                <button
-                  onClick={() => setHidePrices(false)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                    !hidePrices
-                      ? 'bg-studio-wine text-white shadow-xs'
-                      : 'text-studio-muted hover:text-studio-ink'
-                  }`}
-                >
-                  <Eye className="w-3.5 h-3.5" />
-                  <span>With Prices</span>
-                </button>
-                <button
-                  onClick={() => setHidePrices(true)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                    hidePrices
-                      ? 'bg-amber-700 text-white shadow-xs'
-                      : 'text-studio-muted hover:text-studio-ink'
-                  }`}
-                >
-                  <EyeOff className="w-3.5 h-3.5" />
-                  <span>Without Prices</span>
-                </button>
-              </div>
-
-              <button
-                onClick={() => setIsShareModalOpen(true)}
-                className="px-3.5 py-1.5 rounded-2xl bg-studio-surface border border-studio-border hover:border-studio-borderStrong text-studio-secondary font-semibold text-xs shadow-studio transition-all flex items-center gap-1.5"
-              >
-                <Share2 className="w-3.5 h-3.5 text-studio-wine" />
-                <span className="hidden xs:inline">Share</span>
-              </button>
-            </div>
+            <h2 className="font-display italic font-bold text-2xl sm:text-4xl text-studio-ink">
+              Browse Signature Designs & Options
+            </h2>
+            <p className="text-xs sm:text-sm text-studio-secondary leading-relaxed font-sans">
+              We have created this booklet to make choosing your nails effortless. Select any design below, customize your desired length and shape, or bring your own photo!
+            </p>
           </div>
 
-          {/* Notification when hidePrices is active */}
-          {hidePrices && (
-            <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200/80 text-amber-900 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 animate-in fade-in">
-              <div className="flex items-center gap-2">
-                <EyeOff className="w-4 h-4 text-amber-700 shrink-0" />
-                <div>
-                  <span className="font-semibold">Portfolio Preview Mode:</span>{' '}
-                  <span className="text-amber-800">
-                    All treatments and designs are shown without prices. Suitable for portfolio sharing with clients.
-                  </span>
-                </div>
+          {/* Bookmarking / Custom Inspo Callout Banner */}
+          <div className="bg-gradient-to-r from-studio-wineLight/90 via-studio-surface to-studio-canvas border border-studio-border rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-start gap-3.5">
+              <div className="w-11 h-11 rounded-2xl bg-studio-surface border border-studio-border text-studio-wine flex items-center justify-center shrink-0 shadow-xs">
+                <Wand2 className="w-5 h-5 text-studio-wine" />
               </div>
-              <button
-                onClick={() => setHidePrices(false)}
-                className="self-start sm:self-auto px-3 py-1 rounded-xl bg-white border border-amber-300 text-amber-900 font-bold hover:bg-amber-100 transition-colors text-[11px] shrink-0"
-              >
-                Restore Prices
-              </button>
+              <div className="space-y-1">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block">
+                  Found an Inspiring Design on Instagram or Pinterest?
+                </span>
+                <h3 className="font-display font-semibold text-base sm:text-lg text-studio-ink">
+                  You are not limited to this booklet — Bring your own reference image!
+                </h3>
+                <p className="text-xs text-studio-secondary leading-relaxed">
+                  Have a specific screenshot from Pinterest, Google, or TikTok? Sirii recreates and customizes any reference photo to fit your natural nail architecture.
+                </p>
+              </div>
             </div>
-          )}
 
-          {/* Search & Category Tabs */}
-          <div className="space-y-3">
-            <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+            <button
+              onClick={handleSelectCustomInspo}
+              className="self-start md:self-auto px-5 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio transition-all active:scale-95 flex items-center gap-2 shrink-0 min-h-[44px]"
+            >
+              <Wand2 className="w-3.5 h-3.5" />
+              <span>Book With My Inspo Photo</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          {/* Interactive Category Selector & Search */}
+          <div className="space-y-4">
+            <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
               {/* Category Pills (Touch scrollable) */}
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
-                {categories.map((cat) => (
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
+                {catalogueCategories.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`px-3.5 py-2 sm:py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
-                      activeCategory === cat
-                        ? 'bg-studio-wine text-white shadow-xs'
-                        : 'bg-studio-surface border border-studio-border hover:border-studio-borderStrong text-studio-secondary'
-                    }`}
+                    className={`px-4 py-2 rounded-2xl text-xs font-semibold whitespace-nowrap transition-all min-h-[40px] flex items-center gap-1.5 ${activeCategory === cat || (activeCategory === 'All' && cat === 'All Designs')
+                      ? 'bg-studio-wine text-white shadow-studio'
+                      : 'bg-studio-surface border border-studio-border hover:border-studio-borderStrong text-studio-secondary'
+                      }`}
                   >
-                    {cat}
+                    {cat === 'All Designs' && <Sparkles className="w-3.5 h-3.5" />}
+                    {cat === 'Acrylic Nails' && <Gem className="w-3.5 h-3.5" />}
+                    {cat === 'Natural Nails & BIAB' && <Feather className="w-3.5 h-3.5" />}
+                    {cat === 'Gel & Soft Gel (Gel-X)' && <Crown className="w-3.5 h-3.5" />}
+                    {cat === 'Bespoke Nail Art' && <Paintbrush className="w-3.5 h-3.5" />}
+                    {cat === 'Ready-to-Wear Press-Ons' && <Ribbon className="w-3.5 h-3.5" />}
+                    <span>{cat}</span>
+                    {cat === 'Acrylic Nails' && (
+                      <span className={`text-[9px] px-1.5 py-0.2 rounded-full ${activeCategory === 'Acrylic Nails' ? 'bg-white/20 text-white' : 'bg-studio-wineLight text-studio-wine font-bold'
+                        }`}>
+                        5
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
 
               {/* Search Bar */}
-              <div className="relative sm:w-64">
-                <Search className="w-3.5 h-3.5 text-studio-muted absolute left-3 top-1/2 -translate-y-1/2" />
+              <div className="relative md:w-72 shrink-0">
+                <Search className="w-4 h-4 text-studio-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
-                  placeholder="Search treatments or art..."
+                  placeholder="Search acrylic, glazed, french, 3D..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 bg-studio-surface border border-studio-border rounded-xl text-base sm:text-xs text-studio-ink focus:outline-none focus:border-studio-wine font-sans"
+                  className="w-full pl-10 pr-3.5 py-2.5 bg-studio-surface border border-studio-border rounded-2xl text-base sm:text-xs text-studio-ink focus:outline-none focus:border-studio-wine font-sans min-h-[42px]"
                 />
               </div>
             </div>
+
+            {/* Category Note when Acrylic Nails is selected */}
+            {activeCategory === 'Acrylic Nails' && (
+              <div className="p-4 rounded-2xl bg-studio-surface border border-studio-border text-xs text-studio-secondary flex items-start gap-2.5 animate-in fade-in">
+                <Gem className="w-4 h-4 text-studio-wine shrink-0 mt-0.5" />
+                <div>
+                  <strong className="text-studio-ink font-semibold">Acrylic Nails Atelier Collection:</strong>{' '}
+                  Explore our signature sculpted acrylic designs below. Every acrylic set is customized to your desired length and nail silhouette, or you can bring an external reference image from the internet.
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Catalogue Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {filteredServices.map((srv) => (
-              <div
-                key={srv.id}
-                className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border hover:border-studio-borderStrong shadow-studio transition-all space-y-4 flex flex-col justify-between group"
-              >
-                <div className="space-y-3">
-                  {/* Top tags */}
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-studio-wineLight text-studio-wine border border-studio-border">
-                      {srv.category}
-                    </span>
-                    <span className="text-[10px] text-studio-muted font-semibold flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-studio-wine" />
-                      {srv.duration} mins
-                    </span>
-                  </div>
-
-                  {/* Service Title */}
-                  <div>
-                    <h3 className="font-display italic font-bold text-lg text-studio-ink group-hover:text-studio-wine transition-colors">
-                      {srv.name}
-                    </h3>
-                    {srv.popular && (
-                      <span className="inline-block mt-1 text-[9px] font-bold px-2 py-0.5 rounded-full bg-studio-goldLight text-amber-900 border border-amber-200">
-                        Signature Treatment
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-xs text-studio-secondary leading-relaxed font-sans">
-                    {srv.description}
-                  </p>
-
-                  {/* Quality Checklist */}
-                  <div className="pt-2 border-t border-studio-border/50 space-y-1 text-[11px] text-studio-secondary font-medium font-sans">
-                    <div className="flex items-center gap-1.5">
-                      <Check className="w-3 h-3 text-emerald-600" />
-                      <span>Dry Russian e-file cuticle care</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Check className="w-3 h-3 text-emerald-600" />
-                      <span>Health-first natural nail preservation</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bottom Card Footer: Price & Booking */}
-                <div className="pt-4 border-t border-studio-border flex items-center justify-between gap-3">
-                  <div>
-                    {hidePrices ? (
-                      <div>
-                        <span className="text-[9px] font-bold uppercase tracking-wider text-studio-muted block">
-                          Treatment
-                        </span>
-                        <span className="text-xs font-display italic font-bold text-studio-wine">
-                          Price on Request
-                        </span>
-                      </div>
-                    ) : (
-                      <div>
-                        <span className="text-[9px] font-bold uppercase tracking-wider text-studio-muted block">
-                          Treatment Fee
-                        </span>
-                        <span className="font-display font-bold text-lg text-studio-ink">
-                          ₹{Number(srv.price).toLocaleString('en-IN')}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  <button
-                    onClick={() => handleSelectFromCatalogue(srv)}
-                    className="px-4 py-2.5 sm:py-2 rounded-xl bg-studio-canvas hover:bg-studio-wineLight text-studio-ink hover:text-studio-wine border border-studio-border font-semibold text-xs transition-all flex items-center gap-1.5 active:scale-95 shadow-xs"
-                  >
-                    <span>Select</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. INTERACTIVE VIRTUAL NAIL STUDIO / CUSTOMIZER (Mobile First Order) */}
-      <section id="customizer" className="py-12 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto border-t border-studio-border">
-        <div className="space-y-6 sm:space-y-8">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight text-studio-wine text-[11px] font-semibold">
-              <Palette className="w-3 h-3" />
-              <span>Interactive Set Customizer</span>
-            </div>
-            <h2 className="font-display italic font-bold text-2xl sm:text-4xl text-studio-ink">
-              Design Your Bespoke Nail Set
-            </h2>
-            <p className="text-xs text-studio-secondary leading-relaxed font-sans">
-              Select your preferred silhouette, extension length, base mineral shade, and hand-painted art finish with instant price and time synchronization.
-            </p>
-          </div>
-
-          {/* On mobile: Preview is placed FIRST (order-first) so changes are instantly visible! */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
-            {/* Visual Preview Card: TOP on Mobile, Sticky Right on Desktop */}
-            <div className="order-first lg:order-last space-y-4 lg:sticky lg:top-24">
-              <div className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border shadow-studio-float space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-studio-wine block">
-                    Live Nail Preview
-                  </span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-studio-wineLight text-studio-wine font-bold border border-studio-border">
-                    Illustrative Schematic Preview
-                  </span>
-                </div>
-
-                {/* Honest Illustrative Schematic Visual Display */}
-                <div className="h-56 sm:h-60 rounded-3xl p-5 flex flex-col items-center justify-center text-center relative overflow-hidden transition-all duration-300 border border-studio-border bg-studio-canvas/50">
-                  <NailTipSchematic
-                    shape={customShape}
-                    length={customLength}
-                    baseColor={customBase}
-                    finish={customFinish}
-                    size="md"
-                  />
-
-                  {/* Stylized Nail Tip Card */}
-                  <div className="mt-3 relative z-10 space-y-0.5 p-2.5 bg-studio-surface/95 backdrop-blur-md rounded-xl border border-studio-border shadow-studio max-w-[220px]">
-                    <span className="font-display italic font-bold text-xs text-studio-ink block">
-                      {customShape.name} • {customLength.name}
-                    </span>
-                    <span className="text-[10px] text-studio-secondary font-medium block">
-                      {customBase.name} • {customFinish.name}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Price & Time Summary */}
-                <div className="p-3.5 sm:p-4 rounded-2xl bg-studio-subtle border border-studio-border space-y-2 text-xs font-sans">
-                  <div className="flex justify-between text-studio-secondary">
-                    <span>Base Architecture:</span>
-                    <span className="font-semibold text-studio-ink">Natural Builder Gel / Overlay</span>
-                  </div>
-
-                  <div className="flex justify-between text-studio-secondary">
-                    <span>Selected Shape:</span>
-                    <span className="font-semibold text-studio-ink">{customShape.name}</span>
-                  </div>
-
-                  <div className="flex justify-between text-studio-secondary">
-                    <span>Finish & Art:</span>
-                    <span className="font-semibold text-studio-ink">{customFinish.name}</span>
-                  </div>
-
-                  <div className="flex justify-between text-studio-secondary pt-2 border-t border-studio-border">
-                    <span>Estimated Duration:</span>
-                    <span className="font-semibold text-studio-ink">{customizerTotalDuration} mins</span>
-                  </div>
-
-                  {!hidePrices && (
-                    <div className="flex justify-between items-baseline pt-2 border-t border-studio-border">
-                      <span className="font-bold text-studio-ink">Estimated Bill:</span>
-                      <span className="font-display italic font-bold text-xl sm:text-2xl text-studio-wine">
-                        ₹{Number(customizerTotalPrice).toLocaleString('en-IN')}
-                      </span>
-                    </div>
-                  )}
-
-                  {hidePrices && (
-                    <div className="pt-2 border-t border-studio-border text-center text-[11px] text-studio-wine font-display italic">
-                      Pricing provided upon reservation
-                    </div>
-                  )}
-                </div>
-
-                {/* Book This Custom Set CTA */}
-                <button
-                  onClick={handleBookCustomSet}
-                  className="w-full py-3.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio transition-all active:scale-95 flex items-center justify-center gap-2"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span>Reserve This Custom Set</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Step-by-Step Selectors (Below preview on mobile) */}
-            <div className="lg:col-span-2 space-y-4 sm:space-y-6 font-sans">
-              {/* 1. Shape */}
-              <div className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border shadow-studio space-y-3">
-                <span className="text-xs font-bold text-studio-ink uppercase tracking-wider block">
-                  1. Choose Nail Silhouette
-                </span>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-                  {shapes.map((s) => (
-                    <button
-                      key={s.id}
-                      onClick={() => setCustomShape(s)}
-                      className={`p-3 sm:p-3.5 rounded-2xl border text-left text-xs transition-all active:scale-95 ${
-                        customShape.id === s.id
-                          ? 'border-studio-wine bg-studio-wineLight shadow-xs'
-                          : 'border-studio-border bg-studio-surface hover:border-studio-borderStrong'
-                      }`}
-                    >
-                      <span className="font-display italic font-bold text-sm text-studio-ink block">
-                        {s.name}
-                      </span>
-                      <span className="text-[10px] text-studio-muted leading-tight block mt-0.5">
-                        {s.desc}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* 2. Length */}
-              <div className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border shadow-studio space-y-3">
-                <span className="text-xs font-bold text-studio-ink uppercase tracking-wider block">
-                  2. Choose Extension Length
-                </span>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-                  {lengths.map((l) => (
-                    <button
-                      key={l.id}
-                      onClick={() => setCustomLength(l)}
-                      className={`p-3 sm:p-3.5 rounded-2xl border text-center text-xs transition-all active:scale-95 ${
-                        customLength.id === l.id
-                          ? 'border-studio-wine bg-studio-wine text-white font-bold shadow-xs'
-                          : 'border-studio-border bg-studio-surface hover:border-studio-borderStrong text-studio-secondary font-semibold'
-                      }`}
-                    >
-                      <span className="block">{l.name}</span>
-                      <span
-                        className={`text-[10px] block mt-0.5 ${
-                          customLength.id === l.id ? 'text-white/80' : 'text-studio-muted'
-                        }`}
-                      >
-                        {hidePrices
-                          ? 'Length'
-                          : l.extra > 0
-                            ? `+₹${l.extra}`
-                            : 'Included'}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* 3. Base Coat Palette */}
-              <div className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border shadow-studio space-y-3">
-                <span className="text-xs font-bold text-studio-ink uppercase tracking-wider block">
-                  3. Choose Base Mineral Tint
-                </span>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-                  {baseColors.map((c) => (
-                    <button
-                      key={c.id}
-                      onClick={() => setCustomBase(c)}
-                      className={`p-2.5 sm:p-3 rounded-2xl border flex items-center gap-2.5 text-xs transition-all active:scale-95 ${
-                        customBase.id === c.id
-                          ? 'border-studio-wine bg-studio-wineLight shadow-xs'
-                          : 'border-studio-border bg-studio-surface hover:border-studio-borderStrong'
-                      }`}
-                    >
-                      <div
-                        className="w-6 h-6 sm:w-7 sm:h-7 rounded-full shadow-inner border shrink-0"
-                        style={{ backgroundColor: c.hex, borderColor: c.border }}
-                      />
-                      <span className="font-semibold text-studio-ink text-xs truncate">{c.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* 4. Finish & Nail Art Tier */}
-              <div className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border shadow-studio space-y-3">
-                <span className="text-xs font-bold text-studio-ink uppercase tracking-wider block">
-                  4. Choose Art Finish & Shimmer
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-                  {finishes.map((f) => (
-                    <button
-                      key={f.id}
-                      onClick={() => setCustomFinish(f)}
-                      className={`p-3 sm:p-3.5 rounded-2xl border text-left text-xs transition-all flex items-start justify-between active:scale-95 ${
-                        customFinish.id === f.id
-                          ? 'border-studio-wine bg-studio-wineLight shadow-xs'
-                          : 'border-studio-border bg-studio-surface hover:border-studio-borderStrong'
-                      }`}
-                    >
-                      <div>
-                        <span className="font-display italic font-bold text-sm text-studio-ink block">
-                          {f.name}
-                        </span>
-                        <span className="text-[10px] text-studio-muted block mt-0.5">
-                          {f.desc}
-                        </span>
-                      </div>
-                      {!hidePrices && (
-                        <span className="font-display font-bold text-studio-wine shrink-0 ml-2">
-                          {f.price > 0 ? `+₹${f.price}` : 'Included'}
-                        </span>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. CURATED LOOKBOOK GALLERY */}
-      <section id="lookbook" className="py-12 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto border-t border-studio-border">
-        <div className="space-y-6 sm:space-y-8">
-          <div className="text-center space-y-2">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine block">
-              Editorial Portfolio
-            </span>
-            <h2 className="font-display italic font-bold text-2xl sm:text-4xl text-studio-ink">
-              Curated Studio Looks
-            </h2>
-            <p className="text-xs text-studio-secondary max-w-md mx-auto font-sans">
-              Signature looks crafted at our Garhi Cantt atelier. Select any design to initialize your appointment reservation, or bring custom visual references to your session.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {lookbookItems.map((item) => (
+          {/* Design Booklet Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            {filteredCatalogue.map((item) => (
               <div
                 key={item.id}
-                className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border hover:border-studio-borderStrong shadow-studio transition-all space-y-4 group flex flex-col justify-between"
+                className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border hover:border-studio-wine/40 shadow-studio transition-all flex flex-col justify-between group space-y-4"
               >
-                <div>
-                  <div className="h-44 sm:h-48 rounded-2xl bg-studio-subtle flex flex-col items-center justify-center text-center p-4 relative overflow-hidden group-hover:bg-studio-wineLight/40 transition-colors">
+                <div className="space-y-4">
+                  {/* Visual Silhouette & Finish Schematic Preview */}
+                  <div className="h-44 rounded-2xl bg-studio-canvas/70 border border-border-subtle flex flex-col items-center justify-center relative overflow-hidden group-hover:border-studio-wine/30 transition-all p-3">
                     <NailTipSchematic
-                      shape={item.shape}
-                      length={item.length}
-                      baseColor={item.base}
-                      finish={item.finish}
-                      size="md"
+                      shape={item.shape.name}
+                      length={item.length.name}
+                      baseColor={item.base.hex}
+                      finish={item.finish.name}
+                      className="scale-95 transition-transform group-hover:scale-105 duration-300"
                     />
-                    <span className="absolute top-3 left-3 text-[10px] font-semibold text-studio-wine uppercase tracking-wider bg-studio-surface/90 px-2.5 py-0.5 rounded-full border border-studio-border">
-                      {item.tag}
+
+                    <span className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-studio-surface/90 backdrop-blur-sm border border-studio-border text-[10px] font-semibold text-studio-secondary">
+                      {item.shape.name} • {item.length.name}
+                    </span>
+
+                    <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-studio-surface/90 backdrop-blur-sm border border-studio-border text-[10px] font-bold text-studio-wine">
+                      {item.category}
                     </span>
                   </div>
 
-                  <div className="space-y-1.5 text-xs pt-4 font-sans">
-                    <div className="flex justify-between items-baseline">
-                      <span className="font-display italic font-bold text-base text-studio-ink">
-                        {item.title}
+                  {/* Design Header */}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block">
+                        {item.tag}
                       </span>
-                      {!hidePrices && (
-                        <span className="font-display font-bold text-studio-wine text-base">
-                          {item.price}
-                        </span>
-                      )}
-                      {hidePrices && (
-                        <span className="text-[10px] text-studio-muted font-display italic">
-                          On Request
-                        </span>
-                      )}
+                      <span className="text-[10px] text-studio-muted font-medium flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-studio-wine" />
+                        ~{item.durationNum} mins
+                      </span>
                     </div>
-                    <p className="text-studio-secondary leading-relaxed">{item.desc}</p>
-                    <div className="flex items-center gap-2 pt-1 text-[11px] text-studio-muted font-medium">
-                      <span>{item.shape.name} ({item.length.name})</span>
-                      <span>•</span>
-                      <span>~{item.duration}</span>
-                    </div>
+
+                    <h3 className="font-display italic font-bold text-lg text-studio-ink group-hover:text-studio-wine transition-colors">
+                      {item.title}
+                    </h3>
+
+                    <p className="text-xs text-studio-secondary leading-relaxed font-sans pt-1">
+                      {item.desc}
+                    </p>
+                  </div>
+
+                  {/* Highlights Checklist */}
+                  <div className="pt-2 border-t border-studio-border/60 space-y-1.5 text-[11px] text-studio-secondary font-medium">
+                    {item.highlights.map((h, i) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <Sparkle className="w-3 h-3 text-studio-wine shrink-0 fill-studio-wineLight/60" />
+                        <span>{h}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => handleBookLook(item)}
-                  className="w-full py-2.5 rounded-xl bg-studio-canvas hover:bg-studio-wineLight text-studio-ink hover:text-studio-wine font-semibold text-xs transition-all flex items-center justify-center gap-1.5 active:scale-95 border border-studio-border"
-                >
-                  <span>Reserve This Look</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+                {/* Card Action: Book This Look */}
+                <div className="pt-4 border-t border-studio-border flex items-center justify-between gap-3">
+                  <div className="text-[11px] text-studio-muted font-medium">
+                    Customizable shape & length
+                  </div>
 
-      {/* 7. ONLINE SELF-BOOKING WIZARD */}
-      <section id="booking-section" className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto border-t border-studio-border">
-        <div className="space-y-6">
-          <div className="text-center space-y-2">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine block">
-              Online Reservation
-            </span>
-            <h2 className="font-display italic font-bold text-2xl sm:text-4xl text-studio-ink">
-              Reserve Your Studio Session
-            </h2>
-            <p className="text-xs text-studio-secondary max-w-md mx-auto font-sans">
-              Choose your service or custom set, select your preferred time slot within operating hours (12:00 PM – 7:00 PM), and receive your confirmation.
-            </p>
-          </div>
-
-          {/* Stepper indicator */}
-          <div className="flex items-center justify-center gap-2 max-w-md mx-auto py-2">
-            {[1, 2, 3, 4].map((s) => (
-              <div key={s} className="flex items-center gap-2">
-                <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                    bookingStep === s
-                      ? 'bg-studio-wine text-white shadow-studio'
-                      : bookingStep > s
-                        ? 'bg-emerald-100 text-emerald-800'
-                        : 'bg-studio-subtle border border-studio-border text-studio-muted'
-                  }`}
-                >
-                  {bookingStep > s ? '✓' : s}
+                  <button
+                    onClick={() => handleSelectLook(item)}
+                    className="px-4 py-2.5 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio transition-all flex items-center gap-1.5 active:scale-95 min-h-[40px]"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Select This Look</span>
+                  </button>
                 </div>
-                {s < 4 && <div className="w-6 sm:w-10 h-0.5 bg-studio-border" />}
               </div>
             ))}
           </div>
 
-          <div className="bg-studio-surface rounded-3xl p-5 sm:p-8 border border-studio-border shadow-studio-float">
-            {/* STEP 1: Select Service */}
-            {bookingStep === 1 && (
-              <div className="space-y-5 sm:space-y-6 animate-fade-in text-xs font-sans">
-                <div>
-                  <h3 className="font-display italic font-bold text-lg sm:text-xl text-studio-ink mb-1">
-                    1. Select Service or Custom Set
-                  </h3>
-                  <p className="text-studio-secondary text-xs">
-                    Choose the primary treatment for your appointment:
-                  </p>
-                </div>
-
-                {/* Customizer Active Selection Card */}
-                {bookingMode === 'customSet' && (
-                  <div className="p-4 sm:p-5 rounded-2xl border-2 border-studio-wine bg-studio-wineLight/70 shadow-xs space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-studio-wine" />
-                        <span className="font-display italic font-bold text-base text-studio-ink">
-                          Configured Custom Set
-                        </span>
-                      </div>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-studio-surface text-studio-wine font-bold border border-studio-border">
-                        From Customizer
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] p-3 rounded-xl bg-studio-surface border border-studio-border">
-                      <div>
-                        <span className="text-studio-muted block">Silhouette</span>
-                        <span className="font-semibold text-studio-ink">{customShape.name}</span>
-                      </div>
-                      <div>
-                        <span className="text-studio-muted block">Length</span>
-                        <span className="font-semibold text-studio-ink">
-                          {customLength.name} {customLength.extra > 0 && !hidePrices ? `(+₹${customLength.extra})` : ''}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-studio-muted block">Base Tint</span>
-                        <span className="font-semibold text-studio-ink">{customBase.name}</span>
-                      </div>
-                      <div>
-                        <span className="text-studio-muted block">Art Finish</span>
-                        <span className="font-semibold text-studio-ink">
-                          {customFinish.name} {customFinish.price > 0 && !hidePrices ? `(+₹${customFinish.price})` : ''}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-1">
-                      <div className="text-[11px] text-studio-secondary">
-                        Session Duration: <strong className="text-studio-ink">~{customizerTotalDuration} mins</strong>
-                      </div>
-                      {!hidePrices && (
-                        <div className="font-display font-bold text-lg text-studio-wine">
-                          ₹{Number(customizerTotalPrice).toLocaleString('en-IN')}
-                        </div>
-                      )}
-                      {hidePrices && (
-                        <div className="text-xs font-display italic text-studio-wine font-bold">
-                          Price on Request
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-studio-border text-xs">
-                      <button
-                        type="button"
-                        onClick={() => scrollTo('customizer')}
-                        className="text-studio-wine hover:underline font-semibold text-left"
-                      >
-                        ✎ Modify specifications in customizer
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setBookingMode('service')}
-                        className="text-studio-muted hover:text-studio-ink font-medium text-left"
-                      >
-                        Switch to standard catalogue service
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* Lookbook Active Selection Card */}
-                {bookingMode === 'lookbook' && selectedLook && (
-                  <div className="p-4 sm:p-5 rounded-2xl border-2 border-studio-wine bg-studio-wineLight/70 shadow-xs space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-studio-wine" />
-                        <span className="font-display italic font-bold text-base text-studio-ink">
-                          Curated Look: {selectedLook.title}
-                        </span>
-                      </div>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-studio-surface text-studio-wine font-bold border border-studio-border">
-                        {selectedLook.tag}
-                      </span>
-                    </div>
-
-                    <p className="text-[11px] text-studio-secondary">{selectedLook.desc}</p>
-
-                    <div className="flex items-center justify-between pt-1">
-                      <div className="text-[11px] text-studio-secondary">
-                        Silhouette: <strong className="text-studio-ink">{selectedLook.shape.name}</strong> • Time: <strong className="text-studio-ink">~{selectedLook.durationNum} mins</strong>
-                      </div>
-                      {!hidePrices && (
-                        <div className="font-display font-bold text-lg text-studio-wine">
-                          ₹{Number(selectedLook.priceNum).toLocaleString('en-IN')}
-                        </div>
-                      )}
-                      {hidePrices && (
-                        <div className="text-xs font-display italic text-studio-wine font-bold">
-                          Price on Request
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-studio-border text-xs">
-                      <button
-                        type="button"
-                        onClick={() => scrollTo('lookbook')}
-                        className="text-studio-wine hover:underline font-semibold text-left"
-                      >
-                        ← Choose a different look
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setBookingMode('service');
-                          setSelectedLook(null);
-                        }}
-                        className="text-studio-muted hover:text-studio-ink font-medium text-left"
-                      >
-                        Switch to standard catalogue service
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* Catalogue Services List */}
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-studio-secondary">
-                      {bookingMode === 'service' ? 'All Studio Services' : 'Or switch to standard service:'}
-                    </span>
-                  </div>
-                  {services
-                    .filter((s) => s.category !== 'Nail Art' && s.category !== 'Add-on')
-                    .map((srv) => {
-                      const isSelected = bookingMode === 'service' && selectedServiceId === srv.id;
-                      return (
-                        <div
-                          key={srv.id}
-                          onClick={() => {
-                            setBookingMode('service');
-                            setSelectedLook(null);
-                            setSelectedServiceId(srv.id);
-                          }}
-                          className={`p-3.5 sm:p-4 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
-                            isSelected
-                              ? 'border-studio-wine bg-studio-wineLight/70 shadow-xs'
-                              : 'border-studio-border hover:border-studio-borderStrong bg-studio-surface'
-                          }`}
-                        >
-                          <div className="space-y-1 pr-3">
-                            <div className="flex items-center gap-2">
-                              <span className="font-display italic font-bold text-sm text-studio-ink">
-                                {srv.name}
-                              </span>
-                              {srv.popular && (
-                                <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-studio-goldLight text-amber-900 border border-amber-200">
-                                  Most Popular
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-studio-secondary text-[11px] leading-relaxed">
-                              {srv.description}
-                            </p>
-                            <span className="text-[10px] text-studio-muted font-medium block">
-                              Duration: ~{srv.duration} mins
-                            </span>
-                          </div>
-                          <div className="text-right shrink-0">
-                            {hidePrices ? (
-                              <span className="text-xs font-display italic text-studio-wine font-bold">
-                                On Request
-                              </span>
-                            ) : (
-                              <span className="font-display font-bold text-base text-studio-ink">
-                                ₹{Number(srv.price).toLocaleString('en-IN')}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-                </div>
-
-                {/* Addons Selection */}
-                <div className="pt-4 border-t border-studio-border space-y-3">
-                  <span className="font-semibold text-studio-ink block">
-                    Optional Nail Art Accents & Add-ons
-                  </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {addonsList.map((addon) => {
-                      const isSelected = selectedAddons.includes(addon.name);
-                      return (
-                        <button
-                          type="button"
-                          key={addon.id}
-                          onClick={() => toggleAddon(addon.name)}
-                          className={`p-3 rounded-xl border text-left text-xs transition-all flex items-center justify-between active:scale-95 ${
-                            isSelected
-                              ? 'bg-studio-wineLight text-studio-wine border-studio-wine font-semibold shadow-xs'
-                              : 'bg-studio-canvas/50 border-studio-border hover:bg-studio-surface text-studio-secondary'
-                          }`}
-                        >
-                          <span className="truncate pr-1">{addon.name}</span>
-                          {!hidePrices && (
-                            <span className="shrink-0 font-display font-bold text-studio-ink">
-                              +₹{Number(addon.price).toLocaleString('en-IN')}
-                            </span>
-                          )}
-                          {hidePrices && (
-                            <span className="shrink-0 text-[10px] text-studio-muted font-medium">
-                              Optional
-                            </span>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="flex justify-end pt-4">
-                  <button
-                    type="button"
-                    onClick={() => setBookingStep(2)}
-                    className="w-full sm:w-auto px-6 py-3 sm:py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio transition-all flex items-center justify-center gap-1.5 active:scale-95"
-                  >
-                    <span>Next: Shape & Aesthetic</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 2: Shape & Style */}
-            {bookingStep === 2 && (
-              <div className="space-y-5 sm:space-y-6 animate-fade-in text-xs font-sans">
-                <div>
-                  <h3 className="font-display italic font-bold text-lg sm:text-xl text-studio-ink mb-1">
-                    2. Choose Silhouette & Aesthetic
-                  </h3>
-                  <p className="text-studio-secondary text-xs">
-                    Sirii will customize and balance the architecture to complement your natural nail bed.
-                  </p>
-                </div>
-
-                {/* Shape */}
-                <div className="space-y-2">
-                  <label className="font-semibold text-studio-secondary block">
-                    Nail Silhouette
-                  </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    {shapes.map((s) => (
-                      <button
-                        type="button"
-                        key={s.id}
-                        onClick={() => setSelectedShape(s.name)}
-                        className={`p-2.5 rounded-xl border text-xs font-semibold transition-all active:scale-95 ${
-                          selectedShape === s.name
-                            ? 'bg-studio-wine text-white border-studio-wine shadow-xs'
-                            : 'bg-studio-surface border-studio-border hover:bg-studio-subtle text-studio-secondary'
-                        }`}
-                      >
-                        {s.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Length */}
-                <div className="space-y-2">
-                  <label className="font-semibold text-studio-secondary block">
-                    Extension Length
-                  </label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {['Short', 'Medium', 'Long', 'Extra Long'].map((len) => (
-                      <button
-                        type="button"
-                        key={len}
-                        onClick={() => setSelectedLength(len)}
-                        className={`p-2.5 rounded-xl border text-xs font-semibold transition-all active:scale-95 ${
-                          selectedLength === len
-                            ? 'bg-studio-wine text-white border-studio-wine shadow-xs'
-                            : 'bg-studio-surface border-studio-border hover:bg-studio-subtle text-studio-secondary'
-                        }`}
-                      >
-                        {len}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Aesthetic */}
-                <div className="space-y-2">
-                  <label className="font-semibold text-studio-secondary block">
-                    Aesthetic Direction
-                  </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {[
-                      '3D Chrome & Glaze',
-                      'BIAB Clean Natural Architecture',
-                      'French Ombre Minimalist',
-                      'Velvet Cat Eye Magnetic',
-                      'Sculptural Charms & Textures',
-                      'Hand-Painted Editorial Abstract'
-                    ].map((aesthetic) => (
-                      <button
-                        type="button"
-                        key={aesthetic}
-                        onClick={() => setSelectedAesthetic(aesthetic)}
-                        className={`p-2.5 rounded-xl border text-left text-xs font-semibold transition-all active:scale-95 ${
-                          selectedAesthetic === aesthetic
-                            ? 'bg-studio-wineLight text-studio-wine border-studio-wine shadow-xs'
-                            : 'bg-studio-surface border-studio-border hover:bg-studio-subtle text-studio-secondary'
-                        }`}
-                      >
-                        {aesthetic}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex justify-between pt-4 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setBookingStep(1)}
-                    className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary hover:bg-studio-subtle text-xs font-semibold"
-                  >
-                    Back
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setBookingStep(3)}
-                    className="px-6 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio transition-all flex items-center gap-1.5 active:scale-95"
-                  >
-                    <span>Next: Date & Time →</span>
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 3: Date & Time */}
-            {bookingStep === 3 && (
-              <div className="space-y-5 sm:space-y-6 animate-fade-in text-xs font-sans">
-                <div>
-                  <h3 className="font-display italic font-bold text-lg sm:text-xl text-studio-ink mb-1">
-                    3. Select Date & Appointment Slot
-                  </h3>
-                  <p className="text-studio-secondary text-xs">
-                    Estimated session time: ~{totalDuration} mins. Operating hours: 12:00 PM – 7:00 PM IST.
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="font-semibold text-studio-secondary block">
-                    Choose Date
-                  </label>
-                  <input
-                    type="date"
-                    required
-                    min={getKolkataTodayString()}
-                    value={bookingDate}
-                    onChange={(e) => setBookingDate(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="font-semibold text-studio-secondary block">
-                    Available Time Slots (Garhi Cantt Studio)
-                  </label>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                    {timeSlots.map((slot) => (
-                      <button
-                        type="button"
-                        key={slot}
-                        onClick={() => setBookingTime(slot)}
-                        className={`p-3 rounded-xl border text-xs font-semibold transition-all active:scale-95 ${
-                          bookingTime === slot
-                            ? 'bg-studio-wine text-white border-studio-wine shadow-xs'
-                            : 'bg-studio-surface border-studio-border hover:bg-studio-subtle text-studio-secondary'
-                        }`}
-                      >
-                        {slot}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Estimate Box */}
-                <div className="p-4 rounded-2xl bg-studio-subtle border border-studio-border flex items-center justify-between">
-                  <div>
-                    <span className="text-studio-muted text-[10px] uppercase font-bold block">
-                      Estimated Duration
-                    </span>
-                    <span className="font-semibold text-studio-ink">
-                      {totalDuration} mins (~{(totalDuration / 60).toFixed(1)} hrs)
-                    </span>
-                  </div>
-                  {!hidePrices && (
-                    <div className="text-right">
-                      <span className="text-studio-muted text-[10px] uppercase font-bold block">
-                        Estimated Total
-                      </span>
-                      <span className="font-display italic font-bold text-xl text-studio-wine">
-                        ₹{Number(totalPrice).toLocaleString('en-IN')}
-                      </span>
-                    </div>
-                  )}
-                  {hidePrices && (
-                    <div className="text-right">
-                      <span className="text-studio-muted text-[10px] uppercase font-bold block">
-                        Pricing
-                      </span>
-                      <span className="font-display italic font-bold text-sm text-studio-wine">
-                        On Request
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex justify-between pt-4 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setBookingStep(2)}
-                    className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary hover:bg-studio-subtle text-xs font-semibold"
-                  >
-                    Back
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setBookingStep(4)}
-                    className="px-6 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio transition-all flex items-center gap-1.5 active:scale-95"
-                  >
-                    <span>Next: Client Details →</span>
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 4: Client Info & Submit */}
-            {bookingStep === 4 && (
-              <form onSubmit={handleBookingSubmit} className="space-y-4 sm:space-y-5 animate-fade-in text-xs font-sans">
-                <div>
-                  <h3 className="font-display italic font-bold text-lg sm:text-xl text-studio-ink mb-1">
-                    4. Your Information & Confirmation
-                  </h3>
-                  <p className="text-studio-secondary text-xs">
-                    Please provide your contact details. Sirii will review and confirm your session directly on WhatsApp.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  <div>
-                    <label className="block font-semibold text-studio-secondary mb-1">
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Ananya Sharma"
-                      value={clientName}
-                      onChange={(e) => setClientName(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-semibold text-studio-secondary mb-1">
-                      Phone Number (for SMS & WhatsApp) *
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="+91 98765 43210"
-                      value={clientPhone}
-                      onChange={(e) => setClientPhone(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-semibold text-studio-secondary mb-1">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="client@gmail.com"
-                      value={clientEmail}
-                      onChange={(e) => setClientEmail(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-semibold text-studio-secondary mb-1">
-                      Instagram Handle (optional)
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="@yourhandle"
-                      value={clientInstagram}
-                      onChange={(e) => setClientInstagram(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-studio-secondary mb-1">
-                    Allergies or Skin Sensitivities
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. None, or sensitive cuticles / HEMA sensitivity"
-                    value={allergies}
-                    onChange={(e) => setAllergies(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-studio-secondary mb-1">
-                    Special Requests / Inspo References
-                  </label>
-                  <textarea
-                    rows={2}
-                    placeholder="Share any specific design ideas or notes for Sirii. You are also welcome to bring reference images to the studio."
-                    value={clientNotes}
-                    onChange={(e) => setClientNotes(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
-                  />
-                </div>
-
-                {/* Advance Deposit Option with Toggle */}
-                <div className="p-4 rounded-2xl bg-studio-subtle border border-studio-border space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <span className="font-semibold text-studio-ink text-xs flex items-center gap-1.5">
-                        <Wallet className="w-3.5 h-3.5 text-studio-wine" />
-                        <span>Optional Advance Deposit to Hold Slot</span>
-                      </span>
-                      <p className="text-[11px] text-studio-secondary">
-                        Transfer a small advance via UPI (GPay / PhonePe) to guarantee your time slot. Fully credited on your final bill.
-                      </p>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => setClientAdvanceToggle(!clientAdvanceToggle)}
-                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                        clientAdvanceToggle ? 'bg-studio-wine' : 'bg-studio-borderStrong'
-                      }`}
-                      aria-label="Toggle advance payment"
-                    >
-                      <span
-                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${
-                          clientAdvanceToggle ? 'translate-x-5' : 'translate-x-0'
-                        }`}
-                      />
-                    </button>
-                  </div>
-
-                  {clientAdvanceToggle ? (
-                    <div className="space-y-3 pt-2 border-t border-studio-border animate-in fade-in">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                          <label className="block font-semibold text-studio-secondary mb-1">
-                            Advance Amount (₹)
-                          </label>
-                          <input
-                            type="number"
-                            min="100"
-                            max={totalPrice}
-                            step="50"
-                            value={clientAdvanceAmount}
-                            onChange={(e) => setClientAdvanceAmount(e.target.value)}
-                            className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs font-semibold text-emerald-800"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block font-semibold text-studio-secondary mb-1">
-                            UPI Transaction Ref / UTR (Optional)
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="e.g. 12-digit UTR from GPay / PhonePe"
-                            value={clientUpiRef}
-                            onChange={(e) => setClientUpiRef(e.target.value)}
-                            className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Studio UPI ID Callout */}
-                      <div className="p-3 rounded-xl bg-studio-surface border border-studio-border flex items-center justify-between gap-2 text-[11px]">
-                        <div>
-                          <span className="text-studio-muted">Studio UPI ID (GPay / PhonePe):</span>{' '}
-                          <span className="font-mono font-bold text-studio-wine select-all">
-                            {settings?.upiId || 'nailsbysirii@okaxis'}
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            navigator.clipboard.writeText(settings?.upiId || 'nailsbysirii@okaxis');
-                            if (onAddToast) onAddToast('UPI ID Copied', 'Paste into Google Pay or PhonePe', 'success');
-                          }}
-                          className="px-2.5 py-1 rounded-lg bg-studio-wineLight text-studio-wine font-semibold hover:bg-studio-wineLight/80 transition-colors"
-                        >
-                          Copy UPI
-                        </button>
-                      </div>
-
-                      {/* Live Breakdown */}
-                      <div className="p-3 rounded-xl bg-studio-canvas border border-studio-border flex items-center justify-between text-xs">
-                        <div>
-                          <span className="text-[10px] uppercase font-bold text-emerald-800 block tracking-wider">
-                            Advance Paid Now
-                          </span>
-                          <span className="font-display italic font-bold text-sm text-emerald-800">
-                            ₹{Number(clientAdvanceAmount || 0).toLocaleString('en-IN')}
-                          </span>
-                        </div>
-                        <div className="text-right">
-                          <span className="text-[10px] uppercase font-bold text-amber-800 block tracking-wider">
-                            Pending Balance at Studio
-                          </span>
-                          {!hidePrices ? (
-                            <span className="font-display italic font-bold text-base text-amber-800">
-                              ₹{Number(Math.max(0, totalPrice - (Number(clientAdvanceAmount) || 0))).toLocaleString('en-IN')}
-                            </span>
-                          ) : (
-                            <span className="font-display italic font-semibold text-xs text-amber-800">
-                              Balance due at appointment
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="text-[11px] text-studio-muted italic">
-                      No advance payment required. The full balance may be settled at the studio upon completion of your nails.
-                    </p>
-                  )}
-                </div>
-
-                <div className="flex justify-between pt-4 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setBookingStep(3)}
-                    className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary hover:bg-studio-subtle text-xs font-semibold"
-                  >
-                    Back
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={isSubmittingBooking}
-                    className="px-8 py-3 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio transition-all active:scale-95 disabled:opacity-50 flex items-center gap-2"
-                  >
-                    <Sparkles className="w-4 h-4" />
-                    <span>{isSubmittingBooking ? 'Reserving Your Slot...' : 'Confirm Reservation'}</span>
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {/* STEP 5: Booking Confirmed Screen */}
-            {bookingStep === 5 && confirmedBooking && (
-              <div className="text-center space-y-6 py-6 animate-fade-in text-xs font-sans">
-                <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto shadow-studio">
-                  <CheckCircle2 className="w-8 h-8" />
-                </div>
-
-                <div className="space-y-1.5">
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine block">
-                    Reservation Confirmed
-                  </span>
-                  <h3 className="font-display italic font-bold text-2xl text-studio-ink">
-                    Thank You, {confirmedBooking.clientName}
-                  </h3>
-                  <p className="text-studio-secondary text-xs max-w-md mx-auto">
-                    Your appointment has been dispatched to Nails by Sirii in Dehradun. Sirii has received the notification and will send a confirmation on WhatsApp.
-                  </p>
-                </div>
-
-                {/* Appointment Card Recap with Advance & Pending */}
-                <div className="p-5 rounded-2xl bg-studio-canvas border border-studio-border max-w-md mx-auto text-left space-y-2.5">
-                  <div className="flex justify-between items-baseline pb-2 border-b border-studio-border">
-                    <span className="font-semibold text-studio-ink">{confirmedBooking.serviceName}</span>
-                    {!hidePrices && (
-                      <span className="font-display font-bold text-studio-wine text-base">
-                        ₹{Number(confirmedBooking.price).toLocaleString('en-IN')}
-                      </span>
-                    )}
-                    {hidePrices && (
-                      <span className="font-display italic text-studio-wine text-xs">
-                        Price on Request
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-studio-secondary space-y-1 text-xs">
-                    <p>
-                      <strong className="text-studio-ink">Date & Time:</strong> {confirmedBooking.date} at {confirmedBooking.time}
-                    </p>
-                    <p>
-                      <strong className="text-studio-ink">Studio:</strong> {settings?.studioName || 'Nails by Sirii'}
-                    </p>
-                    <p>
-                      <strong className="text-studio-ink">Location:</strong> {settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, Dehradun 248003'}
-                    </p>
-                    <p>
-                      <strong className="text-studio-ink">Specifications:</strong> {selectedShape} • {selectedLength} • {selectedAesthetic}
-                    </p>
-                    {Number(confirmedBooking.depositPaid || 0) > 0 && (
-                      <div className="pt-2 mt-2 border-t border-studio-border flex items-center justify-between text-[11px]">
-                        <span className="text-emerald-800 font-semibold">
-                          Advance Paid: ₹{Number(confirmedBooking.depositPaid).toLocaleString('en-IN')}
-                        </span>
-                        {!hidePrices ? (
-                          <span className="text-amber-800 font-bold">
-                            To Settle at Studio: ₹{Number(Math.max(0, confirmedBooking.price - confirmedBooking.depositPaid)).toLocaleString('en-IN')}
-                          </span>
-                        ) : (
-                          <span className="text-amber-800 font-semibold">
-                            Balance due at studio
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-                  <a
-                    href={`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
-                      `Hello Sirii! I have reserved an appointment through your website:\n\nName: ${confirmedBooking.clientName}\nService: ${confirmedBooking.serviceName}\nDate & Time: ${confirmedBooking.date} at ${confirmedBooking.time}\nPhone: ${confirmedBooking.clientPhone}${
-                        Number(confirmedBooking.depositPaid || 0) > 0 ? `\nAdvance Paid: ₹${confirmedBooking.depositPaid}` : ''
-                      }\n\nLooking forward to my appointment at your Garhi Cantt studio!`
-                    )}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs shadow-studio transition-all active:scale-95 flex items-center justify-center gap-2"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>Confirm via WhatsApp</span>
-                  </a>
-
-                  <button
-                    type="button"
-                    onClick={() => setBookingStep(1)}
-                    className="w-full sm:w-auto px-5 py-3 rounded-xl border border-studio-border bg-studio-surface hover:bg-studio-subtle text-xs font-semibold text-studio-secondary active:scale-95"
-                  >
-                    Reserve Another Session
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* 8. VERIFIED CLIENT TESTIMONIALS */}
-      <section id="reviews" className="py-12 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto border-t border-studio-border">
-        <div className="space-y-6 sm:space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine block">
-                  Client Experiences
-                </span>
-                <a
-                  href="https://maps.google.com/?q=Nails+by+Sirii+Laxmi+Navraj+Plaza+Garhi+Cantonment+Dehradun"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 text-[10px] font-bold flex items-center gap-1 border border-amber-200 hover:bg-amber-100 transition-colors"
-                >
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
-                  <span>4.9 ★ on Google (344+ Reviews)</span>
-                </a>
-              </div>
-              <h2 className="font-display italic font-bold text-2xl sm:text-4xl text-studio-ink">
-                Verified Studio Feedback
-              </h2>
-              <p className="text-xs text-studio-secondary max-w-md font-sans">
-                Authentic reviews from clients who value health-first nail architecture, long-lasting builder gel, and delicate hand-painted art.
+          {filteredCatalogue.length === 0 && (
+            <div className="text-center py-12 bg-studio-surface rounded-3xl border border-studio-border p-6 space-y-3">
+              <BookOpen className="w-10 h-10 text-studio-muted mx-auto" />
+              <h3 className="font-display font-semibold text-lg text-studio-ink">
+                No matching designs found for "{searchQuery}"
+              </h3>
+              <p className="text-xs text-studio-secondary max-w-sm mx-auto">
+                Remember, you are not limited to our booklet! Tap below to bring any photo or screenshot you found online.
               </p>
-            </div>
-
-            <button
-              onClick={() => setShowReviewModal(true)}
-              className="self-start sm:self-auto px-4 py-2 rounded-xl bg-studio-wineLight hover:bg-studio-subtle text-studio-wine border border-studio-border text-xs font-semibold transition-all flex items-center gap-1.5 shadow-xs active:scale-95"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Share Your Experience</span>
-            </button>
-          </div>
-
-          {reviews.length === 0 ? (
-            <div className="bg-studio-surface rounded-3xl p-8 sm:p-12 border border-dashed border-studio-border text-center space-y-4 max-w-2xl mx-auto">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 border border-amber-200 flex items-center justify-center mx-auto shadow-xs">
-                <Star className="w-6 h-6 fill-amber-400 text-amber-500" />
-              </div>
-              <div className="space-y-1">
-                <h3 className="font-display italic font-bold text-lg text-studio-ink">
-                  Be the First to Review Nails by Sirii
-                </h3>
-                <p className="text-xs text-studio-secondary max-w-md mx-auto leading-relaxed">
-                  Visited our studio recently? We would love to hear about your experience.
-                </p>
-              </div>
               <button
-                onClick={() => setShowReviewModal(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-studio-ink hover:bg-black text-white text-xs font-semibold shadow-studio transition-all active:scale-95"
+                onClick={handleSelectCustomInspo}
+                className="px-5 py-2.5 rounded-2xl bg-studio-wine text-white text-xs font-semibold shadow-studio"
               >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Write a Review</span>
+                Bring Your Own Inspo
               </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {reviews.map((rev) => (
-                <div
-                  key={rev.id}
-                  className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border shadow-studio space-y-3 hover:border-studio-borderStrong transition-all flex flex-col justify-between"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1 text-amber-500">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-3.5 h-3.5 ${
-                              i < (rev.rating || 5)
-                                ? 'fill-amber-400 text-amber-500'
-                                : 'text-stone-200'
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <div className="flex items-center gap-1.5 text-[10px] text-emerald-800 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                        <ShieldCheck className="w-3 h-3 text-emerald-600" />
-                        <span>{rev.source || 'Verified Client'}</span>
-                      </div>
-                    </div>
-
-                    <p className="text-xs text-studio-secondary italic leading-relaxed font-sans">
-                      "{rev.comment}"
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-3 border-t border-studio-border text-[11px] font-sans">
-                    <div className="space-y-0.5">
-                      <span className="font-semibold text-studio-ink block">{rev.clientName}</span>
-                      <span className="text-[10px] text-studio-muted">{rev.serviceRendered || 'Signature Gel Service'}</span>
-                    </div>
-                    {rev.aestheticTag && (
-                      <span className="px-2 py-0.5 rounded-full bg-studio-wineLight text-studio-wine text-[10px] font-medium border border-studio-border">
-                        {rev.aestheticTag}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
             </div>
           )}
         </div>
       </section>
 
-      {/* 9. STUDIO POLICIES & LOCATION FOOTER */}
-      <footer id="studio-info" className="bg-studio-surface border-t border-studio-border pt-12 pb-10 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto space-y-10">
-          {/* Policies Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 text-xs text-studio-secondary font-sans">
-            <div className="space-y-2 p-5 rounded-3xl bg-studio-canvas border border-studio-border">
-              <span className="font-display italic font-bold text-sm text-studio-ink block">
-                Appointment Etiquette ⏰
-              </span>
-              <p className="text-studio-secondary leading-relaxed">
-                To dedicate focused attention to every delicate detail, please arrive on time. For existing gel sets requiring removal, select Gel Removal during booking so appropriate time is allocated.
+      {/* 4. PRE-MADE LUXURY PRESS-ON NAILS BOUTIQUE (E-COMMERCE) */}
+      <section id="press-ons" className="py-12 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto border-t border-studio-border">
+        <div className="space-y-8 sm:space-y-10">
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-studio-wineLight text-studio-wine text-xs font-semibold">
+              <Ribbon className="w-3.5 h-3.5" />
+              <span>Atelier Ready-to-Wear Collection • Pan-India Delivery</span>
+            </div>
+            <h2 className="font-display italic font-bold text-3xl sm:text-5xl text-studio-ink tracking-tight">
+              Luxury Handcrafted Press-On Nails
+            </h2>
+            <p className="text-xs sm:text-sm text-studio-secondary max-w-2xl mx-auto leading-relaxed font-sans">
+              Handcrafted salon-quality reusable gel nails custom-fitted to your natural nail beds. Reusable 5+ times with zero natural nail damage. Every set includes your complimentary luxury prep & application kit.
+            </p>
+          </div>
+
+          {/* Boutique Value Proposition Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+            <div className="bg-studio-surface p-4 rounded-3xl border border-studio-border shadow-xs text-center space-y-1.5">
+              <div className="w-9 h-9 rounded-2xl bg-studio-wineLight text-studio-wine flex items-center justify-center mx-auto">
+                <Crown className="w-4 h-4" />
+              </div>
+              <h4 className="font-semibold text-xs text-studio-ink">Reusable 5+ Times</h4>
+              <p className="text-[10px] text-studio-secondary leading-normal">
+                Multi-layer salon builder gel apex for salon durability.
               </p>
             </div>
 
-            <div className="space-y-2 p-5 rounded-3xl bg-studio-canvas border border-studio-border">
-              <span className="font-display italic font-bold text-sm text-studio-ink block">
-                Hospital-Grade Sterilization
-              </span>
-              <p className="text-studio-secondary leading-relaxed">
-                Your health is uncompromised. All stainless steel implements undergo medical-grade ultrasonic cleaning and high-temperature autoclave sterilization, unsealed in front of you. Files and buffers are single-use.
+            <div className="bg-studio-surface p-4 rounded-3xl border border-studio-border shadow-xs text-center space-y-1.5">
+              <div className="w-9 h-9 rounded-2xl bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center justify-center mx-auto">
+                <Feather className="w-4 h-4" />
+              </div>
+              <h4 className="font-semibold text-xs text-studio-ink">Zero Nail Damage</h4>
+              <p className="text-[10px] text-studio-secondary leading-normal">
+                Peel-off jelly tabs preserve and protect natural nail health.
               </p>
             </div>
 
-            <div className="space-y-2 p-5 rounded-3xl bg-studio-canvas border border-studio-border">
-              <span className="font-display italic font-bold text-sm text-studio-ink block">
-                3–4 Week Durability & Care
-              </span>
-              <p className="text-studio-secondary leading-relaxed">
-                Apply nourishing cuticle oil daily to maintain natural nail flexibility and prevent lifting. Avoid using nails as tools, and never peel gel off natural nail plates.
+            <div className="bg-studio-surface p-4 rounded-3xl border border-studio-border shadow-xs text-center space-y-1.5">
+              <div className="w-9 h-9 rounded-2xl bg-purple-50 text-purple-800 border border-purple-200 flex items-center justify-center mx-auto">
+                <PackageCheck className="w-4 h-4" />
+              </div>
+              <h4 className="font-semibold text-xs text-studio-ink">Full Prep Kit Included</h4>
+              <p className="text-[10px] text-studio-secondary leading-normal">
+                Glue, 24 jelly tabs, cuticle pusher, buffer & alcohol pads.
+              </p>
+            </div>
+
+            <div className="bg-studio-surface p-4 rounded-3xl border border-studio-border shadow-xs text-center space-y-1.5">
+              <div className="w-9 h-9 rounded-2xl bg-blue-50 text-blue-800 border border-blue-200 flex items-center justify-center mx-auto">
+                <Truck className="w-4 h-4" />
+              </div>
+              <h4 className="font-semibold text-xs text-studio-ink">Pan-India Express</h4>
+              <p className="text-[10px] text-studio-secondary leading-normal">
+                Carefully packaged in Dehradun and shipped in 24–48 hours.
               </p>
             </div>
           </div>
 
-          {/* Studio Details & Contact */}
-          <div className="pt-6 border-t border-studio-border flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-center md:text-left">
-            <div className="flex items-center gap-3">
-              <StudioLogo logoUrl={settings?.studioLogoUrl} size="md" />
-              <div>
-                <span className="font-display italic font-bold text-base text-studio-ink">
-                  {settings?.studioName || 'Nails by Sirii'}
+          {/* Sizing Assistant Banner */}
+          <div className="bg-gradient-to-r from-studio-wineLight/80 via-studio-surface to-studio-canvas border border-studio-border rounded-3xl p-5 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-start gap-3.5">
+              <div className="w-11 h-11 rounded-2xl bg-studio-surface border border-studio-border text-studio-wine flex items-center justify-center shrink-0 shadow-xs">
+                <Ruler className="w-5 h-5 text-studio-wine" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block">
+                  Find Your Perfect Atelier Fit
                 </span>
-                <p className="text-studio-muted text-[11px] max-w-sm">
-                  {settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi Cantt, Dehradun, Uttarakhand 248003'}
+                <h3 className="font-display font-semibold text-base sm:text-lg text-studio-ink">
+                  Not sure about your nail size? Use our quick 1-minute sizing guide.
+                </h3>
+                <p className="text-xs text-studio-secondary leading-relaxed">
+                  Learn how to measure your natural nail bed with tape and a ruler, or order a custom set tailored to your exact mm numbers.
                 </p>
-                <div className="flex items-center gap-3 mt-1 justify-center md:justify-start">
-                  <a
-                    href="https://maps.google.com/?q=Nails+by+Sirii+Laxmi+Navraj+Plaza+Garhi+Cantonment+Dehradun"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-studio-wine hover:underline font-semibold flex items-center gap-1 text-[11px]"
-                  >
-                    <MapPin className="w-3 h-3 shrink-0" />
-                    <span>Get Directions on Maps</span>
-                  </a>
-                  <span className="text-studio-border">•</span>
-                  <span className="text-emerald-800 font-semibold text-[11px] flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-emerald-600" />
-                    <span>{settings?.timings || '12:00 PM – 7:00 PM'}</span>
-                  </span>
-                </div>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-studio-muted">
-              {settings?.phone && (
-                <a
-                  href={`tel:${settings.phone}`}
-                  className="hover:text-studio-wine flex items-center gap-1.5 transition-colors font-semibold"
-                >
-                  <Phone className="w-3.5 h-3.5 text-studio-wine" />
-                  <span>{settings.phone}</span>
-                </a>
-              )}
-              {settings?.instagram && (
-                <a
-                  href={`https://instagram.com/${settings.instagram.replace('@', '')}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-studio-wine flex items-center gap-1.5 transition-colors font-semibold"
-                >
-                  <InstagramIcon className="w-3.5 h-3.5 text-pink-700" />
-                  <span>{settings.instagram}</span>
-                </a>
-              )}
-              {settings?.email && (
-                <a
-                  href={`mailto:${settings.email}`}
-                  className="hover:text-studio-wine flex items-center gap-1.5 transition-colors"
-                >
-                  <Mail className="w-3.5 h-3.5" />
-                  <span>{settings.email}</span>
-                </a>
-              )}
-            </div>
-
-            {/* Studio Hub Passcode Gate Button */}
             <button
-              onClick={onOpenPasscodeModal}
-              className="px-3 py-1.5 rounded-xl bg-studio-canvas hover:bg-studio-wineLight border border-studio-border text-[11px] font-semibold text-studio-secondary hover:text-studio-wine transition-all flex items-center gap-1.5 shadow-xs active:scale-95"
+              onClick={() => setIsSizingModalOpen(true)}
+              className="self-start md:self-auto px-5 py-3 rounded-2xl bg-studio-surface hover:bg-studio-subtle text-studio-ink border border-studio-border font-semibold text-xs shadow-xs transition-all flex items-center gap-2 shrink-0 active:scale-95 min-h-[44px]"
             >
-              <Lock className="w-3 h-3 text-studio-muted" />
-              <span>Studio Hub (Owner)</span>
+              <Ruler className="w-3.5 h-3.5 text-studio-wine" />
+              <span>Open Nail Sizing Guide</span>
             </button>
           </div>
 
-          <div className="text-center text-[10px] text-studio-muted pt-3 border-t border-studio-border">
-            © {new Date().getFullYear()} {settings?.studioName || 'Nails by Sirii'} • Handcrafted with precision in Garhi Cantt, Dehradun.
+          {/* Press-On Products Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {activePressOnProducts.map((product) => (
+              <div
+                key={product.id}
+                className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border hover:border-studio-wine/40 shadow-studio transition-all flex flex-col justify-between group space-y-4"
+              >
+                <div className="space-y-4">
+                  {/* Visual Schematic Preview */}
+                  <div className="h-48 rounded-2xl bg-studio-canvas/70 border border-studio-border flex flex-col items-center justify-center relative overflow-hidden group-hover:border-studio-wine/30 transition-all p-3">
+                    <NailTipSchematic
+                      shape={product.shape || 'Almond'}
+                      length={product.length || 'Medium'}
+                      baseColor={product.baseColor || '#FDF2F8'}
+                      finish={product.finish || 'Hailey Glazed Chrome'}
+                      className="scale-105 transition-transform group-hover:scale-110 duration-300"
+                    />
+
+                    {/* Tag badge */}
+                    <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-studio-surface/90 backdrop-blur-sm border border-studio-border text-[10px] font-bold text-studio-wine shadow-xs">
+                      {product.tag || 'Handcrafted'}
+                    </span>
+
+                    {/* Silhouette info */}
+                    <span className="absolute bottom-3 right-3 px-2.5 py-0.5 rounded-full bg-studio-surface/90 backdrop-blur-sm border border-studio-border text-[10px] font-semibold text-studio-secondary">
+                      {product.shape} • {product.length}
+                    </span>
+                  </div>
+
+                  {/* Product Details */}
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block">
+                      {product.collection || 'Signature Boutique'}
+                    </span>
+                    <h3 className="font-display italic font-bold text-lg text-studio-ink group-hover:text-studio-wine transition-colors">
+                      {product.title}
+                    </h3>
+                    <p className="text-xs text-studio-secondary leading-relaxed font-sans pt-0.5">
+                      {product.description}
+                    </p>
+                  </div>
+
+                  {/* Included Kit Summary */}
+                  <div className="pt-2 border-t border-studio-border/60 text-[11px] text-studio-secondary space-y-1">
+                    <span className="text-[10px] font-semibold text-studio-ink block">Included in Box:</span>
+                    <p className="text-[10px] text-studio-muted leading-relaxed">
+                      {product.includedKit || '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer & 2 Prep Wipes'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Price, Stock & Order CTA */}
+                <div className="pt-4 border-t border-studio-border flex items-center justify-between gap-3">
+                  <div>
+                    <div className="font-display italic font-bold text-xl text-studio-ink">
+                      ₹{product.price}
+                    </div>
+                    <span className="text-[10px] text-emerald-700 font-semibold block">
+                      Free Pan-India Delivery
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => handleOpenPressOnCheckout(product)}
+                    className="px-5 py-2.5 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio transition-all active:scale-95 flex items-center gap-1.5 min-h-[42px]"
+                  >
+                    <ShoppingBag className="w-3.5 h-3.5" />
+                    <span>Order Set</span>
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
+      </section>
+
+      {/* 5. MULTI-STEP RESERVATION WIZARD (NO FIXED PRICE RATES) */}
+      <section id="booking-section" className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto border-t border-studio-border">
+        <div className="bg-studio-surface rounded-3xl border border-studio-border p-6 sm:p-10 shadow-studio space-y-8">
+          {/* Header */}
+          <div className="text-center space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight text-studio-wine text-[11px] font-semibold">
+              <Calendar className="w-3.5 h-3.5" />
+              <span>Dedicated Studio Session</span>
+            </div>
+            <h2 className="font-display italic font-bold text-2xl sm:text-4xl text-studio-ink">
+              Reserve Your Appointment
+            </h2>
+            <p className="text-xs sm:text-sm text-studio-secondary max-w-md mx-auto leading-relaxed">
+              Every appointment is reserved exclusively for you with dedicated sterilization buffers. No upfront payment required to request your slot.
+            </p>
+          </div>
+
+          {/* Step Progress Pills */}
+          {bookingStep < 5 && (
+            <div className="flex items-center justify-between max-w-md mx-auto pt-2">
+              {[
+                { num: 1, label: 'Design' },
+                { num: 2, label: 'Date & Time' },
+                { num: 3, label: 'Your Details' }
+              ].map((s) => (
+                <div key={s.num} className="flex items-center gap-2">
+                  <div
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${bookingStep === s.num
+                      ? 'bg-studio-wine text-white shadow-xs ring-4 ring-studio-wineLight'
+                      : bookingStep > s.num
+                        ? 'bg-emerald-700 text-white'
+                        : 'bg-studio-canvas text-studio-muted border border-studio-border'
+                      }`}
+                  >
+                    {bookingStep > s.num ? <Check className="w-3.5 h-3.5" /> : s.num}
+                  </div>
+                  <span className={`text-xs font-semibold hidden sm:inline ${bookingStep === s.num ? 'text-studio-ink font-bold' : 'text-studio-muted'
+                    }`}>
+                    {s.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* STEP 1: Selected Design & Custom Inspo */}
+          {bookingStep === 1 && (
+            <div className="space-y-6 animate-fade-in text-xs font-sans">
+              {/* Mode 1: Lookbook Design Selected */}
+              {bookingMode === 'lookbook' && selectedLook && (
+                <div className="p-5 rounded-2xl border-2 border-studio-wine bg-studio-wineLight/60 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-studio-wine" />
+                      <span className="font-display italic font-bold text-base text-studio-ink">
+                        {selectedLook.title}
+                      </span>
+                    </div>
+                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-studio-surface text-studio-wine font-bold border border-studio-border">
+                      {selectedLook.category}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-studio-secondary leading-relaxed">
+                    {selectedLook.desc}
+                  </p>
+
+                  <div className="text-[11px] text-studio-secondary pt-1 flex items-center justify-between">
+                    <span>Suggested: <strong>{selectedLook.shape.name} • {selectedLook.length.name}</strong></span>
+                    <span>Session: <strong>~{selectedLook.durationNum} mins</strong></span>
+                  </div>
+
+                  <div className="pt-2 border-t border-studio-border flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <button
+                      type="button"
+                      onClick={() => scrollTo('catalogue')}
+                      className="text-studio-wine hover:underline font-semibold"
+                    >
+                      ← Browse other booklet designs
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSelectCustomInspo}
+                      className="text-studio-secondary hover:text-studio-ink font-medium"
+                    >
+                      Or switch to "Bring Your Own Inspo"
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Mode 2: Custom Internet Inspo */}
+              {bookingMode === 'customInspo' && (
+                <div className="p-5 rounded-2xl border-2 border-studio-wine bg-studio-wineLight/60 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Camera className="w-4 h-4 text-studio-wine" />
+                      <span className="font-display italic font-bold text-base text-studio-ink">
+                        Bring Your Own Internet Inspo
+                      </span>
+                    </div>
+                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-studio-surface text-studio-wine font-bold border border-studio-border">
+                      Custom Online Reference
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-studio-secondary leading-relaxed">
+                    Share a link to an Instagram post, Pinterest pin, or describe the look you'd like. You can also show reference photos directly to Sirii during your appointment.
+                  </p>
+
+                  <div className="space-y-3 pt-1">
+                    <div>
+                      <label className="block font-semibold text-studio-ink mb-1">
+                        Link to Photo / Pin / Post (Optional)
+                      </label>
+                      <input
+                        type="url"
+                        placeholder="https://pinterest.com/pin/... or Instagram link"
+                        value={inspoUrl}
+                        onChange={(e) => setInspoUrl(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-surface text-base sm:text-xs text-studio-ink focus:border-studio-wine outline-none font-sans"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-semibold text-studio-ink mb-1">
+                        Describe the Look / Colors / Art Details
+                      </label>
+                      <textarea
+                        rows={2}
+                        placeholder="e.g. 3D metallic chrome ribbons on milky nude almond nails, similar to French tips..."
+                        value={inspoDescription}
+                        onChange={(e) => setInspoDescription(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-surface text-base sm:text-xs text-studio-ink focus:border-studio-wine outline-none font-sans"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-studio-border flex justify-between text-xs">
+                    <button
+                      type="button"
+                      onClick={() => scrollTo('catalogue')}
+                      className="text-studio-wine hover:underline font-semibold"
+                    >
+                      ← Browse studio catalogue instead
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Mode 3: Custom Set Silhouette */}
+              {bookingMode === 'customSet' && (
+                <div className="p-5 rounded-2xl border-2 border-studio-wine bg-studio-wineLight/60 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Palette className="w-4 h-4 text-studio-wine" />
+                      <span className="font-display italic font-bold text-base text-studio-ink">
+                        Custom Silhouette: {customShape.name} ({customLength.name})
+                      </span>
+                    </div>
+                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-studio-surface text-studio-wine font-bold border border-studio-border">
+                      Customizer Build
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <span className="text-studio-muted block text-[10px]">Base Tint:</span>
+                      <span className="font-semibold text-studio-ink">{customBase.name}</span>
+                    </div>
+                    <div>
+                      <span className="text-studio-muted block text-[10px]">Finish:</span>
+                      <span className="font-semibold text-studio-ink">{customFinish.name}</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-studio-border text-xs">
+                    <button
+                      type="button"
+                      onClick={() => scrollTo('catalogue')}
+                      className="text-studio-wine hover:underline font-semibold flex items-center gap-1.5"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Adjust specifications in catalogue</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Preferences: Preferred Shape & Length */}
+              <div className="space-y-4 pt-2">
+                <div>
+                  <label className="block font-semibold text-studio-ink mb-1.5">
+                    Confirm Desired Shape
+                  </label>
+                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                    {shapes.map((s) => (
+                      <button
+                        type="button"
+                        key={s.id}
+                        onClick={() => setSelectedShape(s.name)}
+                        className={`p-2 rounded-xl border text-center transition-all text-xs min-h-[40px] flex items-center justify-center ${selectedShape === s.name
+                          ? 'bg-studio-wine text-white font-bold border-studio-wine shadow-xs'
+                          : 'bg-studio-surface border-studio-border text-studio-secondary hover:bg-studio-subtle'
+                          }`}
+                      >
+                        {s.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-studio-ink mb-1.5">
+                    Confirm Desired Length
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {lengths.map((l) => (
+                      <button
+                        type="button"
+                        key={l.id}
+                        onClick={() => setSelectedLength(l.name)}
+                        className={`p-2 rounded-xl border text-center transition-all text-xs min-h-[40px] flex items-center justify-center ${selectedLength === l.name
+                          ? 'bg-studio-wine text-white font-bold border-studio-wine shadow-xs'
+                          : 'bg-studio-surface border-studio-border text-studio-secondary hover:bg-studio-subtle'
+                          }`}
+                      >
+                        {l.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Continue to Step 2 */}
+              <div className="flex justify-end pt-4">
+                <button
+                  type="button"
+                  onClick={() => setBookingStep(2)}
+                  className="w-full sm:w-auto px-7 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio transition-all active:scale-95 flex items-center justify-center gap-2 min-h-[44px]"
+                >
+                  <span>Select Date & Time</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 2: Date & Time Picker */}
+          {bookingStep === 2 && (
+            <div className="space-y-6 animate-fade-in text-xs font-sans">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {/* Date Picker */}
+                <div className="space-y-2">
+                  <label className="block font-semibold text-studio-ink text-xs">
+                    Choose Appointment Date
+                  </label>
+                  <input
+                    type="date"
+                    min={getKolkataTodayString()}
+                    value={bookingDate}
+                    onChange={(e) => setBookingDate(e.target.value)}
+                    className="w-full p-3.5 rounded-2xl border border-studio-border bg-studio-surface text-base sm:text-xs text-studio-ink focus:border-studio-wine outline-none font-medium min-h-[44px]"
+                  />
+                  <p className="text-[11px] text-studio-muted">
+                    Studio opens Tuesday through Sunday (12:00 PM – 7:00 PM).
+                  </p>
+                </div>
+
+                {/* Time Slot Picker */}
+                <div className="space-y-2">
+                  <label className="block font-semibold text-studio-ink text-xs flex items-center justify-between">
+                    <span>Available Starting Slots</span>
+                    <span className="text-[11px] text-studio-muted">Duration: ~{totalDuration}m</span>
+                  </label>
+                  <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto p-1 border border-studio-border rounded-2xl bg-studio-canvas/50">
+                    {timeSlots.map((slot) => (
+                      <button
+                        type="button"
+                        key={slot}
+                        onClick={() => setBookingTime(slot)}
+                        className={`p-2.5 rounded-xl border text-center transition-all text-xs font-semibold min-h-[40px] flex items-center justify-center ${bookingTime === slot
+                          ? 'bg-studio-wine text-white border-studio-wine shadow-xs'
+                          : 'bg-studio-surface border-studio-border text-studio-secondary hover:bg-studio-subtle'
+                          }`}
+                      >
+                        {formatTime12h(slot) || slot}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex justify-between pt-4 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setBookingStep(1)}
+                  className="px-5 py-2.5 rounded-2xl border border-studio-border text-studio-secondary hover:bg-studio-subtle text-xs font-semibold min-h-[44px]"
+                >
+                  Back
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBookingStep(3)}
+                  className="px-7 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio transition-all active:scale-95 flex items-center gap-2 min-h-[44px]"
+                >
+                  <span>Continue to Details</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 3: Client Details & Submission (No price rates or deposit inputs) */}
+          {bookingStep === 3 && (
+            <form onSubmit={handleBookingSubmit} className="space-y-5 animate-fade-in text-xs font-sans">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-semibold text-studio-ink mb-1.5">
+                    Your Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Ananya Sharma"
+                    value={clientName}
+                    onChange={(e) => setClientName(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink font-semibold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-studio-ink mb-1.5">
+                    WhatsApp Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="e.g. 98765 43210"
+                    value={clientPhone}
+                    onChange={(e) => setClientPhone(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink font-semibold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-studio-ink mb-1.5">
+                    Email Address (Optional)
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="for confirmation receipts"
+                    value={clientEmail}
+                    onChange={(e) => setClientEmail(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-studio-ink mb-1.5">
+                    Instagram Handle (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="@yourhandle"
+                    value={clientInstagram}
+                    onChange={(e) => setClientInstagram(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-semibold text-studio-ink mb-1.5">
+                  Any Notes or Design Requests for Sirii
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder="Share any special preferences, previous gel on nails, or questions for your session..."
+                  value={clientNotes}
+                  onChange={(e) => setClientNotes(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink leading-relaxed"
+                />
+              </div>
+
+              {/* Reservation Reassurance Card */}
+              <div className="p-4 rounded-2xl bg-studio-canvas/70 border border-studio-border text-xs text-studio-secondary space-y-1.5">
+                <div className="flex items-center gap-2 text-studio-ink font-semibold">
+                  <ShieldCheck className="w-4 h-4 text-emerald-700" />
+                  <span>No Upfront Payment Required</span>
+                </div>
+                <p className="leading-relaxed">
+                  Your appointment request will be reviewed by Sirii. You will receive a direct confirmation on WhatsApp with studio directions and slot verification.
+                </p>
+              </div>
+
+              {/* Actions */}
+              <div className="flex justify-between pt-4 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setBookingStep(2)}
+                  className="px-5 py-2.5 rounded-2xl border border-studio-border text-studio-secondary hover:bg-studio-subtle text-xs font-semibold min-h-[44px]"
+                >
+                  Back
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmittingBooking}
+                  className="px-8 py-3.5 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs sm:text-sm shadow-studio transition-all active:scale-95 disabled:opacity-50 flex items-center gap-2 min-h-[44px]"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>{isSubmittingBooking ? 'Submitting Reservation...' : 'Confirm Appointment Request'}</span>
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* STEP 5: Booking Confirmed Screen */}
+          {bookingStep === 5 && confirmedBooking && (
+            <div className="text-center space-y-6 py-6 animate-fade-in text-xs font-sans">
+              <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mx-auto shadow-studio">
+                <CheckCircle2 className="w-8 h-8" />
+              </div>
+
+              <div className="space-y-1.5">
+                <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine block">
+                  Reservation Dispatched
+                </span>
+                <h3 className="font-display italic font-bold text-2xl text-studio-ink">
+                  Thank You, {confirmedBooking.clientName}
+                </h3>
+                <p className="text-studio-secondary text-xs max-w-md mx-auto leading-relaxed">
+                  Your appointment request has been dispatched to Sirii's studio console. Sirii will review your chosen design and confirm your slot on WhatsApp.
+                </p>
+              </div>
+
+              {/* Summary Card */}
+              <div className="p-5 rounded-2xl bg-studio-canvas border border-studio-border max-w-md mx-auto text-left space-y-2.5">
+                <div className="flex justify-between items-baseline pb-2 border-b border-studio-border">
+                  <span className="font-semibold text-studio-ink">{confirmedBooking.serviceName}</span>
+                  <span className="text-xs text-studio-wine font-semibold">Reserved</span>
+                </div>
+                <div className="text-studio-secondary space-y-1 text-xs">
+                  <p>
+                    <strong className="text-studio-ink">Date & Time:</strong> {confirmedBooking.date} at {confirmedBooking.time}
+                  </p>
+                  <p>
+                    <strong className="text-studio-ink">Silhouette:</strong> {selectedShape} • {selectedLength}
+                  </p>
+                  <p>
+                    <strong className="text-studio-ink">Studio:</strong> Nails by Sirii
+                  </p>
+                  <p>
+                    <strong className="text-studio-ink">Location:</strong> Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, Dehradun 248003
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a
+                  href={`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
+                    `Hello Sirii! I just requested an appointment for ${confirmedBooking.date} at ${confirmedBooking.time} for "${confirmedBooking.serviceName}". My name is ${confirmedBooking.clientName}.`
+                  )}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs shadow-studio flex items-center justify-center gap-2 min-h-[44px]"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Message Sirii on WhatsApp</span>
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConfirmedBooking(null);
+                    setBookingStep(1);
+                    scrollTo('catalogue');
+                  }}
+                  className="w-full sm:w-auto px-6 py-3 rounded-2xl border border-studio-border bg-studio-surface hover:bg-studio-subtle text-studio-ink font-semibold text-xs transition-colors min-h-[44px]"
+                >
+                  Return to Catalogue
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* 6. CLIENT REVIEWS SECTION */}
+      <section id="reviews" className="py-12 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto border-t border-studio-border">
+        <div className="space-y-8 sm:space-y-10">
+          {/* Section Header */}
+          <div className="space-y-2">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine px-3 py-1 rounded-full bg-studio-wineLight/60 border border-studio-wine/10 inline-flex items-center gap-1.5">
+              <Sparkles className="w-3 h-3 text-studio-wine" />
+              Verified Client Love & Accolades
+            </span>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <h2 className="font-display italic font-bold text-3xl sm:text-4xl md:text-5xl text-studio-ink leading-tight">
+                  Loved by 340+ Clients in Dehradun
+                </h2>
+                <p className="text-xs sm:text-sm text-studio-secondary max-w-2xl font-sans leading-relaxed mt-1">
+                  From Pinterest inspiration matches to clinical Russian cuticle care and masterclass training, explore verified experiences from our atelier community.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 self-start md:self-auto shrink-0">
+                <button
+                  onClick={() => setShowReviewModal(true)}
+                  className="px-4 py-2.5 rounded-2xl bg-studio-wine hover:bg-studio-wine/90 text-white text-xs font-semibold shadow-studio transition-all flex items-center gap-1.5 min-h-[42px]"
+                >
+                  <Star className="w-3.5 h-3.5 fill-white" />
+                  <span>Share Your Review</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* GOOGLE TRUST SCORECARD & REPUTATION BANNER */}
+          <div className="bg-gradient-to-br from-studio-surface via-studio-surface to-studio-wineLight/25 rounded-3xl p-6 sm:p-8 border border-studio-border shadow-studio space-y-6">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-studio-border/70">
+              {/* Left: Google rating & Verified badge */}
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white border border-studio-border/80 shadow-xs flex flex-col items-center justify-center p-2 shrink-0">
+                  <svg className="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                  </svg>
+                  <span className="text-[9px] font-bold text-studio-secondary mt-1">Google</span>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                    <span className="font-display font-bold text-3xl sm:text-4xl text-studio-ink tracking-tight">{avgRating}</span>
+                    <div className="space-y-0.5">
+                      <div className="flex items-center text-amber-500">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-500" />
+                        ))}
+                      </div>
+                      <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 inline-flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" /> 100% 5-Star Satisfaction
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-studio-secondary">
+                    Based on <strong className="text-studio-ink font-semibold">344+ verified reviews</strong> • Garhi Cantt, Dehradun
+                  </p>
+                </div>
+              </div>
+
+              {/* Right: Map direct link */}
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=Nails+by+Sirii+Garhi+Cantt+Dehradun"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2.5 rounded-2xl bg-studio-surface hover:bg-studio-subtle text-studio-ink border border-studio-border text-xs font-semibold transition-all flex items-center gap-2 min-h-[42px] shadow-xs"
+                >
+                  <span>Read on Google Maps</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-studio-muted" />
+                </a>
+              </div>
+            </div>
+
+            {/* Trust Pillars Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 pt-1">
+              <div className="p-3.5 rounded-2xl bg-studio-canvas/80 border border-studio-border/70 space-y-1">
+                <div className="flex items-center gap-1.5 text-studio-wine font-semibold text-xs">
+                  <Wand2 className="w-3.5 h-3.5" />
+                  <span>Exact Inspo Match</span>
+                </div>
+                <p className="text-[11px] text-studio-secondary leading-snug">
+                  Pinterest and IG reference photos replicated down to exact lines.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-studio-canvas/80 border border-studio-border/70 space-y-1">
+                <div className="flex items-center gap-1.5 text-emerald-800 font-semibold text-xs">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Class-B Autoclave</span>
+                </div>
+                <p className="text-[11px] text-studio-secondary leading-snug">
+                  Hospital sterile implements opened fresh before each treatment.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-studio-canvas/80 border border-studio-border/70 space-y-1">
+                <div className="flex items-center gap-1.5 text-amber-700 font-semibold text-xs">
+                  <Gem className="w-3.5 h-3.5" />
+                  <span>4+ Week Retention</span>
+                </div>
+                <p className="text-[11px] text-studio-secondary leading-snug">
+                  Russian e-file cuticle prep for zero lifting or chipping.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-studio-canvas/80 border border-studio-border/70 space-y-1">
+                <div className="flex items-center gap-1.5 text-rose-700 font-semibold text-xs">
+                  <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-100" />
+                  <span>Sweet Hospitality</span>
+                </div>
+                <p className="text-[11px] text-studio-secondary leading-snug">
+                  Beloved couple-run studio with custom design guidance.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* EDITORIAL SPOTLIGHT: CLIENT STORY OF THE MONTH */}
+          <div className="relative overflow-hidden rounded-3xl bg-studio-surface border border-studio-wine/25 p-6 sm:p-8 shadow-studio">
+            <div className="absolute -right-8 -bottom-8 w-44 h-44 bg-studio-wineLight/30 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+              <div className="space-y-3 max-w-2xl">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-3 py-1 rounded-full bg-studio-wine text-white text-[10px] font-bold tracking-wider uppercase inline-flex items-center gap-1 shadow-xs">
+                    <Crown className="w-3 h-3 text-amber-300" /> Client Spotlight of the Month
+                  </span>
+                  <span className="text-[11px] text-studio-muted font-medium">Exact Reference Photo Match</span>
+                </div>
+
+                <div className="relative">
+                  <Quote className="w-8 h-8 text-studio-wine/20 absolute -top-3 -left-3 pointer-events-none" />
+                  <p className="font-display italic text-base sm:text-lg md:text-xl text-studio-ink leading-relaxed pl-5">
+                    "It was my first time getting my nails done at Nails by Sirii and I can't get over how gorgeous these nails turned out! I showed them the inspiration pictures and they executed it perfectly. The artistry and precision in the hand painted flowers are truly impressive. Thank you so much, I love them!"
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 pt-2">
+                  <div className="w-10 h-10 rounded-full bg-rose-100 text-rose-800 border border-rose-200 flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                    DS
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="font-semibold text-xs sm:text-sm text-studio-ink">Da Suttiwanna</span>
+                      <span className="text-[10px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded border border-emerald-200 inline-flex items-center gap-0.5 font-medium">
+                        <Check className="w-2.5 h-2.5 text-emerald-600" /> Verified Google Review
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-studio-muted block">Hand-Painted Floral Nail Art • Dehradun</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right quick badge */}
+              <div className="shrink-0 bg-white/90 backdrop-blur-xs rounded-2xl p-5 border border-studio-border space-y-2 w-full md:w-56 text-center shadow-xs">
+                <div className="flex justify-center text-amber-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-xs font-bold text-studio-ink">100% Inspo Recreation</p>
+                <p className="text-[10px] text-studio-secondary leading-tight">
+                  Complex multi-finger Pinterest nail art executed without compromise.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* CATEGORY FILTER TABS */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none w-full sm:w-auto">
+                {REVIEW_CATEGORIES.map((cat) => {
+                  const count = getCategoryCount(cat);
+                  const isActive = reviewFilter === cat;
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setReviewFilter(cat)}
+                      className={`px-3.5 py-2 rounded-2xl text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 min-h-[38px] ${isActive
+                        ? 'bg-studio-wine text-white font-semibold shadow-studio'
+                        : 'bg-studio-surface hover:bg-studio-wineLight text-studio-secondary border border-studio-border'
+                        }`}
+                    >
+                      {cat === 'All Reviews' && <Stars className="w-3.5 h-3.5" />}
+                      {cat === 'Exact Inspo Match' && <Wand2 className="w-3.5 h-3.5" />}
+                      {cat === 'Extensions & BIAB' && <Gem className="w-3.5 h-3.5" />}
+                      {cat === 'Hand-Painted Art' && <Paintbrush className="w-3.5 h-3.5" />}
+                      {cat === 'Hygiene & Hospitality' && <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-100" />}
+                      {cat === 'Nail Tech Academy' && <Sparkles className="w-3.5 h-3.5" />}
+                      <span>{cat}</span>
+                      <span
+                        className={`text-[10px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-studio-canvas text-studio-muted'
+                          }`}
+                      >
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <span className="text-xs text-studio-muted hidden sm:inline">
+                Showing <strong className="text-studio-ink">{filteredReviews.length}</strong> client experiences
+              </span>
+            </div>
+
+            {/* REVIEWS GRID */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              {filteredReviews.map((r) => {
+                const isLiked = likedReviews.has(r.id);
+                const likeCount = reviewLikes[r.id] || (r.likes || 12);
+                const initials = getInitials(r.clientName);
+                const avatarColor = getAvatarColor(r.clientName);
+
+                return (
+                  <div
+                    key={r.id}
+                    className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border shadow-studio hover:shadow-studio-float transition-all flex flex-col justify-between space-y-4 group"
+                  >
+                    <div className="space-y-3">
+                      {/* Header: Avatar, Name, Verified Badge, Rating */}
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-10 h-10 rounded-full border flex items-center justify-center font-bold text-xs shrink-0 ${avatarColor}`}
+                          >
+                            {initials}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-1.5">
+                              <h4 className="font-semibold text-xs sm:text-sm text-studio-ink">
+                                {r.clientName}
+                              </h4>
+                              <span className="w-3.5 h-3.5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center" title="Verified Client">
+                                <Check className="w-2.5 h-2.5" />
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1.5 text-[10px] text-studio-muted">
+                              <span>{r.source || 'Google Review'}</span>
+                              <span>•</span>
+                              <span>{r.date || 'Recent'}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Stars */}
+                        <div className="flex items-center text-amber-400 shrink-0">
+                          {[...Array(Number(r.rating) || 5)].map((_, i) => (
+                            <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Service & Aesthetic Tags */}
+                      <div className="flex flex-wrap gap-1.5 pt-0.5">
+                        {r.serviceRendered && (
+                          <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-studio-canvas text-studio-ink font-medium border border-studio-border">
+                            {r.serviceRendered}
+                          </span>
+                        )}
+                        {r.aestheticTag && (
+                          <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-studio-wineLight/70 text-studio-wine font-semibold border border-studio-wine/15">
+                            {r.aestheticTag}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Comment */}
+                      <p className="text-xs text-studio-secondary italic leading-relaxed pt-1 font-sans">
+                        "{r.comment}"
+                      </p>
+                    </div>
+
+                    {/* Footer: Interactive Like / Love button & verified mark */}
+                    <div className="pt-3 border-t border-studio-border/60 flex items-center justify-between text-[11px]">
+                      <span className="text-studio-muted text-[10px] flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Verified Visit
+                      </span>
+
+                      <button
+                        onClick={() => handleToggleLikeReview(r.id)}
+                        className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 min-h-[30px] ${isLiked
+                          ? 'bg-rose-50 text-rose-600 border border-rose-200 shadow-xs'
+                          : 'bg-studio-canvas hover:bg-rose-50/50 text-studio-muted hover:text-rose-600 border border-studio-border'
+                          }`}
+                        title="Mark as helpful / appreciative"
+                      >
+                        <Heart
+                          className={`w-3.5 h-3.5 transition-transform ${isLiked ? 'fill-rose-500 text-rose-500 scale-110' : 'text-current'
+                            }`}
+                        />
+                        <span className="font-semibold text-[11px]">{likeCount}</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {filteredReviews.length === 0 && (
+              <div className="text-center py-12 bg-studio-surface rounded-3xl border border-studio-border p-6 space-y-3">
+                <p className="text-xs text-studio-secondary">No reviews under this category yet.</p>
+                <button
+                  onClick={() => setReviewFilter('All Reviews')}
+                  className="px-4 py-2 rounded-2xl bg-studio-wine text-white text-xs font-semibold"
+                >
+                  View All Reviews
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* 7. STUDIO HYGIENE & LOCATION */}
+      <section id="studio-info" className="py-12 sm:py-16 px-4 sm:px-6 max-w-7xl mx-auto border-t border-studio-border">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="space-y-4">
+            <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine block">
+              Medical-Grade Standards
+            </span>
+            <h2 className="font-display italic font-bold text-2xl sm:text-4xl text-studio-ink">
+              Clinical Hygiene in a Contemporary Atelier
+            </h2>
+            <p className="text-xs sm:text-sm text-studio-secondary leading-relaxed font-sans">
+              At Nails by Sirii, client safety is non-negotiable. Every metal implement undergoes a multi-stage ultrasonic cleanse and medical-grade autoclave sterilization. All files, buffers, and orange sticks are single-use or sanitized according to State Board and OSHA protocols.
+            </p>
+            <div className="space-y-2.5 pt-2 text-xs text-studio-secondary">
+              <div className="flex items-center gap-2.5">
+                <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
+                <span>Autoclave pouch opened fresh in front of every client</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <Feather className="w-4 h-4 text-teal-700 shrink-0" />
+                <span>HEPA source air capture for clean, dust-free breathing</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <Heart className="w-4 h-4 text-rose-600 fill-rose-100 shrink-0" />
+                <span>Health-first natural nail preservation without drilling through the plate</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-studio-surface rounded-3xl p-6 sm:p-8 border border-studio-border shadow-studio space-y-4 text-xs font-sans">
+            <h3 className="font-display italic font-bold text-lg text-studio-ink">
+              Visit Nails by Sirii
+            </h3>
+            <div className="space-y-2.5 text-studio-secondary">
+              <div className="flex items-start gap-2.5">
+                <MapPin className="w-4 h-4 text-studio-wine shrink-0 mt-0.5" />
+                <span>Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi Cantt, Dehradun, Uttarakhand 248003</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <Clock className="w-4 h-4 text-studio-wine shrink-0" />
+                <span>Tuesday – Sunday • 12:00 PM – 7:00 PM (By Appointment)</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <Phone className="w-4 h-4 text-studio-wine shrink-0" />
+                <span>+91 73026 23493 (WhatsApp / Direct)</span>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <button
+                onClick={() => setIsRepairModalOpen(true)}
+                className="w-full py-2.5 rounded-2xl bg-red-50 hover:bg-red-100/80 text-red-800 border border-red-200 font-semibold text-xs transition-all flex items-center justify-center gap-2 min-h-[44px]"
+              >
+                <HeartHandshake className="w-4 h-4 text-red-600" />
+                <span>Have a Chipped Nail? Request Emergency Squeeze-in</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. FOOTER */}
+      <footer className="py-8 px-4 sm:px-6 border-t border-studio-border bg-studio-canvas text-center space-y-3">
+        <StudioLogo logoUrl={settings?.studioLogoUrl} size="sm" showText className="justify-center" />
+        <p className="text-[11px] text-studio-muted">
+          Nails by Sirii • Garhi Cantt, Dehradun • All sessions by prior reservation.
+        </p>
       </footer>
 
-      {/* 10. DISCREET FLOATING MOBILE ATELIER CONCIERGE BAR (Mobile Screen Only) */}
-      <div className="sm:hidden fixed bottom-3 inset-x-3 z-30 max-w-sm mx-auto">
-        <div className="bg-studio-surface/95 backdrop-blur-2xl border border-studio-border shadow-studio-float rounded-2xl p-2 flex items-center justify-between gap-2">
-          {/* Quick Reserve Button */}
-          <a
-            href="#booking-section"
-            className="flex-1 py-2.5 px-3 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-xs active:scale-95"
-          >
-            <Calendar className="w-3.5 h-3.5" />
-            <span>Reserve Slot</span>
-          </a>
-
-          {/* Quick WhatsApp Link */}
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-center active:scale-95 shrink-0"
-            title="Chat on WhatsApp"
-            aria-label="Chat on WhatsApp"
-          >
-            <MessageCircle className="w-4 h-4" />
-          </a>
-
-          {/* Quick Share Modal */}
-          <button
-            onClick={() => setIsShareModalOpen(true)}
-            className="w-10 h-10 rounded-xl bg-studio-wineLight border border-studio-border text-studio-wine flex items-center justify-center active:scale-95 shrink-0"
-            title="Share Catalogue Without Prices"
-            aria-label="Share Catalogue Without Prices"
-          >
-            <Share2 className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-
-      {/* Emergency Broken Nail Modal */}
+      {/* EMERGENCY REPAIR MODAL */}
       <EmergencyRepairModal
         isOpen={isRepairModalOpen}
         onClose={() => setIsRepairModalOpen(false)}
         onSubmitRepair={onSubmitRepair}
-        settings={settings}
         onAddToast={onAddToast}
       />
 
-      {/* Share Catalogue Modal */}
+      {/* SHARE CATALOGUE MODAL */}
       <ShareCatalogueModal
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
         settings={settings}
-        onAddToast={onAddToast}
       />
 
-      {/* Leave Review Modal */}
+      {/* CLIENT REVIEW MODAL */}
       {showReviewModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 shadow-studio-float border border-studio-border space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-studio-border">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center">
-                  <Star className="w-4 h-4 fill-amber-400" />
-                </div>
-                <div>
-                  <h3 className="font-display font-bold text-studio-ink">Share Your Studio Experience</h3>
-                  <p className="text-[11px] text-studio-muted">We appreciate your feedback on your fresh set.</p>
-                </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-fade-in overflow-y-auto">
+          <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 border border-studio-border shadow-studio-float space-y-5 my-6 max-h-[92vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3.5 border-b border-studio-border">
+              <div className="space-y-0.5">
+                <span className="text-[10px] font-bold text-studio-wine uppercase tracking-widest block">
+                  Atelier Community
+                </span>
+                <h3 className="font-display italic font-bold text-xl text-studio-ink">
+                  Share Your Experience
+                </h3>
               </div>
               <button
                 onClick={() => setShowReviewModal(false)}
-                className="w-7 h-7 rounded-full hover:bg-studio-subtle flex items-center justify-center text-studio-muted"
-                aria-label="Close"
+                className="w-8 h-8 rounded-full bg-studio-subtle flex items-center justify-center text-studio-secondary hover:text-studio-ink transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <form onSubmit={handleReviewSubmit} className="space-y-3.5 text-xs font-sans">
-              <div>
-                <label className="block font-semibold text-studio-secondary mb-1">
-                  Your Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Ananya, Priya, Simran..."
-                  value={reviewForm.clientName}
-                  onChange={(e) => setReviewForm({ ...reviewForm, clientName: e.target.value })}
-                  className="w-full px-3 py-2.5 bg-studio-canvas/50 border border-studio-border rounded-xl focus:outline-none focus:border-studio-wine focus:bg-studio-surface text-base sm:text-xs text-studio-ink"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-studio-secondary mb-1">
-                  Rating
-                </label>
-                <div className="flex items-center gap-2">
+            <form onSubmit={handleReviewSubmit} className="space-y-4 text-xs font-sans">
+              {/* Rating Selector */}
+              <div className="p-3.5 rounded-2xl bg-studio-canvas border border-studio-border space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="font-semibold text-studio-ink">Overall Rating *</label>
+                  <span className="text-[11px] font-bold text-amber-600">
+                    {reviewForm.rating === 5 && '5.0 / 5.0 — Exceptional Artistry & Retention'}
+                    {reviewForm.rating === 4 && '4.0 / 5.0 — Very Good Service & Beautiful Nails'}
+                    {reviewForm.rating === 3 && '3.0 / 5.0 — Good & Satisfactory'}
+                    {reviewForm.rating === 2 && '2.0 / 5.0 — Needs Attention'}
+                    {reviewForm.rating === 1 && '1.0 / 5.0 — Disappointing'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 pt-0.5">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
-                      key={star}
                       type="button"
+                      key={star}
                       onClick={() => setReviewForm({ ...reviewForm, rating: star })}
-                      className="p-1 hover:scale-110 transition-transform active:scale-95"
-                      aria-label={`${star} star rating`}
+                      className="p-1 text-amber-400 hover:scale-125 transition-transform"
                     >
                       <Star
-                        className={`w-6 h-6 ${
-                          star <= reviewForm.rating
-                            ? 'fill-amber-400 text-amber-500'
-                            : 'text-stone-200'
-                        }`}
+                        className={`w-6 h-6 transition-colors ${star <= reviewForm.rating
+                          ? 'fill-amber-400 text-amber-400'
+                          : 'text-studio-border hover:text-amber-300'
+                          }`}
                       />
                     </button>
                   ))}
-                  <span className="text-xs font-semibold text-amber-800 ml-1">
-                    {reviewForm.rating} / 5 Stars
-                  </span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div>
-                  <label className="block font-semibold text-studio-secondary mb-1">
-                    Service Rendered
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. BIAB Overlay, Gel-X Extensions"
-                    value={reviewForm.serviceRendered}
-                    onChange={(e) => setReviewForm({ ...reviewForm, serviceRendered: e.target.value })}
-                    className="w-full px-3 py-2.5 bg-studio-canvas/50 border border-studio-border rounded-xl focus:outline-none focus:border-studio-wine focus:bg-studio-surface text-base sm:text-xs text-studio-ink"
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold text-studio-secondary mb-1">
-                    Nail Art / Aesthetic Tag
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. French Tips, Cat-Eye, Glazed Donut"
-                    value={reviewForm.aestheticTag}
-                    onChange={(e) => setReviewForm({ ...reviewForm, aestheticTag: e.target.value })}
-                    className="w-full px-3 py-2.5 bg-studio-canvas/50 border border-studio-border rounded-xl focus:outline-none focus:border-studio-wine focus:bg-studio-surface text-base sm:text-xs text-studio-ink"
-                  />
-                </div>
-              </div>
-
+              {/* Client Name */}
               <div>
-                <label className="block font-semibold text-studio-secondary mb-1">
-                  Your Review / Experience *
-                </label>
-                <textarea
+                <label className="block font-semibold text-studio-ink mb-1">Your Name *</label>
+                <input
+                  type="text"
                   required
-                  rows={3}
-                  placeholder="Tell us what you appreciated about your nails, retention, and studio experience..."
-                  value={reviewForm.comment}
-                  onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
-                  className="w-full px-3 py-2.5 bg-studio-canvas/50 border border-studio-border rounded-xl focus:outline-none focus:border-studio-wine focus:bg-studio-surface resize-none text-base sm:text-xs text-studio-ink"
+                  placeholder="e.g., Ananya Sharma"
+                  value={reviewForm.clientName}
+                  onChange={(e) => setReviewForm({ ...reviewForm, clientName: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink outline-none focus:border-studio-wine"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-studio-border">
+              {/* Treatment Rendered with Quick Suggestion Chips */}
+              <div className="space-y-1.5">
+                <label className="block font-semibold text-studio-ink">Service / Treatment Rendered</label>
+                <input
+                  type="text"
+                  placeholder="e.g., Acrylic Nail Extension with French Chrome"
+                  value={reviewForm.serviceRendered}
+                  onChange={(e) => setReviewForm({ ...reviewForm, serviceRendered: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink outline-none focus:border-studio-wine"
+                />
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {[
+                    'Acrylic Extensions',
+                    'Gel-X Soft Gel',
+                    'BIAB Natural Overlay',
+                    'Press-On Nails',
+                    'Hand-Painted Nail Art',
+                    '1:1 Certified Course'
+                  ].map((service) => (
+                    <button
+                      type="button"
+                      key={service}
+                      onClick={() => setReviewForm({ ...reviewForm, serviceRendered: service })}
+                      className={`text-[10px] px-2.5 py-1 rounded-full border transition-all ${reviewForm.serviceRendered === service
+                        ? 'bg-studio-wine text-white border-studio-wine font-semibold'
+                        : 'bg-studio-canvas hover:bg-studio-surface text-studio-secondary border-studio-border'
+                        }`}
+                    >
+                      {service}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Aesthetic Tag with Chips */}
+              <div className="space-y-1.5">
+                <label className="block font-semibold text-studio-ink">Experience Highlight / Aesthetic Tag</label>
+                <input
+                  type="text"
+                  placeholder="e.g., Exact Match to Inspo"
+                  value={reviewForm.aestheticTag}
+                  onChange={(e) => setReviewForm({ ...reviewForm, aestheticTag: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink outline-none focus:border-studio-wine"
+                />
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {[
+                    'Exact Match to Inspo',
+                    'Russian Cuticle Detailing',
+                    'Super Clean & Friendly',
+                    '4+ Week Retention',
+                    'Warm Hospitality',
+                    'Classy & Neat Finishing'
+                  ].map((tag) => (
+                    <button
+                      type="button"
+                      key={tag}
+                      onClick={() => setReviewForm({ ...reviewForm, aestheticTag: tag })}
+                      className={`text-[10px] px-2.5 py-1 rounded-full border transition-all ${reviewForm.aestheticTag === tag
+                        ? 'bg-studio-wineLight text-studio-wine border-studio-wine font-semibold'
+                        : 'bg-studio-canvas hover:bg-studio-surface text-studio-secondary border-studio-border'
+                        }`}
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Review Comment */}
+              <div>
+                <label className="block font-semibold text-studio-ink mb-1">Your Review / Experience *</label>
+                <textarea
+                  rows={4}
+                  required
+                  placeholder="Describe your session: how well your inspo photo was recreated, hygiene standards, longevity, or hospitality..."
+                  value={reviewForm.comment}
+                  onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink outline-none focus:border-studio-wine leading-relaxed"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2.5 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowReviewModal(false)}
-                  className="px-4 py-2 text-studio-muted hover:bg-studio-subtle rounded-xl font-medium"
+                  className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary hover:bg-studio-subtle transition-colors min-h-[42px]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmittingReview}
-                  className="px-5 py-2 bg-studio-wine hover:bg-studio-wineHover text-white rounded-xl font-medium shadow-studio flex items-center gap-1.5 disabled:opacity-50 active:scale-95"
+                  className="px-6 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wine/90 text-white font-semibold shadow-studio transition-all min-h-[42px] disabled:opacity-50"
                 >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>{isSubmittingReview ? 'Submitting...' : 'Submit Review'}</span>
+                  {isSubmittingReview ? 'Posting Review...' : 'Post Verified Review'}
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* 8. MODAL: NAIL SIZING GUIDE & MEASUREMENT ASSISTANT */}
+      {isSizingModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in overflow-y-auto">
+          <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-studio-border">
+              <div className="flex items-center gap-2">
+                <Ruler className="w-4 h-4 text-studio-wine" />
+                <h3 className="font-display italic font-bold text-xl text-studio-ink">
+                  Nail Sizing & Fit Guide
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsSizingModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-studio-subtle flex items-center justify-center text-studio-secondary hover:text-studio-ink"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Step-by-Step Instructions */}
+            <div className="space-y-3 text-xs font-sans">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block">
+                How to Measure Your Nails at Home (1-Minute Method)
+              </span>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-3 rounded-2xl bg-studio-canvas border border-studio-border space-y-1">
+                  <span className="w-5 h-5 rounded-full bg-studio-wine text-white flex items-center justify-center text-[10px] font-bold">1</span>
+                  <p className="font-semibold text-studio-ink">Apply Tape</p>
+                  <p className="text-[11px] text-studio-secondary leading-relaxed">
+                    Place a strip of clear tape across the widest part of your natural nail bed.
+                  </p>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-studio-canvas border border-studio-border space-y-1">
+                  <span className="w-5 h-5 rounded-full bg-studio-wine text-white flex items-center justify-center text-[10px] font-bold">2</span>
+                  <p className="font-semibold text-studio-ink">Mark Edges</p>
+                  <p className="text-[11px] text-studio-secondary leading-relaxed">
+                    Press tape into both sidewalls and mark lines with a pen on each side.
+                  </p>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-studio-canvas border border-studio-border space-y-1">
+                  <span className="w-5 h-5 rounded-full bg-studio-wine text-white flex items-center justify-center text-[10px] font-bold">3</span>
+                  <p className="font-semibold text-studio-ink">Measure (mm)</p>
+                  <p className="text-[11px] text-studio-secondary leading-relaxed">
+                    Peel tape and measure the millimeter distance with a ruler.
+                  </p>
+                </div>
+              </div>
+
+              {/* Standard Sizing Table */}
+              <div className="pt-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block mb-1.5">
+                  Standard Atelier Sizes (Thumb to Pinky in mm)
+                </span>
+                <div className="border border-studio-border rounded-2xl overflow-hidden bg-studio-surface text-[11px]">
+                  <table className="w-full text-left">
+                    <thead className="bg-studio-subtle text-studio-secondary font-semibold border-b border-studio-border">
+                      <tr>
+                        <th className="p-2.5">Size</th>
+                        <th className="p-2.5">Thumb</th>
+                        <th className="p-2.5">Index</th>
+                        <th className="p-2.5">Middle</th>
+                        <th className="p-2.5">Ring</th>
+                        <th className="p-2.5">Pinky</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-studio-border text-studio-ink">
+                      <tr>
+                        <td className="p-2.5 font-bold text-studio-wine">XS</td>
+                        <td className="p-2.5">14 mm</td>
+                        <td className="p-2.5">11 mm</td>
+                        <td className="p-2.5">12 mm</td>
+                        <td className="p-2.5">11 mm</td>
+                        <td className="p-2.5">8 mm</td>
+                      </tr>
+                      <tr className="bg-studio-wineLight/30 font-medium">
+                        <td className="p-2.5 font-bold text-studio-wine">S (Popular)</td>
+                        <td className="p-2.5">15 mm</td>
+                        <td className="p-2.5">12 mm</td>
+                        <td className="p-2.5">13 mm</td>
+                        <td className="p-2.5">12 mm</td>
+                        <td className="p-2.5">9 mm</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-bold text-studio-wine">M</td>
+                        <td className="p-2.5">16 mm</td>
+                        <td className="p-2.5">13 mm</td>
+                        <td className="p-2.5">14 mm</td>
+                        <td className="p-2.5">13 mm</td>
+                        <td className="p-2.5">10 mm</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-bold text-studio-wine">L</td>
+                        <td className="p-2.5">17 mm</td>
+                        <td className="p-2.5">14 mm</td>
+                        <td className="p-2.5">15 mm</td>
+                        <td className="p-2.5">14 mm</td>
+                        <td className="p-2.5">11 mm</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Sizing Reassurance Card */}
+              <div className="p-3.5 rounded-2xl bg-studio-canvas border border-studio-border text-xs text-studio-secondary space-y-1">
+                <div className="flex items-center gap-1.5 font-semibold text-studio-ink">
+                  <Sparkles className="w-3.5 h-3.5 text-studio-wine" />
+                  <span>Between Sizes? Always Size Up</span>
+                </div>
+                <p className="leading-relaxed text-[11px]">
+                  If your nails are between sizes, pick the larger size. You can gently file down the edges using the complimentary mini buffer included with every set for a 100% seamless bespoke fit.
+                </p>
+              </div>
+
+              <div className="flex justify-end pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsSizingModalOpen(false)}
+                  className="px-6 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio"
+                >
+                  Got It! Choose My Size
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 9. MODAL: PRESS-ON BOUTIQUE CHECKOUT & INSTANT UPI */}
+      {isCheckoutModalOpen && selectedPressOnForOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in overflow-y-auto">
+          <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto">
+            {/* Header & Close */}
+            <div className="flex items-center justify-between pb-3 border-b border-studio-border">
+              <div className="flex items-center gap-2">
+                <ShoppingBag className="w-4 h-4 text-studio-wine" />
+                <h3 className="font-display italic font-bold text-lg text-studio-ink">
+                  {checkoutStep === 4 ? 'Order Confirmed' : `Order: ${selectedPressOnForOrder.title}`}
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsCheckoutModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-studio-subtle flex items-center justify-center text-studio-secondary hover:text-studio-ink"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Stepper Breadcrumb */}
+            {checkoutStep < 4 && (
+              <div className="flex items-center justify-between text-[11px] font-semibold text-studio-secondary pb-1 border-b border-studio-border/60">
+                <span className={checkoutStep === 1 ? 'text-studio-wine font-bold' : ''}>1. Size & Kit</span>
+                <span>→</span>
+                <span className={checkoutStep === 2 ? 'text-studio-wine font-bold' : ''}>2. Delivery Address</span>
+                <span>→</span>
+                <span className={checkoutStep === 3 ? 'text-studio-wine font-bold' : ''}>3. Payment</span>
+              </div>
+            )}
+
+            {/* STEP 1: SIZE, WEAR METHOD & QUANTITY */}
+            {checkoutStep === 1 && (
+              <div className="space-y-4 text-xs font-sans animate-in fade-in">
+                {/* Product Summary */}
+                <div className="p-3.5 rounded-2xl bg-studio-canvas border border-studio-border flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-studio-ink text-sm">{selectedPressOnForOrder.title}</h4>
+                    <p className="text-[11px] text-studio-secondary">
+                      {selectedPressOnForOrder.shape} • {selectedPressOnForOrder.length} • {selectedPressOnForOrder.collection}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <span className="font-display italic font-bold text-base text-studio-ink">
+                      ₹{selectedPressOnForOrder.price}
+                    </span>
+                    <span className="text-[10px] text-emerald-700 block font-medium">Free Delivery</span>
+                  </div>
+                </div>
+
+                {/* Size Choice */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="font-semibold text-studio-ink">
+                      Select Your Size
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setIsSizingModalOpen(true)}
+                      className="text-[11px] text-studio-wine hover:underline font-semibold flex items-center gap-1"
+                    >
+                      <Ruler className="w-3 h-3" />
+                      <span>Sizing Guide</span>
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {['XS', 'S', 'M', 'L'].map((sz) => (
+                      <button
+                        type="button"
+                        key={sz}
+                        onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, size: sz })}
+                        className={`p-2.5 rounded-xl border text-center transition-all ${pressOnOrderForm.size === sz
+                          ? 'bg-studio-wine text-white font-bold border-studio-wine shadow-xs'
+                          : 'bg-studio-surface border-studio-border text-studio-secondary hover:bg-studio-subtle'
+                          }`}
+                      >
+                        <span className="block text-xs font-bold">{sz}</span>
+                        <span className="text-[9px] opacity-80">{sz === 'S' ? 'Most Popular' : sz === 'XS' ? 'Petite' : sz === 'M' ? 'Medium' : 'Wide'}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, size: 'Custom' })}
+                    className={`w-full p-2.5 rounded-xl border text-left transition-all flex items-center justify-between ${pressOnOrderForm.size === 'Custom'
+                      ? 'bg-studio-wineLight border-studio-wine text-studio-wine font-semibold'
+                      : 'bg-studio-surface border-studio-border text-studio-secondary'
+                      }`}
+                  >
+                    <span>Custom Size (Enter exact mm numbers)</span>
+                    <span className="text-[10px]">Thumb to Pinky</span>
+                  </button>
+
+                  {pressOnOrderForm.size === 'Custom' && (
+                    <input
+                      type="text"
+                      placeholder="e.g. 15mm, 12mm, 13mm, 11mm, 8mm"
+                      value={pressOnOrderForm.customSizes}
+                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, customSizes: e.target.value })}
+                      className="w-full p-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-mono"
+                    />
+                  )}
+                </div>
+
+                {/* Wear Method Preference */}
+                <div className="space-y-2">
+                  <label className="font-semibold text-studio-ink block">
+                    Preferred Application Method
+                  </label>
+                  <div className="space-y-1.5">
+                    {[
+                      {
+                        title: '24 Jelly Sticky Tabs (Temporary Wear)',
+                        desc: 'Lasts 3–5 days. 100% reusable, peels off cleanly with zero natural nail damage.'
+                      },
+                      {
+                        title: 'Salon Liquid Nail Glue (Long Wear)',
+                        desc: 'Lasts 2–3 weeks. Extra strong bond for weddings, holidays, and extended wear.'
+                      }
+                    ].map((method) => (
+                      <button
+                        type="button"
+                        key={method.title}
+                        onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, wearMethod: method.title })}
+                        className={`w-full p-3 rounded-2xl border text-left transition-all ${pressOnOrderForm.wearMethod === method.title
+                          ? 'bg-studio-wineLight border-studio-wine'
+                          : 'bg-studio-surface border-studio-border hover:bg-studio-subtle'
+                          }`}
+                      >
+                        <span className={`block font-semibold ${pressOnOrderForm.wearMethod === method.title ? 'text-studio-wine' : 'text-studio-ink'}`}>
+                          {method.title}
+                        </span>
+                        <span className="text-[10px] text-studio-secondary leading-normal block mt-0.5">
+                          {method.desc}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Quantity */}
+                <div className="flex items-center justify-between pt-2">
+                  <span className="font-semibold text-studio-ink">Quantity</span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, quantity: Math.max(1, (pressOnOrderForm.quantity || 1) - 1) })}
+                      className="w-8 h-8 rounded-xl bg-studio-canvas border border-studio-border font-bold text-studio-ink hover:bg-studio-subtle"
+                    >
+                      -
+                    </button>
+                    <span className="font-bold text-sm w-6 text-center">{pressOnOrderForm.quantity || 1}</span>
+                    <button
+                      type="button"
+                      onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, quantity: (pressOnOrderForm.quantity || 1) + 1 })}
+                      className="w-8 h-8 rounded-xl bg-studio-canvas border border-studio-border font-bold text-studio-ink hover:bg-studio-subtle"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                {/* Subtotal & Next */}
+                <div className="pt-3 border-t border-studio-border flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] text-studio-muted block">Subtotal</span>
+                    <span className="font-display italic font-bold text-lg text-studio-ink">
+                      ₹{(Number(selectedPressOnForOrder.price || 1299) * Number(pressOnOrderForm.quantity || 1)).toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setCheckoutStep(2)}
+                    className="px-6 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio flex items-center gap-2"
+                  >
+                    <span>Delivery Address</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 2: SHIPPING ADDRESS */}
+            {checkoutStep === 2 && (
+              <div className="space-y-4 text-xs font-sans animate-in fade-in">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-semibold text-studio-ink mb-1">Full Name *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Rhea Kapoor"
+                      value={pressOnOrderForm.clientName}
+                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, clientName: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-semibold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-studio-ink mb-1">WhatsApp Phone *</label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="e.g. 98765 43210"
+                      value={pressOnOrderForm.clientPhone}
+                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, clientPhone: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-semibold"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block font-semibold text-studio-ink mb-1">Email (Optional)</label>
+                    <input
+                      type="email"
+                      placeholder="for shipping tracking updates"
+                      value={pressOnOrderForm.clientEmail}
+                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, clientEmail: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block font-semibold text-studio-ink mb-1">Street Address / Landmark *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="House/Flat No, Apartment, Street name"
+                      value={pressOnOrderForm.addressStreet}
+                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, addressStreet: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-studio-ink mb-1">City *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Dehradun"
+                      value={pressOnOrderForm.addressCity}
+                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, addressCity: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-studio-ink mb-1">State *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Uttarakhand"
+                      value={pressOnOrderForm.addressState}
+                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, addressState: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-studio-ink mb-1">Pincode *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. 248001"
+                      value={pressOnOrderForm.addressPincode}
+                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, addressPincode: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-mono"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-studio-ink mb-1">Order Notes (Optional)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Gifting notes, extra sticky tabs"
+                      value={pressOnOrderForm.notes}
+                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, notes: e.target.value })}
+                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-studio-border flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={() => setCheckoutStep(1)}
+                    className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary"
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!pressOnOrderForm.clientName || !pressOnOrderForm.clientPhone || !pressOnOrderForm.addressStreet) {
+                        if (onAddToast) onAddToast('Missing Information', 'Please complete your name, phone number, and street address.', 'error');
+                        return;
+                      }
+                      setCheckoutStep(3);
+                    }}
+                    className="px-6 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio flex items-center gap-2"
+                  >
+                    <span>Proceed to Payment</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 3: PAYMENT VIA UPI & DISPATCH */}
+            {checkoutStep === 3 && (
+              <form onSubmit={handlePressOnOrderSubmit} className="space-y-4 text-xs font-sans animate-in fade-in">
+                {/* Total Summary */}
+                <div className="p-4 rounded-2xl bg-studio-wineLight/60 border border-studio-border flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] text-studio-wine font-bold uppercase tracking-wider block">Total Amount Due</span>
+                    <h4 className="font-semibold text-studio-ink text-sm">
+                      {selectedPressOnForOrder.title} ({pressOnOrderForm.size}) × {pressOnOrderForm.quantity}
+                    </h4>
+                  </div>
+                  <div className="text-right">
+                    <span className="font-display italic font-bold text-2xl text-studio-wine">
+                      ₹{(Number(selectedPressOnForOrder.price || 1299) * Number(pressOnOrderForm.quantity || 1)).toLocaleString('en-IN')}
+                    </span>
+                    <span className="text-[10px] text-emerald-700 block font-semibold">Free Express Shipping</span>
+                  </div>
+                </div>
+
+                {/* Instant Dynamic UPI QR Code */}
+                <div className="p-4 rounded-2xl bg-studio-canvas border border-studio-border text-center space-y-3">
+                  <span className="text-[11px] font-semibold text-studio-ink block">
+                    Scan with any UPI App (GPay, PhonePe, Paytm, CRED)
+                  </span>
+                  <div className="p-3 bg-white rounded-2xl border border-studio-border inline-block shadow-studio">
+                    <QRCodeSVG
+                      value={`upi://pay?pa=${settings?.upiId || 'nailsbysirii@okaxis'}&pn=Nails%20by%20Sirii&am=${Number(selectedPressOnForOrder.price || 1299) * Number(pressOnOrderForm.quantity || 1)}&cu=INR&tn=PressOn-${encodeURIComponent(selectedPressOnForOrder.title)}`}
+                      size={150}
+                      level="M"
+                      includeMargin
+                      fgColor="#1C1917"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-center gap-2 pt-1">
+                    <span className="font-mono text-xs text-studio-secondary bg-studio-surface px-3 py-1 rounded-lg border border-studio-border">
+                      {settings?.upiId || 'nailsbysirii@okaxis'}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={copyUpiId}
+                      className="px-3 py-1 rounded-lg bg-studio-wine text-white font-semibold text-[11px] shadow-xs flex items-center gap-1 active:scale-95"
+                    >
+                      <Copy className="w-3 h-3" />
+                      <span>{copiedUpi ? 'Copied' : 'Copy UPI'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Optional UTR / Reference */}
+                <div>
+                  <label className="block font-semibold text-studio-ink mb-1">
+                    UPI Transaction UTR / Ref Number (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter 12-digit UTR if paid"
+                    value={pressOnOrderForm.paymentRef}
+                    onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, paymentRef: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-mono"
+                  />
+                  <p className="text-[10px] text-studio-muted mt-0.5">
+                    You can also confirm payment directly on WhatsApp after placing order.
+                  </p>
+                </div>
+
+                {/* Actions */}
+                <div className="pt-3 border-t border-studio-border flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={() => setCheckoutStep(2)}
+                    className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary"
+                  >
+                    Back
+                  </button>
+
+                  <button
+                    type="submit"
+                    disabled={isPlacingPressOnOrder}
+                    className="px-6 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs sm:text-sm shadow-studio flex items-center gap-2 active:scale-95 disabled:opacity-50"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    <span>{isPlacingPressOnOrder ? 'Placing Order...' : 'Confirm & Place Order'}</span>
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* STEP 4: ORDER CONFIRMED SCREEN */}
+            {checkoutStep === 4 && confirmedPressOnOrder && (
+              <div className="text-center space-y-5 py-4 text-xs font-sans animate-in fade-in">
+                <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mx-auto shadow-studio">
+                  <CheckCircle2 className="w-8 h-8" />
+                </div>
+
+                <div className="space-y-1">
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine block">
+                    Order Received Successfully
+                  </span>
+                  <h3 className="font-display italic font-bold text-2xl text-studio-ink">
+                    Thank You, {confirmedPressOnOrder.clientName}!
+                  </h3>
+                  <p className="text-studio-secondary text-xs max-w-sm mx-auto leading-relaxed">
+                    Your order <strong className="text-studio-ink">#{confirmedPressOnOrder.orderNumber || confirmedPressOnOrder.id}</strong> has been transmitted to Sirii's console.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-studio-canvas border border-studio-border text-left max-w-sm mx-auto space-y-1.5 text-[11px]">
+                  <p><strong className="text-studio-ink">Set:</strong> {confirmedPressOnOrder.productTitle}</p>
+                  <p><strong className="text-studio-ink">Size:</strong> {confirmedPressOnOrder.size} • Qty: {confirmedPressOnOrder.quantity || 1}</p>
+                  <p><strong className="text-studio-ink">Shipping To:</strong> {confirmedPressOnOrder.addressStreet}, {confirmedPressOnOrder.addressCity} - {confirmedPressOnOrder.addressPincode}</p>
+                  <p><strong className="text-studio-ink">Dispatch Estimate:</strong> Dispatched in 24–48 hours with live tracking on WhatsApp.</p>
+                </div>
+
+                <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
+                  <a
+                    href={`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(`Hello Sirii! I just placed an order for the ${confirmedPressOnOrder.productTitle} press-on set (Order #${confirmedPressOnOrder.orderNumber || confirmedPressOnOrder.id}). Excited to receive it!`)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs shadow-studio flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>WhatsApp Order Update</span>
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsCheckoutModalOpen(false)}
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-2xl border border-studio-border text-studio-secondary hover:bg-studio-subtle font-semibold text-xs"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

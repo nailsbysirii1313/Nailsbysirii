@@ -3,14 +3,14 @@ import {
   Share2,
   Copy,
   Check,
-  EyeOff,
-  Eye,
   Sparkles,
   QrCode,
   X,
   ExternalLink,
   MessageCircle,
-  Smartphone
+  BookOpen,
+  Ribbon,
+  Gem
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import StudioLogo from './StudioLogo';
@@ -21,33 +21,30 @@ export default function ShareCatalogueModal({
   settings,
   onAddToast
 }) {
-  const [copiedType, setCopiedType] = useState(null);
-  const [activeTab, setActiveTab] = useState('noPrices'); // 'noPrices' | 'withPrices' | 'qr'
+  const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState('link'); // 'link' | 'qr'
 
   if (!isOpen) return null;
 
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
-  const noPricesUrl = `${origin}/?hidePrices=true#catalogue`;
-  const withPricesUrl = `${origin}/?hidePrices=false#catalogue`;
+  const catalogueUrl = `${origin}/#catalogue`;
 
-  const copyToClipboard = (url, type) => {
-    navigator.clipboard.writeText(url);
-    setCopiedType(type);
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(catalogueUrl);
+    setCopied(true);
     if (onAddToast) {
       onAddToast(
-        type === 'noPrices' ? 'Copied Catalogue Link (Without Prices)' : 'Copied Full Price Catalogue Link',
+        'Catalogue Link Copied',
         'Ready to paste in WhatsApp, Instagram DM, or client consultation.',
         'success'
       );
     }
-    setTimeout(() => setCopiedType(null), 3000);
+    setTimeout(() => setCopied(false), 3000);
   };
 
-  const getWhatsAppShareUrl = (includePrices) => {
+  const getWhatsAppShareUrl = () => {
     const studioName = settings?.studioName || 'Nails by Sirii';
-    const text = includePrices
-      ? `*${studioName} — Bespoke Nail Architecture & Menu (Dehradun)*\n\nExplore our Japanese builder gel (BIAB), precision Gel-X extensions, and bespoke nail art catalogue:\n${withPricesUrl}\n\nTransparent pricing and honest time estimates.`
-      : `*${studioName} — Bespoke Nail Architecture & Lookbook (Dehradun)*\n\nExplore our signature nail sets, curated lookbook, and hand-painted art designs:\n${noPricesUrl}\n\nBrowse our portfolio and let us know which set you'd love to reserve!`;
+    const text = `*${studioName} — Bespoke Nail Design Catalogue & Booklet (Dehradun)*\n\nExplore our signature acrylic nail sets, Japanese builder gel (BIAB), Gel-X extensions, and curated design booklet:\n${catalogueUrl}\n\nBrowse design options or bring any photo you found on Pinterest/Instagram for a handcrafted custom set!`;
 
     return `https://wa.me/?text=${encodeURIComponent(text)}`;
   };
@@ -56,6 +53,7 @@ export default function ShareCatalogueModal({
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto">
       <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-studio-float border-t sm:border border-studio-border space-y-5 sm:space-y-6 relative max-h-[92vh] overflow-y-auto">
         <div className="w-10 h-1.5 rounded-full bg-studio-borderStrong mx-auto sm:hidden" />
+        
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -70,13 +68,13 @@ export default function ShareCatalogueModal({
           <StudioLogo logoUrl={settings?.studioLogoUrl} size="md" className="justify-center mb-1" />
           <div>
             <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine block">
-              Client Portfolio Sharing
+              Client Booklet Sharing
             </span>
             <h2 className="font-display italic font-bold text-2xl text-studio-ink">
-              Share Studio Catalogue
+              Share Design Catalogue
             </h2>
             <p className="text-xs text-studio-secondary max-w-sm mx-auto mt-0.5">
-              Send your bespoke portfolio and service menu directly to clients on WhatsApp. Choose between transparent pricing or portfolio preview mode.
+              Send your curated design booklet directly to clients. Clients can browse acrylic nail options, BIAB, Gel-X, or share their own internet inspo.
             </p>
           </div>
         </div>
@@ -84,26 +82,15 @@ export default function ShareCatalogueModal({
         {/* Tab Switcher */}
         <div className="flex rounded-2xl bg-studio-subtle p-1 border border-studio-border text-xs">
           <button
-            onClick={() => setActiveTab('noPrices')}
+            onClick={() => setActiveTab('link')}
             className={`flex-1 py-2 rounded-xl font-semibold transition-all flex items-center justify-center gap-1.5 ${
-              activeTab === 'noPrices'
+              activeTab === 'link'
                 ? 'bg-studio-surface text-studio-wine shadow-studio'
                 : 'text-studio-secondary hover:text-studio-ink'
             }`}
           >
-            <EyeOff className="w-3.5 h-3.5" />
-            <span>Without Prices</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('withPrices')}
-            className={`flex-1 py-2 rounded-xl font-semibold transition-all flex items-center justify-center gap-1.5 ${
-              activeTab === 'withPrices'
-                ? 'bg-studio-surface text-studio-wine shadow-studio'
-                : 'text-studio-secondary hover:text-studio-ink'
-            }`}
-          >
-            <Eye className="w-3.5 h-3.5" />
-            <span>With Prices</span>
+            <Ribbon className="w-3.5 h-3.5" />
+            <span>Design Booklet Link</span>
           </button>
           <button
             onClick={() => setActiveTab('qr')}
@@ -114,41 +101,41 @@ export default function ShareCatalogueModal({
             }`}
           >
             <QrCode className="w-3.5 h-3.5" />
-            <span>QR Code</span>
+            <span>Studio QR Code</span>
           </button>
         </div>
 
-        {/* Tab Content 1: WITHOUT Prices */}
-        {activeTab === 'noPrices' && (
+        {/* Tab Content 1: Design Booklet Link */}
+        {activeTab === 'link' && (
           <div className="space-y-4 animate-in fade-in text-xs font-sans">
             <div className="p-4 rounded-2xl bg-studio-wineLight/60 border border-studio-border space-y-1.5">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-studio-wine" />
+                <Sparkles className="w-4 h-4 text-studio-wine" />
                 <h3 className="font-semibold text-xs text-studio-ink">
-                  Portfolio Mode (Prices Hidden)
+                  Inspiration Catalogue & Booklet
                 </h3>
               </div>
               <p className="text-[11px] text-studio-secondary leading-relaxed">
-                Clients can browse all treatments, customizer shapes, and curated lookbook sets with prices shown as <em>"Price on Request"</em>.
+                Clients can browse acrylic nail sculpture sets, BIAB, Gel-X extensions, and hand-painted art, customize their shape/length, or request custom designs found online.
               </p>
             </div>
 
             <div className="space-y-1.5">
               <label className="text-[11px] font-semibold text-studio-secondary">
-                Shareable Portfolio Link
+                Public Catalogue URL
               </label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   readOnly
-                  value={noPricesUrl}
+                  value={catalogueUrl}
                   className="flex-1 px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 text-xs text-studio-secondary font-mono truncate"
                 />
                 <button
-                  onClick={() => copyToClipboard(noPricesUrl, 'noPrices')}
-                  className="px-4 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-studio"
+                  onClick={copyToClipboard}
+                  className="px-4 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-studio active:scale-95"
                 >
-                  {copiedType === 'noPrices' ? (
+                  {copied ? (
                     <>
                       <Check className="w-3.5 h-3.5" />
                       <span>Copied</span>
@@ -165,7 +152,7 @@ export default function ShareCatalogueModal({
 
             <div className="flex gap-2 pt-1">
               <a
-                href={getWhatsAppShareUrl(false)}
+                href={getWhatsAppShareUrl()}
                 target="_blank"
                 rel="noreferrer"
                 className="flex-1 py-2.5 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs transition-all flex items-center justify-center gap-2 shadow-studio"
@@ -174,7 +161,7 @@ export default function ShareCatalogueModal({
                 <span>Share via WhatsApp</span>
               </a>
               <a
-                href={noPricesUrl}
+                href={catalogueUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="px-4 py-2.5 rounded-xl border border-studio-border hover:bg-studio-subtle text-studio-secondary font-semibold text-xs transition-all flex items-center gap-1.5"
@@ -186,80 +173,12 @@ export default function ShareCatalogueModal({
           </div>
         )}
 
-        {/* Tab Content 2: WITH Prices */}
-        {activeTab === 'withPrices' && (
-          <div className="space-y-4 animate-in fade-in text-xs font-sans">
-            <div className="p-4 rounded-2xl bg-studio-subtle border border-studio-border space-y-1.5">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-600" />
-                <h3 className="font-semibold text-xs text-studio-ink">
-                  Transparent Pricing Menu
-                </h3>
-              </div>
-              <p className="text-[11px] text-studio-secondary leading-relaxed">
-                Displays exact transparent pricing and honest session durations for every service and art add-on.
-              </p>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-semibold text-studio-secondary">
-                Shareable Pricing Link
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  readOnly
-                  value={withPricesUrl}
-                  className="flex-1 px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 text-xs text-studio-secondary font-mono truncate"
-                />
-                <button
-                  onClick={() => copyToClipboard(withPricesUrl, 'withPrices')}
-                  className="px-4 py-2.5 rounded-xl bg-studio-ink hover:bg-black text-white font-semibold text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-studio"
-                >
-                  {copiedType === 'withPrices' ? (
-                    <>
-                      <Check className="w-3.5 h-3.5" />
-                      <span>Copied</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>Copy Link</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex gap-2 pt-1">
-              <a
-                href={getWhatsAppShareUrl(true)}
-                target="_blank"
-                rel="noreferrer"
-                className="flex-1 py-2.5 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs transition-all flex items-center justify-center gap-2 shadow-studio"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>Share via WhatsApp</span>
-              </a>
-              <a
-                href={withPricesUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="px-4 py-2.5 rounded-xl border border-studio-border hover:bg-studio-subtle text-studio-secondary font-semibold text-xs transition-all flex items-center gap-1.5"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-                <span>Preview</span>
-              </a>
-            </div>
-          </div>
-        )}
-
-        {/* Tab Content 3: QR Code */}
+        {/* Tab Content 2: QR Code */}
         {activeTab === 'qr' && (
           <div className="space-y-4 text-center animate-in fade-in py-1 text-xs font-sans">
             <div className="p-4 bg-white rounded-2xl border border-studio-border inline-block shadow-studio">
               <QRCodeSVG
-                value={noPricesUrl}
+                value={catalogueUrl}
                 size={160}
                 level="M"
                 includeMargin
@@ -268,18 +187,18 @@ export default function ShareCatalogueModal({
             </div>
             <div>
               <p className="text-xs font-semibold text-studio-ink">
-                Scan to View Digital Studio Portfolio
+                Scan to View Design Catalogue Booklet
               </p>
               <p className="text-[10px] text-studio-muted mt-0.5">
-                Display on your studio counter or post to Instagram highlights.
+                Display on your studio counter in Garhi Cantt or post to Instagram stories.
               </p>
             </div>
             <button
-              onClick={() => copyToClipboard(noPricesUrl, 'noPrices')}
+              onClick={copyToClipboard}
               className="px-4 py-2 rounded-xl bg-studio-subtle border border-studio-border text-studio-ink font-semibold text-xs hover:bg-studio-wineLight transition-all inline-flex items-center gap-1.5"
             >
               <Copy className="w-3.5 h-3.5" />
-              <span>Copy Portfolio URL</span>
+              <span>Copy Catalogue URL</span>
             </button>
           </div>
         )}

@@ -398,6 +398,82 @@ export const api = {
     return res.json();
   },
 
+  // Pre-Made Press-On Nails E-Commerce API
+  async getPressOnProducts() {
+    const res = await fetch(`${API_BASE}/press-ons`);
+    if (!res.ok) throw new Error('Failed to load press-on products');
+    return res.json();
+  },
+  async getAllPressOnProducts() {
+    const res = await fetch(`${API_BASE}/press-ons/all`, {
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error('Failed to load admin press-on products');
+    return res.json();
+  },
+  async createPressOnProduct(data) {
+    const res = await fetch(`${API_BASE}/press-ons`, {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('Failed to create press-on product');
+    return res.json();
+  },
+  async updatePressOnProduct(id, data) {
+    const res = await fetch(`${API_BASE}/press-ons/${id}`, {
+      method: 'PUT',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('Failed to update press-on product');
+    return res.json();
+  },
+  async deletePressOnProduct(id) {
+    const res = await fetch(`${API_BASE}/press-ons/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error('Failed to delete press-on product');
+    return res.json();
+  },
+
+  // Press-On Customer Orders
+  async getPressOnOrders() {
+    const res = await fetch(`${API_BASE}/press-on-orders`, {
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error('Failed to load press-on orders');
+    return res.json();
+  },
+  async createPressOnOrder(data) {
+    const res = await fetch(`${API_BASE}/press-on-orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || 'Failed to place press-on order');
+    return result;
+  },
+  async updatePressOnOrder(id, data) {
+    const res = await fetch(`${API_BASE}/press-on-orders/${id}`, {
+      method: 'PATCH',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('Failed to update press-on order');
+    return res.json();
+  },
+  async deletePressOnOrder(id) {
+    const res = await fetch(`${API_BASE}/press-on-orders/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error('Failed to delete press-on order');
+    return res.json();
+  },
+
   // Studio Passcode Authentication
   async verifyPasscode(passcode) {
     const res = await fetch(`${API_BASE}/auth/verify`, {

@@ -845,5 +845,113 @@ export const db = {
     const data = readDb();
     data.reviews = (data.reviews || []).filter(r => r.id !== id);
     writeDb(data);
+  },
+
+  // Pre-Made Press-On Nails E-Commerce Products
+  getPressOnProducts(onlyAvailable = false) {
+    const data = readDb();
+    const products = data.pressOnProducts || [];
+    if (onlyAvailable) {
+      return products.filter(p => p.isAvailable && (p.stock === undefined || p.stock > 0));
+    }
+    return products;
+  },
+  getPressOnProductById(id) {
+    const data = readDb();
+    return (data.pressOnProducts || []).find(p => p.id === id) || null;
+  },
+  savePressOnProduct(product) {
+    const data = readDb();
+    if (!data.pressOnProducts) data.pressOnProducts = [];
+    const idx = data.pressOnProducts.findIndex(p => p.id === product.id);
+    const price = Number(product.price) || 999;
+    const stock = product.stock !== undefined ? Number(product.stock) : 5;
+    const record = {
+      ...product,
+      id: product.id || `pop_${Date.now()}`,
+      price,
+      stock,
+      isAvailable: product.isAvailable !== undefined ? Boolean(product.isAvailable) : true,
+      tag: product.tag || 'Handcrafted',
+      shape: product.shape || 'Almond',
+      length: product.length || 'Medium',
+      updatedAt: new Date().toISOString()
+    };
+    if (idx >= 0) {
+      data.pressOnProducts[idx] = { ...data.pressOnProducts[idx], ...record };
+    } else {
+      record.createdAt = new Date().toISOString();
+      data.pressOnProducts.unshift(record);
+    }
+    writeDb(data);
+    return record;
+  },
+  deletePressOnProduct(id) {
+    const data = readDb();
+    data.pressOnProducts = (data.pressOnProducts || []).filter(p => p.id !== id);
+    writeDb(data);
+  },
+
+  // Press-On Nails Customer Orders
+  getPressOnOrders() {
+    return readDb().pressOnOrders || [];
+  },
+  getPressOnOrderById(id) {
+    const data = readDb();
+    return (data.pressOnOrders || []).find(o => o.id === id) || null;
+  },
+  savePressOnOrder(order) {
+    const data = readDb();
+    if (!data.pressOnOrders) data.pressOnOrders = [];
+    const idx = data.pressOnOrders.findIndex(o => o.id === order.id);
+    let record;
+    if (idx >= 0) {
+      record = { ...data.pressOnOrders[idx], ...order, updatedAt: new Date().toISOString() };
+      data.pressOnOrders[idx] = record;
+    } else {
+      const count = (data.pressOnOrders || []).length + 1;
+      const num = String(count).padStart(3, '0');
+      const orderNumber = order.orderNumber || `ORD-${new Date().getFullYear()}-${num}`;
+      record = {
+        ...order,
+        id: order.id || orderNumber,
+        orderNumber,
+        paymentStatus: order.paymentStatus || 'Pending UPI',
+        fulfillmentStatus: order.fulfillmentStatus || 'New Order',
+        quantity: Number(order.quantity) || 1,
+        totalAmount: Number(order.totalAmount) || 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      data.pressOnOrders.unshift(record);
+
+      // Decrement product stock if product ID exists
+      if (order.productId && data.pressOnProducts) {
+        const prod = data.pressOnProducts.find(p => p.id === order.productId);
+        if (prod && prod.stock !== undefined) {
+          prod.stock = Math.max(0, Number(prod.stock) - (record.quantity || 1));
+          if (prod.stock === 0) {
+            prod.isAvailable = false;
+          }
+        }
+      }
+    }
+    writeDb(data);
+    return record;
+  },
+  updatePressOnOrderStatus(id, updates = {}) {
+    const data = readDb();
+    if (!data.pressOnOrders) data.pressOnOrders = [];
+    const order = data.pressOnOrders.find(o => o.id === id);
+    if (!order) return null;
+
+    Object.assign(order, updates, { updatedAt: new Date().toISOString() });
+    writeDb(data);
+    return order;
+  },
+  deletePressOnOrder(id) {
+    const data = readDb();
+    data.pressOnOrders = (data.pressOnOrders || []).filter(o => o.id !== id);
+    writeDb(data);
   }
 };

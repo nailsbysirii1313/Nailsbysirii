@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { db } from './db.js';
-import { sendNtfyNotification, sendAppointmentReminder, sendInventoryAlert, sendEmergencyRepairAlert, sendGiftCardIssuedAlert } from './ntfy.js';
+import { sendNtfyNotification, sendAppointmentReminder, sendInventoryAlert, sendEmergencyRepairAlert, sendGiftCardIssuedAlert, sendPressOnOrderAlert } from './ntfy.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -498,6 +498,85 @@ app.post('/api/reviews', (req, res) => {
 
 app.delete('/api/reviews/:id', requireAuth, (req, res) => {
   db.deleteReview(req.params.id);
+  res.json({ success: true, id: req.params.id });
+});
+
+// Pre-Made Press-On Nails E-Commerce API
+app.get('/api/press-ons', (req, res) => {
+  res.json(db.getPressOnProducts(true)); // public returns available products
+});
+
+app.get('/api/press-ons/all', requireAuth, (req, res) => {
+  res.json(db.getPressOnProducts(false)); // admin returns all including out of stock
+});
+
+app.post('/api/press-ons', requireAuth, (req, res) => {
+  const product = db.savePressOnProduct(req.body);
+  res.status(201).json(product);
+});
+
+app.put('/api/press-ons/:id', requireAuth, (req, res) => {
+  const product = db.savePressOnProduct({ ...req.body, id: req.params.id });
+  res.json(product);
+});
+
+app.delete('/api/press-ons/:id', requireAuth, (req, res) => {
+  db.deletePressOnProduct(req.params.id);
+  res.json({ success: true, id: req.params.id });
+});
+
+// Press-On Nails Orders API
+app.get('/api/press-on-orders', requireAuth, (req, res) => {
+  res.json(db.getPressOnOrders());
+});
+
+app.post('/api/press-on-orders', async (req, res) => {
+  try {
+    const orderData = req.body;
+    if (!orderData.clientName || !orderData.clientPhone || !orderData.addressStreet) {
+      return res.status(400).json({ error: 'Name, phone number, and street address are required.' });
+    }
+
+    const order = db.savePressOnOrder(orderData);
+
+    // Also auto-link or record client in studio database
+    try {
+      db.saveClient({
+        name: order.clientName,
+        phone: order.clientPhone,
+        email: order.clientEmail || '',
+        instagram: order.clientInstagram || '',
+        address: `${order.addressStreet}, ${order.addressCity} ${order.addressPincode}`,
+        preferredShape: order.shape || 'Almond',
+        notes: `Press-On Order #${order.orderNumber}: ${order.productTitle} (Size: ${order.size})`
+      });
+    } catch {
+      // Non-fatal client linking
+    }
+
+    // Dispatch NTFY Push Alert to Studio Phone
+    try {
+      await sendPressOnOrderAlert(order);
+    } catch (err) {
+      console.error('[Press-On Order Alert Error]', err);
+    }
+
+    res.status(201).json(order);
+  } catch (err) {
+    res.status(500).json({ error: err.message || 'Failed to place press-on order' });
+  }
+});
+
+app.patch('/api/press-on-orders/:id', requireAuth, (req, res) => {
+  const updated = db.updatePressOnOrderStatus(req.params.id, req.body);
+  if (!updated) {
+    return res.status(404).json({ error: 'Press-on order not found' });
+  }
+  res.json(updated);
+});
+
+app.delete('/api/press-on-orders/:id', requireAuth, (req, res) => {
+  db.deletePressOnOrder(req.params.id);
   res.json({ success: true, id: req.params.id });
 });
 

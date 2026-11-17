@@ -48,7 +48,7 @@ export default function StudioLogo({
   if (effectiveLogoUrl && !imgError) {
     return (
       <div className={`inline-flex items-center gap-2.5 ${className}`}>
-        <div className={`bg-white/95 border border-atelier-champagneBorder/80 ${current.box} shadow-xs hover:border-atelier-rose300 transition-all shrink-0 flex items-center justify-center`}>
+        <div className={`bg-studio-surface border border-border-subtle ${current.box} shadow-xs hover:border-brand-wine/40 transition-all shrink-0 flex items-center justify-center`}>
           <img
             src={effectiveLogoUrl}
             alt="Nails by Sirii"
@@ -58,11 +58,11 @@ export default function StudioLogo({
         </div>
         {showText && (
           <div className="leading-tight">
-            <span className={`font-serif italic font-bold text-atelier-noir block tracking-tight ${current.title}`}>
+            <span className={`font-display font-semibold text-text-ink block tracking-tight ${current.title}`}>
               Nails by Sirii
             </span>
-            <span className={`tracking-widest uppercase text-atelier-rose600 font-semibold block ${current.sub}`}>
-              Cute Nail Studio • Dehradun
+            <span className={`tracking-wider uppercase text-brand-wine font-medium block ${current.sub}`}>
+              Contemporary Nail Atelier • Dehradun
             </span>
           </div>
         )}
@@ -70,21 +70,21 @@ export default function StudioLogo({
     );
   }
 
-  // Graceful fallback boutique vector insignia
+  // Graceful fallback atelier monogram
   return (
     <div className={`inline-flex items-center gap-2.5 ${className}`}>
       <div
-        className={`${current.img} aspect-square rounded-2xl bg-gradient-to-tr from-atelier-rose500 via-pink-500 to-atelier-rose400 flex items-center justify-center text-white shadow-sm shadow-atelier-rose200/80 border border-white/60 shrink-0 select-none`}
+        className={`${current.img} aspect-square rounded-2xl bg-brand-wine flex items-center justify-center text-white shadow-xs border border-white/20 shrink-0 select-none`}
       >
-        <span className="font-serif italic font-bold tracking-tighter">S</span>
+        <span className="font-display font-bold tracking-tight">S</span>
       </div>
       {showText && (
         <div className="leading-tight">
-          <span className={`font-serif italic font-bold text-atelier-noir block tracking-tight ${current.title}`}>
+          <span className={`font-display font-semibold text-text-ink block tracking-tight ${current.title}`}>
             Nails by Sirii
           </span>
-          <span className={`tracking-widest uppercase text-atelier-rose600 font-semibold block ${current.sub}`}>
-            Cute Nail Studio • Dehradun
+          <span className={`tracking-wider uppercase text-brand-wine font-medium block ${current.sub}`}>
+            Contemporary Nail Atelier • Dehradun
           </span>
         </div>
       )}

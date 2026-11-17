@@ -192,7 +192,7 @@ export default function NewAppointmentModal({
               >
                 {clients.map((c) => (
                   <option key={c.id} value={c.id}>
-                    {c.name} ({c.phone}) {c.vip ? '★ VIP' : ''}
+                    {c.name} ({c.phone}) {c.vip ? '[VIP Client]' : ''}
                   </option>
                 ))}
               </select>

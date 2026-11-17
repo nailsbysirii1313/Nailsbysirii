@@ -33,6 +33,7 @@ import PasscodeModal from './components/PasscodeModal';
 import ShareCatalogueModal from './components/ShareCatalogueModal';
 import PublicHomePilot from './components/PublicHomePilot';
 import StudioTodayPilot from './components/StudioTodayPilot';
+import PressOnsView from './components/PressOnsView';
 import { playStudioChime } from './utils/audio';
 import { customSetToInvoiceItems } from './utils/customizerCalculator';
 import { getKolkataTodayString } from './utils/dateTime';
@@ -120,6 +121,8 @@ export default function App() {
   const [repairs, setRepairs] = useState([]);
   const [giftCards, setGiftCards] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [pressOnProducts, setPressOnProducts] = useState([]);
+  const [pressOnOrders, setPressOnOrders] = useState([]);
 
   // Aftercare Modal State
   const [isAftercareModalOpen, setIsAftercareModalOpen] = useState(false);
@@ -244,7 +247,9 @@ export default function App() {
         checklistData,
         repairsData,
         giftCardsData,
-        reviewsData
+        reviewsData,
+        pressOnProductsData,
+        pressOnOrdersData
       ] = await Promise.all([
         api.getOverview().catch(() => null),
         api.getClients().catch(() => []),
@@ -257,7 +262,9 @@ export default function App() {
         api.getChecklist().catch(() => []),
         api.getRepairs().catch(() => []),
         api.getGiftCards().catch(() => []),
-        api.getReviews().catch(() => [])
+        api.getReviews().catch(() => []),
+        api.getPressOnProducts().catch(() => []),
+        api.getPressOnOrders().catch(() => [])
       ]);
 
       if (overviewData) setOverview(overviewData);
@@ -272,6 +279,8 @@ export default function App() {
       setRepairs(repairsData);
       setGiftCards(giftCardsData);
       setReviews(reviewsData);
+      setPressOnProducts(pressOnProductsData);
+      setPressOnOrders(pressOnOrdersData);
 
       // Deep link to client invoice if opened with #invoice-xxx
       if (typeof window !== 'undefined' && window.location.hash.startsWith('#invoice-')) {
@@ -703,6 +712,108 @@ export default function App() {
     }
   };
 
+  // Press-On Nails E-Commerce Handlers
+  const loadPressOnProducts = async () => {
+    try {
+      const fresh = isAuthenticated ? await api.getAllPressOnProducts() : await api.getPressOnProducts();
+      setPressOnProducts(fresh);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const loadPressOnOrders = async () => {
+    try {
+      if (isAuthenticated) {
+        const fresh = await api.getPressOnOrders();
+        setPressOnOrders(fresh);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleCreatePressOnProduct = async (productData) => {
+    try {
+      const created = await api.createPressOnProduct(productData);
+      setPressOnProducts((prev) => [created, ...prev]);
+      return created;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const handleUpdatePressOnProduct = async (id, productData) => {
+    try {
+      const updated = await api.updatePressOnProduct(id, productData);
+      setPressOnProducts((prev) => prev.map((p) => (p.id === id ? updated : p)));
+      return updated;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const handleDeletePressOnProduct = async (id) => {
+    try {
+      await api.deletePressOnProduct(id);
+      setPressOnProducts((prev) => prev.filter((p) => p.id !== id));
+      addToast('Product Deleted', 'Removed from boutique catalog.', 'info');
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const handleCreatePressOnOrder = async (orderData) => {
+    try {
+      const created = await api.createPressOnOrder(orderData);
+      setPressOnOrders((prev) => [created, ...prev]);
+      setPressOnProducts((prev) =>
+        prev.map((p) => {
+          if (p.id === orderData.productId && p.stock !== undefined) {
+            const newStock = Math.max(0, p.stock - (orderData.quantity || 1));
+            return { ...p, stock: newStock, isAvailable: newStock > 0 };
+          }
+          return p;
+        })
+      );
+      playStudioChime('crystal');
+      addToast(
+        'Press-On Order Placed!',
+        `Order #${created.orderNumber} for ${created.clientName} confirmed.`,
+        'success'
+      );
+      return created;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const handleUpdatePressOnOrder = async (id, updateData) => {
+    try {
+      const updated = await api.updatePressOnOrder(id, updateData);
+      setPressOnOrders((prev) => prev.map((o) => (o.id === id ? updated : o)));
+      return updated;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const handleDeletePressOnOrder = async (id) => {
+    try {
+      await api.deletePressOnOrder(id);
+      setPressOnOrders((prev) => prev.filter((o) => o.id !== id));
+      addToast('Order Deleted', '', 'info');
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
   // Public Booking & Customizer Handlers
   const handlePublicBookingComplete = async (bookingPayload) => {
     try {
@@ -863,96 +974,30 @@ export default function App() {
   if (currentTab === 'clientWebsite') {
     return (
       <div className="min-h-screen bg-studio-canvas text-studio-ink">
-        {/* Creative Redesign Switcher Bar */}
-        <div className="bg-stone-900 text-white px-3 py-1.5 text-xs flex items-center justify-between z-50 sticky top-0 border-b border-stone-800">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-semibold text-stone-100">Phase 3 Complete Redesign</span>
-            <span className="text-[11px] text-stone-400 hidden sm:inline">• Public Experience Active</span>
-          </div>
-          <div className="flex items-center gap-1 bg-stone-800 p-0.5 rounded-lg border border-stone-700">
-            <button
-              onClick={() => setDesignMode('redesigned')}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
-                designMode === 'redesigned' ? 'bg-studio-wine text-white shadow-xs' : 'text-stone-300 hover:text-white'
-              }`}
-            >
-              Full Redesign (Phase 3)
-            </button>
-            <button
-              onClick={() => setDesignMode('pilot')}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
-                designMode === 'pilot' ? 'bg-studio-wine text-white shadow-xs' : 'text-stone-300 hover:text-white'
-              }`}
-            >
-              Pilot Preview (Phase 2)
-            </button>
-          </div>
-        </div>
-
         {/* Toast Notifications */}
         <Toast toasts={toasts} onDismiss={removeToast} />
 
-        {/* Render Public Experience based on Design Mode */}
-        {designMode === 'pilot' ? (
-          <PublicHomePilot
-            services={services}
-            settings={settings}
-            reviews={reviews}
-            hidePrices={hidePrices}
-            setHidePrices={setHidePrices}
-            onOpenPasscodeModal={() => {
-              if (isAuthenticated) {
-                setTabState('dashboard');
-              } else {
-                setPendingTab('dashboard');
-                setIsPasscodeModalOpen(true);
-              }
-            }}
-            onSelectService={(srv) => {
-              setDesignMode('redesigned');
-              setTimeout(() => {
-                const el = document.getElementById('booking-section');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }, 120);
-            }}
-            onOpenCustomizer={() => {
-              setDesignMode('redesigned');
-              setTimeout(() => {
-                const el = document.getElementById('customizer');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }, 120);
-            }}
-            onOpenBooking={() => {
-              setDesignMode('redesigned');
-              setTimeout(() => {
-                const el = document.getElementById('booking-section');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }, 120);
-            }}
-            onOpenShareModal={() => setIsShareCatalogueOpen(true)}
-          />
-        ) : (
-          <ClientWebsite
-            services={services}
-            settings={settings}
-            reviews={reviews}
-            hidePrices={hidePrices}
-            setHidePrices={setHidePrices}
-            onOpenPasscodeModal={() => {
-              if (isAuthenticated) {
-                setTabState('dashboard');
-              } else {
-                setPendingTab('dashboard');
-                setIsPasscodeModalOpen(true);
-              }
-            }}
-            onBookingComplete={handlePublicBookingComplete}
-            onSubmitRepair={handleCreateRepair}
-            onSaveReview={handleSaveReview}
-            onAddToast={addToast}
-          />
-        )}
+        <ClientWebsite
+          services={services}
+          settings={settings}
+          reviews={reviews}
+          pressOnProducts={pressOnProducts}
+          onOrderPressOn={handleCreatePressOnOrder}
+          hidePrices={true}
+          setHidePrices={() => { }}
+          onOpenPasscodeModal={() => {
+            if (isAuthenticated) {
+              setTabState('dashboard');
+            } else {
+              setPendingTab('dashboard');
+              setIsPasscodeModalOpen(true);
+            }
+          }}
+          onBookingComplete={handlePublicBookingComplete}
+          onSubmitRepair={handleCreateRepair}
+          onSaveReview={handleSaveReview}
+          onAddToast={addToast}
+        />
 
         {/* Studio Passcode Gate Modal (nbs0812) */}
         <PasscodeModal
@@ -974,7 +1019,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex bg-atelier-cream text-atelier-noir">
+    <div className="min-h-screen flex bg-studio-canvas text-text-ink font-sans">
       {/* Toast Notifications */}
       <Toast toasts={toasts} onDismiss={removeToast} />
 
@@ -990,6 +1035,7 @@ export default function App() {
           clients: clients.length,
           pendingAppointments: pendingAppointments.length,
           unpaidInvoices: unpaidInvoices.length,
+          pressOnOrders: pressOnOrders.filter((o) => o.fulfillmentStatus === 'New Order').length,
           lowStockCount: inventory.filter((i) => (Number(i.quantity) || 0) <= (Number(i.minThreshold) || 0)).length
         }}
       />
@@ -1014,8 +1060,8 @@ export default function App() {
         <main className="flex-1 px-3.5 py-4 sm:p-6 md:p-8 max-w-7xl w-full mx-auto pb-28 md:pb-8">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20 space-y-3">
-              <div className="w-10 h-10 rounded-full border-2 border-atelier-rose300 border-t-atelier-rose600 animate-spin" />
-              <p className="font-serif italic text-sm text-atelier-muted">
+              <div className="w-10 h-10 rounded-full border-2 border-border-subtle border-t-brand-wine animate-spin" />
+              <p className="font-display font-medium text-sm text-text-muted">
                 Opening Nails by Sirii Studio OS...
               </p>
             </div>
@@ -1034,17 +1080,15 @@ export default function App() {
                     <div className="flex items-center gap-1 bg-studio-canvas p-1 rounded-xl border border-studio-border">
                       <button
                         onClick={() => setDesignMode('pilot')}
-                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-                          designMode === 'pilot' ? 'bg-studio-wine text-white shadow-xs' : 'text-studio-secondary hover:text-studio-ink'
-                        }`}
+                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${designMode === 'pilot' ? 'bg-studio-wine text-white shadow-xs' : 'text-studio-secondary hover:text-studio-ink'
+                          }`}
                       >
                         Redesigned Pilot
                       </button>
                       <button
                         onClick={() => setDesignMode('classic')}
-                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-                          designMode === 'classic' ? 'bg-studio-wine text-white shadow-xs' : 'text-studio-secondary hover:text-studio-ink'
-                        }`}
+                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${designMode === 'classic' ? 'bg-studio-wine text-white shadow-xs' : 'text-studio-secondary hover:text-studio-ink'
+                          }`}
                       >
                         Classic Baseline
                       </button>
@@ -1177,6 +1221,22 @@ export default function App() {
                 />
               )}
 
+              {currentTab === 'pressons' && (
+                <PressOnsView
+                  products={pressOnProducts}
+                  orders={pressOnOrders}
+                  settings={settings}
+                  onRefreshProducts={loadPressOnProducts}
+                  onRefreshOrders={loadPressOnOrders}
+                  onCreateProduct={handleCreatePressOnProduct}
+                  onUpdateProduct={handleUpdatePressOnProduct}
+                  onDeleteProduct={handleDeletePressOnProduct}
+                  onUpdateOrder={handleUpdatePressOnOrder}
+                  onDeleteOrder={handleDeletePressOnOrder}
+                  onAddToast={addToast}
+                />
+              )}
+
               {currentTab === 'customizer' && (
                 <NailCustomizerView
                   onBookCustomDesign={handleBookFromCustomizer}
@@ -1190,6 +1250,8 @@ export default function App() {
                   services={services}
                   settings={settings}
                   reviews={reviews}
+                  pressOnProducts={pressOnProducts}
+                  onOrderPressOn={handleCreatePressOnOrder}
                   onBookingComplete={handlePublicBookingComplete}
                   onSubmitRepair={handleCreateRepair}
                   onSaveReview={handleSaveReview}

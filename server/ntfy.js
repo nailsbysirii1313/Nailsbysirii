@@ -152,3 +152,21 @@ export async function sendGiftCardIssuedAlert(card) {
   });
 }
 
+export async function sendPressOnOrderAlert(order) {
+  const title = `New Press-On Order: ${order.clientName} (INR ${order.totalAmount || 0})`;
+  const message = `${order.clientName} ordered "${order.productTitle || 'Press-On Set'}"!\n\nSize: ${order.size} (Qty: ${order.quantity || 1})\nTotal: INR ${order.totalAmount || 0}\nPhone: ${order.clientPhone}\nAddress: ${order.addressStreet || ''}, ${order.addressCity || ''} ${order.addressPincode || ''}\nWear Kit: ${order.wearMethod || 'Adhesive Tabs'}`;
+
+  return await sendNtfyNotification({
+    title,
+    message,
+    priority: "high",
+    tags: "package,shopping_cart,gem",
+    type: "press_on_order",
+    metadata: {
+      orderId: order.id,
+      clientName: order.clientName,
+      totalAmount: order.totalAmount
+    }
+  });
+}
+

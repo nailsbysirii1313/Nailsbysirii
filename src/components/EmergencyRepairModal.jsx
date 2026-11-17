@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   X,
-  AlertTriangle,
+  HeartHandshake,
   ShieldCheck,
   Phone,
   Clock,
@@ -91,9 +91,9 @@ export default function EmergencyRepairModal({
         {!isSuccess ? (
           <div>
             <div className="space-y-1.5 mb-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-[10px] font-bold">
-                <AlertTriangle className="w-3 h-3 text-amber-600" />
-                <span>Urgent Repair Desk</span>
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-studio-wineLight border border-studio-wine/20 text-studio-wine text-[10px] font-bold">
+                <HeartHandshake className="w-3 h-3 text-studio-wine" />
+                <span>Urgent Repair Care</span>
               </div>
               <h3 className="font-display italic font-bold text-2xl text-studio-ink">
                 Quick Nail Repair Request
