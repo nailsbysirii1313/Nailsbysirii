@@ -10,7 +10,7 @@ import {
   Edit3,
   Search,
   Filter,
-  Sparkles,
+  CalendarHeart,
   Phone,
   AlertTriangle,
   ChevronLeft,
@@ -178,7 +178,7 @@ export default function AppointmentsView({
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-subtle text-brand-wine text-xs font-semibold mb-2 border border-border-subtle">
-            <Sparkles className="w-3.5 h-3.5 text-brand-wine" />
+            <CalendarHeart className="w-3.5 h-3.5 text-brand-wine" />
             <span>Studio Calendar & Appointments</span>
           </div>
           <h2 className="font-display text-2xl sm:text-3xl font-semibold text-text-ink tracking-tight">

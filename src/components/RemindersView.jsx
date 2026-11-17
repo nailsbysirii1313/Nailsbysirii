@@ -9,7 +9,6 @@ import {
   ExternalLink,
   Copy,
   Check,
-  Sparkles,
   Clock,
   ShieldCheck,
   RefreshCw,

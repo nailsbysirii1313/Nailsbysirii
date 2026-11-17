@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Clock, DollarSign, Check, Calendar, Receipt, RotateCcw } from 'lucide-react';
+import { Palette, Clock, DollarSign, Check, Calendar, Receipt, RotateCcw } from 'lucide-react';
 import { SHAPES, LENGTHS, BASE_COLORS, FINISHES, calculateCustomSet } from '../utils/customizerCalculator';
 import NailTipSchematic from './NailTipSchematic';
 
@@ -57,7 +57,7 @@ export default function NailCustomizerView({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-subtle text-brand-wine text-xs font-semibold mb-2 border border-border-subtle">
-            <Sparkles className="w-3.5 h-3.5 text-brand-wine" />
+            <Palette className="w-3.5 h-3.5 text-brand-wine" />
             <span>Interactive Studio Consultation Tool</span>
           </div>
           <h2 className="font-display font-semibold text-2xl sm:text-3xl text-text-ink tracking-tight">

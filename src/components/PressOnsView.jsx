@@ -16,7 +16,6 @@ import {
   X,
   Check,
   ChevronRight,
-  Sparkles,
   ArrowRight,
   TrendingUp,
   Tag,

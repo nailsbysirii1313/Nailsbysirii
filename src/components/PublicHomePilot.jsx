@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Sparkles,
   Calendar,
   Clock,
   ArrowRight,
@@ -262,7 +261,7 @@ export default function PublicHomePilot({
           {/* Studio Meta Badge */}
           <div className="inline-flex flex-wrap items-center justify-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-surface border border-studio-border text-[11px] font-semibold text-studio-secondary shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-studio-wine" />
+              <Palette className="w-3.5 h-3.5 text-studio-wine" />
               <span>Bespoke Nail Atelier</span>
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-emeraldLight border border-emerald-200 text-[11px] font-semibold text-emerald-800">
@@ -491,7 +490,7 @@ export default function PublicHomePilot({
             </div>
 
             <div className="p-4 rounded-2xl bg-studio-canvas border border-studio-border space-y-1.5">
-              <Sparkles className="w-5 h-5 text-studio-wine" />
+              <ShieldCheck className="w-5 h-5 text-studio-wine" />
               <h3 className="font-semibold text-studio-ink">Health-First Natural Nail Care</h3>
               <p className="text-studio-secondary leading-relaxed">
                 Zero aggressive e-file cuticle carving. We focus on long-term nail plate health, strength, and integrity.

@@ -3,7 +3,6 @@ import {
   Gift,
   Plus,
   Search,
-  Sparkles,
   CreditCard,
   DollarSign,
   Printer,
@@ -246,7 +245,7 @@ export default function GiftCardsView({
           <div className="flex items-center justify-between text-text-muted">
             <span className="text-[10px] font-bold uppercase tracking-wider">Lifetime Gifted</span>
             <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200">
-              <Sparkles className="w-4 h-4" />
+              <Heart className="w-4 h-4" />
             </div>
           </div>
           <div className="text-2xl font-display font-bold text-emerald-800">
@@ -704,7 +703,7 @@ export default function GiftCardsView({
                   type="submit"
                   className="px-5 py-2.5 bg-brand-wine hover:bg-brand-wineHover text-white rounded-xl text-xs font-semibold shadow-studio transition-all flex items-center gap-1.5 min-h-[44px]"
                 >
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <Gift className="w-3.5 h-3.5" />
                   <span>Generate Certificate</span>
                 </button>
               </div>

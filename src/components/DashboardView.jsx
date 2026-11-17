@@ -7,7 +7,7 @@ import {
   CreditCard,
   DollarSign,
   Bell,
-  Sparkles,
+  Crown,
   ArrowRight,
   CheckCircle2,
   Phone,
@@ -107,7 +107,7 @@ export default function DashboardView({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-studio-canvas border border-border-subtle text-brand-wine text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5" />
+              <Crown className="w-3.5 h-3.5" />
               <span>Studio Operations Hub</span>
             </div>
             <h2 className="font-display font-semibold text-2xl sm:text-3xl text-text-ink tracking-tight">
@@ -566,7 +566,7 @@ export default function DashboardView({
           {/* Atelier Philosophy Note */}
           <div className="bg-studio-canvas rounded-3xl p-5 border border-border-subtle space-y-2">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-brand-wine" />
+              <ShieldCheck className="w-4 h-4 text-brand-wine" />
               <span className="text-xs font-bold text-text-ink uppercase tracking-wider">
                 Atelier Standard
               </span>

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Sparkles,
+  LayoutDashboard,
   Calendar,
   Users,
   LayoutGrid,
@@ -43,7 +43,7 @@ export default function MobileBottomNav({
           }`}
         >
           <div className="relative">
-            <Sparkles
+            <LayoutDashboard
               className={`w-5 h-5 transition-transform ${
                 currentTab === 'dashboard' ? 'scale-110 text-brand-wine' : ''
               }`}

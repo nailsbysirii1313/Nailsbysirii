@@ -3,7 +3,6 @@ import {
   Search,
   Plus,
   Users,
-  Sparkles,
   Phone,
   Mail,
   Heart,

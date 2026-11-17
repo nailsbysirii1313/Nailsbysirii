@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, User, Phone, Mail, Sparkles, AlertCircle, Heart } from 'lucide-react';
+import { X, User, Phone, Mail, Palette, AlertCircle, Heart } from 'lucide-react';
 import { InstagramIcon } from './Icons';
 
 export default function NewClientModal({ isOpen, onClose, onSave, clientToEdit }) {
@@ -146,7 +146,7 @@ export default function NewClientModal({ isOpen, onClose, onSave, clientToEdit }
           {/* Nail Preferences */}
           <div className="pt-2 border-t border-studio-border">
             <h4 className="font-semibold text-studio-ink text-xs mb-3 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-studio-wine" />
+              <Palette className="w-3.5 h-3.5 text-studio-wine" />
               <span>Nail Architecture & Style Preferences</span>
             </h4>
 

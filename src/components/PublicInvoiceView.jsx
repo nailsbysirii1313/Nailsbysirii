@@ -6,7 +6,6 @@ import {
   Copy,
   Check,
   CheckCircle2,
-  Sparkles,
   ArrowLeft,
   Share2,
   Send,

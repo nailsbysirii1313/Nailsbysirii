@@ -5,7 +5,6 @@ import {
   ShieldCheck,
   Phone,
   Clock,
-  Sparkles,
   CheckCircle2,
   Send,
   Heart

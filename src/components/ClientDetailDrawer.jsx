@@ -3,7 +3,7 @@ import {
   X,
   Phone,
   Mail,
-  Sparkles,
+  Palette,
   Calendar,
   CreditCard,
   AlertCircle,
@@ -274,7 +274,7 @@ export default function ClientDetailDrawer({
                 {/* Nail Anatomy & Styling */}
                 <div className="p-4 rounded-2xl bg-studio-canvas border border-studio-border space-y-3">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-studio-wine" />
+                    <Palette className="w-4 h-4 text-studio-wine" />
                     <span className="font-bold text-studio-ink">Nail Style Profile</span>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-xs">
@@ -485,7 +485,7 @@ export default function ClientDetailDrawer({
                 {/* Aftercare Card Launcher */}
                 <div className="p-4 rounded-2xl bg-studio-wineLight/60 border border-studio-border shadow-xs space-y-2.5">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-studio-wine" />
+                    <Heart className="w-4 h-4 text-studio-wine" />
                     <span className="text-xs font-bold text-studio-ink uppercase tracking-wider">
                       Client Aftercare Stationery
                     </span>

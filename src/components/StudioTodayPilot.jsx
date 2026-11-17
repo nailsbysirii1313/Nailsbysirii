@@ -13,7 +13,7 @@ import {
   ChevronRight,
   Lock,
   Bell,
-  Sparkles,
+  Palette,
   ArrowRight,
   Filter
 } from 'lucide-react';
@@ -288,7 +288,7 @@ export default function StudioTodayPilot({
 
                       {apt.customSet && (
                         <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-studio-subtle text-[10px] text-studio-wine font-semibold">
-                          <Sparkles className="w-3 h-3" />
+                          <Palette className="w-3 h-3" />
                           <span>
                             {apt.customSet.shape} • {apt.customSet.length} • {apt.customSet.finish}
                           </span>

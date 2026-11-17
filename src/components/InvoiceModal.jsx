@@ -8,7 +8,6 @@ import {
   Copy,
   Check,
   CheckCircle2,
-  Sparkles,
   Smartphone,
   Send,
   QrCode,

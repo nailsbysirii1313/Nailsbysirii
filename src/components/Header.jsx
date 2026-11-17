@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import StudioLogo from './StudioLogo';
 import {
-  Sparkles,
   Bell,
   Smartphone,
   Globe,

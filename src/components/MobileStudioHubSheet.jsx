@@ -9,7 +9,6 @@ import {
   Globe,
   TrendingUp,
   BellRing,
-  Sparkles,
   Settings,
   FileSpreadsheet,
   ChevronRight,
@@ -62,7 +61,7 @@ export default function MobileStudioHubSheet({
           id: 'services',
           label: 'Services & Art Menu',
           desc: 'Configure nail sets, BIAB overlays, tiers & pricing',
-          icon: Sparkles,
+          icon: Palette,
           color: 'text-pink-600 bg-pink-50'
         }
       ]

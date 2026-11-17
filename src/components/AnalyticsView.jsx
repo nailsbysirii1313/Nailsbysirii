@@ -4,7 +4,6 @@ import {
   DollarSign,
   Users,
   Calendar,
-  Sparkles,
   Download,
   FileSpreadsheet,
   Award,

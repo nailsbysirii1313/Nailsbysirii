@@ -4,7 +4,6 @@ import {
   User,
   Calendar,
   Receipt,
-  Sparkles,
   Bell,
   Globe,
   Palette,

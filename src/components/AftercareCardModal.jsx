@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Sparkles,
+  Gem,
   ShieldCheck,
   Droplets,
   Calendar,
@@ -94,7 +94,7 @@ Address: ${settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, De
         {/* Action Header (Hidden on Print) */}
         <div className="flex items-center justify-between pb-4 mb-4 border-b border-border-subtle print:hidden">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-brand-wine" />
+            <Heart className="w-4 h-4 text-brand-wine" />
             <span className="text-xs font-bold text-text-ink uppercase tracking-wider">
               Atelier Aftercare Guide
             </span>
@@ -175,7 +175,7 @@ Address: ${settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, De
 
             <div className="flex items-start gap-3 p-3 rounded-xl bg-studio-surface border border-border-subtle">
               <div className="w-7 h-7 rounded-lg bg-studio-canvas text-brand-wine flex items-center justify-center shrink-0 mt-0.5 border border-border-subtle">
-                <Sparkles className="w-3.5 h-3.5" />
+                <Gem className="w-3.5 h-3.5" />
               </div>
               <div className="space-y-0.5">
                 <h4 className="font-bold text-text-ink text-xs">3. Nails Are Jewels, Not Tools</h4>

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Sparkles,
-  Sparkle,
   Gem,
   Crown,
   Flower2,
@@ -9,6 +7,7 @@ import {
   Paintbrush,
   Ribbon,
   Feather,
+  GraduationCap,
   Stars,
   PackageCheck,
   HeartHandshake,
@@ -1144,7 +1143,7 @@ export default function ClientWebsite({
               href="#booking-section"
               className="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-bold shadow-studio active:scale-95 transition-all"
             >
-              <Sparkles className="w-3.5 h-3.5 fill-white" />
+              <Heart className="w-3.5 h-3.5 fill-white text-white" />
               <span>Book Appointment</span>
             </a>
 
@@ -1208,7 +1207,7 @@ export default function ClientWebsite({
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-3 p-3 rounded-2xl bg-studio-wineLight text-studio-wine font-bold"
                 >
-                  <Sparkles className="w-4 h-4 text-studio-wine" />
+                  <Palette className="w-4 h-4 text-studio-wine" />
                   <span>Nail Ideas</span>
                 </a>
                 <a
@@ -1348,7 +1347,7 @@ export default function ClientWebsite({
         <div className="flex flex-col items-center text-center space-y-5 lg:hidden animate-hero-fade-up">
           {/* 1. Small location line */}
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight border border-studio-wine/20 text-studio-wine text-xs font-bold uppercase tracking-wider shadow-xs">
-            <Sparkle className="w-3 h-3 fill-studio-wine" />
+            <MapPin className="w-3 h-3 text-studio-wine" />
             <span>Nail studio in Dehradun</span>
           </div>
 
@@ -1367,14 +1366,14 @@ export default function ClientWebsite({
 
           {/* 4. Interactive nail-card fan with Real Photography */}
           <div className="relative w-full max-w-[320px] sm:max-w-[360px] h-[260px] sm:h-[285px] flex items-center justify-center my-1 select-none">
-            {/* Soft pink glow aura with decorative curved line and sparkle */}
+            {/* Soft pink glow aura with decorative curved line and luminous accent */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10" aria-hidden="true">
               <div className="w-[300px] h-[230px] rounded-full bg-gradient-to-tr from-pink-300/35 via-rose-200/30 to-pink-100/25 blur-3xl" />
               <svg className="absolute w-[250px] h-[145px] text-studio-wine/20" fill="none" viewBox="0 0 250 145">
                 <path d="M 15 125 C 75 25 175 25 235 125" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
               </svg>
-              <Sparkle className="absolute top-2 right-6 w-3.5 h-3.5 text-studio-wine/50 animate-pulse" />
-              <Sparkle className="absolute bottom-4 left-6 w-2.5 h-2.5 text-studio-wine/40" />
+              <span className="absolute top-2 right-6 w-2 h-2 rounded-full bg-pink-400/60 shadow-[0_0_8px_rgba(244,114,182,0.8)] animate-pulse" />
+              <span className="absolute bottom-4 left-6 w-1.5 h-1.5 rounded-full bg-rose-400/50 shadow-[0_0_6px_rgba(251,113,133,0.6)]" />
             </div>
 
             {/* Three Overlapping Cards with Real Photography */}
@@ -1493,7 +1492,7 @@ export default function ClientWebsite({
               onClick={() => handleBookHeroStyle(activeHeroStyle)}
               className="w-full max-w-xs py-3.5 px-6 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-sm font-bold shadow-studio hover:shadow-glow transition-all active:scale-95 flex items-center justify-center gap-2"
             >
-              <Sparkles className="w-4 h-4 fill-white" />
+              <Heart className="w-4 h-4 fill-white text-white" />
               <span>Book Your Nails</span>
             </a>
 
@@ -1512,7 +1511,7 @@ export default function ClientWebsite({
           {/* Left Column: Copy & Actions */}
           <div className="lg:col-span-6 space-y-6 text-left">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight border border-studio-wine/20 text-studio-wine text-xs font-bold uppercase tracking-wider shadow-xs">
-              <Sparkle className="w-3 h-3 fill-studio-wine" />
+              <MapPin className="w-3 h-3 text-studio-wine" />
               <span>Nail studio in Dehradun</span>
             </div>
 
@@ -1533,7 +1532,7 @@ export default function ClientWebsite({
                 onClick={() => handleBookHeroStyle(activeHeroStyle)}
                 className="py-3.5 px-7 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-sm font-bold shadow-studio hover:shadow-glow transition-all active:scale-95 inline-flex items-center justify-center gap-2"
               >
-                <Sparkles className="w-4 h-4 fill-white" />
+                <Heart className="w-4 h-4 fill-white text-white" />
                 <span>Book Your Nails</span>
               </a>
 
@@ -1550,14 +1549,14 @@ export default function ClientWebsite({
           {/* Right Column: Card Fan & Style Buttons */}
           <div className="lg:col-span-6 flex flex-col items-center justify-center space-y-5">
             <div className="relative w-full max-w-[390px] h-[290px] flex items-center justify-center select-none">
-              {/* Soft pink glow aura with decorative curved line and sparkle */}
+              {/* Soft pink glow aura with decorative curved line and luminous accent */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10" aria-hidden="true">
                 <div className="w-[360px] h-[250px] rounded-full bg-gradient-to-tr from-pink-300/35 via-rose-200/30 to-pink-100/25 blur-3xl" />
                 <svg className="absolute w-[290px] h-[165px] text-studio-wine/20" fill="none" viewBox="0 0 290 165">
                   <path d="M 15 140 C 85 25 205 25 275 140" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
                 </svg>
-                <Sparkle className="absolute top-2 right-8 w-4 h-4 text-studio-wine/50 animate-pulse" />
-                <Sparkle className="absolute bottom-5 left-8 w-3 h-3 text-studio-wine/40" />
+                <span className="absolute top-2 right-8 w-2 h-2 rounded-full bg-pink-400/60 shadow-[0_0_8px_rgba(244,114,182,0.8)] animate-pulse" />
+                <span className="absolute bottom-5 left-8 w-1.5 h-1.5 rounded-full bg-rose-400/50 shadow-[0_0_6px_rgba(251,113,133,0.6)]" />
               </div>
 
               {/* Three Overlapping Cards with Real Photography */}
@@ -1678,7 +1677,7 @@ export default function ClientWebsite({
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-2.5">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight text-studio-wine text-[11px] font-semibold">
-              <Sparkles className="w-3.5 h-3.5" />
+              <Palette className="w-3.5 h-3.5" />
               <span>Atelier Design Booklet & Catalogue</span>
             </div>
             <h2 className="font-display italic font-bold text-2xl sm:text-4xl text-studio-ink">
@@ -1732,7 +1731,7 @@ export default function ClientWebsite({
                       : 'bg-studio-surface border border-studio-border hover:border-studio-borderStrong text-studio-secondary'
                       }`}
                   >
-                    {cat === 'All Designs' && <Sparkles className="w-3.5 h-3.5" />}
+                    {cat === 'All Designs' && <Layers className="w-3.5 h-3.5" />}
                     {cat === 'Acrylic Nails' && <Gem className="w-3.5 h-3.5" />}
                     {cat === 'Natural Nails & BIAB' && <Feather className="w-3.5 h-3.5" />}
                     {cat === 'Gel & Soft Gel (Gel-X)' && <Crown className="w-3.5 h-3.5" />}
@@ -1826,7 +1825,7 @@ export default function ClientWebsite({
                   <div className="pt-2 border-t border-studio-border/60 space-y-1.5 text-[11px] text-studio-secondary font-medium">
                     {item.highlights.map((h, i) => (
                       <div key={i} className="flex items-center gap-2">
-                        <Sparkle className="w-3 h-3 text-studio-wine shrink-0 fill-studio-wineLight/60" />
+                        <Check className="w-3 h-3 text-studio-wine shrink-0" />
                         <span>{h}</span>
                       </div>
                     ))}
@@ -1843,7 +1842,7 @@ export default function ClientWebsite({
                     onClick={() => handleSelectLook(item)}
                     className="px-4 py-2.5 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio transition-all flex items-center gap-1.5 active:scale-95 min-h-[40px]"
                   >
-                    <Sparkles className="w-3.5 h-3.5" />
+                    <Heart className="w-3.5 h-3.5 fill-white text-white" />
                     <span>Select This Look</span>
                   </button>
                 </div>
@@ -2088,7 +2087,7 @@ export default function ClientWebsite({
                 <div className="p-5 rounded-2xl border-2 border-studio-wine bg-studio-wineLight/60 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-studio-wine" />
+                      <Palette className="w-4 h-4 text-studio-wine" />
                       <span className="font-display italic font-bold text-base text-studio-ink">
                         {selectedLook.title}
                       </span>
@@ -2217,7 +2216,7 @@ export default function ClientWebsite({
                       onClick={() => scrollTo('catalogue')}
                       className="text-studio-wine hover:underline font-semibold flex items-center gap-1.5"
                     >
-                      <Sparkles className="w-3.5 h-3.5" />
+                      <Palette className="w-3.5 h-3.5" />
                       <span>Adjust specifications in catalogue</span>
                     </button>
                   </div>
@@ -2446,7 +2445,7 @@ export default function ClientWebsite({
                   disabled={isSubmittingBooking}
                   className="px-8 py-3.5 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs sm:text-sm shadow-studio transition-all active:scale-95 disabled:opacity-50 flex items-center gap-2 min-h-[44px]"
                 >
-                  <Sparkles className="w-4 h-4" />
+                  <Heart className="w-4 h-4 fill-white text-white" />
                   <span>{isSubmittingBooking ? 'Submitting Reservation...' : 'Confirm Appointment Request'}</span>
                 </button>
               </div>
@@ -2530,7 +2529,7 @@ export default function ClientWebsite({
           {/* Section Header */}
           <div className="space-y-2">
             <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine px-3 py-1 rounded-full bg-studio-wineLight/60 border border-studio-wine/10 inline-flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3 text-studio-wine" />
+              <Heart className="w-3 h-3 text-studio-wine fill-studio-wine/20" />
               Verified Client Love & Accolades
             </span>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -2720,7 +2719,7 @@ export default function ClientWebsite({
                       {cat === 'Extensions & BIAB' && <Gem className="w-3.5 h-3.5" />}
                       {cat === 'Hand-Painted Art' && <Paintbrush className="w-3.5 h-3.5" />}
                       {cat === 'Hygiene & Hospitality' && <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-100" />}
-                      {cat === 'Nail Tech Academy' && <Sparkles className="w-3.5 h-3.5" />}
+                      {cat === 'Nail Tech Academy' && <GraduationCap className="w-3.5 h-3.5" />}
                       <span>{cat}</span>
                       <span
                         className={`text-[10px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-studio-canvas text-studio-muted'
@@ -3208,7 +3207,7 @@ export default function ClientWebsite({
               {/* Sizing Reassurance Card */}
               <div className="p-3.5 rounded-2xl bg-studio-canvas border border-studio-border text-xs text-studio-secondary space-y-1">
                 <div className="flex items-center gap-1.5 font-semibold text-studio-ink">
-                  <Sparkles className="w-3.5 h-3.5 text-studio-wine" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-studio-wine" />
                   <span>Between Sizes? Always Size Up</span>
                 </div>
                 <p className="leading-relaxed text-[11px]">

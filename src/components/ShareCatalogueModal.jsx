@@ -3,7 +3,7 @@ import {
   Share2,
   Copy,
   Check,
-  Sparkles,
+  Palette,
   QrCode,
   X,
   ExternalLink,
@@ -110,7 +110,7 @@ export default function ShareCatalogueModal({
           <div className="space-y-4 animate-in fade-in text-xs font-sans">
             <div className="p-4 rounded-2xl bg-studio-wineLight/60 border border-studio-border space-y-1.5">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-studio-wine" />
+                <Palette className="w-4 h-4 text-studio-wine" />
                 <h3 className="font-semibold text-xs text-studio-ink">
                   Inspiration Catalogue & Booklet
                 </h3>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
   Settings,
-  Sparkles,
+  Crown,
+  Palette,
   CreditCard,
   Smartphone,
   Save,
@@ -194,7 +195,7 @@ export default function SettingsView({ settings, onSaveSettings }) {
         {/* Studio Identity & Brand Logo */}
         <div className="bg-studio-surface rounded-3xl p-5 sm:p-7 border border-border-subtle shadow-xs space-y-5">
           <div className="flex items-center gap-2.5 pb-4 border-b border-border-subtle">
-            <Sparkles className="w-4 h-4 text-brand-wine" />
+            <Crown className="w-4 h-4 text-brand-wine" />
             <h3 className="font-display font-semibold text-base text-text-ink">
               Atelier Identity & Insignia
             </h3>
@@ -350,7 +351,7 @@ export default function SettingsView({ settings, onSaveSettings }) {
         <div className="bg-studio-surface rounded-3xl p-5 sm:p-7 border border-border-subtle shadow-xs space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-border-subtle">
             <div className="flex items-center gap-2.5">
-              <Sparkles className="w-4 h-4 text-brand-wine" />
+              <Palette className="w-4 h-4 text-brand-wine" />
               <div>
                 <h3 className="font-display font-semibold text-base text-text-ink">
                   Hero Showcase Cards ("Your Next Nail Crush")

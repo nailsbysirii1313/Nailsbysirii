@@ -1,6 +1,6 @@
 import React from 'react';
 import ClientWebsite from './ClientWebsite';
-import { ArrowLeft, Sparkles } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 export default function PublicBookingView({
   services,

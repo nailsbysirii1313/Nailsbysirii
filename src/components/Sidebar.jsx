@@ -5,7 +5,6 @@ import {
   Users,
   Calendar,
   CreditCard,
-  Sparkles,
   BellRing,
   Settings,
   Globe,
@@ -91,7 +90,7 @@ export default function Sidebar({
     {
       id: 'services',
       label: 'Services & Art Menu',
-      icon: Sparkles
+      icon: Palette
     },
     {
       id: 'reminders',

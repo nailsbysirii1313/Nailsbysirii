@@ -8,7 +8,6 @@ import {
   Gift,
   Smartphone,
   ChevronRight,
-  Sparkles,
   Share2
 } from 'lucide-react';
 

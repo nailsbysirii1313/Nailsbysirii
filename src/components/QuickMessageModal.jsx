@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Send, Copy, Check, MessageSquare, Phone, Sparkles } from 'lucide-react';
+import { X, Send, Copy, Check, MessageSquare, Phone } from 'lucide-react';
 import { formatTime12h } from '../utils/dateTime';
 
 export default function QuickMessageModal({

@@ -12,7 +12,6 @@ import {
   Send,
   CreditCard,
   QrCode,
-  Sparkles,
   ArrowRight,
   TrendingUp,
   Clock,

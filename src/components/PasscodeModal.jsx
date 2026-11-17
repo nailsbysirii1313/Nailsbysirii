@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Lock, KeyRound, Eye, EyeOff, Sparkles, ArrowRight, X, AlertCircle } from 'lucide-react';
+import { Lock, KeyRound, Eye, EyeOff, ArrowRight, X, AlertCircle } from 'lucide-react';
 import StudioLogo from './StudioLogo';
 import { api } from '../api';
 import { playStudioChime } from '../utils/audio';

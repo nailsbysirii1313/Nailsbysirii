@@ -3,7 +3,6 @@ import {
   X,
   Calendar,
   Clock,
-  Sparkles,
   User,
   DollarSign,
   Bell,

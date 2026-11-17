@@ -17,7 +17,6 @@ import {
   Search,
   DollarSign,
   Layers,
-  Sparkles,
   Clock,
   ArrowRight,
   Shield,

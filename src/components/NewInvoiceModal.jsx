@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Receipt, Plus, Trash2, Sparkles, User, Tag } from 'lucide-react';
+import { X, Receipt, Plus, Trash2, User, Tag } from 'lucide-react';
 import { getKolkataTodayString } from '../utils/dateTime';
 import { customSetToInvoiceItems } from '../utils/customizerCalculator';
 

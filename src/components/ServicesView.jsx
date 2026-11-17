@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Sparkles,
+  Palette,
   Plus,
   Clock,
   DollarSign,
@@ -84,7 +84,7 @@ export default function ServicesView({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-subtle text-brand-wine text-xs font-semibold mb-2 border border-border-subtle">
-            <Sparkles className="w-3.5 h-3.5 text-brand-wine" />
+            <Palette className="w-3.5 h-3.5 text-brand-wine" />
             <span>Studio Menu & Art Catalog</span>
           </div>
           <h2 className="font-display font-semibold text-2xl sm:text-3xl text-text-ink tracking-tight">
@@ -125,7 +125,7 @@ export default function ServicesView({
       {filtered.length === 0 ? (
         <div className="bg-studio-surface rounded-3xl p-12 border border-border-subtle text-center space-y-3 shadow-xs">
           <div className="w-12 h-12 mx-auto rounded-full bg-studio-canvas text-brand-wine flex items-center justify-center border border-border-subtle">
-            <Sparkles className="w-6 h-6" />
+            <Palette className="w-6 h-6" />
           </div>
           <p className="font-display font-semibold text-lg text-text-ink">
             No Services in this Category
