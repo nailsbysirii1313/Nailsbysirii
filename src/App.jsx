@@ -141,6 +141,7 @@ export default function App() {
   const [preselectedDateForAppointment, setPreselectedDateForAppointment] = useState(null);
   const [preselectedTimeForAppointment, setPreselectedTimeForAppointment] = useState(null);
   const [appointmentToEdit, setAppointmentToEdit] = useState(null);
+  const [isAppointmentFromNewClient, setIsAppointmentFromNewClient] = useState(false);
 
   const [isNewInvoiceOpen, setIsNewInvoiceOpen] = useState(false);
   const [preselectedAppointmentForInvoice, setPreselectedAppointmentForInvoice] = useState(null);
@@ -363,13 +364,23 @@ export default function App() {
         if (selectedClient && selectedClient.id === clientToEdit.id) {
           setSelectedClient(updated);
         }
+        setIsNewClientOpen(false);
+        setClientToEdit(null);
       } else {
         const created = await api.createClient(formData);
         setClients((prev) => [created, ...prev]);
         addToast('Client Registered', `${formData.name} added to your client roster.`);
+        setIsNewClientOpen(false);
+        setClientToEdit(null);
+
+        // Open appointment booking popup directly for this new client with option to skip
+        setAppointmentToEdit(null);
+        setPreselectedClientForAppointment(created);
+        setPreselectedDateForAppointment(getKolkataTodayString());
+        setPreselectedTimeForAppointment('12:00');
+        setIsAppointmentFromNewClient(true);
+        setIsNewAppointmentOpen(true);
       }
-      setIsNewClientOpen(false);
-      setClientToEdit(null);
     } catch (err) {
       addToast('Error', err.message, 'error');
     }
@@ -405,6 +416,7 @@ export default function App() {
         );
       }
       setIsNewAppointmentOpen(false);
+      setIsAppointmentFromNewClient(false);
       setAppointmentToEdit(null);
       setPreselectedClientForAppointment(null);
     } catch (err) {
@@ -903,6 +915,7 @@ export default function App() {
   };
 
   const openNewAppointment = (clientOrOptions = null) => {
+    setIsAppointmentFromNewClient(false);
     setAppointmentToEdit(null);
     if (clientOrOptions && typeof clientOrOptions === 'object') {
       if (clientOrOptions.date || clientOrOptions.time) {
@@ -1300,7 +1313,10 @@ export default function App() {
 
       <NewAppointmentModal
         isOpen={isNewAppointmentOpen}
-        onClose={() => setIsNewAppointmentOpen(false)}
+        onClose={() => {
+          setIsNewAppointmentOpen(false);
+          setIsAppointmentFromNewClient(false);
+        }}
         onSave={handleSaveAppointment}
         clients={clients}
         services={services}
@@ -1308,6 +1324,7 @@ export default function App() {
         preselectedDate={preselectedDateForAppointment}
         preselectedTime={preselectedTimeForAppointment}
         appointmentToEdit={appointmentToEdit}
+        isFromNewClient={isAppointmentFromNewClient}
       />
 
       <NewInvoiceModal

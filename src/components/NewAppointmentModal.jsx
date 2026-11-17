@@ -9,7 +9,8 @@ import {
   Wallet,
   CheckCircle2,
   CreditCard,
-  Check
+  Check,
+  Heart
 } from 'lucide-react';
 import { getKolkataTodayString } from '../utils/dateTime';
 
@@ -22,7 +23,8 @@ export default function NewAppointmentModal({
   preselectedClient = null,
   appointmentToEdit = null,
   preselectedDate = null,
-  preselectedTime = null
+  preselectedTime = null,
+  isFromNewClient = false
 }) {
   const [clientId, setClientId] = useState('');
   const [clientName, setClientName] = useState('');
@@ -167,7 +169,7 @@ export default function NewAppointmentModal({
         <div className="mb-6">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight text-studio-wine text-xs font-semibold mb-2">
             <Calendar className="w-3.5 h-3.5" />
-            <span>{appointmentToEdit ? 'Edit Booking' : 'Schedule Nail Appointment'}</span>
+            <span>{appointmentToEdit ? 'Edit Booking' : isFromNewClient ? 'Step 2: Schedule Appointment' : 'Schedule Nail Appointment'}</span>
           </div>
           <h3 className="font-display italic font-bold text-2xl text-studio-ink">
             {appointmentToEdit ? 'Update Appointment' : 'Book Client Appointment'}
@@ -176,6 +178,22 @@ export default function NewAppointmentModal({
             Reserve time in the studio calendar. Automatically dispatches alerts to your phone.
           </p>
         </div>
+
+        {isFromNewClient && (
+          <div className="mb-4 p-3 rounded-2xl bg-studio-wineLight border border-studio-wine/25 flex items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2 text-studio-wine font-medium">
+              <Heart className="w-4 h-4 fill-studio-wine text-studio-wine shrink-0" />
+              <span>Client <strong>{clientName || preselectedClient?.name}</strong> registered! Book appointment or skip:</span>
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-2.5 py-1 rounded-lg bg-studio-surface border border-studio-wine/30 text-studio-wine hover:bg-studio-wine hover:text-white font-bold text-[11px] shrink-0 transition-all shadow-xs"
+            >
+              Skip for now
+            </button>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           {/* Client Selection */}
@@ -189,6 +207,11 @@ export default function NewAppointmentModal({
                 onChange={(e) => handleClientChange(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none font-medium text-base sm:text-xs text-studio-ink"
               >
+                {preselectedClient && !clients.some((c) => c.id === preselectedClient.id) && (
+                  <option key={preselectedClient.id} value={preselectedClient.id}>
+                    {preselectedClient.name} ({preselectedClient.phone})
+                  </option>
+                )}
                 {clients.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name} ({c.phone}) {c.vip ? '[VIP Client]' : ''}
@@ -497,7 +520,7 @@ export default function NewAppointmentModal({
               onClick={onClose}
               className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary hover:bg-studio-subtle text-xs font-semibold transition-all"
             >
-              Cancel
+              {isFromNewClient ? 'Skip for Now' : 'Cancel'}
             </button>
             <button
               type="submit"
