@@ -7,7 +7,6 @@ import {
   CreditCard,
   BellRing,
   Settings,
-  Globe,
   Palette,
   TrendingUp,
   Package,
@@ -69,18 +68,6 @@ export default function Sidebar({
       label: 'Inventory & Supplies',
       icon: Package,
       badge: counts?.lowStockCount ? `${counts.lowStockCount} low` : null
-    },
-    {
-      id: 'customizer',
-      label: 'Nail Set Customizer',
-      icon: Palette,
-      badge: 'Interactive'
-    },
-    {
-      id: 'clientWebsite',
-      label: 'Main Client Website',
-      icon: Globe,
-      badge: 'Public'
     },
     {
       id: 'analytics',

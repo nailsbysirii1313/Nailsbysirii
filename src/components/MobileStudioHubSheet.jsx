@@ -6,7 +6,6 @@ import {
   ShieldCheck,
   Gift,
   Palette,
-  Globe,
   TrendingUp,
   BellRing,
   Settings,
@@ -63,26 +62,6 @@ export default function MobileStudioHubSheet({
           desc: 'Configure nail sets, BIAB overlays, tiers & pricing',
           icon: Palette,
           color: 'text-pink-600 bg-pink-50'
-        }
-      ]
-    },
-    {
-      title: 'Client Experience & Consultations',
-      items: [
-        {
-          id: 'clientWebsite',
-          label: 'Main Client Website',
-          desc: 'Client-facing booking website, lookbook & catalogue',
-          icon: Globe,
-          color: 'text-blue-600 bg-blue-50',
-          badge: 'Public'
-        },
-        {
-          id: 'customizer',
-          label: 'Nail Set 3D Customizer',
-          desc: 'Interactive shape, length & finish visual consultation',
-          icon: Palette,
-          color: 'text-fuchsia-600 bg-fuchsia-50'
         }
       ]
     },
