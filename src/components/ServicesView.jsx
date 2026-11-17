@@ -3,13 +3,11 @@ import {
   Palette,
   Plus,
   Clock,
-  DollarSign,
   Edit3,
   Trash2,
   X,
-  CheckCircle2,
   Star,
-  Tag
+  MessageCircle
 } from 'lucide-react';
 
 export default function ServicesView({
@@ -25,7 +23,7 @@ export default function ServicesView({
     name: '',
     category: 'Natural Nails',
     duration: 60,
-    price: 80,
+    price: 0,
     description: '',
     popular: false
   });
@@ -43,7 +41,7 @@ export default function ServicesView({
         name: service.name,
         category: service.category,
         duration: service.duration,
-        price: service.price,
+        price: service.price || 0,
         description: service.description || '',
         popular: Boolean(service.popular)
       });
@@ -53,7 +51,7 @@ export default function ServicesView({
         name: '',
         category: 'Natural Nails',
         duration: 60,
-        price: 2200,
+        price: 0,
         description: '',
         popular: false
       });
@@ -91,7 +89,7 @@ export default function ServicesView({
             Services & Art Menu
           </h2>
           <p className="text-xs text-text-muted mt-1 max-w-xl">
-            Configure your studio treatment menu, honest appointment durations, and bespoke hand-painted nail art pricing tiers.
+            Studio treatment menu and appointment durations. Pricing is customized per consultation based on nail length, art complexity, and inspiration photos.
           </p>
         </div>
 
@@ -131,7 +129,7 @@ export default function ServicesView({
             No Services in this Category
           </p>
           <p className="text-xs text-text-muted max-w-sm mx-auto">
-            Add a service to this category to display it in your studio menu and public booking wizard.
+            Add a service to this category to display it in your studio menu. Clients connect with you directly for quotes.
           </p>
           <button
             onClick={() => handleOpenModal(null)}
@@ -172,10 +170,11 @@ export default function ServicesView({
 
               <div className="pt-4 mt-4 border-t border-border-subtle flex items-center justify-between">
                 <div>
-                  <span className="font-display font-bold text-xl text-text-ink">
-                    ₹{Number(srv.price).toLocaleString('en-IN')}
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-studio-subtle text-brand-wine text-[11px] font-semibold border border-border-subtle">
+                    <MessageCircle className="w-3 h-3 text-brand-wine" />
+                    <span>Connect for Pricing</span>
                   </span>
-                  <span className="text-xs text-text-muted block">
+                  <span className="text-xs text-text-muted block mt-1.5 font-medium">
                     {srv.duration} minutes
                   </span>
                 </div>
@@ -243,7 +242,7 @@ export default function ServicesView({
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-3 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas outline-none text-base sm:text-xs font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas outline-none text-base sm:text-xs font-medium"
                   >
                     <option value="Natural Nails">Natural Nails</option>
                     <option value="Extensions">Extensions</option>
@@ -256,33 +255,18 @@ export default function ServicesView({
 
                 <div>
                   <label className="block font-semibold text-text-secondary mb-1">
-                    Price (₹) *
+                    Duration (Minutes) *
                   </label>
                   <input
                     type="number"
-                    min="0"
-                    step="50"
+                    min="15"
+                    step="5"
                     required
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas outline-none focus:border-brand-wine focus:bg-white text-base sm:text-xs font-mono"
+                    value={formData.duration}
+                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas outline-none focus:border-brand-wine focus:bg-white text-base sm:text-xs"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block font-semibold text-text-secondary mb-1">
-                  Duration (Minutes) *
-                </label>
-                <input
-                  type="number"
-                  min="15"
-                  step="5"
-                  required
-                  value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas outline-none focus:border-brand-wine focus:bg-white text-base sm:text-xs"
-                />
               </div>
 
               <div>
@@ -298,6 +282,24 @@ export default function ServicesView({
                 />
               </div>
 
+              <div>
+                <label className="block font-semibold text-text-secondary mb-1">
+                  Internal Guide Price (₹, optional)
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  step="50"
+                  placeholder="e.g. 1500 (Clients connect for quote)"
+                  value={formData.price || ''}
+                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-border-subtle bg-studio-canvas outline-none focus:border-brand-wine focus:bg-white text-base sm:text-xs font-mono"
+                />
+                <p className="text-[11px] text-text-muted mt-1">
+                  Optional internal base rate for invoices. Cards will display "Connect for Pricing".
+                </p>
+              </div>
+
               <div className="flex items-center pt-1">
                 <label className="flex items-center gap-2 cursor-pointer select-none">
                   <input
@@ -307,7 +309,7 @@ export default function ServicesView({
                     className="w-4 h-4 rounded text-brand-wine focus:ring-brand-wine border-border-subtle accent-brand-wine"
                   />
                   <span className="font-semibold text-text-ink text-xs">
-                    Mark as Popular Service (Highlighted on website)
+                    Mark as Popular Service
                   </span>
                 </label>
               </div>

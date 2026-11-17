@@ -1128,16 +1128,6 @@ export default function ClientWebsite({
               <span>Share Booklet</span>
             </button>
 
-            {/* Desktop Price Visibility Toggle */}
-            <button
-              onClick={() => setHidePrices && setHidePrices(!hidePrices)}
-              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-studio-surface border border-studio-border hover:border-studio-borderStrong text-studio-secondary text-xs font-semibold shadow-xs transition-all active:scale-95"
-              title={hidePrices ? "Show Prices" : "Hide Prices (Portfolio Mode)"}
-            >
-              {hidePrices ? <EyeOff className="w-3.5 h-3.5 text-amber-600" /> : <Eye className="w-3.5 h-3.5 text-emerald-600" />}
-              <span>{hidePrices ? 'Prices Hidden' : 'Prices Shown'}</span>
-            </button>
-
             {/* Book Appointment Primary CTA */}
             <a
               href="#booking-section"
@@ -1271,18 +1261,6 @@ export default function ClientWebsite({
                     <span>Share Booklet</span>
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-studio-muted" />
-                </button>
-
-                {/* Price Visibility Toggle */}
-                <button
-                  onClick={() => setHidePrices && setHidePrices(!hidePrices)}
-                  className="w-full py-2.5 px-3 rounded-xl bg-studio-surface border border-studio-border text-xs font-semibold text-studio-ink flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-2">
-                    {hidePrices ? <EyeOff className="w-3.5 h-3.5 text-amber-600" /> : <Eye className="w-3.5 h-3.5 text-emerald-600" />}
-                    <span>{hidePrices ? 'Prices: Hidden' : 'Prices: Visible'}</span>
-                  </div>
-                  <span className="text-[10px] font-bold text-studio-wine uppercase">{hidePrices ? 'Show' : 'Hide'}</span>
                 </button>
 
                 {/* Emergency Nail Repair */}
