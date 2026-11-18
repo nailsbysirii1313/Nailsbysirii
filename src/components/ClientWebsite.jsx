@@ -267,7 +267,8 @@ export default function ClientWebsite({
   onSubmitRepair,
   onSaveReview,
   onAddToast,
-  onOpenCatalogue
+  onOpenCatalogue,
+  catalogueDesigns = []
 }) {
   // Navigation & Modals
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -483,47 +484,21 @@ export default function ClientWebsite({
   const [isPlacingPressOnOrder, setIsPlacingPressOnOrder] = useState(false);
   const [confirmedPressOnOrder, setConfirmedPressOnOrder] = useState(null);
 
-  // Curated Design Booklet Items (Grouped by Category for clients browsing ideas)
-  const catalogueBooklet = [
-    // 1. ACRYLIC NAILS
+  // Curated Image-Based Design Booklet Items (Only real photography looks)
+  const defaultImageDesigns = [
     {
       id: 'acrylic_1',
       category: 'Acrylic Nails',
       title: 'French Ombré Acrylic Sculpture',
       tag: 'Studio Classic',
       desc: 'Seamless airbrushed transition of soft white powder into a translucent blush pink acrylic bed. Sculpted with strong structural apex architecture.',
-      shape: SHAPES[0], // Almond
-      length: LENGTHS[2], // Long
+      shape: SHAPES[0],
+      length: LENGTHS[2],
       base: BASE_COLORS[1],
       finish: FINISHES[5],
       durationNum: 90,
+      imageUrl: '/catalogue/french-ombre.jpg',
       highlights: ['Seamless pink-and-white ombré blend', 'Structural apex reinforcement', 'Russian dry e-file prep included']
-    },
-    {
-      id: 'acrylic_2',
-      category: 'Acrylic Nails',
-      title: '3D Sculpted Acrylic Floral Bouquet',
-      tag: 'Hand-Carved Art',
-      desc: 'Hand-carved dimensional acrylic petals with micro freshwater pearl and gold bead centers over a soft nude acrylic base.',
-      shape: SHAPES[1], // Coffin
-      length: LENGTHS[2], // Long
-      base: BASE_COLORS[2],
-      finish: FINISHES[3],
-      durationNum: 105,
-      highlights: ['Hand-sculpted 3D acrylic florals', 'Micro pearl & crystal accents', 'Customizable petal placement']
-    },
-    {
-      id: 'acrylic_3',
-      category: 'Acrylic Nails',
-      title: 'Encapsulated Gold Leaf & Glitter Acrylic',
-      tag: 'Depth Encapsulation',
-      desc: 'Pure metallic gold foils and holographic iridescent glitter suspended under crystal-clear sculptured acrylic glass tips.',
-      shape: SHAPES[4], // Stiletto
-      length: LENGTHS[3], // Extra Long
-      base: BASE_COLORS[5],
-      finish: FINISHES[0],
-      durationNum: 100,
-      highlights: ['Internal depth encapsulation', 'Zero snag, ultra-smooth surface', 'High-gloss mirror finish']
     },
     {
       id: 'acrylic_4',
@@ -531,39 +506,26 @@ export default function ClientWebsite({
       title: 'Velvet Cat-Eye Stiletto Acrylics',
       tag: 'Magnetic Silk Shift',
       desc: 'Deep dimensional velvet magnetic shimmer refracting light across long sculpted stilettos. Dramatic, luxurious, and chip-proof.',
-      shape: SHAPES[4], // Stiletto
-      length: LENGTHS[2], // Long
+      shape: SHAPES[4],
+      length: LENGTHS[2],
       base: BASE_COLORS[4],
       finish: FINISHES[1],
       durationNum: 95,
+      imageUrl: '/hero/make-statement.jpg',
       highlights: ['Multi-angle magnetic illumination', 'Precision razor stiletto apex', 'Lasts 4+ weeks effortlessly']
     },
-    {
-      id: 'acrylic_5',
-      category: 'Acrylic Nails',
-      title: 'Milky Quartz Marble Acrylic Inlay',
-      tag: 'Smoky Mineral Veins',
-      desc: 'Subtle translucent white and rose-tinted marble veining swirled throughout the acrylic body, finished with micro gold foil flecks.',
-      shape: SHAPES[1], // Coffin
-      length: LENGTHS[1], // Medium
-      base: BASE_COLORS[0],
-      finish: FINISHES[5],
-      durationNum: 90,
-      highlights: ['Dual-tone acrylic blending', 'Organic mineral marble veining', 'Reinforced stress zone']
-    },
-
-    // 2. BIAB / NATURAL BUILDER GEL
     {
       id: 'biab_1',
       category: 'BIAB / Builder Gel',
       title: 'Glazed Pearl Donut BIAB',
       tag: 'Studio Signature',
       desc: 'Pearlescent glazed chrome powder hand-buffed over sheer strawberry jelly builder gel. The quintessential ethereal modern manicure.',
-      shape: SHAPES[0], // Almond
-      length: LENGTHS[1], // Medium
+      shape: SHAPES[0],
+      length: LENGTHS[1],
       base: BASE_COLORS[1],
       finish: FINISHES[0],
       durationNum: 75,
+      imageUrl: '/hero/little-sparkle.jpg',
       highlights: ['Micro-fine iridescent chrome buff', 'Flexible natural apex reinforcement', 'Gentle non-damaging soak-off']
     },
     {
@@ -572,152 +534,64 @@ export default function ClientWebsite({
       title: 'Milky White Clean Chrome BIAB',
       tag: 'Clean Aesthetic',
       desc: 'Semi-translucent porcelain white builder gel with a soft champagne reflection. Elegant, minimalist, and flattering on any skin tone.',
-      shape: SHAPES[2], // Squoval
-      length: LENGTHS[0], // Short
+      shape: SHAPES[3],
+      length: LENGTHS[0],
       base: BASE_COLORS[0],
       finish: FINISHES[0],
       durationNum: 75,
+      imageUrl: '/catalogue/milky-white.jpg',
       highlights: ['Porcelain semi-sheer overlay', 'Reinforces weak natural nails', 'Ultra-clean cuticle framing']
     },
     {
-      id: 'biab_3',
+      id: 'biab_glazed',
       category: 'BIAB / Builder Gel',
-      title: 'Micro-French Porcelain BIAB',
-      tag: 'Precision Line',
-      desc: 'Ultra-thin, razor-sharp white smile line painted along the free edge over a natural cashmere nude builder gel overlay.',
-      shape: SHAPES[3], // Round
-      length: LENGTHS[0], // Short
-      base: BASE_COLORS[2],
-      finish: FINISHES[4],
-      durationNum: 75,
-      highlights: ['Hand-painted micro tip detailing', 'High-apex natural curve', 'Zero lifting for 3–4 weeks']
-    },
-    {
-      id: 'biab_4',
-      category: 'BIAB / Builder Gel',
-      title: 'Aura Halo Soft Gradient BIAB',
-      tag: 'Blush Gradient',
-      desc: 'Soft airbrushed rose blush aura glow diffused from the nail center outward onto a translucent milk builder base.',
-      shape: SHAPES[0], // Almond
-      length: LENGTHS[1], // Medium
-      base: BASE_COLORS[3],
-      finish: FINISHES[5],
-      durationNum: 80,
-      highlights: ['Seamless aura gradient transition', 'Gentle builder gel protection', 'High-shine glass topcoat']
-    },
-
-    // 3. GEL-X SOFT GEL EXTENSIONS
-    {
-      id: 'gelx_1',
-      category: 'Gel-X Extensions',
-      title: 'Sculpted 3D Liquid Chrome Gel-X',
-      tag: 'Futuristic Organic',
-      desc: 'Raised molten silver 3D gel curves winding along the contours of lightweight full-cover soft gel extension tips.',
-      shape: SHAPES[1], // Coffin
-      length: LENGTHS[2], // Long
-      base: BASE_COLORS[0],
-      finish: FINISHES[2],
-      durationNum: 90,
-      highlights: ['Raised 3D liquid metal textures', 'Apres-style lightweight soft gel', 'Zero natural nail damage']
-    },
-    {
-      id: 'gelx_2',
-      category: 'Gel-X Extensions',
-      title: 'Glass Aura Jelly Gel-X',
-      tag: 'Prismatic Glass',
-      desc: 'High-transparency jelly tinted tips with multi-tonal holographic chrome reflection that shifts with sunlight.',
-      shape: SHAPES[0], // Almond
-      length: LENGTHS[1], // Medium
-      base: BASE_COLORS[5],
-      finish: FINISHES[0],
-      durationNum: 85,
-      highlights: ['Crystal-clear glass transparency', 'Custom fitted to nail sidewalls', 'Featherlight comfortable feel']
-    },
-    {
-      id: 'gelx_3',
-      category: 'Gel-X Extensions',
-      title: 'Tortoiseshell Amber Inlay Gel-X',
-      tag: 'Vintage Luxury',
-      desc: 'Rich amber, caramel, and black layered tortoiseshell pattern suspended with dimensional depth between clear gel coats.',
-      shape: SHAPES[5], // Square
-      length: LENGTHS[1], // Medium
-      base: BASE_COLORS[2],
-      finish: FINISHES[5],
-      durationNum: 90,
-      highlights: ['Multi-layer depth technique', 'Warm vintage amber palette', 'Finished with gold micro accents']
-    },
-
-    // 4. HAND-PAINTED NAIL ART
-    {
-      id: 'art_1',
-      category: 'Hand-Painted Art',
-      title: 'Intricate Wildflower Botanicals',
-      tag: 'Micro-Fine Floral',
-      desc: 'Delicate hand-painted micro botanical vines, leaves, and wildflower blossoms individually rendered with fine artist brushes.',
-      shape: SHAPES[0], // Almond
-      length: LENGTHS[1], // Medium
-      base: BASE_COLORS[3],
-      finish: FINISHES[5],
-      durationNum: 95,
-      highlights: ['100% hand-painted with micro brush', 'Unique composition per nail', 'Matte or high-gloss finish']
-    },
-    {
-      id: 'art_2',
-      category: 'Hand-Painted Art',
-      title: 'Y2K Cyber Chrome Starbursts',
-      tag: 'Reflective Stars',
-      desc: 'High-shine silver chrome starbursts, cross-stars, and geometric cyber accents set against a sheer neutral canvas.',
-      shape: SHAPES[1], // Coffin
-      length: LENGTHS[2], // Long
+      title: 'Hailey Glazed Chrome Gel Overlay',
+      tag: 'Ethereal Glaze',
+      desc: 'High-reflectivity mirror chrome powder buffed over natural builder gel apex. Ethereal, glossy, and durable.',
+      shape: SHAPES[0],
+      length: LENGTHS[1],
       base: BASE_COLORS[1],
-      finish: FINISHES[2],
-      durationNum: 90,
-      highlights: ['Ultra-reflective chrome pigment', 'Symmetrical star placements', 'Modern streetwear aesthetic']
+      finish: FINISHES[0],
+      durationNum: 80,
+      imageUrl: '/catalogue/glazed-donut.jpg',
+      highlights: ['High-reflectivity chrome pearl', 'Flexible protective builder base', 'High-shine mirror top coat']
     },
-
-    // 5. BRIDAL & OCCASION
     {
       id: 'bridal_1',
       category: 'Bridal & Occasion',
-      title: 'Luxe Pearl & Crystal Pavé',
+      title: 'Luxe Pearl & Crystal Sculpture',
       tag: 'Wedding & Celebration',
       desc: 'Graduated real freshwater-look pearls and genuine Swarovski crystal placements clustered along the cuticle and free edge.',
-      shape: SHAPES[0], // Almond
-      length: LENGTHS[1], // Medium
+      shape: SHAPES[0],
+      length: LENGTHS[2],
       base: BASE_COLORS[1],
       finish: FINISHES[3],
       durationNum: 100,
+      imageUrl: '/catalogue/luxe-pearl.jpg',
       highlights: ['Secure crystal encapsulation', 'Soft bridal blush nude base', 'Photograph-perfect elegance']
     },
     {
-      id: 'bridal_2',
-      category: 'Bridal & Occasion',
-      title: 'Romantic White Ribbon & Bows',
-      tag: 'Couture Feminine',
-      desc: 'Raised hand-formed 3D gel ribbon bows and delicate white lace detailing over a sheer milk-bath ombré background.',
-      shape: SHAPES[0], // Almond
-      length: LENGTHS[2], // Long
-      base: BASE_COLORS[0],
-      finish: FINISHES[3],
-      durationNum: 95,
-      highlights: ['3D sculpted gel ribbon bows', 'Airy lace pattern accents', 'Bridal trousseau ready']
-    },
-
-    // 6. PRESS-ON NAILS
-    {
-      id: 'presson_1',
-      category: 'Press-On Nails',
-      title: 'Custom-Fitted Luxury Press-On Set',
-      tag: 'Reusable Handcrafted',
-      desc: 'Custom-sized, reusable artisan nail set handcrafted with salon-quality builder gel and hand-painted art. Delivered with application kit.',
-      shape: SHAPES[0], // Almond
-      length: LENGTHS[1], // Medium
+      id: 'natural_1',
+      category: 'Natural Nails',
+      title: 'Soft & Simple Natural Sheer Nude',
+      tag: 'Everyday Chic',
+      desc: 'Clean Russian manicure detailing with sheer strawberry nude gloss. Minimalist, healthy, and pristine natural nails.',
+      shape: SHAPES[0],
+      length: LENGTHS[1],
       base: BASE_COLORS[1],
-      finish: FINISHES[0],
+      finish: FINISHES[5],
       durationNum: 60,
-      highlights: ['Made to your exact nail measurements', 'Reusable 5+ times with proper care', 'Shipped with complete prep kit']
+      imageUrl: '/hero/soft-simple.jpg',
+      highlights: ['Sheer strawberry jelly finish', 'Russian cuticle precision', 'Gentle natural strengthening']
     }
   ];
+
+  // Strictly filter to image-based designs only (no schematic vector placeholders)
+  const validPropDesigns = Array.isArray(catalogueDesigns)
+    ? catalogueDesigns.filter(d => Boolean(d.imageUrl && d.imageUrl.trim()))
+    : [];
+
+  const catalogueBooklet = validPropDesigns.length > 0 ? validPropDesigns : defaultImageDesigns;
 
   // Catalogue Category Options
   const catalogueCategories = [
@@ -829,11 +703,11 @@ export default function ClientWebsite({
     const styleObj = heroCards.find((s) => s.id === styleId) || heroCards[1];
     let matchedLook = null;
     if (styleObj.id === 'soft') {
-      matchedLook = catalogueBooklet.find((b) => b.id === 'biab_1') || catalogueBooklet[5];
+      matchedLook = catalogueBooklet.find((b) => b.id === 'natural_1') || catalogueBooklet[0];
     } else if (styleObj.id === 'sparkle') {
-      matchedLook = catalogueBooklet.find((b) => b.id === 'acrylic_3') || catalogueBooklet[0];
+      matchedLook = catalogueBooklet.find((b) => b.id === 'biab_1') || catalogueBooklet[2];
     } else {
-      matchedLook = catalogueBooklet.find((b) => b.id === 'acrylic_4') || catalogueBooklet[3];
+      matchedLook = catalogueBooklet.find((b) => b.id === 'acrylic_4') || catalogueBooklet[1];
     }
 
     setBookingMode('lookbook');
@@ -1725,18 +1599,17 @@ export default function ClientWebsite({
                 className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border hover:border-studio-wine/40 shadow-studio transition-all flex flex-col justify-between group space-y-4"
               >
                 <div className="space-y-4">
-                  {/* Visual Silhouette & Finish Schematic Preview */}
-                  <div className="h-44 rounded-2xl bg-studio-canvas/70 border border-border-subtle flex flex-col items-center justify-center relative overflow-hidden group-hover:border-studio-wine/30 transition-all p-3">
-                    <NailTipSchematic
-                      shape={item.shape.name}
-                      length={item.length.name}
-                      baseColor={item.base.hex}
-                      finish={item.finish.name}
-                      className="scale-95 transition-transform group-hover:scale-105 duration-300"
+                  {/* Visual Photography Preview */}
+                  <div className="h-48 sm:h-52 rounded-2xl bg-studio-canvas border border-studio-border relative overflow-hidden group-hover:border-studio-wine/30 transition-all">
+                    <img
+                      src={item.imageUrl || '/hero/soft-simple.jpg'}
+                      alt={item.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
                     />
 
                     <span className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-studio-surface/90 backdrop-blur-sm border border-studio-border text-[10px] font-semibold text-studio-secondary">
-                      {item.shape.name} • {item.length.name}
+                      {typeof item.shape === 'object' ? item.shape.name : item.shape || 'Almond'} • {typeof item.length === 'object' ? item.length.name : item.length || 'Medium'}
                     </span>
 
                     <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-studio-surface/90 backdrop-blur-sm border border-studio-border text-[10px] font-bold text-studio-wine">

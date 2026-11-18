@@ -20,7 +20,6 @@ import {
   BookOpen
 } from 'lucide-react';
 import StudioLogo from './StudioLogo';
-import NailTipSchematic from './NailTipSchematic';
 
 export default function CataloguePageView({
   designs = [],
@@ -34,23 +33,26 @@ export default function CataloguePageView({
   const [searchQuery, setSearchQuery] = useState('');
   const [imgErrors, setImgErrors] = useState({});
 
-  const categories = [
-    'All Designs',
-    'Acrylic Nails',
-    'BIAB / Builder Gel',
-    'Gel-X Extensions',
-    'Hand-Painted Art',
-    'Bridal & Occasion',
-    'Press-On Nails'
-  ];
-
   const handleImageError = (id) => {
     setImgErrors((prev) => ({ ...prev, [id]: true }));
   };
 
+  // Strictly filter to image-based designs only (no vector/schematic placeholders)
+  const imageBasedDesigns = useMemo(() => {
+    return (designs || []).filter((item) => Boolean(item.imageUrl && item.imageUrl.trim() && !imgErrors[item.id]));
+  }, [designs, imgErrors]);
+
+  const categories = useMemo(() => {
+    const set = new Set();
+    imageBasedDesigns.forEach((d) => {
+      if (d.category) set.add(d.category);
+    });
+    return ['All Designs', ...Array.from(set)];
+  }, [imageBasedDesigns]);
+
   const filtered = useMemo(() => {
     const q = (searchQuery || '').trim().toLowerCase();
-    return designs.filter((item) => {
+    return imageBasedDesigns.filter((item) => {
       const matchCat =
         activeCategory === 'All Designs' ||
         activeCategory === 'All' ||
@@ -67,7 +69,7 @@ export default function CataloguePageView({
         (item.highlights && item.highlights.some((h) => h.toLowerCase().includes(q)))
       );
     });
-  }, [designs, activeCategory, searchQuery]);
+  }, [imageBasedDesigns, activeCategory, searchQuery]);
 
   const studioPhone = settings?.phone || '+91 73026 23493';
   const cleanPhone = studioPhone.replace(/[^0-9]/g, '');
@@ -246,26 +248,15 @@ export default function CataloguePageView({
                   key={item.id}
                   className="bg-studio-surface rounded-3xl border border-studio-border hover:border-studio-wine/40 shadow-studio hover:shadow-studio-float transition-all flex flex-col justify-between overflow-hidden group"
                 >
-                  {/* Visual Header */}
-                  <div className="relative h-56 bg-studio-canvas/60 overflow-hidden flex items-center justify-center border-b border-studio-border">
-                    {hasImage ? (
-                      <img
-                        src={item.imageUrl}
-                        alt={item.title}
-                        onError={() => handleImageError(item.id)}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="p-4 flex items-center justify-center w-full h-full">
-                        <NailTipSchematic
-                          shape={shapeName}
-                          length={lengthName}
-                          baseColor={item.baseColor || '#E8C5C8'}
-                          finish={item.finish || 'chrome'}
-                          className="scale-95 group-hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                    )}
+                  {/* Visual Photography Header */}
+                  <div className="relative h-60 bg-studio-canvas overflow-hidden flex items-center justify-center border-b border-studio-border">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.title}
+                      onError={() => handleImageError(item.id)}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
 
                     {/* Top Badges */}
                     <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none">

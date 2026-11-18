@@ -7,7 +7,7 @@
     "email": "hello@nailsbysirii.com",
     "address": "Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi Cantt, Dehradun, Uttarakhand 248003",
     "instagram": "@nails.by.sirii",
-    "currency": "₹",
+    "currency": "\u20b9",
     "upiId": "nailsbysirii@okaxis",
     "upiName": "Nails by Sirii",
     "studioLogoUrl": "/logo.png",
@@ -15,10 +15,10 @@
     "ntfyServer": "https://ntfy.sh",
     "reminderLeadHours": 2,
     "autoRemindersEnabled": true,
-    "paymentInstructions": "UPI: 7302623493 / nailsbysirii@okaxis (GPay, PhonePe, Paytm) • Cash accepted at studio",
+    "paymentInstructions": "UPI: 7302623493 / nailsbysirii@okaxis (GPay, PhonePe, Paytm) \u2022 Cash accepted at studio",
     "defaultTaxRate": 0,
     "depositRequirement": 500,
-    "timings": "12:00 PM – 7:00 PM",
+    "timings": "12:00 PM \u2013 7:00 PM",
     "googleRating": "4.9",
     "googleReviewCount": 344,
     "googleMapsUrl": "https://maps.google.com/?q=Nails+by+Sirii+Laxmi+Navraj+Plaza+Garhi+Cantonment+Dehradun",
@@ -30,7 +30,7 @@
         "shape": "Almond",
         "length": "Short",
         "imageUrl": "/hero/soft-simple.jpg",
-        "subtitle": "Sheer strawberry nude • Natural almond",
+        "subtitle": "Sheer strawberry nude \u2022 Natural almond",
         "tag": "Trending Now"
       },
       {
@@ -40,7 +40,7 @@
         "shape": "Coffin",
         "length": "Medium",
         "imageUrl": "/hero/little-sparkle.jpg",
-        "subtitle": "Champagne porcelain • Molten chrome shine",
+        "subtitle": "Champagne porcelain \u2022 Molten chrome shine",
         "tag": "Studio Fav"
       },
       {
@@ -50,7 +50,7 @@
         "shape": "Stiletto",
         "length": "Long",
         "imageUrl": "/hero/make-statement.jpg",
-        "subtitle": "Magnetic silk shimmer • Sculpted stiletto",
+        "subtitle": "Magnetic silk shimmer \u2022 Sculpted stiletto",
         "tag": "Statement Art"
       }
     ]
@@ -198,7 +198,7 @@
       "instagram": "@kavya_styles",
       "address": "",
       "preferredShape": "Almond",
-      "notes": "Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
+      "notes": "Selected Design: French Ombr\u00e9 Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
       "totalSpent": 0,
       "totalVisits": 0,
       "createdAt": "2026-11-17T16:24:33.404+00:00",
@@ -233,14 +233,14 @@
       "clientEmail": "kavya@example.com",
       "clientInstagram": "@kavya_styles",
       "serviceId": "acrylic_1",
-      "serviceName": "French Ombré Acrylic Sculpture",
+      "serviceName": "French Ombr\u00e9 Acrylic Sculpture",
       "category": "Acrylic Nails",
       "date": "2026-11-20",
       "time": "14:00",
       "duration": 90,
       "shape": "Almond",
       "length": "Long",
-      "notes": "Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
+      "notes": "Selected Design: French Ombr\u00e9 Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
       "status": "Confirmed",
       "price": 0,
       "createdAt": "2026-11-17T16:24:33.405+00:00",
@@ -264,11 +264,23 @@
       "status": "Confirmed",
       "price": 3100,
       "createdAt": "2026-11-17T15:13:35.04+00:00",
-      "updatedAt": "2026-11-17T15:35:33.799+00:00"
+      "updatedAt": "2026-11-18T06:44:27.103Z",
+      "reminderSent": true,
+      "lastReminderAt": "2026-11-18T06:44:27.102Z"
     }
   ],
   "invoices": [],
   "notifications": [
+    {
+      "type": "appointment_reminder",
+      "title": "Upcoming Client: Phase3 TestClient",
+      "message": "Phase3 TestClient is booked for Custom Set: Almond (Medium) on 2026-11-18 at 14:00.\nPhone: +91 98765 43210\nNotes: Preferences: Almond, Medium, 3D Chrome & Glaze. Allergies: None. Note: Phase 3 Verification",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "appointmentId": "apt_1794928415040",
+      "id": "notif_1794984267100",
+      "sentAt": "2026-11-18T06:44:27.100Z"
+    },
     {
       "type": "press_on_order",
       "title": "New Press-On Order: Test Order Client (INR 1299)",
@@ -340,7 +352,7 @@
     },
     {
       "type": "test_alert",
-      "title": "Nails by Sirii • Client Alert",
+      "title": "Nails by Sirii \u2022 Client Alert",
       "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
@@ -349,7 +361,7 @@
     },
     {
       "type": "test_alert",
-      "title": "Nails by Sirii • Client Alert",
+      "title": "Nails by Sirii \u2022 Client Alert",
       "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
@@ -358,7 +370,7 @@
     },
     {
       "type": "test_alert",
-      "title": "Nails by Sirii • Client Alert",
+      "title": "Nails by Sirii \u2022 Client Alert",
       "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
@@ -367,7 +379,7 @@
     },
     {
       "type": "test_alert",
-      "title": "Nails by Sirii • Client Alert",
+      "title": "Nails by Sirii \u2022 Client Alert",
       "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
@@ -376,7 +388,7 @@
     },
     {
       "type": "test_alert",
-      "title": "Nails by Sirii • Client Alert",
+      "title": "Nails by Sirii \u2022 Client Alert",
       "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
@@ -714,7 +726,7 @@
       "clientName": "Ashutosh Duklan",
       "rating": 5,
       "serviceRendered": "Nail Extensions",
-      "aestheticTag": "Local Guide • Warm Hospitality",
+      "aestheticTag": "Local Guide \u2022 Warm Hospitality",
       "comment": "Recently visited Nails by Siri with my sister, and this review isn't just about the amazing nail services, it's also about the incredible hospitality we experienced there. The couple running the studio was genuinely warm, sweet, and extremely welcoming. The services were absolutely top-notch!",
       "date": "7 months ago",
       "source": "Google Review"
@@ -745,7 +757,7 @@
       "rating": 5,
       "serviceRendered": "1:1 Certified Nail Course",
       "aestheticTag": "Nail Tech Academy",
-      "comment": "Simran ma'am is so good in teaching Nail Course. I was a beginner to understand the whole things about Nails, but Ma'am and Sir both made me super Pro and trust me everyone now I am doing so good. If you are planning to get your nails done or take a Nail Tech Course, I'll genuinely suggest Nails by Sirii — super reasonable!",
+      "comment": "Simran ma'am is so good in teaching Nail Course. I was a beginner to understand the whole things about Nails, but Ma'am and Sir both made me super Pro and trust me everyone now I am doing so good. If you are planning to get your nails done or take a Nail Tech Course, I'll genuinely suggest Nails by Sirii \u2014 super reasonable!",
       "date": "4 months ago",
       "source": "Google Review"
     },
@@ -821,7 +833,7 @@
     },
     {
       "id": "pop_4",
-      "title": "French Ombré Classic Porcelain",
+      "title": "French Ombr\u00e9 Classic Porcelain",
       "collection": "Everyday Minimalist",
       "shape": "Squoval",
       "length": "Short",
@@ -831,7 +843,7 @@
       "stock": 10,
       "isAvailable": true,
       "tag": "Clean Aesthetic",
-      "description": "Seamless airbrushed baby boomer pink-and-white ombré gradient with high-apex reinforcement. Natural, clean, and workplace ready.",
+      "description": "Seamless airbrushed baby boomer pink-and-white ombr\u00e9 gradient with high-apex reinforcement. Natural, clean, and workplace ready.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
       "imageUrl": null
     },
@@ -961,7 +973,7 @@
     {
       "id": "acrylic_1",
       "category": "Acrylic Nails",
-      "title": "French Ombré Acrylic Sculpture",
+      "title": "French Ombr\u00e9 Acrylic Sculpture",
       "tag": "Studio Classic",
       "desc": "Seamless airbrushed transition of soft white powder into a translucent blush pink acrylic bed. Sculpted with strong structural apex architecture.",
       "shape": "Almond",
@@ -969,47 +981,11 @@
       "baseColor": "#E8C5C8",
       "finish": "Natural Gloss",
       "durationNum": 90,
-      "imageUrl": "/hero/soft-simple.jpg",
+      "imageUrl": "/catalogue/french-ombre.jpg",
       "highlights": [
-        "Seamless pink-and-white ombré blend",
+        "Seamless pink-and-white ombr\u00e9 blend",
         "Structural apex reinforcement",
         "Russian dry e-file prep included"
-      ]
-    },
-    {
-      "id": "acrylic_2",
-      "category": "Acrylic Nails",
-      "title": "3D Sculpted Acrylic Floral Bouquet",
-      "tag": "Hand-Carved Art",
-      "desc": "Hand-carved dimensional acrylic petals with micro freshwater pearl and gold bead centers over a soft nude acrylic base.",
-      "shape": "Coffin",
-      "length": "Long",
-      "baseColor": "#E2B89D",
-      "finish": "Pearl Luster",
-      "durationNum": 105,
-      "imageUrl": "",
-      "highlights": [
-        "Hand-sculpted 3D acrylic florals",
-        "Micro pearl & crystal accents",
-        "Customizable petal placement"
-      ]
-    },
-    {
-      "id": "acrylic_3",
-      "category": "Acrylic Nails",
-      "title": "Encapsulated Gold Leaf & Glitter Acrylic",
-      "tag": "Depth Encapsulation",
-      "desc": "Pure metallic gold foils and holographic iridescent glitter suspended under crystal-clear sculptured acrylic glass tips.",
-      "shape": "Stiletto",
-      "length": "Extra Long",
-      "baseColor": "#C49A6C",
-      "finish": "Hailey Glazed Chrome",
-      "durationNum": 100,
-      "imageUrl": "",
-      "highlights": [
-        "Internal depth encapsulation",
-        "Zero snag, ultra-smooth surface",
-        "High-gloss mirror finish"
       ]
     },
     {
@@ -1028,24 +1004,6 @@
         "Multi-angle magnetic illumination",
         "Precision razor stiletto apex",
         "Lasts 4+ weeks effortlessly"
-      ]
-    },
-    {
-      "id": "acrylic_5",
-      "category": "Acrylic Nails",
-      "title": "Milky Quartz Marble Acrylic Inlay",
-      "tag": "Smoky Mineral Veins",
-      "desc": "Subtle translucent white and rose-tinted marble veining swirled throughout the acrylic body, finished with micro gold foil flecks.",
-      "shape": "Coffin",
-      "length": "Medium",
-      "baseColor": "#F5EBE6",
-      "finish": "Natural Gloss",
-      "durationNum": 90,
-      "imageUrl": "",
-      "highlights": [
-        "Dual-tone acrylic blending",
-        "Organic mineral marble veining",
-        "Reinforced stress zone"
       ]
     },
     {
@@ -1077,7 +1035,7 @@
       "baseColor": "#F5EBE6",
       "finish": "Hailey Glazed Chrome",
       "durationNum": 75,
-      "imageUrl": "",
+      "imageUrl": "/catalogue/milky-white.jpg",
       "highlights": [
         "Porcelain semi-sheer overlay",
         "Reinforces weak natural nails",
@@ -1085,143 +1043,35 @@
       ]
     },
     {
-      "id": "biab_3",
+      "id": "biab_glazed",
       "category": "BIAB / Builder Gel",
-      "title": "Micro-French Porcelain BIAB",
-      "tag": "Precision Line",
-      "desc": "Ultra-thin, razor-sharp white smile line painted along the free edge over a natural cashmere nude builder gel overlay.",
-      "shape": "Round",
-      "length": "Short",
-      "baseColor": "#E2B89D",
-      "finish": "French Minimalist Line",
-      "durationNum": 75,
-      "imageUrl": "",
-      "highlights": [
-        "Hand-painted micro tip detailing",
-        "High-apex natural curve",
-        "Zero lifting for 3–4 weeks"
-      ]
-    },
-    {
-      "id": "biab_4",
-      "category": "BIAB / Builder Gel",
-      "title": "Aura Halo Soft Gradient BIAB",
-      "tag": "Blush Gradient",
-      "desc": "Soft airbrushed rose blush aura glow diffused from the nail center outward onto a translucent milk builder base.",
+      "title": "Hailey Glazed Chrome Gel Overlay",
+      "tag": "Ethereal Glaze",
+      "desc": "High-reflectivity mirror chrome powder buffed over natural builder gel apex. Ethereal, glossy, and durable.",
       "shape": "Almond",
       "length": "Medium",
-      "baseColor": "#E0A3B5",
-      "finish": "Natural Gloss",
-      "durationNum": 80,
-      "imageUrl": "",
-      "highlights": [
-        "Seamless aura gradient transition",
-        "Gentle builder gel protection",
-        "High-shine glass topcoat"
-      ]
-    },
-    {
-      "id": "gelx_1",
-      "category": "Gel-X Extensions",
-      "title": "Sculpted 3D Liquid Chrome Gel-X",
-      "tag": "Futuristic Organic",
-      "desc": "Raised molten silver 3D gel curves winding along the contours of lightweight full-cover soft gel extension tips.",
-      "shape": "Coffin",
-      "length": "Long",
-      "baseColor": "#F5EBE6",
-      "finish": "Molten Silver Drips",
-      "durationNum": 90,
-      "imageUrl": "",
-      "highlights": [
-        "Raised 3D liquid metal textures",
-        "Apres-style lightweight soft gel",
-        "Zero natural nail damage"
-      ]
-    },
-    {
-      "id": "gelx_2",
-      "category": "Gel-X Extensions",
-      "title": "Glass Aura Jelly Gel-X",
-      "tag": "Prismatic Glass",
-      "desc": "High-transparency jelly tinted tips with multi-tonal holographic chrome reflection that shifts with sunlight.",
-      "shape": "Almond",
-      "length": "Medium",
-      "baseColor": "#C49A6C",
-      "finish": "Hailey Glazed Chrome",
-      "durationNum": 85,
-      "imageUrl": "",
-      "highlights": [
-        "Crystal-clear glass transparency",
-        "Custom fitted to nail sidewalls",
-        "Featherlight comfortable feel"
-      ]
-    },
-    {
-      "id": "gelx_3",
-      "category": "Gel-X Extensions",
-      "title": "Tortoiseshell Amber Inlay Gel-X",
-      "tag": "Vintage Luxury",
-      "desc": "Rich amber, caramel, and black layered tortoiseshell pattern suspended with dimensional depth between clear gel coats.",
-      "shape": "Square",
-      "length": "Medium",
-      "baseColor": "#E2B89D",
-      "finish": "Natural Gloss",
-      "durationNum": 90,
-      "imageUrl": "",
-      "highlights": [
-        "Multi-layer depth technique",
-        "Warm vintage amber palette",
-        "Finished with gold micro accents"
-      ]
-    },
-    {
-      "id": "art_1",
-      "category": "Hand-Painted Art",
-      "title": "Intricate Wildflower Botanicals",
-      "tag": "Micro-Fine Floral",
-      "desc": "Delicate hand-painted micro botanical vines, leaves, and wildflower blossoms individually rendered with fine artist brushes.",
-      "shape": "Almond",
-      "length": "Medium",
-      "baseColor": "#E0A3B5",
-      "finish": "Natural Gloss",
-      "durationNum": 95,
-      "imageUrl": "",
-      "highlights": [
-        "100% hand-painted with micro brush",
-        "Unique composition per nail",
-        "Matte or high-gloss finish"
-      ]
-    },
-    {
-      "id": "art_2",
-      "category": "Hand-Painted Art",
-      "title": "Y2K Cyber Chrome Starbursts",
-      "tag": "Reflective Stars",
-      "desc": "High-shine silver chrome starbursts, cross-stars, and geometric cyber accents set against a sheer neutral canvas.",
-      "shape": "Coffin",
-      "length": "Long",
       "baseColor": "#E8C5C8",
-      "finish": "Molten Silver Drips",
-      "durationNum": 90,
-      "imageUrl": "",
+      "finish": "Hailey Glazed Chrome",
+      "durationNum": 80,
+      "imageUrl": "/catalogue/glazed-donut.jpg",
       "highlights": [
-        "Ultra-reflective chrome pigment",
-        "Symmetrical star placements",
-        "Modern streetwear aesthetic"
+        "High-reflectivity chrome pearl",
+        "Flexible protective builder base",
+        "High-shine mirror top coat"
       ]
     },
     {
       "id": "bridal_1",
       "category": "Bridal & Occasion",
-      "title": "Luxe Pearl & Crystal Pavé",
+      "title": "Luxe Pearl & Crystal Sculpture",
       "tag": "Wedding & Celebration",
       "desc": "Graduated real freshwater-look pearls and genuine Swarovski crystal placements clustered along the cuticle and free edge.",
       "shape": "Almond",
-      "length": "Medium",
+      "length": "Long",
       "baseColor": "#E8C5C8",
       "finish": "Pearl Luster",
       "durationNum": 100,
-      "imageUrl": "",
+      "imageUrl": "/catalogue/luxe-pearl.jpg",
       "highlights": [
         "Secure crystal encapsulation",
         "Soft bridal blush nude base",
@@ -1229,39 +1079,21 @@
       ]
     },
     {
-      "id": "bridal_2",
-      "category": "Bridal & Occasion",
-      "title": "Romantic White Ribbon & Bows",
-      "tag": "Couture Feminine",
-      "desc": "Raised hand-formed 3D gel ribbon bows and delicate white lace detailing over a sheer milk-bath ombré background.",
-      "shape": "Almond",
-      "length": "Long",
-      "baseColor": "#F5EBE6",
-      "finish": "Pearl Luster",
-      "durationNum": 95,
-      "imageUrl": "",
-      "highlights": [
-        "3D sculpted gel ribbon bows",
-        "Airy lace pattern accents",
-        "Bridal trousseau ready"
-      ]
-    },
-    {
-      "id": "presson_1",
-      "category": "Press-On Nails",
-      "title": "Custom-Fitted Luxury Press-On Set",
-      "tag": "Reusable Handcrafted",
-      "desc": "Custom-sized, reusable artisan nail set handcrafted with salon-quality builder gel and hand-painted art. Delivered with application kit.",
+      "id": "natural_1",
+      "category": "Natural Nails",
+      "title": "Soft & Simple Natural Sheer Nude",
+      "tag": "Everyday Chic",
+      "desc": "Clean Russian manicure detailing with sheer strawberry nude gloss. Minimalist, healthy, and pristine natural nails.",
       "shape": "Almond",
       "length": "Medium",
       "baseColor": "#E8C5C8",
-      "finish": "Hailey Glazed Chrome",
+      "finish": "Natural Gloss",
       "durationNum": 60,
-      "imageUrl": "",
+      "imageUrl": "/hero/soft-simple.jpg",
       "highlights": [
-        "Made to your exact nail measurements",
-        "Reusable 5+ times with proper care",
-        "Shipped with complete prep kit"
+        "Sheer strawberry jelly finish",
+        "Russian cuticle precision",
+        "Gentle natural strengthening"
       ]
     }
   ]

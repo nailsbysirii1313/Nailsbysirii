@@ -1123,6 +1123,7 @@ export default function App() {
             window.location.hash = '#catalogue';
             setTabState('catalogue');
           }}
+          catalogueDesigns={catalogueDesigns}
         />
 
         {/* Studio Passcode Gate Modal (nbs0812) */}

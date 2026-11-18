@@ -12,7 +12,6 @@ import {
   Check,
   Image as ImageIcon
 } from 'lucide-react';
-import NailTipSchematic from './NailTipSchematic';
 
 export default function CatalogueManagerView({
   designs = [],
@@ -48,9 +47,13 @@ export default function CatalogueManagerView({
   ];
 
   const samplePhotoPresets = [
+    { label: 'French Ombré', url: '/catalogue/french-ombre.jpg' },
+    { label: 'Glazed Donut', url: '/catalogue/glazed-donut.jpg' },
+    { label: 'Milky White', url: '/catalogue/milky-white.jpg' },
+    { label: 'Luxe Pearl', url: '/catalogue/luxe-pearl.jpg' },
     { label: 'Soft & Simple', url: '/hero/soft-simple.jpg' },
     { label: 'Little Sparkle', url: '/hero/little-sparkle.jpg' },
-    { label: 'Make a Statement', url: '/hero/make-statement.jpg' }
+    { label: 'Velvet Cat-Eye', url: '/hero/make-statement.jpg' }
   ];
 
   const [formData, setFormData] = useState({
@@ -105,6 +108,10 @@ export default function CatalogueManagerView({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.title.trim()) return;
+    if (!formData.imageUrl.trim()) {
+      alert('Photo Image URL is required. Only image-based designs are published in the catalogue.');
+      return;
+    }
 
     const highlights = formData.highlightsText
       .split('\n')
@@ -250,26 +257,15 @@ export default function CatalogueManagerView({
                 key={item.id}
                 className="bg-studio-surface rounded-3xl border border-border-subtle hover:border-brand-wine/40 shadow-xs hover:shadow-studio transition-all flex flex-col justify-between overflow-hidden group"
               >
-                {/* Visual Preview */}
-                <div className="relative h-48 bg-studio-canvas/70 overflow-hidden flex items-center justify-center border-b border-border-subtle">
-                  {hasImage ? (
-                    <img
-                      src={item.imageUrl}
-                      alt={item.title}
-                      onError={() => setImgErrors((prev) => ({ ...prev, [item.id]: true }))}
-                      className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-300"
-                    />
-                  ) : (
-                    <div className="p-3">
-                      <NailTipSchematic
-                        shape={shapeName}
-                        length={lengthName}
-                        baseColor={item.baseColor || '#E8C5C8'}
-                        finish={item.finish || 'chrome'}
-                        className="scale-95 group-hover:scale-105 transition-transform"
-                      />
-                    </div>
-                  )}
+                {/* Visual Photography Preview */}
+                <div className="relative h-48 bg-studio-canvas overflow-hidden flex items-center justify-center border-b border-border-subtle">
+                  <img
+                    src={item.imageUrl || '/catalogue/french-ombre.jpg'}
+                    alt={item.title}
+                    onError={() => setImgErrors((prev) => ({ ...prev, [item.id]: true }))}
+                    className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-300"
+                    loading="lazy"
+                  />
 
                   <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-studio-surface/90 text-brand-wine text-[10px] font-bold border border-border-subtle shadow-xs">
                     {item.category}
@@ -420,12 +416,13 @@ export default function CatalogueManagerView({
               {/* Image URL & Presets */}
               <div>
                 <label className="block font-semibold text-text-secondary mb-1">
-                  Photo Image URL (Optional)
+                  Photo Image URL <span className="text-brand-wine">*</span> <span className="text-[11px] font-normal text-text-muted">(Required — Only image-based designs are published)</span>
                 </label>
                 <div className="space-y-1.5">
                   <input
                     type="text"
-                    placeholder="e.g. /hero/soft-simple.jpg or https://..."
+                    required
+                    placeholder="e.g. /catalogue/french-ombre.jpg or https://..."
                     value={formData.imageUrl}
                     onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
                     className="w-full px-3.5 py-2 rounded-xl border border-border-subtle bg-studio-canvas outline-none focus:border-brand-wine text-xs font-mono"
