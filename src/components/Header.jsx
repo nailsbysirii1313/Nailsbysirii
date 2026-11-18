@@ -136,11 +136,11 @@ export default function Header({
           {/* Switch to Client Website */}
           <button
             onClick={() => setTab('clientWebsite')}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-text-ink hover:bg-stone-800 text-white text-xs font-semibold transition-all shadow-xs active:scale-95 min-h-[40px]"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-2xl bg-studio-ink hover:bg-stone-800 text-white text-xs font-semibold transition-all shadow-xs active:scale-95 min-h-[36px] sm:min-h-[40px] border border-studio-ink"
             title="View public client website"
           >
-            <Globe className="w-3.5 h-3.5 text-brand-wine shrink-0" />
-            <span className="hidden sm:inline text-xs whitespace-nowrap">Client Site</span>
+            <Globe className="w-3.5 h-3.5 text-pink-300 shrink-0" />
+            <span className="text-[11px] sm:text-xs font-bold whitespace-nowrap text-white">Client Site</span>
           </button>
 
           {/* Lock Studio Hub */}

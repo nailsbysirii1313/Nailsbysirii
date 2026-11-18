@@ -7,6 +7,15 @@ export default {
   theme: {
     extend: {
       colors: {
+        text: {
+          ink: '#1C1917',
+          secondary: '#57534E',
+          muted: '#8C827A',
+        },
+        border: {
+          subtle: '#E8DFD5',
+          strong: '#D1C4B5',
+        },
         studio: {
           canvas: '#FAF6F0',
           surface: '#FFFFFF',
