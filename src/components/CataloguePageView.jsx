@@ -362,7 +362,7 @@ export default function CataloguePageView({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <StudioLogo logoUrl={settings?.studioLogoUrl} size="sm" showText />
-            <span className="text-studio-muted">•</span>
+            <Heart className="w-2.5 h-2.5 text-studio-wine fill-studio-wine/40 shrink-0" />
             <span>{settings?.address || 'Garhi Cantt, Dehradun'}</span>
           </div>
 

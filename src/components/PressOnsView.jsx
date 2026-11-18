@@ -19,7 +19,8 @@ import {
   ArrowRight,
   TrendingUp,
   Tag,
-  DollarSign
+  DollarSign,
+  Heart
 } from 'lucide-react';
 import NailTipSchematic from './NailTipSchematic';
 import { SHAPES, LENGTHS, BASE_COLORS, FINISHES } from '../utils/customizerCalculator';
@@ -230,7 +231,7 @@ export default function PressOnsView({
             <span className="text-xs font-bold uppercase tracking-widest text-brand-wine">
               E-Commerce Boutique
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-wine" />
+            <Heart className="w-2.5 h-2.5 text-brand-wine fill-brand-wine shrink-0" />
             <span className="text-xs text-text-muted font-medium">Ready-to-Wear Press-Ons</span>
           </div>
           <h1 className="font-display italic font-bold text-2xl sm:text-3xl text-text-ink mt-0.5">

@@ -6,7 +6,8 @@ import {
   Globe,
   Search,
   Share2,
-  Lock
+  Lock,
+  Heart
 } from 'lucide-react';
 import { formatKolkataDate, getKolkataTodayString } from '../utils/dateTime';
 
@@ -51,7 +52,7 @@ export default function Header({
               <h1 className="font-display font-semibold text-sm sm:text-base md:text-lg text-text-ink tracking-tight group-hover:text-brand-wine transition-colors truncate">
                 {settings?.studioName || 'Nails by Sirii'}
               </h1>
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-wine animate-pulse shrink-0" />
+              <Heart className="w-3.5 h-3.5 text-brand-wine fill-brand-wine shrink-0" />
             </div>
             <p className="text-[10px] sm:text-[11px] text-text-muted font-medium truncate">
               {todayFormatted} • Studio Hub

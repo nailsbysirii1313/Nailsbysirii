@@ -1117,7 +1117,7 @@ export default function ClientWebsite({
                 <span className="font-sans font-bold text-base sm:text-lg text-studio-ink tracking-tight group-hover:text-studio-wine transition-colors truncate">
                   {settings?.studioName || 'Nails by Sirii'}
                 </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-studio-wine shrink-0" />
+                <Heart className="w-3 h-3 text-studio-wine fill-studio-wine shrink-0" />
               </div>
               <p className="text-[10px] text-studio-muted font-medium truncate hidden sm:block">
                 Nail Studio • Dehradun
@@ -1378,14 +1378,9 @@ export default function ClientWebsite({
 
           {/* 4. Interactive nail-card fan with Real Photography */}
           <div className="relative w-full max-w-[320px] sm:max-w-[360px] h-[260px] sm:h-[285px] flex items-center justify-center my-1 select-none">
-            {/* Soft pink glow aura with decorative curved line and luminous accent */}
+            {/* Soft pink ambient blur aura */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10" aria-hidden="true">
-              <div className="w-[300px] h-[230px] rounded-full bg-gradient-to-tr from-pink-300/35 via-rose-200/30 to-pink-100/25 blur-3xl" />
-              <svg className="absolute w-[250px] h-[145px] text-studio-wine/20" fill="none" viewBox="0 0 250 145">
-                <path d="M 15 125 C 75 25 175 25 235 125" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
-              </svg>
-              <span className="absolute top-2 right-6 w-2 h-2 rounded-full bg-pink-400/60 shadow-[0_0_8px_rgba(244,114,182,0.8)] animate-pulse" />
-              <span className="absolute bottom-4 left-6 w-1.5 h-1.5 rounded-full bg-rose-400/50 shadow-[0_0_6px_rgba(251,113,133,0.6)]" />
+              <div className="w-[300px] h-[230px] rounded-full bg-gradient-to-tr from-pink-300/30 via-rose-200/25 to-pink-100/20 blur-3xl" />
             </div>
 
             {/* Three Overlapping Cards with Real Photography */}
@@ -1452,7 +1447,7 @@ export default function ClientWebsite({
                       <h4 className="font-sans font-bold text-xs sm:text-[13px] text-studio-ink leading-tight truncate">
                         {style.title}
                       </h4>
-                      <span className="w-1.5 h-1.5 rounded-full bg-studio-wine shrink-0" />
+                      <Heart className="w-3.5 h-3.5 text-studio-wine fill-studio-wine/15 group-hover:fill-studio-wine transition-colors shrink-0" />
                     </div>
                     <p className="text-[10px] text-studio-secondary line-clamp-1 mt-0.5 leading-snug">
                       {style.subtitle}
@@ -1474,7 +1469,7 @@ export default function ClientWebsite({
           <div className="space-y-2 w-full pt-1">
             <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-studio-muted">
               <span>Pick your mood</span>
-              <span className="text-studio-wine">•</span>
+              <Heart className="w-2.5 h-2.5 text-studio-wine fill-studio-wine shrink-0" />
               <span className="text-[10px] text-studio-wine lowercase font-normal">tap to switch</span>
             </div>
             <div className="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
@@ -1560,14 +1555,9 @@ export default function ClientWebsite({
           {/* Right Column: Card Fan & Style Buttons */}
           <div className="lg:col-span-6 flex flex-col items-center justify-center space-y-5">
             <div className="relative w-full max-w-[390px] h-[290px] flex items-center justify-center select-none">
-              {/* Soft pink glow aura with decorative curved line and luminous accent */}
+              {/* Soft pink ambient blur aura */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10" aria-hidden="true">
-                <div className="w-[360px] h-[250px] rounded-full bg-gradient-to-tr from-pink-300/35 via-rose-200/30 to-pink-100/25 blur-3xl" />
-                <svg className="absolute w-[290px] h-[165px] text-studio-wine/20" fill="none" viewBox="0 0 290 165">
-                  <path d="M 15 140 C 85 25 205 25 275 140" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
-                </svg>
-                <span className="absolute top-2 right-8 w-2 h-2 rounded-full bg-pink-400/60 shadow-[0_0_8px_rgba(244,114,182,0.8)] animate-pulse" />
-                <span className="absolute bottom-5 left-8 w-1.5 h-1.5 rounded-full bg-rose-400/50 shadow-[0_0_6px_rgba(251,113,133,0.6)]" />
+                <div className="w-[360px] h-[250px] rounded-full bg-gradient-to-tr from-pink-300/30 via-rose-200/25 to-pink-100/20 blur-3xl" />
               </div>
 
               {/* Three Overlapping Cards with Real Photography */}
@@ -1634,7 +1624,7 @@ export default function ClientWebsite({
                         <h4 className="font-sans font-bold text-xs sm:text-[13px] text-studio-ink leading-tight truncate">
                           {style.title}
                         </h4>
-                        <span className="w-1.5 h-1.5 rounded-full bg-studio-wine shrink-0" />
+                        <Heart className="w-3.5 h-3.5 text-studio-wine fill-studio-wine/15 group-hover:fill-studio-wine transition-colors shrink-0" />
                       </div>
                       <p className="text-[10px] text-studio-secondary line-clamp-1 mt-0.5 leading-snug">
                         {style.subtitle}
@@ -1656,7 +1646,7 @@ export default function ClientWebsite({
             <div className="space-y-2 text-center w-full">
               <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-studio-muted">
                 <span>Pick your mood</span>
-                <span className="text-studio-wine">•</span>
+                <Heart className="w-2.5 h-2.5 text-studio-wine fill-studio-wine shrink-0" />
                 <span className="text-[10px] text-studio-wine lowercase font-normal">tap to switch</span>
               </div>
               <div className="flex items-center justify-center gap-2">
