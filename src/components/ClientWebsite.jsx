@@ -51,7 +51,8 @@ import {
   Copy,
   QrCode,
   Quote,
-  ThumbsUp
+  ThumbsUp,
+  ArrowUp
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { InstagramIcon } from './Icons';
@@ -2216,12 +2217,341 @@ export default function ClientWebsite({
         </div>
       </section>
 
-      {/* 8. FOOTER */}
-      <footer className="py-8 px-4 sm:px-6 border-t border-studio-border bg-studio-canvas text-center space-y-3">
-        <StudioLogo logoUrl={settings?.studioLogoUrl} size="sm" showText className="justify-center" />
-        <p className="text-[11px] text-studio-muted">
-          Nails by Sirii • Garhi Cantt, Dehradun • All sessions by prior reservation.
-        </p>
+      {/* 8. FOOTER WITH UPDATED CONTENT & ATELIER DETAILS */}
+      <footer className="border-t border-studio-border bg-studio-canvas text-studio-ink font-sans transition-colors">
+        {/* Top Atelier Highlight Bar */}
+        <div className="border-b border-studio-border/70 bg-studio-wineLight/40 px-4 sm:px-6 py-4">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2 text-studio-ink font-medium text-center md:text-left">
+              <span className="w-2 h-2 rounded-full bg-studio-wine animate-pulse shrink-0" />
+              <span className="font-semibold text-studio-wine">Pan-India Press-On Boutique Live:</span>
+              <span className="text-studio-secondary">Salon-grade reusable sets handcrafted in Dehradun and dispatched in 24–48 hours.</span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <a
+                href="#press-ons"
+                className="px-3 py-1.5 rounded-xl bg-studio-surface border border-studio-border hover:border-studio-wine/40 text-studio-ink font-semibold text-[11px] transition-all flex items-center gap-1.5 shadow-xs"
+              >
+                <Package className="w-3.5 h-3.5 text-studio-wine" />
+                <span>Shop Press-Ons</span>
+              </a>
+              <button
+                onClick={() => setIsSizingModalOpen(true)}
+                className="px-3 py-1.5 rounded-xl bg-studio-surface border border-studio-border hover:border-studio-wine/40 text-studio-ink font-semibold text-[11px] transition-all flex items-center gap-1.5 shadow-xs"
+              >
+                <Ruler className="w-3.5 h-3.5 text-studio-wine" />
+                <span>Sizing Guide</span>
+              </button>
+              <button
+                onClick={() => setIsRepairModalOpen(true)}
+                className="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100/80 text-red-800 border border-red-200 font-semibold text-[11px] transition-all flex items-center gap-1.5"
+              >
+                <HeartHandshake className="w-3.5 h-3.5 text-red-600" />
+                <span>Emergency Squeeze-in</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Main 4-Column Footer Navigation */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+            {/* Column 1: Studio Brand & Google Reviews */}
+            <div className="space-y-4">
+              <StudioLogo logoUrl={settings?.studioLogoUrl} size="md" showText />
+              <p className="text-xs text-studio-secondary leading-relaxed font-sans">
+                {settings?.tagline || 'Sculptural Gel Architecture & Contemporary Nail Atelier'}. Specialized in Russian e-file cuticle care, BIAB natural overlays, precision acrylics, and handcrafted ready-to-wear press-on nails.
+              </p>
+
+              {/* Google Verified Review Card */}
+              <a
+                href={settings?.googleMapsUrl || 'https://maps.google.com/?q=Nails+by+Sirii+Laxmi+Navraj+Plaza+Garhi+Cantonment+Dehradun'}
+                target="_blank"
+                rel="noreferrer"
+                className="block p-3 rounded-2xl bg-studio-surface border border-studio-border hover:border-studio-wine/40 transition-all shadow-xs group"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                    Google Verified
+                  </span>
+                </div>
+                <div className="mt-1.5 flex items-center justify-between text-xs">
+                  <span className="font-bold text-studio-ink group-hover:text-studio-wine transition-colors">
+                    {settings?.googleRating || '4.9'} / 5.0 Rating
+                  </span>
+                  <span className="text-studio-muted text-[11px] flex items-center gap-1">
+                    <span>{settings?.googleReviewCount || 344} Reviews</span>
+                    <ExternalLink className="w-3 h-3 text-studio-muted group-hover:text-studio-wine transition-colors" />
+                  </span>
+                </div>
+              </a>
+
+              {/* Social Channels */}
+              <div className="flex items-center gap-2 pt-1">
+                <a
+                  href={`https://instagram.com/${(settings?.instagram || 'nails.by.sirii').replace('@', '')}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3 py-1.5 rounded-xl bg-studio-surface border border-studio-border hover:border-studio-wine/40 text-studio-ink text-xs font-semibold flex items-center gap-2 shadow-xs transition-colors"
+                >
+                  <InstagramIcon className="w-3.5 h-3.5 text-studio-wine" />
+                  <span>{settings?.instagram || '@nails.by.sirii'}</span>
+                </a>
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3 py-1.5 rounded-xl bg-studio-surface border border-studio-border hover:border-emerald-300 text-studio-ink text-xs font-semibold flex items-center gap-2 shadow-xs transition-colors"
+                >
+                  <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>WhatsApp</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Column 2: Signature Services & Lookbook */}
+            <div className="space-y-3.5">
+              <span className="text-[10px] font-bold text-studio-wine uppercase tracking-widest block font-sans">
+                Signature Offerings
+              </span>
+              <ul className="space-y-2 text-xs text-studio-secondary font-sans">
+                <li>
+                  <button
+                    onClick={() => {
+                      if (onOpenCatalogue) onOpenCatalogue();
+                      else {
+                        const el = document.getElementById('catalogue-showcase');
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                    className="hover:text-studio-wine transition-colors flex items-center gap-1.5 text-left"
+                  >
+                    <ChevronRight className="w-3 h-3 text-studio-wine/60" />
+                    <span>Nail Lookbook & Design Ideas</span>
+                  </button>
+                </li>
+                <li>
+                  <a href="#customizer" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+                    <ChevronRight className="w-3 h-3 text-studio-wine/60" />
+                    <span>Interactive Nail Customizer</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#booking-section" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+                    <ChevronRight className="w-3 h-3 text-studio-wine/60" />
+                    <span>Russian Manicure & Cuticle Care</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#booking-section" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+                    <ChevronRight className="w-3 h-3 text-studio-wine/60" />
+                    <span>BIAB Natural Builder Gel Overlays</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#booking-section" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+                    <ChevronRight className="w-3 h-3 text-studio-wine/60" />
+                    <span>Sculptured Acrylic Extensions</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#booking-section" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+                    <ChevronRight className="w-3 h-3 text-studio-wine/60" />
+                    <span>Gel-X Soft Gel Extension Sets</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#booking-section" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+                    <ChevronRight className="w-3 h-3 text-studio-wine/60" />
+                    <span>Hand-Painted & 3D Texture Art</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#reviews" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+                    <ChevronRight className="w-3 h-3 text-studio-wine/60" />
+                    <span>Verified Client Testimonials</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3: Ready-to-Wear Press-On Boutique */}
+            <div className="space-y-3.5">
+              <span className="text-[10px] font-bold text-studio-wine uppercase tracking-widest block font-sans">
+                Press-On Boutique
+              </span>
+              <ul className="space-y-2 text-xs text-studio-secondary font-sans">
+                <li>
+                  <a href="#press-ons" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+                    <ChevronRight className="w-3 h-3 text-studio-wine/60" />
+                    <span>Hailey Glazed Pearl Chrome Sets</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#press-ons" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+                    <ChevronRight className="w-3 h-3 text-studio-wine/60" />
+                    <span>Velvet Rose Quartz Cat-Eye</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#press-ons" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+                    <ChevronRight className="w-3 h-3 text-studio-wine/60" />
+                    <span>3D Molten Gold & Baroque Pearls</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#press-ons" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
+                    <ChevronRight className="w-3 h-3 text-studio-wine/60" />
+                    <span>French Ombré Classic Porcelain</span>
+                  </a>
+                </li>
+              </ul>
+
+              {/* Press-On Assurances Pill Box */}
+              <div className="p-3.5 rounded-2xl bg-studio-surface border border-studio-border space-y-2 text-[11px] text-studio-secondary shadow-xs">
+                <div className="flex items-center gap-2">
+                  <Truck className="w-3.5 h-3.5 text-studio-wine shrink-0" />
+                  <span>Pan-India Tracked Express Delivery</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>Reusable 5+ Times • Zero Nail Damage</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Package className="w-3.5 h-3.5 text-studio-wine shrink-0" />
+                  <span>Luxury Prep Kit Included With Every Set</span>
+                </div>
+                <button
+                  onClick={() => setIsSizingModalOpen(true)}
+                  className="w-full mt-1.5 py-1.5 px-2.5 rounded-xl bg-studio-canvas hover:bg-studio-wineLight text-studio-wine font-semibold text-[11px] border border-studio-border hover:border-studio-wine/30 transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <Ruler className="w-3 h-3" />
+                  <span>Open 1-Minute Sizing Guide</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Column 4: Studio Location, Hours & Direct Connect */}
+            <div className="space-y-3.5">
+              <span className="text-[10px] font-bold text-studio-wine uppercase tracking-widest block font-sans">
+                Atelier Location & Hours
+              </span>
+              <div className="space-y-3 text-xs text-studio-secondary font-sans">
+                {/* Address */}
+                <div className="flex items-start gap-2.5">
+                  <MapPin className="w-4 h-4 text-studio-wine shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-studio-ink">Nails by Sirii Atelier</p>
+                    <p className="text-studio-secondary leading-snug">
+                      {settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi Cantt, Dehradun, Uttarakhand 248003'}
+                    </p>
+                    <a
+                      href={settings?.googleMapsUrl || 'https://maps.google.com/?q=Nails+by+Sirii+Laxmi+Navraj+Plaza+Garhi+Cantonment+Dehradun'}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] text-studio-wine font-semibold hover:underline mt-1"
+                    >
+                      <span>Get Directions on Google Maps</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
+
+                {/* Timings */}
+                <div className="flex items-start gap-2.5">
+                  <Clock className="w-4 h-4 text-studio-wine shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-studio-ink">Studio Hours</p>
+                    <p>Tuesday – Sunday: {settings?.timings || '12:00 PM – 7:00 PM'}</p>
+                    <p className="text-[11px] text-studio-muted">Monday: Closed (Art & Material Prep)</p>
+                    <span className="inline-block mt-1 text-[10px] font-bold text-studio-wine bg-studio-wineLight px-2 py-0.5 rounded-full border border-studio-wine/20">
+                      Prior Reservation Only
+                    </span>
+                  </div>
+                </div>
+
+                {/* Direct Phone / Call */}
+                <div className="flex items-center gap-2.5">
+                  <Phone className="w-4 h-4 text-studio-wine shrink-0" />
+                  <a
+                    href={`tel:${cleanTelPhone}`}
+                    className="hover:text-studio-wine font-semibold text-studio-ink transition-colors"
+                  >
+                    {studioFormattedPhone}
+                  </a>
+                </div>
+
+                {/* Hygiene Assurance */}
+                <div className="flex items-center gap-2.5 text-[11px] text-emerald-800 bg-emerald-50/70 p-2.5 rounded-xl border border-emerald-200/80">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>100% Hospital-Grade Autoclave Sterilized • Disposable Files</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar: Copyright, Actions & Owner Hub Access */}
+        <div className="border-t border-studio-border/70 py-6 px-4 sm:px-6 bg-studio-surface/60">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-studio-muted font-sans">
+            <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
+              <span>© {new Date().getFullYear()} Nails by Sirii. All rights reserved.</span>
+              <span className="hidden sm:inline">•</span>
+              <span>Founded & Sculpted by Simran (Sirii) in Dehradun</span>
+            </div>
+
+            {/* Quick Interactive Actions */}
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs">
+              <button
+                onClick={() => setIsShareModalOpen(true)}
+                className="hover:text-studio-wine transition-colors flex items-center gap-1.5"
+              >
+                <Share2 className="w-3.5 h-3.5 text-studio-wine" />
+                <span>Share Booklet</span>
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => setShowReviewModal(true)}
+                className="hover:text-studio-wine transition-colors flex items-center gap-1.5"
+              >
+                <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500/30" />
+                <span>Write Review</span>
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => setIsRepairModalOpen(true)}
+                className="hover:text-red-700 transition-colors flex items-center gap-1.5"
+              >
+                <HeartHandshake className="w-3.5 h-3.5 text-red-500" />
+                <span>Emergency Squeeze-in</span>
+              </button>
+              <span>•</span>
+              <button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="hover:text-studio-wine transition-colors flex items-center gap-1"
+                title="Back to Top"
+              >
+                <ArrowUp className="w-3.5 h-3.5" />
+                <span>Top</span>
+              </button>
+              <span>•</span>
+              {/* Discreet Studio Hub Access */}
+              <button
+                onClick={onOpenPasscodeModal}
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-studio-canvas border border-studio-border hover:border-studio-borderStrong hover:text-studio-ink text-studio-muted text-[11px] font-semibold transition-all shadow-2xs"
+                title="Studio Hub (Owner Passcode Access)"
+              >
+                <Lock className="w-3 h-3 text-studio-muted" />
+                <span>Studio Hub</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </footer>
 
       {/* EMERGENCY REPAIR & SHARE MODALS (Lazy-Loaded) */}

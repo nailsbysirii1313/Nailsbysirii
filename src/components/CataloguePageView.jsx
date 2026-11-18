@@ -17,9 +17,13 @@ import {
   Paintbrush,
   Ribbon,
   Sparkles,
-  BookOpen
+  BookOpen,
+  MapPin,
+  Package,
+  ShieldCheck
 } from 'lucide-react';
 import StudioLogo from './StudioLogo';
+import { InstagramIcon } from './Icons';
 
 export default function CataloguePageView({
   designs = [],
@@ -350,24 +354,73 @@ export default function CataloguePageView({
       </main>
 
       {/* Catalogue Footer */}
-      <footer className="mt-16 py-10 bg-studio-surface border-t border-studio-border text-xs text-studio-secondary">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <StudioLogo logoUrl={settings?.studioLogoUrl} size="sm" showText />
-            <Heart className="w-2.5 h-2.5 text-studio-wine fill-studio-wine/40 shrink-0" />
-            <span>{settings?.address || 'Garhi Cantt, Dehradun'}</span>
+      <footer className="mt-16 py-12 bg-studio-surface border-t border-studio-border text-xs text-studio-secondary font-sans">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-studio-border/70">
+            <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
+              <StudioLogo logoUrl={settings?.studioLogoUrl} size="sm" showText />
+              <span className="hidden sm:inline text-studio-border">•</span>
+              <div className="flex items-center gap-1.5 text-studio-muted text-[11px]">
+                <MapPin className="w-3.5 h-3.5 text-studio-wine shrink-0" />
+                <span>{settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, Dehradun'}</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <button
+                onClick={onGoHome}
+                className="hover:text-studio-wine transition-colors font-semibold"
+              >
+                Studio Home
+              </button>
+              <span className="text-studio-border">•</span>
+              <button
+                onClick={() => {
+                  onGoHome();
+                  setTimeout(() => {
+                    window.location.hash = '#press-ons';
+                  }, 100);
+                }}
+                className="hover:text-studio-wine transition-colors font-semibold flex items-center gap-1"
+              >
+                <Package className="w-3.5 h-3.5 text-studio-wine" />
+                <span>Press-On Boutique</span>
+              </button>
+              <span className="text-studio-border">•</span>
+              <a
+                href={`https://instagram.com/${(settings?.instagram || 'nails.by.sirii').replace('@', '')}`}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-studio-wine transition-colors flex items-center gap-1"
+              >
+                <InstagramIcon className="w-3.5 h-3.5 text-studio-wine" />
+                <span>{settings?.instagram || '@nails.by.sirii'}</span>
+              </a>
+              <span className="text-studio-border">•</span>
+              <button
+                onClick={openWhatsAppGeneral}
+                className="hover:text-studio-wine transition-colors flex items-center gap-1 text-emerald-700"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span>WhatsApp Consult</span>
+              </button>
+              <span className="text-studio-border">•</span>
+              <button
+                onClick={onBookAppointment}
+                className="px-3 py-1 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-bold shadow-xs transition-colors"
+              >
+                Book Appointment
+              </button>
+            </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button onClick={onGoHome} className="hover:text-studio-wine transition-colors">
-              Studio Home
-            </button>
-            <button onClick={openWhatsAppGeneral} className="hover:text-studio-wine transition-colors">
-              WhatsApp Consult
-            </button>
-            <button onClick={onBookAppointment} className="font-semibold text-studio-wine hover:underline">
-              Book Appointment
-            </button>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-studio-muted text-center sm:text-left">
+            <p>
+              © {new Date().getFullYear()} Nails by Sirii • Dehradun • 100% Autoclave Sterilized • Hours: {settings?.timings || '12:00 PM – 7:00 PM'} (Prior Reservation Only)
+            </p>
+            <p className="text-studio-secondary">
+              Handcrafted with pride in Uttarakhand
+            </p>
           </div>
         </div>
       </footer>
