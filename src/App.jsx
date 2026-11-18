@@ -92,8 +92,16 @@ export default function App() {
     if (hash.startsWith('#catalogue') || params.get('page') === 'catalogue') {
       return 'catalogue';
     }
-    if ((params.get('view') === 'studio' || hash.startsWith('#studio')) && authed) {
-      return 'dashboard';
+    if (authed) {
+      const validStudioTabs = ['dashboard', 'appointments', 'clients', 'invoices', 'inventory', 'services', 'catalogueManager', 'giftcards', 'pressons', 'analytics', 'settings', 'reminders'];
+      if (params.get('view') === 'studio' || hash.startsWith('#studio')) {
+        const studioTab = params.get('tab') || hash.replace('#studio-', '');
+        if (validStudioTabs.includes(studioTab)) return studioTab;
+        return 'dashboard';
+      }
+      if (hash === '#pressons' || params.get('tab') === 'pressons') {
+        return 'pressons';
+      }
     }
     return 'clientWebsite';
   });
@@ -222,9 +230,22 @@ export default function App() {
         setTabState('catalogue');
       } else if (params.get('view') === 'studio' || hash.startsWith('#studio')) {
         if (authed) {
-          setTabState('dashboard');
+          const studioTab = params.get('tab') || hash.replace('#studio-', '');
+          const validStudioTabs = ['dashboard', 'appointments', 'clients', 'invoices', 'inventory', 'services', 'catalogueManager', 'giftcards', 'pressons', 'analytics', 'settings', 'reminders'];
+          if (validStudioTabs.includes(studioTab)) {
+            setTabState(studioTab);
+          } else {
+            setTabState('dashboard');
+          }
         } else {
           setPendingTab('dashboard');
+          setIsPasscodeModalOpen(true);
+        }
+      } else if (hash === '#pressons' || params.get('tab') === 'pressons') {
+        if (authed) {
+          setTabState('pressons');
+        } else {
+          setPendingTab('pressons');
           setIsPasscodeModalOpen(true);
         }
       } else if (hash === '' || hash === '#home' || hash === '#') {
@@ -300,10 +321,28 @@ export default function App() {
             });
           } else if (type === 'CATALOGUE_DELETED' && payload?.id) {
             setCatalogueDesigns((prev) => prev.filter((d) => d.id !== payload.id));
+          } else if (type === 'PRESSONS_SAVED' && payload) {
+            setPressOnProducts((prev) => {
+              const exists = prev.some((p) => p.id === payload.id);
+              return exists
+                ? prev.map((p) => (p.id === payload.id ? payload : p))
+                : [payload, ...prev];
+            });
+          } else if (type === 'PRESSONS_DELETED' && payload?.id) {
+            setPressOnProducts((prev) => prev.filter((p) => p.id !== payload.id));
           } else if (type === 'REFRESH_CATALOGUE') {
             api.getCatalogueDesigns().then((designs) => {
               if (Array.isArray(designs)) setCatalogueDesigns(designs);
             }).catch(() => { });
+          } else if (type === 'PRESSONS_SAVED' && payload) {
+            setPressOnProducts((prev) => {
+              const exists = prev.some((p) => p.id === payload.id);
+              return exists
+                ? prev.map((p) => (p.id === payload.id ? payload : p))
+                : [payload, ...prev];
+            });
+          } else if (type === 'PRESSONS_DELETED' && payload?.id) {
+            setPressOnProducts((prev) => prev.filter((p) => p.id !== payload.id));
           }
         };
       }
@@ -324,6 +363,15 @@ export default function App() {
             });
           } else if (type === 'CATALOGUE_DELETED' && payload?.id) {
             setCatalogueDesigns((prev) => prev.filter((d) => d.id !== payload.id));
+          } else if (type === 'PRESSONS_SAVED' && payload) {
+            setPressOnProducts((prev) => {
+              const exists = prev.some((p) => p.id === payload.id);
+              return exists
+                ? prev.map((p) => (p.id === payload.id ? payload : p))
+                : [payload, ...prev];
+            });
+          } else if (type === 'PRESSONS_DELETED' && payload?.id) {
+            setPressOnProducts((prev) => prev.filter((p) => p.id !== payload.id));
           }
         } catch (err) { }
       }
@@ -909,6 +957,7 @@ export default function App() {
     try {
       const created = await api.createPressOnProduct(productData);
       setPressOnProducts((prev) => [created, ...prev]);
+      broadcastSync('PRESSONS_SAVED', created);
       return created;
     } catch (err) {
       console.error(err);
@@ -920,6 +969,7 @@ export default function App() {
     try {
       const updated = await api.updatePressOnProduct(id, productData);
       setPressOnProducts((prev) => prev.map((p) => (p.id === id ? updated : p)));
+      broadcastSync('PRESSONS_SAVED', updated);
       return updated;
     } catch (err) {
       console.error(err);
@@ -931,6 +981,7 @@ export default function App() {
     try {
       await api.deletePressOnProduct(id);
       setPressOnProducts((prev) => prev.filter((p) => p.id !== id));
+      broadcastSync('PRESSONS_DELETED', { id });
       addToast('Product Deleted', 'Removed from boutique catalog.', 'info');
     } catch (err) {
       console.error(err);

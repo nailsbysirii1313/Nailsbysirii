@@ -380,6 +380,7 @@ export default function ClientWebsite({
       stock: 8,
       isAvailable: true,
       tag: 'Bestseller',
+      imageUrl: '/hero/little-sparkle.jpg',
       description: 'Ultra-popular pearlescent glazed chrome over sheer strawberry milk builder gel. Hand-buffed with salon chrome powder for an ethereal mirror shine.',
       includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
     },
@@ -395,6 +396,7 @@ export default function ClientWebsite({
       stock: 6,
       isAvailable: true,
       tag: 'Studio Pick',
+      imageUrl: '/hero/make-statement.jpg',
       description: 'Deep dimensional velvet magnetic shimmer refracting light across long sculpted stilettos. Dramatic, luxurious, and chip-proof.',
       includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
     },
@@ -410,6 +412,7 @@ export default function ClientWebsite({
       stock: 5,
       isAvailable: true,
       tag: 'Luxury Edition',
+      imageUrl: '/catalogue/french-ombre.jpg',
       description: 'Hand-sculpted 3D liquid molten gold curves and real freshwater baroque pearl accents encrusted over an ivory porcelain bed.',
       includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
     },
@@ -425,6 +428,7 @@ export default function ClientWebsite({
       stock: 10,
       isAvailable: true,
       tag: 'Clean Aesthetic',
+      imageUrl: '/hero/soft-simple.jpg',
       description: 'Seamless airbrushed baby boomer pink-and-white ombré gradient with high-apex reinforcement. Natural, clean, and workplace ready.',
       includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
     },
@@ -440,6 +444,7 @@ export default function ClientWebsite({
       stock: 4,
       isAvailable: true,
       tag: 'Trending',
+      imageUrl: '/hero/little-sparkle.jpg',
       description: 'High-shine liquid silver chrome starbursts, cross-stars, and geometric cyber accents set against a sheer neutral canvas.',
       includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
     },
@@ -455,6 +460,7 @@ export default function ClientWebsite({
       stock: 7,
       isAvailable: true,
       tag: 'Handcrafted',
+      imageUrl: '/catalogue/french-ombre.jpg',
       description: 'Subtle translucent white marble veining swirled with pure 24K gold foil flecks suspended in crystal clear gel depth.',
       includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
     }
@@ -1089,157 +1095,157 @@ export default function ClientWebsite({
               aria-hidden="true"
             />
             <div className="relative w-full max-w-xs bg-studio-surface h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto z-10 animate-in slide-in-from-right duration-300">
-            <div className="space-y-6">
-              {/* Drawer Top Branding & Close Button */}
-              <div className="flex items-center justify-between pb-4 border-b border-studio-border">
-                <div className="flex items-center gap-2.5">
-                  <StudioLogo logoUrl={settings?.studioLogoUrl} size="sm" />
-                  <div>
-                    <span className="font-sans font-bold text-sm text-studio-ink block">
-                      {settings?.studioName || 'Nails by Sirii'}
-                    </span>
-                    <span className="text-[10px] text-studio-muted">Nail Studio • Dehradun</span>
+              <div className="space-y-6">
+                {/* Drawer Top Branding & Close Button */}
+                <div className="flex items-center justify-between pb-4 border-b border-studio-border">
+                  <div className="flex items-center gap-2.5">
+                    <StudioLogo logoUrl={settings?.studioLogoUrl} size="sm" />
+                    <div>
+                      <span className="font-sans font-bold text-sm text-studio-ink block">
+                        {settings?.studioName || 'Nails by Sirii'}
+                      </span>
+                      <span className="text-[10px] text-studio-muted">Nail Studio • Dehradun</span>
+                    </div>
                   </div>
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-8 h-8 rounded-full bg-studio-subtle flex items-center justify-center text-studio-secondary hover:text-studio-ink"
+                    aria-label="Close Menu"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-8 h-8 rounded-full bg-studio-subtle flex items-center justify-center text-studio-secondary hover:text-studio-ink"
-                  aria-label="Close Menu"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+
+                {/* Navigation Links */}
+                <nav className="space-y-1.5 text-xs font-semibold text-studio-secondary font-sans">
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      if (onOpenCatalogue) onOpenCatalogue();
+                      else window.location.hash = '#catalogue';
+                    }}
+                    className="w-full flex items-center gap-3 p-3 rounded-2xl bg-studio-wineLight text-studio-wine font-bold text-left text-xs font-sans"
+                  >
+                    <Palette className="w-4 h-4 text-studio-wine" />
+                    <span>Nail Ideas & Catalogue</span>
+                  </button>
+                  <a
+                    href="#customizer"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
+                  >
+                    <Wand2 className="w-4 h-4 text-studio-wine" />
+                    <span>Design Your Nails</span>
+                  </a>
+                  <a
+                    href="#press-ons"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
+                  >
+                    <Ribbon className="w-4 h-4 text-studio-wine" />
+                    <span>Press-On Boutique</span>
+                  </a>
+                  <a
+                    href="#booking-section"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
+                  >
+                    <Calendar className="w-4 h-4 text-studio-wine" />
+                    <span>Book Appointment</span>
+                  </a>
+                  <a
+                    href="#reviews"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
+                  >
+                    <Heart className="w-4 h-4 text-rose-500 fill-rose-100" />
+                    <span>Reviews ({reviews.length})</span>
+                  </a>
+                  <a
+                    href="#studio-info"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                    <span>Visit Us</span>
+                  </a>
+                </nav>
+
+                {/* Secondary Utilities in Drawer */}
+                <div className="pt-4 border-t border-studio-border space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-studio-muted block px-1">
+                    Utilities
+                  </span>
+
+                  {/* Share Booklet */}
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setIsShareModalOpen(true);
+                    }}
+                    className="w-full py-2.5 px-3 rounded-xl bg-studio-surface border border-studio-border text-xs font-semibold text-studio-ink flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Ribbon className="w-3.5 h-3.5 text-studio-wine" />
+                      <span>Share Booklet</span>
+                    </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-studio-muted" />
+                  </button>
+
+                  {/* Emergency Nail Repair */}
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setIsRepairModalOpen(true);
+                    }}
+                    className="w-full py-2.5 px-3 rounded-xl bg-red-50 text-red-800 border border-red-200 text-xs font-semibold flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-2">
+                      <HeartHandshake className="w-3.5 h-3.5 text-red-600" />
+                      <span>Emergency Nail Repair</span>
+                    </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-red-400" />
+                  </button>
+
+                  {/* Direct WhatsApp Chat */}
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full py-2.5 px-3 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-2">
+                      <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>WhatsApp Chat</span>
+                    </div>
+                    <ExternalLink className="w-3.5 h-3.5 text-emerald-600" />
+                  </a>
+
+                  {/* Discreet Studio Hub Owner Access */}
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onOpenPasscodeModal();
+                    }}
+                    className="w-full py-2.5 px-3 rounded-xl bg-studio-subtle/80 text-studio-ink text-xs font-semibold flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Lock className="w-3.5 h-3.5 text-studio-muted" />
+                      <span>Studio Hub (Owner)</span>
+                    </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-studio-muted" />
+                  </button>
+                </div>
               </div>
 
-              {/* Navigation Links */}
-              <nav className="space-y-1.5 text-xs font-semibold text-studio-secondary font-sans">
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    if (onOpenCatalogue) onOpenCatalogue();
-                    else window.location.hash = '#catalogue';
-                  }}
-                  className="w-full flex items-center gap-3 p-3 rounded-2xl bg-studio-wineLight text-studio-wine font-bold text-left text-xs font-sans"
-                >
-                  <Palette className="w-4 h-4 text-studio-wine" />
-                  <span>Nail Ideas & Catalogue</span>
-                </button>
-                <a
-                  href="#customizer"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
-                >
-                  <Wand2 className="w-4 h-4 text-studio-wine" />
-                  <span>Design Your Nails</span>
-                </a>
-                <a
-                  href="#press-ons"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
-                >
-                  <Ribbon className="w-4 h-4 text-studio-wine" />
-                  <span>Press-On Boutique</span>
-                </a>
-                <a
-                  href="#booking-section"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
-                >
-                  <Calendar className="w-4 h-4 text-studio-wine" />
-                  <span>Book Appointment</span>
-                </a>
-                <a
-                  href="#reviews"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
-                >
-                  <Heart className="w-4 h-4 text-rose-500 fill-rose-100" />
-                  <span>Reviews ({reviews.length})</span>
-                </a>
-                <a
-                  href="#studio-info"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-2xl hover:bg-studio-wineLight hover:text-studio-wine transition-colors"
-                >
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  <span>Visit Us</span>
-                </a>
-              </nav>
-
-              {/* Secondary Utilities in Drawer */}
-              <div className="pt-4 border-t border-studio-border space-y-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-studio-muted block px-1">
-                  Utilities
-                </span>
-
-                {/* Share Booklet */}
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    setIsShareModalOpen(true);
-                  }}
-                  className="w-full py-2.5 px-3 rounded-xl bg-studio-surface border border-studio-border text-xs font-semibold text-studio-ink flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-2">
-                    <Ribbon className="w-3.5 h-3.5 text-studio-wine" />
-                    <span>Share Booklet</span>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-studio-muted" />
-                </button>
-
-                {/* Emergency Nail Repair */}
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    setIsRepairModalOpen(true);
-                  }}
-                  className="w-full py-2.5 px-3 rounded-xl bg-red-50 text-red-800 border border-red-200 text-xs font-semibold flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-2">
-                    <HeartHandshake className="w-3.5 h-3.5 text-red-600" />
-                    <span>Emergency Nail Repair</span>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-red-400" />
-                </button>
-
-                {/* Direct WhatsApp Chat */}
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-full py-2.5 px-3 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-2">
-                    <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>WhatsApp Chat</span>
-                  </div>
-                  <ExternalLink className="w-3.5 h-3.5 text-emerald-600" />
-                </a>
-
-                {/* Discreet Studio Hub Owner Access */}
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenPasscodeModal();
-                  }}
-                  className="w-full py-2.5 px-3 rounded-xl bg-studio-subtle/80 text-studio-ink text-xs font-semibold flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-2">
-                    <Lock className="w-3.5 h-3.5 text-studio-muted" />
-                    <span>Studio Hub (Owner)</span>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-studio-muted" />
-                </button>
+              {/* Bottom Studio Info */}
+              <div className="pt-6 border-t border-studio-border space-y-1 text-[11px] text-studio-muted">
+                <p className="font-semibold text-studio-ink">Nails by Sirii</p>
+                <p>Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, Dehradun</p>
+                <p className="text-studio-wine font-semibold">12:00 PM – 7:00 PM • Dedicated 1-on-1</p>
               </div>
-            </div>
-
-            {/* Bottom Studio Info */}
-            <div className="pt-6 border-t border-studio-border space-y-1 text-[11px] text-studio-muted">
-              <p className="font-semibold text-studio-ink">Nails by Sirii</p>
-              <p>Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, Dehradun</p>
-              <p className="text-studio-wine font-semibold">12:00 PM – 7:00 PM • Dedicated 1-on-1</p>
             </div>
           </div>
-        </div>
         </ModalPortal>
       )}
 
@@ -1585,23 +1591,26 @@ export default function ClientWebsite({
                 className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border hover:border-studio-wine/40 shadow-studio transition-all flex flex-col justify-between group space-y-4"
               >
                 <div className="space-y-4">
-                  {/* Visual Schematic Preview */}
-                  <div className="h-48 rounded-2xl bg-studio-canvas/70 border border-studio-border flex flex-col items-center justify-center relative overflow-hidden group-hover:border-studio-wine/30 transition-all p-3">
-                    <NailTipSchematic
-                      shape={product.shape || 'Almond'}
-                      length={product.length || 'Medium'}
-                      baseColor={product.baseColor || '#FDF2F8'}
-                      finish={product.finish || 'Hailey Glazed Chrome'}
-                      className="scale-105 transition-transform group-hover:scale-110 duration-300"
+                  {/* Real Nail Photography Preview */}
+                  <div className="relative h-52 sm:h-56 rounded-2xl overflow-hidden bg-studio-canvas border border-studio-border group-hover:border-studio-wine/40 transition-all">
+                    <img
+                      src={product.imageUrl || '/catalogue/glazed-donut.jpg'}
+                      alt={product.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.src = '/catalogue/glazed-donut.jpg';
+                      }}
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20 pointer-events-none" />
 
                     {/* Tag badge */}
-                    <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-studio-surface/90 backdrop-blur-sm border border-studio-border text-[10px] font-bold text-studio-wine shadow-xs">
+                    <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/25 text-[10px] font-bold text-white shadow-xs">
                       {product.tag || 'Handcrafted'}
                     </span>
 
                     {/* Silhouette info */}
-                    <span className="absolute bottom-3 right-3 px-2.5 py-0.5 rounded-full bg-studio-surface/90 backdrop-blur-sm border border-studio-border text-[10px] font-semibold text-studio-secondary">
+                    <span className="absolute bottom-3 right-3 px-2.5 py-0.5 rounded-full bg-studio-wine/90 backdrop-blur-md text-[10px] font-bold text-white shadow-xs">
                       {product.shape} • {product.length}
                     </span>
                   </div>
@@ -2243,170 +2252,170 @@ export default function ClientWebsite({
           {/* Scrollable floating dialog container */}
           <div className="fixed inset-0 z-[71] overflow-y-auto p-4 flex items-center justify-center pointer-events-none animate-fade-in">
             <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 border border-studio-border shadow-studio-float space-y-5 my-6 max-h-[92vh] overflow-y-auto pointer-events-auto">
-            <div className="flex items-center justify-between pb-3.5 border-b border-studio-border">
-              <div className="space-y-0.5">
-                <span className="text-[10px] font-bold text-studio-wine uppercase tracking-widest block">
-                  Atelier Community
-                </span>
-                <h3 className="font-display italic font-bold text-xl text-studio-ink">
-                  Share Your Experience
-                </h3>
-              </div>
-              <button
-                onClick={() => setShowReviewModal(false)}
-                className="w-8 h-8 rounded-full bg-studio-subtle flex items-center justify-center text-studio-secondary hover:text-studio-ink transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleReviewSubmit} className="space-y-4 text-xs font-sans">
-              {/* Rating Selector */}
-              <div className="p-3.5 rounded-2xl bg-studio-canvas border border-studio-border space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="font-semibold text-studio-ink">Overall Rating *</label>
-                  <span className="text-[11px] font-bold text-amber-600">
-                    {reviewForm.rating === 5 && '5.0 / 5.0 — Exceptional Artistry & Retention'}
-                    {reviewForm.rating === 4 && '4.0 / 5.0 — Very Good Service & Beautiful Nails'}
-                    {reviewForm.rating === 3 && '3.0 / 5.0 — Good & Satisfactory'}
-                    {reviewForm.rating === 2 && '2.0 / 5.0 — Needs Attention'}
-                    {reviewForm.rating === 1 && '1.0 / 5.0 — Disappointing'}
+              <div className="flex items-center justify-between pb-3.5 border-b border-studio-border">
+                <div className="space-y-0.5">
+                  <span className="text-[10px] font-bold text-studio-wine uppercase tracking-widest block">
+                    Atelier Community
                   </span>
+                  <h3 className="font-display italic font-bold text-xl text-studio-ink">
+                    Share Your Experience
+                  </h3>
                 </div>
-                <div className="flex items-center gap-2 pt-0.5">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      type="button"
-                      key={star}
-                      onClick={() => setReviewForm({ ...reviewForm, rating: star })}
-                      className="p-1 text-amber-400 hover:scale-125 transition-transform"
-                    >
-                      <Star
-                        className={`w-6 h-6 transition-colors ${star <= reviewForm.rating
-                          ? 'fill-amber-400 text-amber-400'
-                          : 'text-studio-border hover:text-amber-300'
-                          }`}
-                      />
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Client Name */}
-              <div>
-                <label className="block font-semibold text-studio-ink mb-1">Your Name *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g., Ananya Sharma"
-                  value={reviewForm.clientName}
-                  onChange={(e) => setReviewForm({ ...reviewForm, clientName: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink outline-none focus:border-studio-wine"
-                />
-              </div>
-
-              {/* Treatment Rendered with Quick Suggestion Chips */}
-              <div className="space-y-1.5">
-                <label className="block font-semibold text-studio-ink">Service / Treatment Rendered</label>
-                <input
-                  type="text"
-                  placeholder="e.g., Acrylic Nail Extension with French Chrome"
-                  value={reviewForm.serviceRendered}
-                  onChange={(e) => setReviewForm({ ...reviewForm, serviceRendered: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink outline-none focus:border-studio-wine"
-                />
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {[
-                    'Acrylic Extensions',
-                    'Gel-X Soft Gel',
-                    'BIAB Natural Overlay',
-                    'Press-On Nails',
-                    'Hand-Painted Nail Art',
-                    '1:1 Certified Course'
-                  ].map((service) => (
-                    <button
-                      type="button"
-                      key={service}
-                      onClick={() => setReviewForm({ ...reviewForm, serviceRendered: service })}
-                      className={`text-[10px] px-2.5 py-1 rounded-full border transition-all ${reviewForm.serviceRendered === service
-                        ? 'bg-studio-wine text-white border-studio-wine font-semibold'
-                        : 'bg-studio-canvas hover:bg-studio-surface text-studio-secondary border-studio-border'
-                        }`}
-                    >
-                      {service}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Aesthetic Tag with Chips */}
-              <div className="space-y-1.5">
-                <label className="block font-semibold text-studio-ink">Experience Highlight / Aesthetic Tag</label>
-                <input
-                  type="text"
-                  placeholder="e.g., Exact Match to Inspo"
-                  value={reviewForm.aestheticTag}
-                  onChange={(e) => setReviewForm({ ...reviewForm, aestheticTag: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink outline-none focus:border-studio-wine"
-                />
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {[
-                    'Exact Match to Inspo',
-                    'Russian Cuticle Detailing',
-                    'Super Clean & Friendly',
-                    '4+ Week Retention',
-                    'Warm Hospitality',
-                    'Classy & Neat Finishing'
-                  ].map((tag) => (
-                    <button
-                      type="button"
-                      key={tag}
-                      onClick={() => setReviewForm({ ...reviewForm, aestheticTag: tag })}
-                      className={`text-[10px] px-2.5 py-1 rounded-full border transition-all ${reviewForm.aestheticTag === tag
-                        ? 'bg-studio-wineLight text-studio-wine border-studio-wine font-semibold'
-                        : 'bg-studio-canvas hover:bg-studio-surface text-studio-secondary border-studio-border'
-                        }`}
-                    >
-                      {tag}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Review Comment */}
-              <div>
-                <label className="block font-semibold text-studio-ink mb-1">Your Review / Experience *</label>
-                <textarea
-                  rows={4}
-                  required
-                  placeholder="Describe your session: how well your inspo photo was recreated, hygiene standards, longevity, or hospitality..."
-                  value={reviewForm.comment}
-                  onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink outline-none focus:border-studio-wine leading-relaxed"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2.5 pt-2">
                 <button
-                  type="button"
                   onClick={() => setShowReviewModal(false)}
-                  className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary hover:bg-studio-subtle transition-colors min-h-[42px]"
+                  className="w-8 h-8 rounded-full bg-studio-subtle flex items-center justify-center text-studio-secondary hover:text-studio-ink transition-colors"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmittingReview}
-                  className="px-6 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wine/90 text-white font-semibold shadow-studio transition-all min-h-[42px] disabled:opacity-50"
-                >
-                  {isSubmittingReview ? 'Posting Review...' : 'Post Verified Review'}
+                  <X className="w-4 h-4" />
                 </button>
               </div>
-            </form>
+
+              <form onSubmit={handleReviewSubmit} className="space-y-4 text-xs font-sans">
+                {/* Rating Selector */}
+                <div className="p-3.5 rounded-2xl bg-studio-canvas border border-studio-border space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="font-semibold text-studio-ink">Overall Rating *</label>
+                    <span className="text-[11px] font-bold text-amber-600">
+                      {reviewForm.rating === 5 && '5.0 / 5.0 — Exceptional Artistry & Retention'}
+                      {reviewForm.rating === 4 && '4.0 / 5.0 — Very Good Service & Beautiful Nails'}
+                      {reviewForm.rating === 3 && '3.0 / 5.0 — Good & Satisfactory'}
+                      {reviewForm.rating === 2 && '2.0 / 5.0 — Needs Attention'}
+                      {reviewForm.rating === 1 && '1.0 / 5.0 — Disappointing'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 pt-0.5">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        type="button"
+                        key={star}
+                        onClick={() => setReviewForm({ ...reviewForm, rating: star })}
+                        className="p-1 text-amber-400 hover:scale-125 transition-transform"
+                      >
+                        <Star
+                          className={`w-6 h-6 transition-colors ${star <= reviewForm.rating
+                            ? 'fill-amber-400 text-amber-400'
+                            : 'text-studio-border hover:text-amber-300'
+                            }`}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Client Name */}
+                <div>
+                  <label className="block font-semibold text-studio-ink mb-1">Your Name *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g., Ananya Sharma"
+                    value={reviewForm.clientName}
+                    onChange={(e) => setReviewForm({ ...reviewForm, clientName: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink outline-none focus:border-studio-wine"
+                  />
+                </div>
+
+                {/* Treatment Rendered with Quick Suggestion Chips */}
+                <div className="space-y-1.5">
+                  <label className="block font-semibold text-studio-ink">Service / Treatment Rendered</label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Acrylic Nail Extension with French Chrome"
+                    value={reviewForm.serviceRendered}
+                    onChange={(e) => setReviewForm({ ...reviewForm, serviceRendered: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink outline-none focus:border-studio-wine"
+                  />
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {[
+                      'Acrylic Extensions',
+                      'Gel-X Soft Gel',
+                      'BIAB Natural Overlay',
+                      'Press-On Nails',
+                      'Hand-Painted Nail Art',
+                      '1:1 Certified Course'
+                    ].map((service) => (
+                      <button
+                        type="button"
+                        key={service}
+                        onClick={() => setReviewForm({ ...reviewForm, serviceRendered: service })}
+                        className={`text-[10px] px-2.5 py-1 rounded-full border transition-all ${reviewForm.serviceRendered === service
+                          ? 'bg-studio-wine text-white border-studio-wine font-semibold'
+                          : 'bg-studio-canvas hover:bg-studio-surface text-studio-secondary border-studio-border'
+                          }`}
+                      >
+                        {service}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Aesthetic Tag with Chips */}
+                <div className="space-y-1.5">
+                  <label className="block font-semibold text-studio-ink">Experience Highlight / Aesthetic Tag</label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Exact Match to Inspo"
+                    value={reviewForm.aestheticTag}
+                    onChange={(e) => setReviewForm({ ...reviewForm, aestheticTag: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink outline-none focus:border-studio-wine"
+                  />
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {[
+                      'Exact Match to Inspo',
+                      'Russian Cuticle Detailing',
+                      'Super Clean & Friendly',
+                      '4+ Week Retention',
+                      'Warm Hospitality',
+                      'Classy & Neat Finishing'
+                    ].map((tag) => (
+                      <button
+                        type="button"
+                        key={tag}
+                        onClick={() => setReviewForm({ ...reviewForm, aestheticTag: tag })}
+                        className={`text-[10px] px-2.5 py-1 rounded-full border transition-all ${reviewForm.aestheticTag === tag
+                          ? 'bg-studio-wineLight text-studio-wine border-studio-wine font-semibold'
+                          : 'bg-studio-canvas hover:bg-studio-surface text-studio-secondary border-studio-border'
+                          }`}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Review Comment */}
+                <div>
+                  <label className="block font-semibold text-studio-ink mb-1">Your Review / Experience *</label>
+                  <textarea
+                    rows={4}
+                    required
+                    placeholder="Describe your session: how well your inspo photo was recreated, hygiene standards, longevity, or hospitality..."
+                    value={reviewForm.comment}
+                    onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink outline-none focus:border-studio-wine leading-relaxed"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-2.5 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowReviewModal(false)}
+                    className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary hover:bg-studio-subtle transition-colors min-h-[42px]"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmittingReview}
+                    className="px-6 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wine/90 text-white font-semibold shadow-studio transition-all min-h-[42px] disabled:opacity-50"
+                  >
+                    {isSubmittingReview ? 'Posting Review...' : 'Post Verified Review'}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      </ModalPortal>
-    )}
+        </ModalPortal>
+      )}
 
       {/* 8. MODAL: NAIL SIZING GUIDE & MEASUREMENT ASSISTANT */}
       {isSizingModalOpen && (
@@ -2420,134 +2429,134 @@ export default function ClientWebsite({
           {/* Scrollable floating dialog container */}
           <div className="fixed inset-0 z-[71] overflow-y-auto p-4 flex items-center justify-center pointer-events-none animate-in fade-in">
             <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto pointer-events-auto">
-            {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-studio-border">
-              <div className="flex items-center gap-2">
-                <Ruler className="w-4 h-4 text-studio-wine" />
-                <h3 className="font-display italic font-bold text-xl text-studio-ink">
-                  Nail Sizing & Fit Guide
-                </h3>
-              </div>
-              <button
-                onClick={() => setIsSizingModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-studio-subtle flex items-center justify-center text-studio-secondary hover:text-studio-ink"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Step-by-Step Instructions */}
-            <div className="space-y-3 text-xs font-sans">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block">
-                How to Measure Your Nails at Home (1-Minute Method)
-              </span>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3 rounded-2xl bg-studio-canvas border border-studio-border space-y-1">
-                  <span className="w-5 h-5 rounded-full bg-studio-wine text-white flex items-center justify-center text-[10px] font-bold">1</span>
-                  <p className="font-semibold text-studio-ink">Apply Tape</p>
-                  <p className="text-[11px] text-studio-secondary leading-relaxed">
-                    Place a strip of clear tape across the widest part of your natural nail bed.
-                  </p>
+              {/* Header */}
+              <div className="flex items-center justify-between pb-3 border-b border-studio-border">
+                <div className="flex items-center gap-2">
+                  <Ruler className="w-4 h-4 text-studio-wine" />
+                  <h3 className="font-display italic font-bold text-xl text-studio-ink">
+                    Nail Sizing & Fit Guide
+                  </h3>
                 </div>
-
-                <div className="p-3 rounded-2xl bg-studio-canvas border border-studio-border space-y-1">
-                  <span className="w-5 h-5 rounded-full bg-studio-wine text-white flex items-center justify-center text-[10px] font-bold">2</span>
-                  <p className="font-semibold text-studio-ink">Mark Edges</p>
-                  <p className="text-[11px] text-studio-secondary leading-relaxed">
-                    Press tape into both sidewalls and mark lines with a pen on each side.
-                  </p>
-                </div>
-
-                <div className="p-3 rounded-2xl bg-studio-canvas border border-studio-border space-y-1">
-                  <span className="w-5 h-5 rounded-full bg-studio-wine text-white flex items-center justify-center text-[10px] font-bold">3</span>
-                  <p className="font-semibold text-studio-ink">Measure (mm)</p>
-                  <p className="text-[11px] text-studio-secondary leading-relaxed">
-                    Peel tape and measure the millimeter distance with a ruler.
-                  </p>
-                </div>
-              </div>
-
-              {/* Standard Sizing Table */}
-              <div className="pt-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block mb-1.5">
-                  Standard Atelier Sizes (Thumb to Pinky in mm)
-                </span>
-                <div className="border border-studio-border rounded-2xl overflow-hidden bg-studio-surface text-[11px]">
-                  <table className="w-full text-left">
-                    <thead className="bg-studio-subtle text-studio-secondary font-semibold border-b border-studio-border">
-                      <tr>
-                        <th className="p-2.5">Size</th>
-                        <th className="p-2.5">Thumb</th>
-                        <th className="p-2.5">Index</th>
-                        <th className="p-2.5">Middle</th>
-                        <th className="p-2.5">Ring</th>
-                        <th className="p-2.5">Pinky</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-studio-border text-studio-ink">
-                      <tr>
-                        <td className="p-2.5 font-bold text-studio-wine">XS</td>
-                        <td className="p-2.5">14 mm</td>
-                        <td className="p-2.5">11 mm</td>
-                        <td className="p-2.5">12 mm</td>
-                        <td className="p-2.5">11 mm</td>
-                        <td className="p-2.5">8 mm</td>
-                      </tr>
-                      <tr className="bg-studio-wineLight/30 font-medium">
-                        <td className="p-2.5 font-bold text-studio-wine">S (Popular)</td>
-                        <td className="p-2.5">15 mm</td>
-                        <td className="p-2.5">12 mm</td>
-                        <td className="p-2.5">13 mm</td>
-                        <td className="p-2.5">12 mm</td>
-                        <td className="p-2.5">9 mm</td>
-                      </tr>
-                      <tr>
-                        <td className="p-2.5 font-bold text-studio-wine">M</td>
-                        <td className="p-2.5">16 mm</td>
-                        <td className="p-2.5">13 mm</td>
-                        <td className="p-2.5">14 mm</td>
-                        <td className="p-2.5">13 mm</td>
-                        <td className="p-2.5">10 mm</td>
-                      </tr>
-                      <tr>
-                        <td className="p-2.5 font-bold text-studio-wine">L</td>
-                        <td className="p-2.5">17 mm</td>
-                        <td className="p-2.5">14 mm</td>
-                        <td className="p-2.5">15 mm</td>
-                        <td className="p-2.5">14 mm</td>
-                        <td className="p-2.5">11 mm</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* Sizing Reassurance Card */}
-              <div className="p-3.5 rounded-2xl bg-studio-canvas border border-studio-border text-xs text-studio-secondary space-y-1">
-                <div className="flex items-center gap-1.5 font-semibold text-studio-ink">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-studio-wine" />
-                  <span>Between Sizes? Always Size Up</span>
-                </div>
-                <p className="leading-relaxed text-[11px]">
-                  If your nails are between sizes, pick the larger size. You can gently file down the edges using the complimentary mini buffer included with every set for a 100% seamless bespoke fit.
-                </p>
-              </div>
-
-              <div className="flex justify-end pt-2">
                 <button
-                  type="button"
                   onClick={() => setIsSizingModalOpen(false)}
-                  className="px-6 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio"
+                  className="w-8 h-8 rounded-full bg-studio-subtle flex items-center justify-center text-studio-secondary hover:text-studio-ink"
                 >
-                  Got It! Choose My Size
+                  <X className="w-4 h-4" />
                 </button>
+              </div>
+
+              {/* Step-by-Step Instructions */}
+              <div className="space-y-3 text-xs font-sans">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block">
+                  How to Measure Your Nails at Home (1-Minute Method)
+                </span>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="p-3 rounded-2xl bg-studio-canvas border border-studio-border space-y-1">
+                    <span className="w-5 h-5 rounded-full bg-studio-wine text-white flex items-center justify-center text-[10px] font-bold">1</span>
+                    <p className="font-semibold text-studio-ink">Apply Tape</p>
+                    <p className="text-[11px] text-studio-secondary leading-relaxed">
+                      Place a strip of clear tape across the widest part of your natural nail bed.
+                    </p>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-studio-canvas border border-studio-border space-y-1">
+                    <span className="w-5 h-5 rounded-full bg-studio-wine text-white flex items-center justify-center text-[10px] font-bold">2</span>
+                    <p className="font-semibold text-studio-ink">Mark Edges</p>
+                    <p className="text-[11px] text-studio-secondary leading-relaxed">
+                      Press tape into both sidewalls and mark lines with a pen on each side.
+                    </p>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-studio-canvas border border-studio-border space-y-1">
+                    <span className="w-5 h-5 rounded-full bg-studio-wine text-white flex items-center justify-center text-[10px] font-bold">3</span>
+                    <p className="font-semibold text-studio-ink">Measure (mm)</p>
+                    <p className="text-[11px] text-studio-secondary leading-relaxed">
+                      Peel tape and measure the millimeter distance with a ruler.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Standard Sizing Table */}
+                <div className="pt-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block mb-1.5">
+                    Standard Atelier Sizes (Thumb to Pinky in mm)
+                  </span>
+                  <div className="border border-studio-border rounded-2xl overflow-hidden bg-studio-surface text-[11px]">
+                    <table className="w-full text-left">
+                      <thead className="bg-studio-subtle text-studio-secondary font-semibold border-b border-studio-border">
+                        <tr>
+                          <th className="p-2.5">Size</th>
+                          <th className="p-2.5">Thumb</th>
+                          <th className="p-2.5">Index</th>
+                          <th className="p-2.5">Middle</th>
+                          <th className="p-2.5">Ring</th>
+                          <th className="p-2.5">Pinky</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-studio-border text-studio-ink">
+                        <tr>
+                          <td className="p-2.5 font-bold text-studio-wine">XS</td>
+                          <td className="p-2.5">14 mm</td>
+                          <td className="p-2.5">11 mm</td>
+                          <td className="p-2.5">12 mm</td>
+                          <td className="p-2.5">11 mm</td>
+                          <td className="p-2.5">8 mm</td>
+                        </tr>
+                        <tr className="bg-studio-wineLight/30 font-medium">
+                          <td className="p-2.5 font-bold text-studio-wine">S (Popular)</td>
+                          <td className="p-2.5">15 mm</td>
+                          <td className="p-2.5">12 mm</td>
+                          <td className="p-2.5">13 mm</td>
+                          <td className="p-2.5">12 mm</td>
+                          <td className="p-2.5">9 mm</td>
+                        </tr>
+                        <tr>
+                          <td className="p-2.5 font-bold text-studio-wine">M</td>
+                          <td className="p-2.5">16 mm</td>
+                          <td className="p-2.5">13 mm</td>
+                          <td className="p-2.5">14 mm</td>
+                          <td className="p-2.5">13 mm</td>
+                          <td className="p-2.5">10 mm</td>
+                        </tr>
+                        <tr>
+                          <td className="p-2.5 font-bold text-studio-wine">L</td>
+                          <td className="p-2.5">17 mm</td>
+                          <td className="p-2.5">14 mm</td>
+                          <td className="p-2.5">15 mm</td>
+                          <td className="p-2.5">14 mm</td>
+                          <td className="p-2.5">11 mm</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Sizing Reassurance Card */}
+                <div className="p-3.5 rounded-2xl bg-studio-canvas border border-studio-border text-xs text-studio-secondary space-y-1">
+                  <div className="flex items-center gap-1.5 font-semibold text-studio-ink">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-studio-wine" />
+                    <span>Between Sizes? Always Size Up</span>
+                  </div>
+                  <p className="leading-relaxed text-[11px]">
+                    If your nails are between sizes, pick the larger size. You can gently file down the edges using the complimentary mini buffer included with every set for a 100% seamless bespoke fit.
+                  </p>
+                </div>
+
+                <div className="flex justify-end pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsSizingModalOpen(false)}
+                    className="px-6 py-2.5 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio"
+                  >
+                    Got It! Choose My Size
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </ModalPortal>
-    )}
+        </ModalPortal>
+      )}
 
       {/* 9. MODAL: PRESS-ON BOUTIQUE CHECKOUT & INSTANT UPI */}
       {isCheckoutModalOpen && selectedPressOnForOrder && (
@@ -2561,449 +2570,449 @@ export default function ClientWebsite({
           {/* Scrollable floating dialog container */}
           <div className="fixed inset-0 z-[71] overflow-y-auto p-4 flex items-center justify-center pointer-events-none animate-in fade-in">
             <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto pointer-events-auto">
-            {/* Header & Close */}
-            <div className="flex items-center justify-between pb-3 border-b border-studio-border">
-              <div className="flex items-center gap-2">
-                <ShoppingBag className="w-4 h-4 text-studio-wine" />
-                <h3 className="font-display italic font-bold text-lg text-studio-ink">
-                  {checkoutStep === 4 ? 'Order Confirmed' : `Order: ${selectedPressOnForOrder.title}`}
-                </h3>
+              {/* Header & Close */}
+              <div className="flex items-center justify-between pb-3 border-b border-studio-border">
+                <div className="flex items-center gap-2">
+                  <ShoppingBag className="w-4 h-4 text-studio-wine" />
+                  <h3 className="font-display italic font-bold text-lg text-studio-ink">
+                    {checkoutStep === 4 ? 'Order Confirmed' : `Order: ${selectedPressOnForOrder.title}`}
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setIsCheckoutModalOpen(false)}
+                  className="w-8 h-8 rounded-full bg-studio-subtle flex items-center justify-center text-studio-secondary hover:text-studio-ink"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-              <button
-                onClick={() => setIsCheckoutModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-studio-subtle flex items-center justify-center text-studio-secondary hover:text-studio-ink"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
 
-            {/* Stepper Breadcrumb */}
-            {checkoutStep < 4 && (
-              <div className="flex items-center justify-between text-[11px] font-semibold text-studio-secondary pb-1 border-b border-studio-border/60">
-                <span className={checkoutStep === 1 ? 'text-studio-wine font-bold' : ''}>1. Size & Kit</span>
-                <span>→</span>
-                <span className={checkoutStep === 2 ? 'text-studio-wine font-bold' : ''}>2. Delivery Address</span>
-                <span>→</span>
-                <span className={checkoutStep === 3 ? 'text-studio-wine font-bold' : ''}>3. Payment</span>
-              </div>
-            )}
+              {/* Stepper Breadcrumb */}
+              {checkoutStep < 4 && (
+                <div className="flex items-center justify-between text-[11px] font-semibold text-studio-secondary pb-1 border-b border-studio-border/60">
+                  <span className={checkoutStep === 1 ? 'text-studio-wine font-bold' : ''}>1. Size & Kit</span>
+                  <span>→</span>
+                  <span className={checkoutStep === 2 ? 'text-studio-wine font-bold' : ''}>2. Delivery Address</span>
+                  <span>→</span>
+                  <span className={checkoutStep === 3 ? 'text-studio-wine font-bold' : ''}>3. Payment</span>
+                </div>
+              )}
 
-            {/* STEP 1: SIZE, WEAR METHOD & QUANTITY */}
-            {checkoutStep === 1 && (
-              <div className="space-y-4 text-xs font-sans animate-in fade-in">
-                {/* Product Summary */}
-                <div className="p-3.5 rounded-2xl bg-studio-canvas border border-studio-border flex items-center justify-between">
+              {/* STEP 1: SIZE, WEAR METHOD & QUANTITY */}
+              {checkoutStep === 1 && (
+                <div className="space-y-4 text-xs font-sans animate-in fade-in">
+                  {/* Product Summary */}
+                  <div className="p-3.5 rounded-2xl bg-studio-canvas border border-studio-border flex items-center justify-between">
+                    <div>
+                      <h4 className="font-semibold text-studio-ink text-sm">{selectedPressOnForOrder.title}</h4>
+                      <p className="text-[11px] text-studio-secondary">
+                        {selectedPressOnForOrder.shape} • {selectedPressOnForOrder.length} • {selectedPressOnForOrder.collection}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-display italic font-bold text-base text-studio-ink">
+                        ₹{selectedPressOnForOrder.price}
+                      </span>
+                      <span className="text-[10px] text-emerald-700 block font-medium">Free Delivery</span>
+                    </div>
+                  </div>
+
+                  {/* Size Choice */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="font-semibold text-studio-ink">
+                        Select Your Size
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setIsSizingModalOpen(true)}
+                        className="text-[11px] text-studio-wine hover:underline font-semibold flex items-center gap-1"
+                      >
+                        <Ruler className="w-3 h-3" />
+                        <span>Sizing Guide</span>
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {['XS', 'S', 'M', 'L'].map((sz) => (
+                        <button
+                          type="button"
+                          key={sz}
+                          onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, size: sz })}
+                          className={`p-2.5 rounded-xl border text-center transition-all ${pressOnOrderForm.size === sz
+                            ? 'bg-studio-wine text-white font-bold border-studio-wine shadow-xs'
+                            : 'bg-studio-surface border-studio-border text-studio-secondary hover:bg-studio-subtle'
+                            }`}
+                        >
+                          <span className="block text-xs font-bold">{sz}</span>
+                          <span className="text-[9px] opacity-80">{sz === 'S' ? 'Most Popular' : sz === 'XS' ? 'Petite' : sz === 'M' ? 'Medium' : 'Wide'}</span>
+                        </button>
+                      ))}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, size: 'Custom' })}
+                      className={`w-full p-2.5 rounded-xl border text-left transition-all flex items-center justify-between ${pressOnOrderForm.size === 'Custom'
+                        ? 'bg-studio-wineLight border-studio-wine text-studio-wine font-semibold'
+                        : 'bg-studio-surface border-studio-border text-studio-secondary'
+                        }`}
+                    >
+                      <span>Custom Size (Enter exact mm numbers)</span>
+                      <span className="text-[10px]">Thumb to Pinky</span>
+                    </button>
+
+                    {pressOnOrderForm.size === 'Custom' && (
+                      <input
+                        type="text"
+                        placeholder="e.g. 15mm, 12mm, 13mm, 11mm, 8mm"
+                        value={pressOnOrderForm.customSizes}
+                        onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, customSizes: e.target.value })}
+                        className="w-full p-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-mono"
+                      />
+                    )}
+                  </div>
+
+                  {/* Wear Method Preference */}
+                  <div className="space-y-2">
+                    <label className="font-semibold text-studio-ink block">
+                      Preferred Application Method
+                    </label>
+                    <div className="space-y-1.5">
+                      {[
+                        {
+                          title: '24 Jelly Sticky Tabs (Temporary Wear)',
+                          desc: 'Lasts 3–5 days. 100% reusable, peels off cleanly with zero natural nail damage.'
+                        },
+                        {
+                          title: 'Salon Liquid Nail Glue (Long Wear)',
+                          desc: 'Lasts 2–3 weeks. Extra strong bond for weddings, holidays, and extended wear.'
+                        }
+                      ].map((method) => (
+                        <button
+                          type="button"
+                          key={method.title}
+                          onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, wearMethod: method.title })}
+                          className={`w-full p-3 rounded-2xl border text-left transition-all ${pressOnOrderForm.wearMethod === method.title
+                            ? 'bg-studio-wineLight border-studio-wine'
+                            : 'bg-studio-surface border-studio-border hover:bg-studio-subtle'
+                            }`}
+                        >
+                          <span className={`block font-semibold ${pressOnOrderForm.wearMethod === method.title ? 'text-studio-wine' : 'text-studio-ink'}`}>
+                            {method.title}
+                          </span>
+                          <span className="text-[10px] text-studio-secondary leading-normal block mt-0.5">
+                            {method.desc}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Quantity */}
+                  <div className="flex items-center justify-between pt-2">
+                    <span className="font-semibold text-studio-ink">Quantity</span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, quantity: Math.max(1, (pressOnOrderForm.quantity || 1) - 1) })}
+                        className="w-8 h-8 rounded-xl bg-studio-canvas border border-studio-border font-bold text-studio-ink hover:bg-studio-subtle"
+                      >
+                        -
+                      </button>
+                      <span className="font-bold text-sm w-6 text-center">{pressOnOrderForm.quantity || 1}</span>
+                      <button
+                        type="button"
+                        onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, quantity: (pressOnOrderForm.quantity || 1) + 1 })}
+                        className="w-8 h-8 rounded-xl bg-studio-canvas border border-studio-border font-bold text-studio-ink hover:bg-studio-subtle"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Subtotal & Next */}
+                  <div className="pt-3 border-t border-studio-border flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] text-studio-muted block">Subtotal</span>
+                      <span className="font-display italic font-bold text-lg text-studio-ink">
+                        ₹{(Number(selectedPressOnForOrder.price || 1299) * Number(pressOnOrderForm.quantity || 1)).toLocaleString('en-IN')}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setCheckoutStep(2)}
+                      className="px-6 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio flex items-center gap-2"
+                    >
+                      <span>Delivery Address</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 2: SHIPPING ADDRESS */}
+              {checkoutStep === 2 && (
+                <div className="space-y-4 text-xs font-sans animate-in fade-in">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold text-studio-ink mb-1">Full Name *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Rhea Kapoor"
+                        value={pressOnOrderForm.clientName}
+                        onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, clientName: e.target.value })}
+                        className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-semibold"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-semibold text-studio-ink mb-1">WhatsApp Phone *</label>
+                      <input
+                        type="tel"
+                        required
+                        placeholder="e.g. 98765 43210"
+                        value={pressOnOrderForm.clientPhone}
+                        onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, clientPhone: e.target.value })}
+                        className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-semibold"
+                      />
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label className="block font-semibold text-studio-ink mb-1">Email (Optional)</label>
+                      <input
+                        type="email"
+                        placeholder="for shipping tracking updates"
+                        value={pressOnOrderForm.clientEmail}
+                        onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, clientEmail: e.target.value })}
+                        className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
+                      />
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label className="block font-semibold text-studio-ink mb-1">Street Address / Landmark *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="House/Flat No, Apartment, Street name"
+                        value={pressOnOrderForm.addressStreet}
+                        onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, addressStreet: e.target.value })}
+                        className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-semibold text-studio-ink mb-1">City *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Dehradun"
+                        value={pressOnOrderForm.addressCity}
+                        onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, addressCity: e.target.value })}
+                        className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-semibold text-studio-ink mb-1">State *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Uttarakhand"
+                        value={pressOnOrderForm.addressState}
+                        onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, addressState: e.target.value })}
+                        className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-semibold text-studio-ink mb-1">Pincode *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. 248001"
+                        value={pressOnOrderForm.addressPincode}
+                        onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, addressPincode: e.target.value })}
+                        className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-mono"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-semibold text-studio-ink mb-1">Order Notes (Optional)</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Gifting notes, extra sticky tabs"
+                        value={pressOnOrderForm.notes}
+                        onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, notes: e.target.value })}
+                        className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="pt-3 border-t border-studio-border flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={() => setCheckoutStep(1)}
+                      className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary"
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!pressOnOrderForm.clientName || !pressOnOrderForm.clientPhone || !pressOnOrderForm.addressStreet) {
+                          if (onAddToast) onAddToast('Missing Information', 'Please complete your name, phone number, and street address.', 'error');
+                          return;
+                        }
+                        setCheckoutStep(3);
+                      }}
+                      className="px-6 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio flex items-center gap-2"
+                    >
+                      <span>Proceed to Payment</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* STEP 3: PAYMENT VIA UPI & DISPATCH */}
+              {checkoutStep === 3 && (
+                <form onSubmit={handlePressOnOrderSubmit} className="space-y-4 text-xs font-sans animate-in fade-in">
+                  {/* Total Summary */}
+                  <div className="p-4 rounded-2xl bg-studio-wineLight/60 border border-studio-border flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] text-studio-wine font-bold uppercase tracking-wider block">Total Amount Due</span>
+                      <h4 className="font-semibold text-studio-ink text-sm">
+                        {selectedPressOnForOrder.title} ({pressOnOrderForm.size}) × {pressOnOrderForm.quantity}
+                      </h4>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-display italic font-bold text-2xl text-studio-wine">
+                        ₹{(Number(selectedPressOnForOrder.price || 1299) * Number(pressOnOrderForm.quantity || 1)).toLocaleString('en-IN')}
+                      </span>
+                      <span className="text-[10px] text-emerald-700 block font-semibold">Free Express Shipping</span>
+                    </div>
+                  </div>
+
+                  {/* Instant Dynamic UPI QR Code */}
+                  <div className="p-4 rounded-2xl bg-studio-canvas border border-studio-border text-center space-y-3">
+                    <span className="text-[11px] font-semibold text-studio-ink block">
+                      Scan with any UPI App (GPay, PhonePe, Paytm, CRED)
+                    </span>
+                    <div className="p-3 bg-white rounded-2xl border border-studio-border inline-block shadow-studio">
+                      <QRCodeSVG
+                        value={`upi://pay?pa=${settings?.upiId || 'nailsbysirii@okaxis'}&pn=Nails%20by%20Sirii&am=${Number(selectedPressOnForOrder.price || 1299) * Number(pressOnOrderForm.quantity || 1)}&cu=INR&tn=PressOn-${encodeURIComponent(selectedPressOnForOrder.title)}`}
+                        size={150}
+                        level="M"
+                        includeMargin
+                        fgColor="#1C1917"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-center gap-2 pt-1">
+                      <span className="font-mono text-xs text-studio-secondary bg-studio-surface px-3 py-1 rounded-lg border border-studio-border">
+                        {settings?.upiId || 'nailsbysirii@okaxis'}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={copyUpiId}
+                        className="px-3 py-1 rounded-lg bg-studio-wine text-white font-semibold text-[11px] shadow-xs flex items-center gap-1 active:scale-95"
+                      >
+                        <Copy className="w-3 h-3" />
+                        <span>{copiedUpi ? 'Copied' : 'Copy UPI'}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Optional UTR / Reference */}
                   <div>
-                    <h4 className="font-semibold text-studio-ink text-sm">{selectedPressOnForOrder.title}</h4>
-                    <p className="text-[11px] text-studio-secondary">
-                      {selectedPressOnForOrder.shape} • {selectedPressOnForOrder.length} • {selectedPressOnForOrder.collection}
+                    <label className="block font-semibold text-studio-ink mb-1">
+                      UPI Transaction UTR / Ref Number (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter 12-digit UTR if paid"
+                      value={pressOnOrderForm.paymentRef}
+                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, paymentRef: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-mono"
+                    />
+                    <p className="text-[10px] text-studio-muted mt-0.5">
+                      You can also confirm payment directly on WhatsApp after placing order.
                     </p>
                   </div>
-                  <div className="text-right">
-                    <span className="font-display italic font-bold text-base text-studio-ink">
-                      ₹{selectedPressOnForOrder.price}
+
+                  {/* Actions */}
+                  <div className="pt-3 border-t border-studio-border flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={() => setCheckoutStep(2)}
+                      className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary"
+                    >
+                      Back
+                    </button>
+
+                    <button
+                      type="submit"
+                      disabled={isPlacingPressOnOrder}
+                      className="px-6 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs sm:text-sm shadow-studio flex items-center gap-2 active:scale-95 disabled:opacity-50"
+                    >
+                      <ShoppingBag className="w-4 h-4" />
+                      <span>{isPlacingPressOnOrder ? 'Placing Order...' : 'Confirm & Place Order'}</span>
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* STEP 4: ORDER CONFIRMED SCREEN */}
+              {checkoutStep === 4 && confirmedPressOnOrder && (
+                <div className="text-center space-y-5 py-4 text-xs font-sans animate-in fade-in">
+                  <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mx-auto shadow-studio">
+                    <CheckCircle2 className="w-8 h-8" />
+                  </div>
+
+                  <div className="space-y-1">
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine block">
+                      Order Received Successfully
                     </span>
-                    <span className="text-[10px] text-emerald-700 block font-medium">Free Delivery</span>
+                    <h3 className="font-display italic font-bold text-2xl text-studio-ink">
+                      Thank You, {confirmedPressOnOrder.clientName}!
+                    </h3>
+                    <p className="text-studio-secondary text-xs max-w-sm mx-auto leading-relaxed">
+                      Your order <strong className="text-studio-ink">#{confirmedPressOnOrder.orderNumber || confirmedPressOnOrder.id}</strong> has been transmitted to Sirii's console.
+                    </p>
                   </div>
-                </div>
 
-                {/* Size Choice */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="font-semibold text-studio-ink">
-                      Select Your Size
-                    </label>
+                  <div className="p-4 rounded-2xl bg-studio-canvas border border-studio-border text-left max-w-sm mx-auto space-y-1.5 text-[11px]">
+                    <p><strong className="text-studio-ink">Set:</strong> {confirmedPressOnOrder.productTitle}</p>
+                    <p><strong className="text-studio-ink">Size:</strong> {confirmedPressOnOrder.size} • Qty: {confirmedPressOnOrder.quantity || 1}</p>
+                    <p><strong className="text-studio-ink">Shipping To:</strong> {confirmedPressOnOrder.addressStreet}, {confirmedPressOnOrder.addressCity} - {confirmedPressOnOrder.addressPincode}</p>
+                    <p><strong className="text-studio-ink">Dispatch Estimate:</strong> Dispatched in 24–48 hours with live tracking on WhatsApp.</p>
+                  </div>
+
+                  <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
+                    <a
+                      href={`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(`Hello Sirii! I just placed an order for the ${confirmedPressOnOrder.productTitle} press-on set (Order #${confirmedPressOnOrder.orderNumber || confirmedPressOnOrder.id}). Excited to receive it!`)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs shadow-studio flex items-center justify-center gap-2"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      <span>WhatsApp Order Update</span>
+                    </a>
+
                     <button
                       type="button"
-                      onClick={() => setIsSizingModalOpen(true)}
-                      className="text-[11px] text-studio-wine hover:underline font-semibold flex items-center gap-1"
+                      onClick={() => setIsCheckoutModalOpen(false)}
+                      className="w-full sm:w-auto px-5 py-2.5 rounded-2xl border border-studio-border text-studio-secondary hover:bg-studio-subtle font-semibold text-xs"
                     >
-                      <Ruler className="w-3 h-3" />
-                      <span>Sizing Guide</span>
-                    </button>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {['XS', 'S', 'M', 'L'].map((sz) => (
-                      <button
-                        type="button"
-                        key={sz}
-                        onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, size: sz })}
-                        className={`p-2.5 rounded-xl border text-center transition-all ${pressOnOrderForm.size === sz
-                          ? 'bg-studio-wine text-white font-bold border-studio-wine shadow-xs'
-                          : 'bg-studio-surface border-studio-border text-studio-secondary hover:bg-studio-subtle'
-                          }`}
-                      >
-                        <span className="block text-xs font-bold">{sz}</span>
-                        <span className="text-[9px] opacity-80">{sz === 'S' ? 'Most Popular' : sz === 'XS' ? 'Petite' : sz === 'M' ? 'Medium' : 'Wide'}</span>
-                      </button>
-                    ))}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, size: 'Custom' })}
-                    className={`w-full p-2.5 rounded-xl border text-left transition-all flex items-center justify-between ${pressOnOrderForm.size === 'Custom'
-                      ? 'bg-studio-wineLight border-studio-wine text-studio-wine font-semibold'
-                      : 'bg-studio-surface border-studio-border text-studio-secondary'
-                      }`}
-                  >
-                    <span>Custom Size (Enter exact mm numbers)</span>
-                    <span className="text-[10px]">Thumb to Pinky</span>
-                  </button>
-
-                  {pressOnOrderForm.size === 'Custom' && (
-                    <input
-                      type="text"
-                      placeholder="e.g. 15mm, 12mm, 13mm, 11mm, 8mm"
-                      value={pressOnOrderForm.customSizes}
-                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, customSizes: e.target.value })}
-                      className="w-full p-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-mono"
-                    />
-                  )}
-                </div>
-
-                {/* Wear Method Preference */}
-                <div className="space-y-2">
-                  <label className="font-semibold text-studio-ink block">
-                    Preferred Application Method
-                  </label>
-                  <div className="space-y-1.5">
-                    {[
-                      {
-                        title: '24 Jelly Sticky Tabs (Temporary Wear)',
-                        desc: 'Lasts 3–5 days. 100% reusable, peels off cleanly with zero natural nail damage.'
-                      },
-                      {
-                        title: 'Salon Liquid Nail Glue (Long Wear)',
-                        desc: 'Lasts 2–3 weeks. Extra strong bond for weddings, holidays, and extended wear.'
-                      }
-                    ].map((method) => (
-                      <button
-                        type="button"
-                        key={method.title}
-                        onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, wearMethod: method.title })}
-                        className={`w-full p-3 rounded-2xl border text-left transition-all ${pressOnOrderForm.wearMethod === method.title
-                          ? 'bg-studio-wineLight border-studio-wine'
-                          : 'bg-studio-surface border-studio-border hover:bg-studio-subtle'
-                          }`}
-                      >
-                        <span className={`block font-semibold ${pressOnOrderForm.wearMethod === method.title ? 'text-studio-wine' : 'text-studio-ink'}`}>
-                          {method.title}
-                        </span>
-                        <span className="text-[10px] text-studio-secondary leading-normal block mt-0.5">
-                          {method.desc}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Quantity */}
-                <div className="flex items-center justify-between pt-2">
-                  <span className="font-semibold text-studio-ink">Quantity</span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, quantity: Math.max(1, (pressOnOrderForm.quantity || 1) - 1) })}
-                      className="w-8 h-8 rounded-xl bg-studio-canvas border border-studio-border font-bold text-studio-ink hover:bg-studio-subtle"
-                    >
-                      -
-                    </button>
-                    <span className="font-bold text-sm w-6 text-center">{pressOnOrderForm.quantity || 1}</span>
-                    <button
-                      type="button"
-                      onClick={() => setPressOnOrderForm({ ...pressOnOrderForm, quantity: (pressOnOrderForm.quantity || 1) + 1 })}
-                      className="w-8 h-8 rounded-xl bg-studio-canvas border border-studio-border font-bold text-studio-ink hover:bg-studio-subtle"
-                    >
-                      +
+                      Close
                     </button>
                   </div>
                 </div>
-
-                {/* Subtotal & Next */}
-                <div className="pt-3 border-t border-studio-border flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] text-studio-muted block">Subtotal</span>
-                    <span className="font-display italic font-bold text-lg text-studio-ink">
-                      ₹{(Number(selectedPressOnForOrder.price || 1299) * Number(pressOnOrderForm.quantity || 1)).toLocaleString('en-IN')}
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setCheckoutStep(2)}
-                    className="px-6 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio flex items-center gap-2"
-                  >
-                    <span>Delivery Address</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 2: SHIPPING ADDRESS */}
-            {checkoutStep === 2 && (
-              <div className="space-y-4 text-xs font-sans animate-in fade-in">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block font-semibold text-studio-ink mb-1">Full Name *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Rhea Kapoor"
-                      value={pressOnOrderForm.clientName}
-                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, clientName: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-semibold"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-semibold text-studio-ink mb-1">WhatsApp Phone *</label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="e.g. 98765 43210"
-                      value={pressOnOrderForm.clientPhone}
-                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, clientPhone: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-semibold"
-                    />
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="block font-semibold text-studio-ink mb-1">Email (Optional)</label>
-                    <input
-                      type="email"
-                      placeholder="for shipping tracking updates"
-                      value={pressOnOrderForm.clientEmail}
-                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, clientEmail: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
-                    />
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="block font-semibold text-studio-ink mb-1">Street Address / Landmark *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="House/Flat No, Apartment, Street name"
-                      value={pressOnOrderForm.addressStreet}
-                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, addressStreet: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-semibold text-studio-ink mb-1">City *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Dehradun"
-                      value={pressOnOrderForm.addressCity}
-                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, addressCity: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-semibold text-studio-ink mb-1">State *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Uttarakhand"
-                      value={pressOnOrderForm.addressState}
-                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, addressState: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-semibold text-studio-ink mb-1">Pincode *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. 248001"
-                      value={pressOnOrderForm.addressPincode}
-                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, addressPincode: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-mono"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-semibold text-studio-ink mb-1">Order Notes (Optional)</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Gifting notes, extra sticky tabs"
-                      value={pressOnOrderForm.notes}
-                      onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, notes: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink"
-                    />
-                  </div>
-                </div>
-
-                <div className="pt-3 border-t border-studio-border flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={() => setCheckoutStep(1)}
-                    className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary"
-                  >
-                    Back
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!pressOnOrderForm.clientName || !pressOnOrderForm.clientPhone || !pressOnOrderForm.addressStreet) {
-                        if (onAddToast) onAddToast('Missing Information', 'Please complete your name, phone number, and street address.', 'error');
-                        return;
-                      }
-                      setCheckoutStep(3);
-                    }}
-                    className="px-6 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs shadow-studio flex items-center gap-2"
-                  >
-                    <span>Proceed to Payment</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 3: PAYMENT VIA UPI & DISPATCH */}
-            {checkoutStep === 3 && (
-              <form onSubmit={handlePressOnOrderSubmit} className="space-y-4 text-xs font-sans animate-in fade-in">
-                {/* Total Summary */}
-                <div className="p-4 rounded-2xl bg-studio-wineLight/60 border border-studio-border flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] text-studio-wine font-bold uppercase tracking-wider block">Total Amount Due</span>
-                    <h4 className="font-semibold text-studio-ink text-sm">
-                      {selectedPressOnForOrder.title} ({pressOnOrderForm.size}) × {pressOnOrderForm.quantity}
-                    </h4>
-                  </div>
-                  <div className="text-right">
-                    <span className="font-display italic font-bold text-2xl text-studio-wine">
-                      ₹{(Number(selectedPressOnForOrder.price || 1299) * Number(pressOnOrderForm.quantity || 1)).toLocaleString('en-IN')}
-                    </span>
-                    <span className="text-[10px] text-emerald-700 block font-semibold">Free Express Shipping</span>
-                  </div>
-                </div>
-
-                {/* Instant Dynamic UPI QR Code */}
-                <div className="p-4 rounded-2xl bg-studio-canvas border border-studio-border text-center space-y-3">
-                  <span className="text-[11px] font-semibold text-studio-ink block">
-                    Scan with any UPI App (GPay, PhonePe, Paytm, CRED)
-                  </span>
-                  <div className="p-3 bg-white rounded-2xl border border-studio-border inline-block shadow-studio">
-                    <QRCodeSVG
-                      value={`upi://pay?pa=${settings?.upiId || 'nailsbysirii@okaxis'}&pn=Nails%20by%20Sirii&am=${Number(selectedPressOnForOrder.price || 1299) * Number(pressOnOrderForm.quantity || 1)}&cu=INR&tn=PressOn-${encodeURIComponent(selectedPressOnForOrder.title)}`}
-                      size={150}
-                      level="M"
-                      includeMargin
-                      fgColor="#1C1917"
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-center gap-2 pt-1">
-                    <span className="font-mono text-xs text-studio-secondary bg-studio-surface px-3 py-1 rounded-lg border border-studio-border">
-                      {settings?.upiId || 'nailsbysirii@okaxis'}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={copyUpiId}
-                      className="px-3 py-1 rounded-lg bg-studio-wine text-white font-semibold text-[11px] shadow-xs flex items-center gap-1 active:scale-95"
-                    >
-                      <Copy className="w-3 h-3" />
-                      <span>{copiedUpi ? 'Copied' : 'Copy UPI'}</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Optional UTR / Reference */}
-                <div>
-                  <label className="block font-semibold text-studio-ink mb-1">
-                    UPI Transaction UTR / Ref Number (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Enter 12-digit UTR if paid"
-                    value={pressOnOrderForm.paymentRef}
-                    onChange={(e) => setPressOnOrderForm({ ...pressOnOrderForm, paymentRef: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl border border-studio-border bg-studio-canvas text-base sm:text-xs text-studio-ink font-mono"
-                  />
-                  <p className="text-[10px] text-studio-muted mt-0.5">
-                    You can also confirm payment directly on WhatsApp after placing order.
-                  </p>
-                </div>
-
-                {/* Actions */}
-                <div className="pt-3 border-t border-studio-border flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={() => setCheckoutStep(2)}
-                    className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary"
-                  >
-                    Back
-                  </button>
-
-                  <button
-                    type="submit"
-                    disabled={isPlacingPressOnOrder}
-                    className="px-6 py-3 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white font-semibold text-xs sm:text-sm shadow-studio flex items-center gap-2 active:scale-95 disabled:opacity-50"
-                  >
-                    <ShoppingBag className="w-4 h-4" />
-                    <span>{isPlacingPressOnOrder ? 'Placing Order...' : 'Confirm & Place Order'}</span>
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {/* STEP 4: ORDER CONFIRMED SCREEN */}
-            {checkoutStep === 4 && confirmedPressOnOrder && (
-              <div className="text-center space-y-5 py-4 text-xs font-sans animate-in fade-in">
-                <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center mx-auto shadow-studio">
-                  <CheckCircle2 className="w-8 h-8" />
-                </div>
-
-                <div className="space-y-1">
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine block">
-                    Order Received Successfully
-                  </span>
-                  <h3 className="font-display italic font-bold text-2xl text-studio-ink">
-                    Thank You, {confirmedPressOnOrder.clientName}!
-                  </h3>
-                  <p className="text-studio-secondary text-xs max-w-sm mx-auto leading-relaxed">
-                    Your order <strong className="text-studio-ink">#{confirmedPressOnOrder.orderNumber || confirmedPressOnOrder.id}</strong> has been transmitted to Sirii's console.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-studio-canvas border border-studio-border text-left max-w-sm mx-auto space-y-1.5 text-[11px]">
-                  <p><strong className="text-studio-ink">Set:</strong> {confirmedPressOnOrder.productTitle}</p>
-                  <p><strong className="text-studio-ink">Size:</strong> {confirmedPressOnOrder.size} • Qty: {confirmedPressOnOrder.quantity || 1}</p>
-                  <p><strong className="text-studio-ink">Shipping To:</strong> {confirmedPressOnOrder.addressStreet}, {confirmedPressOnOrder.addressCity} - {confirmedPressOnOrder.addressPincode}</p>
-                  <p><strong className="text-studio-ink">Dispatch Estimate:</strong> Dispatched in 24–48 hours with live tracking on WhatsApp.</p>
-                </div>
-
-                <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
-                  <a
-                    href={`https://wa.me/${whatsappPhone}?text=${encodeURIComponent(`Hello Sirii! I just placed an order for the ${confirmedPressOnOrder.productTitle} press-on set (Order #${confirmedPressOnOrder.orderNumber || confirmedPressOnOrder.id}). Excited to receive it!`)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs shadow-studio flex items-center justify-center gap-2"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>WhatsApp Order Update</span>
-                  </a>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsCheckoutModalOpen(false)}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-2xl border border-studio-border text-studio-secondary hover:bg-studio-subtle font-semibold text-xs"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
-      </ModalPortal>
-    )}
+        </ModalPortal>
+      )}
     </div>
   );
 }

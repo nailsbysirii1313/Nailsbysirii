@@ -812,7 +812,7 @@
       "tag": "Bestseller",
       "description": "Ultra-popular pearlescent glazed chrome over sheer strawberry milk builder gel. Hand-buffed with salon chrome powder for an ethereal mirror shine.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": null
+      "imageUrl": "/hero/little-sparkle.jpg"
     },
     {
       "id": "pop_2",
@@ -828,7 +828,7 @@
       "tag": "Studio Pick",
       "description": "Deep dimensional velvet magnetic shimmer refracting light across long sculpted stilettos. Dramatic, luxurious, and chip-proof.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": null
+      "imageUrl": "/hero/make-statement.jpg"
     },
     {
       "id": "pop_3",
@@ -844,7 +844,7 @@
       "tag": "Luxury Edition",
       "description": "Hand-sculpted 3D liquid molten gold curves and real freshwater baroque pearl accents encrusted over an ivory porcelain bed.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": null
+      "imageUrl": "/catalogue/french-ombre.jpg"
     },
     {
       "id": "pop_4",
@@ -860,7 +860,7 @@
       "tag": "Clean Aesthetic",
       "description": "Seamless airbrushed baby boomer pink-and-white ombré gradient with high-apex reinforcement. Natural, clean, and workplace ready.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": null
+      "imageUrl": "/hero/soft-simple.jpg"
     },
     {
       "id": "pop_5",
@@ -876,7 +876,7 @@
       "tag": "Trending",
       "description": "High-shine liquid silver chrome starbursts, cross-stars, and geometric cyber accents set against a sheer neutral canvas.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": null
+      "imageUrl": "/hero/little-sparkle.jpg"
     },
     {
       "id": "pop_6",
@@ -892,7 +892,7 @@
       "tag": "Handcrafted",
       "description": "Subtle translucent white marble veining swirled with pure 24K gold foil flecks suspended in crystal clear gel depth.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": null
+      "imageUrl": "/catalogue/french-ombre.jpg"
     }
   ],
   "pressOnOrders": [
