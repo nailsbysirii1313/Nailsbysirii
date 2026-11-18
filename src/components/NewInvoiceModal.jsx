@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ModalPortal from './ModalPortal';
 import { X, Receipt, Plus, Trash2 } from 'lucide-react';
 import { getKolkataTodayString } from '../utils/dateTime';
 import { customSetToInvoiceItems } from '../utils/customizerCalculator';
@@ -199,8 +200,9 @@ export default function NewInvoiceModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-text-ink/60 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-studio-surface rounded-3xl max-w-xl w-full p-4 sm:p-6 shadow-studio border border-border-subtle relative max-h-[92vh] overflow-y-auto font-sans">
+    <ModalPortal isOpen={isOpen} onClose={onClose}>
+      <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 bg-studio-ink/60 backdrop-blur-md overflow-y-auto animate-fade-in">
+        <div className="bg-studio-surface rounded-3xl max-w-xl w-full p-4 sm:p-6 shadow-studio-float border border-border-subtle relative max-h-[92vh] overflow-y-auto font-sans my-auto">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -527,5 +529,6 @@ export default function NewInvoiceModal({
         </form>
       </div>
     </div>
+  </ModalPortal>
   );
 }

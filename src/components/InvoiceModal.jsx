@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ModalPortal from './ModalPortal';
 import confetti from 'canvas-confetti';
 import { QRCodeSVG } from 'qrcode.react';
 import {
@@ -162,8 +163,9 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for visiting Nai
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-text-ink/60 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-2xl w-full shadow-studio border-t sm:border border-border-subtle relative max-h-[96vh] flex flex-col font-sans">
+    <ModalPortal isOpen={isOpen} onClose={onClose}>
+      <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md overflow-y-auto animate-fade-in">
+        <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-2xl w-full shadow-studio-float border-t sm:border border-border-subtle relative max-h-[96vh] flex flex-col font-sans my-auto">
         {/* Mobile Drag Indicator */}
         <div className="w-10 h-1.5 rounded-full bg-border-subtle mx-auto my-2.5 sm:hidden shrink-0" />
 
@@ -478,7 +480,7 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for visiting Nai
 
         {/* Payment Confirmation Drawer/Modal */}
         {showPayModal && (
-          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-text-ink/70 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-studio-ink/70 backdrop-blur-md">
             <div className="bg-studio-surface rounded-3xl p-6 max-w-sm w-full border border-border-subtle shadow-studio space-y-4 text-xs font-sans">
               <div className="flex items-center justify-between pb-2 border-b border-border-subtle">
                 <div className="flex items-center gap-2">
@@ -558,5 +560,6 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for visiting Nai
         )}
       </div>
     </div>
+  </ModalPortal>
   );
 }

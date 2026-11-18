@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { X, Smartphone, Bell, Copy, Check, ExternalLink, ShieldCheck } from 'lucide-react';
+import ModalPortal from './ModalPortal';
 
 export default function QrModal({ isOpen, onClose, settings, onTestAlert }) {
   const [copied, setCopied] = useState(false);
@@ -25,8 +26,9 @@ export default function QrModal({ isOpen, onClose, settings, onTestAlert }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-text-ink/50 backdrop-blur-sm animate-fade-in overflow-y-auto">
-      <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 shadow-studio border-t sm:border border-border-subtle relative max-h-[92vh] overflow-y-auto">
+    <ModalPortal isOpen={isOpen} onClose={onClose}>
+      <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md animate-fade-in overflow-y-auto">
+        <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 shadow-studio border-t sm:border border-border-subtle relative max-h-[92vh] overflow-y-auto">
         <div className="w-12 h-1.5 rounded-full bg-border-subtle mx-auto mb-3 sm:hidden" />
         <button
           onClick={onClose}
@@ -132,5 +134,6 @@ export default function QrModal({ isOpen, onClose, settings, onTestAlert }) {
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ModalPortal from './ModalPortal';
 import { Lock, KeyRound, Eye, EyeOff, ArrowRight, X, AlertCircle } from 'lucide-react';
 import StudioLogo from './StudioLogo';
 import { api } from '../api';
@@ -55,8 +56,9 @@ export default function PasscodeModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-studio-surface rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-studio-float border border-studio-border space-y-6 relative overflow-hidden">
+    <ModalPortal isOpen={isOpen} onClose={onClose}>
+      <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in duration-200">
+        <div className="bg-studio-surface rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-studio-float border border-studio-border space-y-6 relative overflow-hidden">
         {/* Decorative background glow */}
         <div className="absolute -top-16 -right-16 w-36 h-36 bg-studio-wineLight rounded-full blur-2xl pointer-events-none" />
         <div className="absolute -bottom-16 -left-16 w-36 h-36 bg-studio-subtle rounded-full blur-2xl pointer-events-none" />
@@ -174,5 +176,6 @@ export default function PasscodeModal({
         </div>
       </div>
     </div>
+  </ModalPortal>
   );
 }

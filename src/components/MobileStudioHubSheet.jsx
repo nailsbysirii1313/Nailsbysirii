@@ -1,4 +1,5 @@
 import React from 'react';
+import ModalPortal from './ModalPortal';
 import {
   X,
   CreditCard,
@@ -111,13 +112,14 @@ export default function MobileStudioHubSheet({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-stone-900/40 backdrop-blur-sm animate-in fade-in duration-200">
-      <div
-        className="fixed inset-0"
-        onClick={onClose}
-        aria-hidden="true"
-      />
-      <div className="relative bg-white rounded-t-3xl max-w-lg w-full p-5 pb-8 shadow-2xl border-t border-rose-100 max-h-[88vh] overflow-y-auto space-y-5 animate-in slide-in-from-bottom duration-250">
+    <ModalPortal isOpen={isOpen} onClose={onClose}>
+      <div className="fixed inset-0 z-[70] flex items-end justify-center bg-studio-ink/60 backdrop-blur-md animate-in fade-in duration-200">
+        <div
+          className="fixed inset-0"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+        <div className="relative bg-white rounded-t-3xl max-w-lg w-full p-5 pb-8 shadow-2xl border-t border-rose-100 max-h-[88vh] overflow-y-auto space-y-5 animate-in slide-in-from-bottom duration-250">
         {/* Drag Handle */}
         <div className="w-12 h-1.5 rounded-full bg-stone-200 mx-auto" />
 
@@ -202,6 +204,7 @@ export default function MobileStudioHubSheet({
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }
 

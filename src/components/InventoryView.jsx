@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ModalPortal from './ModalPortal';
 import {
   Package,
   PackageCheck,
@@ -751,8 +752,9 @@ export default function InventoryView({
 
       {/* Add / Edit Supply Item Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-text-ink/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 border-t sm:border border-border-subtle shadow-studio relative max-h-[92vh] overflow-y-auto font-sans">
+        <ModalPortal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md overflow-y-auto">
+            <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 border-t sm:border border-border-subtle shadow-studio relative max-h-[92vh] overflow-y-auto font-sans">
             <div className="w-10 h-1.5 rounded-full bg-border-subtle mx-auto mb-3 sm:hidden" />
             <button
               onClick={() => setIsModalOpen(false)}
@@ -955,6 +957,7 @@ export default function InventoryView({
             </form>
           </div>
         </div>
+        </ModalPortal>
       )}
     </div>
   );

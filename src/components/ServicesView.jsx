@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ModalPortal from './ModalPortal';
 import {
   Palette,
   Plus,
@@ -205,8 +206,9 @@ export default function ServicesView({
 
       {/* Add / Edit Service Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-text-ink/60 backdrop-blur-sm">
-          <div className="bg-studio-surface rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-studio border border-border-subtle relative font-sans">
+        <ModalPortal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md">
+            <div className="bg-studio-surface rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-studio border border-border-subtle relative font-sans">
             <button
               onClick={() => setIsModalOpen(false)}
               className="absolute top-5 right-5 p-2 rounded-full text-text-muted hover:text-text-ink hover:bg-studio-canvas transition-colors min-h-[38px] min-w-[38px] flex items-center justify-center"
@@ -332,6 +334,7 @@ export default function ServicesView({
             </form>
           </div>
         </div>
+        </ModalPortal>
       )}
     </div>
   );

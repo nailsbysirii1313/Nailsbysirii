@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ModalPortal from './ModalPortal';
 import {
   Calendar,
   Clock,
@@ -175,9 +176,10 @@ export default function PublicHomePilot({
 
       {/* MOBILE SLIDE DRAWER */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden flex justify-end bg-studio-ink/40 backdrop-blur-xs">
-          <div className="fixed inset-0" onClick={() => setMobileMenuOpen(false)} />
-          <div className="relative w-full max-w-xs bg-studio-surface h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto z-10 animate-fade-in">
+        <ModalPortal isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)}>
+          <div className="fixed inset-0 z-[70] md:hidden flex justify-end bg-studio-ink/60 backdrop-blur-md">
+            <div className="fixed inset-0" onClick={() => setMobileMenuOpen(false)} />
+            <div className="relative w-full max-w-xs bg-studio-surface h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto z-10 animate-fade-in">
             <div className="space-y-6">
               <div className="flex items-center justify-between pb-3 border-b border-studio-border">
                 <span className="font-display italic font-bold text-base text-studio-ink">
@@ -253,6 +255,7 @@ export default function PublicHomePilot({
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* 2. HERO: FOCUSED, ARTIST-LED, IMMEDIATE NAIL WORK VISIBLE (390px Viewport Target) */}

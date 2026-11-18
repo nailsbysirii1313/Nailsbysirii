@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ModalPortal from './ModalPortal';
 import {
   BookOpen,
   Plus,
@@ -344,9 +345,9 @@ export default function CatalogueManagerView({
       )}
 
       {/* Add / Edit Design Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-text-ink/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-studio border border-border-subtle relative max-h-[92vh] overflow-y-auto font-sans">
+      <ModalPortal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 bg-studio-ink/60 backdrop-blur-md overflow-y-auto animate-fade-in">
+          <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-studio-float border border-border-subtle relative max-h-[92vh] overflow-y-auto font-sans my-auto">
             <button
               onClick={() => setIsModalOpen(false)}
               className="absolute top-4 sm:top-5 right-4 sm:right-5 p-2 rounded-full text-text-muted hover:text-text-ink hover:bg-studio-canvas transition-colors min-h-[38px] min-w-[38px] flex items-center justify-center"
@@ -547,7 +548,7 @@ export default function CatalogueManagerView({
             </form>
           </div>
         </div>
-      )}
+      </ModalPortal>
     </div>
   );
 }

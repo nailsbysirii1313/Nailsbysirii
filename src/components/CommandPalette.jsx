@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ModalPortal from './ModalPortal';
 import {
   Search,
   User,
@@ -83,8 +84,9 @@ export default function CommandPalette({
   ].filter((act) => act.label.toLowerCase().includes(q) || act.category.toLowerCase().includes(q));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-20 p-4 bg-text-ink/50 backdrop-blur-sm animate-fade-in">
-      <div className="bg-studio-surface rounded-3xl max-w-xl w-full shadow-studio border border-border-subtle overflow-hidden relative">
+    <ModalPortal isOpen={isOpen} onClose={onClose}>
+      <div className="fixed inset-0 z-[70] flex items-start justify-center pt-16 sm:pt-20 p-4 bg-studio-ink/60 backdrop-blur-md animate-fade-in">
+        <div className="bg-studio-surface rounded-3xl max-w-xl w-full shadow-studio border border-border-subtle overflow-hidden relative">
         {/* Search Input Bar */}
         <div className="p-4 border-b border-border-subtle flex items-center gap-3">
           <Search className="w-5 h-5 text-brand-wine shrink-0" />
@@ -222,5 +224,6 @@ export default function CommandPalette({
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }

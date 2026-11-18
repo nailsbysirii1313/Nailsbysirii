@@ -23,6 +23,7 @@ import {
   Heart
 } from 'lucide-react';
 import NailTipSchematic from './NailTipSchematic';
+import ModalPortal from './ModalPortal';
 import { SHAPES, LENGTHS, BASE_COLORS, FINISHES } from '../utils/customizerCalculator';
 
 export default function PressOnsView({
@@ -666,106 +667,109 @@ export default function PressOnsView({
 
       {/* 5. MODAL: UPDATE DISPATCH / TRACKING */}
       {selectedOrderForDispatch && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in">
-          <div className="bg-studio-surface rounded-3xl max-w-md w-full p-6 shadow-studio-float border border-border-subtle space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
-              <div className="flex items-center gap-2">
-                <Truck className="w-4 h-4 text-brand-wine" />
-                <h3 className="font-display italic font-bold text-lg text-text-ink">
-                  Update Order #{selectedOrderForDispatch.orderNumber}
-                </h3>
-              </div>
-              <button
-                onClick={() => setSelectedOrderForDispatch(null)}
-                className="w-7 h-7 rounded-full bg-studio-canvas flex items-center justify-center text-text-muted hover:text-text-ink"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveDispatch} className="space-y-4 text-xs font-sans">
-              <div>
-                <label className="block font-semibold text-text-ink mb-1">
-                  Fulfillment Status
-                </label>
-                <select
-                  value={dispatchForm.fulfillmentStatus}
-                  onChange={(e) => setDispatchForm({ ...dispatchForm, fulfillmentStatus: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border border-border-subtle bg-studio-surface text-base sm:text-xs text-text-ink font-semibold"
-                >
-                  <option value="New Order">New Order</option>
-                  <option value="Processing">Processing / Handcrafting</option>
-                  <option value="Shipped">Shipped / In Transit</option>
-                  <option value="Delivered">Delivered</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block font-semibold text-text-ink mb-1">
-                  Payment Status
-                </label>
-                <select
-                  value={dispatchForm.paymentStatus}
-                  onChange={(e) => setDispatchForm({ ...dispatchForm, paymentStatus: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border border-border-subtle bg-studio-surface text-base sm:text-xs text-text-ink font-semibold"
-                >
-                  <option value="Paid (UPI)">Paid (UPI)</option>
-                  <option value="Pending UPI">Pending UPI Verification</option>
-                  <option value="Cash on Delivery">Cash on Delivery</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block font-semibold text-text-ink mb-1">
-                  Courier Partner
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Delhivery, Bluedart, Speed Post"
-                  value={dispatchForm.courierPartner}
-                  onChange={(e) => setDispatchForm({ ...dispatchForm, courierPartner: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border border-border-subtle bg-studio-surface text-base sm:text-xs text-text-ink"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-text-ink mb-1">
-                  Tracking Number / AWB
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. DLV1234567890"
-                  value={dispatchForm.trackingNumber}
-                  onChange={(e) => setDispatchForm({ ...dispatchForm, trackingNumber: e.target.value })}
-                  className="w-full p-2.5 rounded-xl border border-border-subtle bg-studio-surface text-base sm:text-xs text-text-ink font-mono"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2">
+        <ModalPortal isOpen={!!selectedOrderForDispatch} onClose={() => setSelectedOrderForDispatch(null)}>
+          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in">
+            <div className="bg-studio-surface rounded-3xl max-w-md w-full p-6 shadow-studio-float border border-border-subtle space-y-5">
+              <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
+                <div className="flex items-center gap-2">
+                  <Truck className="w-4 h-4 text-brand-wine" />
+                  <h3 className="font-display italic font-bold text-lg text-text-ink">
+                    Update Order #{selectedOrderForDispatch.orderNumber}
+                  </h3>
+                </div>
                 <button
-                  type="button"
                   onClick={() => setSelectedOrderForDispatch(null)}
-                  className="px-4 py-2 rounded-xl border border-border-subtle text-text-muted hover:bg-studio-canvas"
+                  className="w-7 h-7 rounded-full bg-studio-canvas flex items-center justify-center text-text-muted hover:text-text-ink"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl bg-brand-wine hover:bg-brand-wineHover text-white font-semibold shadow-xs"
-                >
-                  Save Changes
+                  <X className="w-4 h-4" />
                 </button>
               </div>
-            </form>
+
+              <form onSubmit={handleSaveDispatch} className="space-y-4 text-xs font-sans">
+                <div>
+                  <label className="block font-semibold text-text-ink mb-1">
+                    Fulfillment Status
+                  </label>
+                  <select
+                    value={dispatchForm.fulfillmentStatus}
+                    onChange={(e) => setDispatchForm({ ...dispatchForm, fulfillmentStatus: e.target.value })}
+                    className="w-full p-2.5 rounded-xl border border-border-subtle bg-studio-surface text-base sm:text-xs text-text-ink font-semibold"
+                  >
+                    <option value="New Order">New Order</option>
+                    <option value="Processing">Processing / Handcrafting</option>
+                    <option value="Shipped">Shipped / In Transit</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-text-ink mb-1">
+                    Payment Status
+                  </label>
+                  <select
+                    value={dispatchForm.paymentStatus}
+                    onChange={(e) => setDispatchForm({ ...dispatchForm, paymentStatus: e.target.value })}
+                    className="w-full p-2.5 rounded-xl border border-border-subtle bg-studio-surface text-base sm:text-xs text-text-ink font-semibold"
+                  >
+                    <option value="Paid (UPI)">Paid (UPI)</option>
+                    <option value="Pending UPI">Pending UPI Verification</option>
+                    <option value="Cash on Delivery">Cash on Delivery</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-text-ink mb-1">
+                    Courier Partner
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Delhivery, Bluedart, Speed Post"
+                    value={dispatchForm.courierPartner}
+                    onChange={(e) => setDispatchForm({ ...dispatchForm, courierPartner: e.target.value })}
+                    className="w-full p-2.5 rounded-xl border border-border-subtle bg-studio-surface text-base sm:text-xs text-text-ink"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-text-ink mb-1">
+                    Tracking Number / AWB
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. DLV1234567890"
+                    value={dispatchForm.trackingNumber}
+                    onChange={(e) => setDispatchForm({ ...dispatchForm, trackingNumber: e.target.value })}
+                    className="w-full p-2.5 rounded-xl border border-border-subtle bg-studio-surface text-base sm:text-xs text-text-ink font-mono"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedOrderForDispatch(null)}
+                    className="px-4 py-2 rounded-xl border border-border-subtle text-text-muted hover:bg-studio-canvas"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2 rounded-xl bg-brand-wine hover:bg-brand-wineHover text-white font-semibold shadow-xs"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
+        </ModalPortal>
       )}
 
       {/* 6. MODAL: ADD / EDIT PRODUCT */}
       {isAddProductModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in overflow-y-auto">
-          <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 shadow-studio-float border border-border-subtle space-y-5 my-8 max-h-[90vh] overflow-y-auto">
+        <ModalPortal isOpen={isAddProductModalOpen} onClose={() => setIsAddProductModalOpen(false)}>
+          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in overflow-y-auto">
+            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 shadow-studio-float border border-border-subtle space-y-5 my-8 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
               <div className="flex items-center gap-2">
                 <Package className="w-4 h-4 text-brand-wine" />
@@ -937,6 +941,7 @@ export default function PressOnsView({
             </form>
           </div>
         </div>
+        </ModalPortal>
       )}
     </div>
   );

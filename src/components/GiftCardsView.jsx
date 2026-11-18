@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ModalPortal from './ModalPortal';
 import {
   Gift,
   Plus,
@@ -532,8 +533,9 @@ export default function GiftCardsView({
 
       {/* Issue Gift Certificate Modal */}
       {showIssueModal && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-text-ink/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-6 shadow-studio border-t sm:border border-border-subtle max-h-[92vh] overflow-y-auto space-y-4">
+        <ModalPortal isOpen={showIssueModal} onClose={() => setShowIssueModal(false)}>
+          <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md overflow-y-auto">
+            <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-6 shadow-studio border-t sm:border border-border-subtle max-h-[92vh] overflow-y-auto space-y-4">
             <div className="w-10 h-1.5 rounded-full bg-border-subtle mx-auto sm:hidden" />
             <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
               <div className="flex items-center gap-2">
@@ -710,12 +712,14 @@ export default function GiftCardsView({
             </form>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* Printable Luxury Certificate Modal */}
       {selectedVoucherForPrint && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-text-ink/70 backdrop-blur-md overflow-y-auto">
-          <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-studio border-t sm:border border-border-subtle space-y-5 max-h-[92vh] overflow-y-auto">
+        <ModalPortal isOpen={!!selectedVoucherForPrint} onClose={() => setSelectedVoucherForPrint(null)}>
+          <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md overflow-y-auto">
+            <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-studio border-t sm:border border-border-subtle space-y-5 max-h-[92vh] overflow-y-auto">
             <div className="w-10 h-1.5 rounded-full bg-border-subtle mx-auto sm:hidden" />
             <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
               <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
@@ -797,6 +801,7 @@ export default function GiftCardsView({
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
     </div>
   );

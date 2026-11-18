@@ -58,6 +58,7 @@ import { InstagramIcon } from './Icons';
 import StudioLogo from './StudioLogo';
 import EmergencyRepairModal from './EmergencyRepairModal';
 import ShareCatalogueModal from './ShareCatalogueModal';
+import ModalPortal from './ModalPortal';
 import confetti from 'canvas-confetti';
 import { calculateCustomSet, SHAPES, LENGTHS, BASE_COLORS, FINISHES } from '../utils/customizerCalculator';
 import { getKolkataTodayString, getKolkataTomorrowString, getAvailableSlotsForDuration, formatTime12h } from '../utils/dateTime';
@@ -1067,13 +1068,14 @@ export default function ClientWebsite({
 
       {/* MOBILE SLIDE-OVER DRAWER */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex justify-end bg-studio-ink/50 backdrop-blur-sm animate-in fade-in duration-200">
-          <div
-            className="fixed inset-0"
-            onClick={() => setMobileMenuOpen(false)}
-            aria-hidden="true"
-          />
-          <div className="relative w-full max-w-xs bg-studio-surface h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto z-10 animate-in slide-in-from-right duration-300">
+        <ModalPortal isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)}>
+          <div className="fixed inset-0 z-[70] lg:hidden flex justify-end bg-studio-ink/60 backdrop-blur-md animate-in fade-in duration-200">
+            <div
+              className="fixed inset-0"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-hidden="true"
+            />
+            <div className="relative w-full max-w-xs bg-studio-surface h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto z-10 animate-in slide-in-from-right duration-300">
             <div className="space-y-6">
               {/* Drawer Top Branding & Close Button */}
               <div className="flex items-center justify-between pb-4 border-b border-studio-border">
@@ -1225,6 +1227,7 @@ export default function ClientWebsite({
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* 2. HERO SECTION: "YOUR NEXT NAIL CRUSH" */}
@@ -2424,8 +2427,9 @@ export default function ClientWebsite({
 
       {/* CLIENT REVIEW MODAL */}
       {showReviewModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-fade-in overflow-y-auto">
-          <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 border border-studio-border shadow-studio-float space-y-5 my-6 max-h-[92vh] overflow-y-auto">
+        <ModalPortal isOpen={showReviewModal} onClose={() => setShowReviewModal(false)}>
+          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-fade-in overflow-y-auto">
+            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 border border-studio-border shadow-studio-float space-y-5 my-6 max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3.5 border-b border-studio-border">
               <div className="space-y-0.5">
                 <span className="text-[10px] font-bold text-studio-wine uppercase tracking-widest block">
@@ -2588,12 +2592,14 @@ export default function ClientWebsite({
             </form>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* 8. MODAL: NAIL SIZING GUIDE & MEASUREMENT ASSISTANT */}
       {isSizingModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in overflow-y-auto">
-          <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto">
+        <ModalPortal isOpen={isSizingModalOpen} onClose={() => setIsSizingModalOpen(false)}>
+          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in overflow-y-auto">
+            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-studio-border">
               <div className="flex items-center gap-2">
@@ -2720,12 +2726,14 @@ export default function ClientWebsite({
             </div>
           </div>
         </div>
+        </ModalPortal>
       )}
 
       {/* 9. MODAL: PRESS-ON BOUTIQUE CHECKOUT & INSTANT UPI */}
       {isCheckoutModalOpen && selectedPressOnForOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in overflow-y-auto">
-          <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto">
+        <ModalPortal isOpen={isCheckoutModalOpen} onClose={() => setIsCheckoutModalOpen(false)}>
+          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in overflow-y-auto">
+            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto">
             {/* Header & Close */}
             <div className="flex items-center justify-between pb-3 border-b border-studio-border">
               <div className="flex items-center gap-2">
@@ -3167,6 +3175,7 @@ export default function ClientWebsite({
             )}
           </div>
         </div>
+        </ModalPortal>
       )}
     </div>
   );

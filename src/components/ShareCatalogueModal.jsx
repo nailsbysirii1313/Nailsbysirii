@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ModalPortal from './ModalPortal';
 import {
   Share2,
   Copy,
@@ -50,8 +51,9 @@ export default function ShareCatalogueModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto">
-      <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-studio-float border-t sm:border border-studio-border space-y-5 sm:space-y-6 relative max-h-[92vh] overflow-y-auto">
+    <ModalPortal isOpen={isOpen} onClose={onClose}>
+      <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in duration-200 overflow-y-auto">
+        <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-studio-float border-t sm:border border-studio-border space-y-5 sm:space-y-6 relative max-h-[92vh] overflow-y-auto">
         <div className="w-10 h-1.5 rounded-full bg-studio-borderStrong mx-auto sm:hidden" />
         
         {/* Close Button */}
@@ -204,5 +206,6 @@ export default function ShareCatalogueModal({
         )}
       </div>
     </div>
+    </ModalPortal>
   );
 }

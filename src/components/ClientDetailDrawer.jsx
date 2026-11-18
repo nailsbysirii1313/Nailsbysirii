@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ModalPortal from './ModalPortal';
 import {
   X,
   Phone,
@@ -86,8 +87,9 @@ export default function ClientDetailDrawer({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-studio-ink/50 backdrop-blur-sm animate-fade-in font-sans">
-      <div className="bg-studio-surface w-full max-w-md h-full shadow-studio-float border-l border-studio-border flex flex-col justify-between overflow-y-auto">
+    <ModalPortal isOpen={isOpen} onClose={onClose}>
+      <div className="fixed inset-0 z-[70] flex justify-end bg-studio-ink/60 backdrop-blur-md animate-fade-in font-sans">
+        <div className="bg-studio-surface w-full max-w-md h-full shadow-studio-float border-l border-studio-border flex flex-col justify-between overflow-y-auto">
         {/* Header */}
         <div>
           <div className="p-6 border-b border-studio-border bg-studio-subtle/50 relative">
@@ -628,5 +630,6 @@ export default function ClientDetailDrawer({
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }
