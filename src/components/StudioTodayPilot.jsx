@@ -15,7 +15,8 @@ import {
   Bell,
   Palette,
   ArrowRight,
-  Filter
+  Filter,
+  Sparkles
 } from 'lucide-react';
 import { formatKolkataDate, getKolkataTodayString, formatTime12h } from '../utils/dateTime';
 
@@ -359,24 +360,24 @@ export default function StudioTodayPilot({
           )}
         </div>
 
-        {/* 6. DAILY PROTOCOL & SANITIZATION PROGRESS */}
+        {/* 6. DAILY STUDIO RITUALS & CHECKS */}
         <div className="p-4 rounded-2xl bg-studio-surface border border-studio-border space-y-2.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-700" />
+              <Sparkles className="w-4 h-4 text-brand-wine" />
               <span className="font-semibold text-xs text-studio-ink">
-                Daily Sanitation Protocols
+                Daily Studio Rituals
               </span>
             </div>
             <span className="text-[11px] font-bold text-studio-secondary">
-              {completedChecklist}/{totalChecklist} Signed
+              {completedChecklist}/{totalChecklist} Done
             </span>
           </div>
 
           {/* Progress bar */}
           <div className="w-full bg-studio-subtle rounded-full h-2 overflow-hidden">
             <div
-              className="bg-emerald-600 h-2 rounded-full transition-all duration-300"
+              className="bg-brand-wine h-2 rounded-full transition-all duration-300"
               style={{
                 width: `${totalChecklist > 0 ? (completedChecklist / totalChecklist) * 100 : 0}%`
               }}
@@ -384,12 +385,12 @@ export default function StudioTodayPilot({
           </div>
 
           <div className="flex items-center justify-between text-[11px] text-studio-muted pt-0.5">
-            <span>OSHA & State Board Sterilization Standards</span>
+            <span>Personal Studio Mindful Routine</span>
             <button
               onClick={() => onSwitchTab('inventory')}
               className="text-studio-wine font-semibold hover:underline"
             >
-              Review Items →
+              Review Rituals →
             </button>
           </div>
         </div>

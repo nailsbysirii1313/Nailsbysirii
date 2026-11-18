@@ -507,9 +507,27 @@ app.post('/api/inventory/alert', requireAuth, async (req, res) => {
   res.json({ success: true, count: lowStock.length, result });
 });
 
-// Daily Sanitization Checklist API
+// Daily Studio Rituals & Personal Checklist API
 app.get('/api/checklist', requireAuth, (req, res) => {
   res.json(db.getChecklist());
+});
+
+app.post('/api/checklist', requireAuth, (req, res) => {
+  if (!req.body || !req.body.title) {
+    return res.status(400).json({ error: 'Checklist item title is required' });
+  }
+  const item = db.saveChecklistItem(req.body);
+  res.status(201).json(item);
+});
+
+app.put('/api/checklist/:id', requireAuth, (req, res) => {
+  const item = db.saveChecklistItem({ ...req.body, id: req.params.id });
+  res.json(item);
+});
+
+app.delete('/api/checklist/:id', requireAuth, (req, res) => {
+  db.deleteChecklistItem(req.params.id);
+  res.json({ success: true, id: req.params.id });
 });
 
 app.post('/api/checklist/:id/toggle', requireAuth, (req, res) => {

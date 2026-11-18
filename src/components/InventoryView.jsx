@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import ModalPortal from './ModalPortal';
 import {
   Package,
@@ -23,7 +23,20 @@ import {
   Shield,
   FileCheck,
   X,
-  Wallet
+  Wallet,
+  Sparkles,
+  Heart,
+  Flame,
+  Trophy,
+  Check,
+  Coffee,
+  Music,
+  Sun,
+  Moon,
+  Star,
+  Pencil,
+  Zap,
+  BookmarkPlus
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -36,6 +49,34 @@ const CATEGORIES = [
   'Retail & Aftercare'
 ];
 
+const RITUAL_CATEGORIES = [
+  'Studio Vibe',
+  'Station Prep',
+  'Tools & Gear',
+  'Restock',
+  'Creative & Social',
+  'Closing Ritual'
+];
+
+const RITUAL_CATEGORY_STYLES = {
+  'Studio Vibe': 'bg-pink-50 text-pink-700 border-pink-200',
+  'Station Prep': 'bg-rose-50 text-brand-wine border-rose-200',
+  'Tools & Gear': 'bg-amber-50 text-amber-800 border-amber-200',
+  'Restock': 'bg-emerald-50 text-emerald-800 border-emerald-200',
+  'Creative & Social': 'bg-purple-50 text-purple-800 border-purple-200',
+  'Closing Ritual': 'bg-indigo-50 text-indigo-800 border-indigo-200'
+};
+
+const QUICK_PRESETS = [
+  { title: 'Fresh matcha/coffee & client beverage bar', category: 'Studio Vibe', shift: 'opening' },
+  { title: 'Light amber candle & start lo-fi playlist', category: 'Studio Vibe', shift: 'opening' },
+  { title: 'Wipe manicure desk, set fresh wipes & armrest', category: 'Station Prep', shift: 'opening', mandatory: true },
+  { title: 'Test LED/UV curing lamps & inspection light', category: 'Tools & Gear', shift: 'opening', mandatory: true },
+  { title: 'Restock builder gels & lavender cuticle oils', category: 'Restock', shift: 'opening' },
+  { title: 'Snap aesthetic workstation story for Instagram', category: 'Creative & Social', shift: 'opening' },
+  { title: 'Ultrasonic cleanse bits & wipe desks for tomorrow', category: 'Closing Ritual', shift: 'closing' }
+];
+
 export default function InventoryView({
   inventory = [],
   checklist = [],
@@ -44,6 +85,8 @@ export default function InventoryView({
   onDeleteItem,
   onSendLowStockAlert,
   onToggleChecklistItem,
+  onSaveChecklistItem,
+  onDeleteChecklistItem,
   onResetChecklist,
   onAddToast
 }) {
@@ -51,6 +94,18 @@ export default function InventoryView({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [showLowStockOnly, setShowLowStockOnly] = useState(false);
+
+  // Personal Rituals state
+  const [ritualFilter, setRitualFilter] = useState('all'); // 'all' | 'opening' | 'closing' | 'pending' | 'completed'
+  const [isAddingRitual, setIsAddingRitual] = useState(false);
+  const [editingRitual, setEditingRitual] = useState(null);
+  const [ritualForm, setRitualForm] = useState({
+    title: '',
+    category: 'Station Prep',
+    shift: 'opening',
+    description: '',
+    mandatory: false
+  });
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -91,9 +146,90 @@ export default function InventoryView({
   const completedChecklist = checklist.filter((c) => c.completed);
   const openingChecklist = checklist.filter((c) => c.shift === 'opening');
   const closingChecklist = checklist.filter((c) => c.shift === 'closing');
-  const isOpeningComplete = openingChecklist
-    .filter((c) => c.mandatory)
-    .every((c) => c.completed);
+  const totalRituals = checklist.length;
+  const completedRitualsCount = completedChecklist.length;
+  const ritualProgressPercent = totalRituals > 0 ? Math.round((completedRitualsCount / totalRituals) * 100) : 0;
+  const isAllRitualsDone = totalRituals > 0 && completedRitualsCount === totalRituals;
+
+  // Personal Rituals Handlers
+  const handleSaveRitual = (e) => {
+    if (e) e.preventDefault();
+    if (!ritualForm.title.trim()) {
+      onAddToast && onAddToast('Missing Title', 'Please enter a name for your personal check.', 'warning');
+      return;
+    }
+    if (onSaveChecklistItem) {
+      onSaveChecklistItem({
+        ...(editingRitual?.id ? { id: editingRitual.id } : {}),
+        title: ritualForm.title.trim(),
+        category: ritualForm.category || 'Station Prep',
+        shift: ritualForm.shift || 'opening',
+        description: (ritualForm.description || '').trim(),
+        mandatory: Boolean(ritualForm.mandatory),
+        completed: editingRitual ? editingRitual.completed : false
+      });
+    }
+    setRitualForm({
+      title: '',
+      category: 'Station Prep',
+      shift: 'opening',
+      description: '',
+      mandatory: false
+    });
+    setEditingRitual(null);
+    setIsAddingRitual(false);
+  };
+
+  const handleApplyPreset = (preset) => {
+    setRitualForm({
+      title: preset.title,
+      category: preset.category,
+      shift: preset.shift,
+      description: '',
+      mandatory: Boolean(preset.mandatory)
+    });
+    setIsAddingRitual(true);
+  };
+
+  const handleStartEditRitual = (item, e) => {
+    e.stopPropagation();
+    setEditingRitual(item);
+    setRitualForm({
+      title: item.title || '',
+      category: item.category || 'Station Prep',
+      shift: item.shift || 'opening',
+      description: item.description || '',
+      mandatory: Boolean(item.mandatory)
+    });
+    setIsAddingRitual(true);
+  };
+
+  const handleDeleteRitual = (item, e) => {
+    e.stopPropagation();
+    if (window.confirm(`Delete personal check "${item.title}"?`)) {
+      if (onDeleteChecklistItem) {
+        onDeleteChecklistItem(item.id);
+      }
+    }
+  };
+
+  const filteredRituals = useMemo(() => {
+    return checklist.filter((item) => {
+      if (ritualFilter === 'opening') return item.shift === 'opening';
+      if (ritualFilter === 'closing') return item.shift === 'closing';
+      if (ritualFilter === 'pending') return !item.completed;
+      if (ritualFilter === 'completed') return item.completed;
+      return true;
+    });
+  }, [checklist, ritualFilter]);
+
+  const getRitualStatusMessage = () => {
+    if (totalRituals === 0) return { title: 'No Checks Added Yet', subtitle: 'Tap below to add your first daily studio check ✨', icon: Sparkles, color: 'text-brand-wine' };
+    if (isAllRitualsDone) return { title: '👑 100% Atelier Perfection!', subtitle: "All personal rituals complete. Ready for today's queens! ✨", icon: Trophy, color: 'text-emerald-700' };
+    if (ritualProgressPercent >= 75) return { title: '✨ Almost Studio Ready!', subtitle: 'Only 1 or 2 small checks remaining • Final polish!', icon: Sparkles, color: 'text-brand-wine' };
+    if (ritualProgressPercent >= 40) return { title: '🔥 In the Flow!', subtitle: 'Halfway there • Your studio space is looking immaculate.', icon: Flame, color: 'text-amber-700' };
+    return { title: '☀️ Morning Prep Underway', subtitle: 'Take your time and begin your daily studio rituals.', icon: Sun, color: 'text-brand-wine' };
+  };
 
   // Filtering inventory
   const filteredInventory = inventory.filter((item) => {
@@ -192,14 +328,14 @@ export default function InventoryView({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-subtle text-brand-wine text-xs font-semibold mb-2 border border-border-subtle">
-            <Package className="w-3.5 h-3.5 text-brand-wine" />
-            <span>Studio Supplies & Protocols</span>
+            <Sparkles className="w-3.5 h-3.5 text-brand-wine" />
+            <span>Studio Supplies & Personal Rituals</span>
           </div>
           <h2 className="font-display font-semibold text-2xl sm:text-3xl text-text-ink tracking-tight">
-            Inventory & Sanitation
+            Inventory & Studio Rituals
           </h2>
           <p className="text-xs text-text-muted mt-1 max-w-xl">
-            Manage salon builder gels, Gel-X tips, precision implements, and OSHA/Board sterilization compliance logs.
+            Manage salon builder gels, Gel-X tips, precision implements, and your personal daily studio checks.
           </p>
         </div>
 
@@ -230,10 +366,14 @@ export default function InventoryView({
                 : 'text-text-muted hover:text-text-ink'
             }`}
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
-            <span>Sanitation Protocols</span>
-            <span className="px-2 py-0.2 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-bold">
-              {completedChecklist.length}/{checklist.length}
+            <Sparkles className="w-3.5 h-3.5 text-rose-500" />
+            <span>Personal Rituals</span>
+            <span className={`px-2 py-0.2 rounded-full text-[10px] font-bold ${
+              isAllRitualsDone
+                ? 'bg-emerald-100 text-emerald-900 border border-emerald-300'
+                : 'bg-rose-100 text-rose-900'
+            }`}>
+              {completedRitualsCount}/{totalRituals}
             </span>
           </button>
         </div>
@@ -304,21 +444,21 @@ export default function InventoryView({
         <div className="bg-studio-surface rounded-3xl p-5 border border-border-subtle shadow-xs space-y-1">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider">
-              Sanitation Compliance
+              Studio Readiness
             </span>
-            <div className={`w-9 h-9 rounded-2xl flex items-center justify-center border ${isOpeningComplete ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'}`}>
-              <ShieldCheck className="w-4 h-4" />
+            <div className={`w-9 h-9 rounded-2xl flex items-center justify-center border ${isAllRitualsDone ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-brand-wine border-rose-200'}`}>
+              {isAllRitualsDone ? <Trophy className="w-4 h-4 text-emerald-700" /> : <Sparkles className="w-4 h-4 text-brand-wine" />}
             </div>
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-bold font-display text-text-ink">
-              {checklist.length > 0 ? Math.round((completedChecklist.length / checklist.length) * 100) : 100}%
+              {ritualProgressPercent}%
             </span>
-            <span className="text-xs text-text-muted">verified</span>
+            <span className="text-xs text-text-muted">ready</span>
           </div>
-          <p className="text-xs text-emerald-700 font-medium mt-2 flex items-center gap-1">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
-            <span>State Board & OSHA compliant</span>
+          <p className="text-xs text-text-muted font-medium mt-2 flex items-center gap-1.5">
+            <span className="inline-block w-2 h-2 rounded-full bg-brand-wine" />
+            <span>{completedRitualsCount}/{totalRituals} personal checks done</span>
           </p>
         </div>
       </div>
@@ -568,184 +708,435 @@ export default function InventoryView({
         </div>
       )}
 
-      {/* Tab 2: Sanitization Protocols Checklist */}
+      {/* Tab 2: Personal Studio Rituals & Daily Checks */}
       {activeTab === 'sanitization' && (
-        <div className="space-y-6">
-          {/* Sanitation Banner */}
-          <div className="bg-studio-surface rounded-3xl p-6 border border-border-subtle shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1.5 max-w-xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-bold border border-emerald-200">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
-                <span>OSHA & Board of Cosmetology Compliant</span>
-              </div>
-              <h3 className="font-display font-semibold text-xl text-text-ink">
-                Daily Studio Sterilization & Hygiene Protocol
-              </h3>
-              <p className="text-xs text-text-muted leading-relaxed">
-                Nails by Sirii enforces autoclave medical sterilization, 24-hr Barbicide immersion, and HEPA air filtration for client safety.
-              </p>
-            </div>
+        <div className="space-y-6 animate-fade-in">
+          {/* Gamified Readiness & Mastery Banner */}
+          <div className="bg-studio-surface rounded-3xl p-6 sm:p-7 border border-border-subtle shadow-xs space-y-6 relative overflow-hidden">
+            {/* Ambient subtle glow when 100% completed */}
+            {isAllRitualsDone && (
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-pink-500/10 to-brand-wine/10 pointer-events-none animate-pulse" />
+            )}
 
-            <div className="flex items-center gap-3">
-              <button
-                onClick={onResetChecklist}
-                className="px-4 py-2.5 rounded-2xl bg-studio-surface border border-border-subtle hover:bg-studio-canvas text-text-ink text-xs font-semibold shadow-xs transition-all flex items-center gap-2 min-h-[44px]"
-                title="Resets today's checklist items to uncompleted for the morning opening shift"
-              >
-                <RefreshCw className="w-3.5 h-3.5 text-brand-wine" />
-                <span>Reset for New Day</span>
-              </button>
-            </div>
-          </div>
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+              <div className="space-y-2 max-w-xl">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-brand-wine text-[11px] font-bold border border-rose-200">
+                    <Sparkles className="w-3.5 h-3.5 text-brand-wine" />
+                    <span>Personal Daily Checklist</span>
+                  </div>
 
-          {/* Opening Shift Protocols */}
-          <div className="bg-studio-surface rounded-3xl p-6 border border-border-subtle shadow-xs space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-studio-canvas text-brand-wine flex items-center justify-center border border-border-subtle">
-                  <Clock className="w-4 h-4" />
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-900 text-[11px] font-bold border border-amber-200">
+                    <Flame className="w-3.5 h-3.5 text-amber-600" />
+                    <span>7-Day Studio Streak 🔥</span>
+                  </div>
+
+                  {isAllRitualsDone && (
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[11px] font-bold border border-emerald-300 animate-bounce">
+                      <Trophy className="w-3.5 h-3.5 text-emerald-700" />
+                      <span>Ready for Queens ✨</span>
+                    </div>
+                  )}
                 </div>
-                <div>
-                  <h4 className="font-display font-semibold text-base text-text-ink">
-                    Morning Opening Protocols
-                  </h4>
-                  <span className="text-[10px] text-text-muted">
-                    Must be inspected prior to the first client booking
+
+                <div className="flex items-center gap-2.5">
+                  <h3 className="font-display font-semibold text-xl sm:text-2xl text-text-ink">
+                    {getRitualStatusMessage().title}
+                  </h3>
+                </div>
+                <p className="text-xs text-text-muted leading-relaxed">
+                  {getRitualStatusMessage().subtitle}
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap shrink-0">
+                <button
+                  onClick={onResetChecklist}
+                  className="px-4 py-2.5 rounded-2xl bg-studio-canvas hover:bg-studio-subtle text-text-ink text-xs font-semibold border border-border-subtle shadow-xs transition-all flex items-center gap-2 min-h-[44px]"
+                  title="Reset today's checks for a fresh opening shift"
+                >
+                  <RefreshCw className="w-3.5 h-3.5 text-brand-wine" />
+                  <span>Reset for New Day</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setEditingRitual(null);
+                    setRitualForm({
+                      title: '',
+                      category: 'Station Prep',
+                      shift: 'opening',
+                      description: '',
+                      mandatory: false
+                    });
+                    setIsAddingRitual(!isAddingRitual);
+                  }}
+                  className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-brand-wine to-brand-wine-dark hover:brightness-110 text-white text-xs font-semibold shadow-xs transition-all flex items-center gap-2 min-h-[44px]"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>{isAddingRitual ? 'Close Form' : 'Add Custom Check'}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Gamification Progress Bar */}
+            <div className="space-y-2 pt-2 border-t border-border-subtle relative z-10">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-text-ink flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-brand-wine" />
+                  <span>Atelier Readiness Level</span>
+                </span>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-text-muted">
+                    {completedRitualsCount} of {totalRituals} completed
+                  </span>
+                  <span className="font-display font-bold text-base text-brand-wine">
+                    {ritualProgressPercent}%
                   </span>
                 </div>
               </div>
 
-              <span className="text-xs font-semibold text-brand-wine">
-                {openingChecklist.filter((c) => c.completed).length} / {openingChecklist.length} Verified
+              {/* Animated Progress Track */}
+              <div className="w-full h-3 rounded-full bg-studio-canvas p-0.5 border border-border-subtle overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-rose-400 via-pink-500 to-brand-wine transition-all duration-700 ease-out"
+                  style={{ width: `${ritualProgressPercent}%` }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Preset Inspiration Chips */}
+          <div className="bg-studio-surface rounded-3xl p-4 sm:p-5 border border-border-subtle shadow-xs space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-text-muted flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-brand-wine" />
+                <span>Quick-Add Studio Inspiration (1-Tap Add)</span>
               </span>
+              <span className="text-[10px] text-text-muted">Tap to load into form</span>
             </div>
 
-            <div className="space-y-3">
-              {openingChecklist.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => onToggleChecklistItem(item.id)}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-4 ${
-                    item.completed
-                      ? 'bg-emerald-50/40 border-emerald-200'
-                      : 'bg-studio-canvas/50 border-border-subtle hover:border-brand-wine/40'
-                  }`}
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+              {QUICK_PRESETS.map((p, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleApplyPreset(p)}
+                  className="px-3.5 py-2 rounded-xl bg-studio-canvas hover:bg-rose-50 hover:border-brand-wine/30 border border-border-subtle text-xs text-text-ink font-medium whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0"
                 >
-                  <div className="mt-0.5">
-                    {item.completed ? (
-                      <CheckSquare className="w-5 h-5 text-emerald-700" />
-                    ) : (
-                      <Square className="w-5 h-5 text-text-muted hover:text-brand-wine transition-colors" />
-                    )}
-                  </div>
-
-                  <div className="flex-1 space-y-1">
-                    <div className="flex items-center justify-between gap-2 flex-wrap">
-                      <div className="flex items-center gap-2">
-                        <span className={`text-xs font-bold ${item.completed ? 'text-text-muted line-through' : 'text-text-ink'}`}>
-                          {item.title}
-                        </span>
-                        {item.mandatory && (
-                          <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[9px] font-bold">
-                            Mandatory
-                          </span>
-                        )}
-                      </div>
-
-                      <span className="text-[10px] font-mono text-text-muted uppercase tracking-wider px-2 py-0.5 rounded bg-studio-surface border border-border-subtle">
-                        {item.category}
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-text-muted leading-relaxed">
-                      {item.description}
-                    </p>
-
-                    {item.completed && item.completedAt && (
-                      <div className="pt-1 flex items-center gap-2 text-[10px] text-emerald-800 font-medium">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Verified by {item.signedBy || 'Sirii'} at {new Date(item.completedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                  <Plus className="w-3 h-3 text-brand-wine" />
+                  <span>{p.title}</span>
+                </button>
               ))}
             </div>
           </div>
 
-          {/* Evening Closing Protocols */}
-          <div className="bg-studio-surface rounded-3xl p-6 border border-border-subtle shadow-xs space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-studio-canvas text-accent-gold flex items-center justify-center border border-border-subtle">
-                  <Shield className="w-4 h-4" />
+          {/* Add / Edit Ritual Form Card */}
+          {isAddingRitual && (
+            <form onSubmit={handleSaveRitual} className="bg-studio-surface rounded-3xl p-6 border-2 border-brand-wine/30 shadow-studio space-y-5 animate-slide-down">
+              <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-rose-50 text-brand-wine flex items-center justify-center border border-rose-200">
+                    <BookmarkPlus className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-display font-semibold text-base text-text-ink">
+                      {editingRitual ? 'Edit Personal Check' : 'Create Custom Studio Check'}
+                    </h4>
+                    <span className="text-[10px] text-text-muted">
+                      Tailor this check for your own daily studio workflow
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-display font-semibold text-base text-text-ink">
-                    Evening Closing & Sterilization Cycle
-                  </h4>
-                  <span className="text-[10px] text-text-muted">
-                    Completed at the conclusion of studio service hours
-                  </span>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsAddingRitual(false);
+                    setEditingRitual(null);
+                  }}
+                  className="w-8 h-8 rounded-full bg-studio-canvas hover:bg-studio-subtle flex items-center justify-center text-text-muted hover:text-text-ink transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="md:col-span-2 space-y-1">
+                  <label className="text-xs font-bold text-text-ink flex items-center justify-between">
+                    <span>Check Title *</span>
+                    <span className="text-[10px] text-text-muted">Keep it personal and actionable</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Light amber candle & queue studio lo-fi playlist..."
+                    value={ritualForm.title}
+                    onChange={(e) => setRitualForm({ ...ritualForm, title: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-2xl bg-studio-canvas border border-border-subtle focus:outline-none focus:border-brand-wine text-text-ink text-sm"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-text-ink">Category</label>
+                  <select
+                    value={ritualForm.category}
+                    onChange={(e) => setRitualForm({ ...ritualForm, category: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-2xl bg-studio-canvas border border-border-subtle focus:outline-none focus:border-brand-wine text-text-ink text-xs"
+                  >
+                    {RITUAL_CATEGORIES.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-text-ink">When do you do this?</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setRitualForm({ ...ritualForm, shift: 'opening' })}
+                      className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all flex items-center justify-center gap-1.5 ${
+                        ritualForm.shift === 'opening'
+                          ? 'bg-amber-50 text-amber-900 border-amber-300 font-bold'
+                          : 'bg-studio-canvas text-text-muted border-border-subtle'
+                      }`}
+                    >
+                      <Sun className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Morning Prep</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setRitualForm({ ...ritualForm, shift: 'closing' })}
+                      className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all flex items-center justify-center gap-1.5 ${
+                        ritualForm.shift === 'closing'
+                          ? 'bg-indigo-50 text-indigo-900 border-indigo-300 font-bold'
+                          : 'bg-studio-canvas text-text-muted border-border-subtle'
+                      }`}
+                    >
+                      <Moon className="w-3.5 h-3.5 text-indigo-600" />
+                      <span>Closing Ritual</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="md:col-span-2 space-y-1">
+                  <label className="text-xs font-bold text-text-ink">Optional Details or Notes</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Lavender cuticle pens are in top left drawer"
+                    value={ritualForm.description}
+                    onChange={(e) => setRitualForm({ ...ritualForm, description: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-2xl bg-studio-canvas border border-border-subtle focus:outline-none focus:border-brand-wine text-text-ink text-xs"
+                  />
                 </div>
               </div>
 
-              <span className="text-xs font-semibold text-text-secondary">
-                {closingChecklist.filter((c) => c.completed).length} / {closingChecklist.length} Verified
-              </span>
-            </div>
+              <div className="flex items-center justify-between pt-3 border-t border-border-subtle">
+                <label className="inline-flex items-center gap-2 cursor-pointer text-xs font-semibold text-text-ink select-none">
+                  <input
+                    type="checkbox"
+                    checked={ritualForm.mandatory}
+                    onChange={(e) => setRitualForm({ ...ritualForm, mandatory: e.target.checked })}
+                    className="w-4 h-4 accent-brand-wine rounded"
+                  />
+                  <span>⭐ Mark as High Priority check</span>
+                </label>
 
-            <div className="space-y-3">
-              {closingChecklist.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => onToggleChecklistItem(item.id)}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-4 ${
-                    item.completed
-                      ? 'bg-emerald-50/40 border-emerald-200'
-                      : 'bg-studio-canvas/50 border-border-subtle hover:border-brand-wine/40'
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsAddingRitual(false);
+                      setEditingRitual(null);
+                    }}
+                    className="px-4 py-2 rounded-xl text-xs text-text-muted hover:text-text-ink transition-colors font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 rounded-xl bg-brand-wine hover:bg-brand-wine-dark text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5"
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                    <span>{editingRitual ? 'Save Changes' : 'Add to Rituals'}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          )}
+
+          {/* Filter Bar & Count */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+              {[
+                { id: 'all', label: 'All Checks', count: totalRituals },
+                { id: 'opening', label: 'Morning Prep', count: openingChecklist.length },
+                { id: 'closing', label: 'Closing Ritual', count: closingChecklist.length },
+                { id: 'pending', label: 'To Do', count: totalRituals - completedRitualsCount },
+                { id: 'completed', label: 'Done', count: completedRitualsCount }
+              ].map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => setRitualFilter(f.id)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 ${
+                    ritualFilter === f.id
+                      ? 'bg-brand-wine text-white shadow-xs'
+                      : 'bg-studio-surface text-text-muted hover:text-text-ink border border-border-subtle'
                   }`}
                 >
-                  <div className="mt-0.5">
-                    {item.completed ? (
-                      <CheckSquare className="w-5 h-5 text-emerald-700" />
-                    ) : (
-                      <Square className="w-5 h-5 text-text-muted hover:text-brand-wine transition-colors" />
-                    )}
-                  </div>
-
-                  <div className="flex-1 space-y-1">
-                    <div className="flex items-center justify-between gap-2 flex-wrap">
-                      <div className="flex items-center gap-2">
-                        <span className={`text-xs font-bold ${item.completed ? 'text-text-muted line-through' : 'text-text-ink'}`}>
-                          {item.title}
-                        </span>
-                        {item.mandatory && (
-                          <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[9px] font-bold">
-                            Mandatory
-                          </span>
-                        )}
-                      </div>
-
-                      <span className="text-[10px] font-mono text-text-muted uppercase tracking-wider px-2 py-0.5 rounded bg-studio-surface border border-border-subtle">
-                        {item.category}
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-text-muted leading-relaxed">
-                      {item.description}
-                    </p>
-
-                    {item.completed && item.completedAt && (
-                      <div className="pt-1 flex items-center gap-2 text-[10px] text-emerald-800 font-medium">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Verified by {item.signedBy || 'Sirii'} at {new Date(item.completedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                  <span>{f.label}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                    ritualFilter === f.id ? 'bg-white/20 text-white' : 'bg-studio-canvas text-text-muted'
+                  }`}>
+                    {f.count}
+                  </span>
+                </button>
               ))}
             </div>
+
+            <span className="text-xs text-text-muted font-medium self-end sm:self-auto">
+              Showing {filteredRituals.length} check{filteredRituals.length === 1 ? '' : 's'}
+            </span>
+          </div>
+
+          {/* Checklist Items Grid/List */}
+          <div className="space-y-3">
+            {filteredRituals.length === 0 ? (
+              <div className="bg-studio-surface rounded-3xl p-10 border border-border-subtle text-center space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-studio-canvas text-brand-wine flex items-center justify-center mx-auto border border-border-subtle">
+                  <Sparkles className="w-6 h-6 text-brand-wine" />
+                </div>
+                <h4 className="font-display font-semibold text-lg text-text-ink">
+                  No checks match this filter
+                </h4>
+                <p className="text-xs text-text-muted max-w-sm mx-auto">
+                  {checklist.length === 0
+                    ? 'Your personal rituals list is currently empty. Add your morning station setup, ambient checks, or closing duties above!'
+                    : 'Switch your filter or tap "Add Custom Check" to add a new personal routine.'}
+                </p>
+                <button
+                  onClick={() => setIsAddingRitual(true)}
+                  className="px-4 py-2 rounded-xl bg-brand-wine text-white text-xs font-bold hover:brightness-110 transition-all inline-flex items-center gap-1.5 mt-2"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Create Check</span>
+                </button>
+              </div>
+            ) : (
+              filteredRituals.map((item) => {
+                const catClass = RITUAL_CATEGORY_STYLES[item.category] || 'bg-studio-canvas text-text-muted border-border-subtle';
+                const isOpening = item.shift === 'opening';
+
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => onToggleChecklistItem(item.id)}
+                    className={`p-4 sm:p-5 rounded-3xl border transition-all cursor-pointer flex items-start gap-3.5 sm:gap-4 group ${
+                      item.completed
+                        ? 'bg-emerald-50/30 border-emerald-200/80'
+                        : 'bg-studio-surface border-border-subtle hover:border-brand-wine/40 hover:shadow-xs'
+                    }`}
+                  >
+                    {/* Gamified Check Button */}
+                    <div className="mt-0.5 shrink-0">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onToggleChecklistItem(item.id);
+                        }}
+                        className={`w-7 h-7 rounded-xl flex items-center justify-center transition-all ${
+                          item.completed
+                            ? 'bg-emerald-600 text-white shadow-xs scale-105'
+                            : 'bg-studio-canvas border border-border-subtle text-text-muted group-hover:border-brand-wine group-hover:text-brand-wine'
+                        }`}
+                        title={item.completed ? 'Mark pending' : 'Check off'}
+                      >
+                        {item.completed ? (
+                          <Check className="w-4 h-4 stroke-[3]" />
+                        ) : (
+                          <Heart className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    </div>
+
+                    {/* Check Details */}
+                    <div className="flex-1 min-w-0 space-y-1">
+                      <div className="flex items-center justify-between gap-2 flex-wrap">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className={`text-sm font-semibold transition-all ${
+                            item.completed
+                              ? 'line-through text-text-muted'
+                              : 'text-text-ink'
+                          }`}>
+                            {item.title}
+                          </span>
+
+                          {item.mandatory && (
+                            <span className="px-2 py-0.5 rounded-full bg-rose-100 text-brand-wine text-[9px] font-bold border border-rose-200">
+                              ⭐ Priority
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Category & Shift Badges */}
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${catClass}`}>
+                            {item.category || 'General'}
+                          </span>
+
+                          <span className="text-[10px] text-text-muted px-2 py-0.5 rounded-full bg-studio-canvas border border-border-subtle flex items-center gap-1">
+                            {isOpening ? <Sun className="w-2.5 h-2.5 text-amber-600" /> : <Moon className="w-2.5 h-2.5 text-indigo-600" />}
+                            <span>{isOpening ? 'Morning' : 'Closing'}</span>
+                          </span>
+                        </div>
+                      </div>
+
+                      {item.description && (
+                        <p className={`text-xs leading-relaxed ${item.completed ? 'text-text-muted/70' : 'text-text-muted'}`}>
+                          {item.description}
+                        </p>
+                      )}
+
+                      {/* Verified details timestamp */}
+                      {item.completed && item.completedAt && (
+                        <div className="pt-1 flex items-center gap-2 text-[10px] text-emerald-800 font-medium">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>
+                            Checked off at {new Date(item.completedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Actions: Edit & Delete buttons */}
+                    <div className="flex items-center gap-1 shrink-0 opacity-80 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        type="button"
+                        onClick={(e) => handleStartEditRitual(item, e)}
+                        className="w-8 h-8 rounded-xl bg-studio-canvas hover:bg-studio-subtle text-text-muted hover:text-text-ink flex items-center justify-center transition-colors border border-border-subtle"
+                        title="Edit check"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={(e) => handleDeleteRitual(item, e)}
+                        className="w-8 h-8 rounded-xl bg-studio-canvas hover:bg-rose-50 text-text-muted hover:text-rose-600 flex items-center justify-center transition-colors border border-border-subtle"
+                        title="Delete check"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       )}

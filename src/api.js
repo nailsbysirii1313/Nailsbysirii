@@ -277,12 +277,38 @@ export const api = {
     return res.json();
   },
 
-  // Daily Sanitization Checklist
+  // Daily Studio Rituals & Personal Checklist
   async getChecklist() {
     const res = await fetch(`${API_BASE}/checklist`, {
       headers: getAuthHeaders()
     });
     if (!res.ok) throw new Error('Failed to load checklist');
+    return res.json();
+  },
+  async createChecklistItem(item) {
+    const res = await fetch(`${API_BASE}/checklist`, {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(item)
+    });
+    if (!res.ok) throw new Error('Failed to create checklist item');
+    return res.json();
+  },
+  async updateChecklistItem(id, item) {
+    const res = await fetch(`${API_BASE}/checklist/${id}`, {
+      method: 'PUT',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(item)
+    });
+    if (!res.ok) throw new Error('Failed to update checklist item');
+    return res.json();
+  },
+  async deleteChecklistItem(id) {
+    const res = await fetch(`${API_BASE}/checklist/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error('Failed to delete checklist item');
     return res.json();
   },
   async toggleChecklistItem(id, signedBy = 'Sirii') {

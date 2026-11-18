@@ -19,7 +19,10 @@ import {
   CheckSquare,
   Square,
   ChevronRight,
-  CalendarClock
+  CalendarClock,
+  Sparkles,
+  Heart,
+  Flame
 } from 'lucide-react';
 import {
   getKolkataTodayString,
@@ -540,27 +543,57 @@ export default function DashboardView({
             </button>
           </div>
 
-          {/* Daily Sanitization & Sterilization Card */}
+          {/* Personal Daily Studio Rituals Card */}
           <div className="bg-studio-surface rounded-3xl p-5 border border-border-subtle shadow-xs space-y-3">
             <div className="flex items-center justify-between pb-2 border-b border-border-subtle">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-700" />
-                <span className="text-xs font-bold text-text-ink">Daily Sanitization Protocols</span>
+                <Sparkles className="w-4 h-4 text-brand-wine" />
+                <span className="text-xs font-bold text-text-ink">Daily Studio Rituals</span>
+                <span className="px-2 py-0.5 rounded-full bg-rose-50 text-brand-wine text-[10px] font-bold border border-rose-200">
+                  {checklist.filter((c) => c.completed).length}/{checklist.length}
+                </span>
               </div>
               <button
                 onClick={() => setTab('inventory')}
-                className="text-xs font-semibold text-brand-wine hover:underline"
+                className="text-xs font-semibold text-brand-wine hover:underline flex items-center gap-1"
               >
-                All Checks
+                <span>All Checks</span>
+                <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>
 
+            {/* Gamified progress bar */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-text-muted font-medium flex items-center gap-1">
+                  {checklist.length > 0 && checklist.every((c) => c.completed) ? (
+                    <span className="text-emerald-700 font-bold flex items-center gap-1">
+                      <span>👑 100% Atelier Perfection</span>
+                    </span>
+                  ) : (
+                    <span>Studio Readiness</span>
+                  )}
+                </span>
+                <span className="font-bold text-brand-wine">
+                  {checklist.length > 0 ? Math.round((checklist.filter((c) => c.completed).length / checklist.length) * 100) : 0}%
+                </span>
+              </div>
+              <div className="w-full h-2 rounded-full bg-studio-canvas overflow-hidden border border-border-subtle">
+                <div
+                  className="h-full bg-gradient-to-r from-rose-400 via-pink-500 to-brand-wine transition-all duration-500 rounded-full"
+                  style={{
+                    width: `${checklist.length > 0 ? Math.round((checklist.filter((c) => c.completed).length / checklist.length) * 100) : 0}%`
+                  }}
+                />
+              </div>
+            </div>
+
             <p className="text-xs text-text-muted leading-relaxed">
-              Medical autoclave and sanitation compliance checklist for salon safety.
+              Personal mindful checks to keep your atelier organized and client-ready.
             </p>
 
             <div className="space-y-2">
-              {checklist.slice(0, 3).map((item) => (
+              {checklist.slice(0, 4).map((item) => (
                 <div
                   key={item.id}
                   onClick={() => onToggleChecklistItem && onToggleChecklistItem(item.id)}
@@ -571,13 +604,18 @@ export default function DashboardView({
                   }`}
                 >
                   {item.completed ? (
-                    <CheckSquare className="w-4 h-4 text-emerald-700 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
                   ) : (
                     <Square className="w-4 h-4 text-text-muted shrink-0" />
                   )}
-                  <span className={`text-xs font-medium truncate ${item.completed ? 'line-through text-text-muted' : 'text-text-ink'}`}>
+                  <span className={`text-xs font-medium truncate flex-1 ${item.completed ? 'line-through text-text-muted' : 'text-text-ink'}`}>
                     {item.title}
                   </span>
+                  {item.category && (
+                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-studio-surface text-text-muted border border-border-subtle shrink-0">
+                      {item.category}
+                    </span>
+                  )}
                 </div>
               ))}
             </div>

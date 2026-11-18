@@ -650,26 +650,61 @@ export default function App() {
     }
   };
 
-  // Sanitization Checklist Handlers
-  const handleToggleChecklistItem = async (id) => {
+  // Studio Rituals & Personal Checklist Handlers
+  const handleSaveChecklistItem = async (itemData) => {
     try {
-      const updated = await api.toggleChecklistItem(id, settings?.ownerName || 'Sirii');
-      setChecklist((prev) => prev.map((c) => (c.id === id ? updated : c)));
-      if (updated.completed) {
+      if (itemData.id) {
+        const updated = await api.updateChecklistItem(itemData.id, itemData);
+        setChecklist((prev) => prev.map((c) => (c.id === itemData.id ? updated : c)));
+        addToast('Ritual Updated', `Updated "${updated.title}".`);
+      } else {
+        const created = await api.createChecklistItem(itemData);
+        setChecklist((prev) => [...prev, created]);
         playStudioChime('crystal');
-        addToast('Protocol Verified', `Marked "${updated.title}" as complete.`);
+        addToast('Ritual Added ✨', `Added "${created.title}" to personal checks.`);
       }
     } catch (err) {
       addToast('Error', err.message, 'error');
     }
   };
 
+  const handleDeleteChecklistItem = async (id) => {
+    try {
+      await api.deleteChecklistItem(id);
+      setChecklist((prev) => prev.filter((c) => c.id !== id));
+      addToast('Check Removed', 'Personal check removed from rituals.');
+    } catch (err) {
+      addToast('Error', err.message, 'error');
+    }
+  };
+
+  const handleToggleChecklistItem = async (id) => {
+    try {
+      const updated = await api.toggleChecklistItem(id, settings?.ownerName || 'Sirii');
+      setChecklist((prev) => {
+        const next = prev.map((c) => (c.id === id ? updated : c));
+        const total = next.length;
+        const completed = next.filter((c) => c.completed).length;
+        if (updated.completed && total > 0 && completed === total) {
+          playStudioChime('crystal');
+          addToast('👑 100% Atelier Perfection!', 'All personal checks complete. Ready for today’s queens! ✨');
+        } else if (updated.completed) {
+          playStudioChime('crystal');
+          addToast('Personal Check Done ✨', `Checked off "${updated.title}".`);
+        }
+        return next;
+      });
+    } catch (err) {
+      addToast('Error', err.message, 'error');
+    }
+  };
+
   const handleResetChecklist = async () => {
-    if (!window.confirm("Reset all today's sanitization protocol checks for a fresh opening shift?")) return;
+    if (!window.confirm("Reset all today's personal checks for a fresh studio day?")) return;
     try {
       const reset = await api.resetChecklist();
       setChecklist(reset);
-      addToast('Checklist Reset', 'Sanitization checklist ready for opening shift.');
+      addToast('Studio Rituals Reset ✨', 'Ready for a fresh, mindful day at the atelier.');
     } catch (err) {
       addToast('Error', err.message, 'error');
     }
@@ -1267,6 +1302,8 @@ export default function App() {
                   onDeleteItem={handleDeleteInventoryItem}
                   onSendLowStockAlert={handleSendInventoryAlert}
                   onToggleChecklistItem={handleToggleChecklistItem}
+                  onSaveChecklistItem={handleSaveChecklistItem}
+                  onDeleteChecklistItem={handleDeleteChecklistItem}
                   onResetChecklist={handleResetChecklist}
                   onAddToast={addToast}
                 />

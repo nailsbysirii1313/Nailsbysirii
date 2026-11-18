@@ -344,111 +344,67 @@ const initialData = {
   ],
   checklist: [
     {
-      id: "chk_1",
+      id: "chk_ritual_1",
       shift: "opening",
-      category: "Sterilization",
-      title: "Autoclave Steam Strip Validation & Pouch Sealing",
-      description: "Verify physical indicator color change on sterilizer pouch batch and prepare fresh autoclaved pouches for today's clients.",
-      mandatory: true,
+      category: "Studio Vibe",
+      title: "Fresh iced matcha / water carafe & client beverage bar",
+      description: "Prepare welcome refreshments, crystal glasses, and tidy the beverage tray.",
+      mandatory: false,
       completed: true,
       completedAt: new Date(Date.now() - 3 * 3600 * 1000).toISOString(),
       signedBy: "Sirii"
     },
     {
-      id: "chk_2",
+      id: "chk_ritual_2",
       shift: "opening",
-      category: "Sanitation",
-      title: "Barbicide 24-Hour Fresh Solution Mix",
-      description: "Discard yesterday's disinfectant solution. Mix 2 oz Barbicide concentrate with 32 oz cold tap water in immersion glass jars.",
-      mandatory: true,
+      category: "Studio Vibe",
+      title: "Light signature studio candle & start ambient lo-fi playlist",
+      description: "Set warm, cozy atelier lighting and smooth relaxing background music.",
+      mandatory: false,
       completed: true,
       completedAt: new Date(Date.now() - 2.8 * 3600 * 1000).toISOString(),
       signedBy: "Sirii"
     },
     {
-      id: "chk_3",
+      id: "chk_ritual_3",
       shift: "opening",
-      category: "Air Quality",
-      title: "HEPA Air Purifier & Salon Desk Dust Extractor Check",
-      description: "Switch salon medical-grade HEPA-13 air purifier to high. Inspect desk dust collector suction grate & cyclone filter bag.",
-      mandatory: false,
-      completed: true,
-      completedAt: new Date(Date.now() - 2.5 * 3600 * 1000).toISOString(),
-      signedBy: "Sirii"
-    },
-    {
-      id: "chk_4",
-      shift: "opening",
-      category: "Sterilization",
-      title: "Ultrasonic Bath Diamond Bit Protocol",
-      description: "Prepare ultrasonic cleansing bath with enzymatic neutral detergent solution for rotating carbide and diamond bits.",
+      category: "Station Prep",
+      title: "Wipe desk, set fresh lint-free wipes & sanitized implements",
+      description: "Ensure manicure table is pristine with clean armrest, dust collector on, and sealed bits.",
       mandatory: true,
-      completed: true,
-      completedAt: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
-      signedBy: "Sirii"
+      completed: false,
+      completedAt: null,
+      signedBy: null
     },
     {
-      id: "chk_5",
+      id: "chk_ritual_4",
       shift: "opening",
-      category: "Disinfection",
-      title: "Curing Lamp Disinfection & Mirror Reflectors",
-      description: "Wipe interior reflective removable base plates and outer housing of LED/UV lamps with 70% Isopropyl Alcohol.",
+      category: "Tools & Gear",
+      title: "Test LED/UV curing lamps & inspection light mirror",
+      description: "Verify high-gloss cure sensors and cordless e-file drill battery level.",
       mandatory: true,
-      completed: true,
-      completedAt: new Date(Date.now() - 1.5 * 3600 * 1000).toISOString(),
-      signedBy: "Sirii"
+      completed: false,
+      completedAt: null,
+      signedBy: null
     },
     {
-      id: "chk_6",
+      id: "chk_ritual_5",
       shift: "opening",
-      category: "Prep Trays",
-      title: "Client Station Single-Use Disposable Tray Set",
-      description: "Lay out brand new single-use 100/180 grit files, mini buffing blocks, and wooden orange sticks in sealed individual client trays.",
+      category: "Restock",
+      title: "Restock builder gels, rubber bases & cuticle oil pens",
+      description: "Check popular nude palettes, top coats, and prep bottles are at arm's reach.",
       mandatory: false,
       completed: false,
       completedAt: null,
       signedBy: null
     },
     {
-      id: "chk_7",
-      shift: "opening",
-      category: "Hospitality",
-      title: "Hydration & Hand-Washing Station Refresh",
-      description: "Replenish gentle foaming amino-acid hand wash and fresh laundered lint-free linen hand towels at the client washbasin.",
-      mandatory: false,
-      completed: false,
-      completedAt: null,
-      signedBy: null
-    },
-    {
-      id: "chk_8",
+      id: "chk_ritual_6",
       shift: "closing",
-      category: "Sterilization",
-      title: "Autoclave Final Run & Sterilization Register Log",
-      description: "Load washed and dried stainless steel cuticle nippers/pushers into Class B autoclave sterilizer; run 134C cycle and log cycle number in register.",
-      mandatory: true,
-      completed: false,
-      completedAt: null,
-      signedBy: null
-    },
-    {
-      id: "chk_9",
-      shift: "closing",
-      category: "Maintenance",
-      title: "Gel Bottle Neck Acetone Cleanse",
-      description: "Wipe all gel polish, BIAB, and top coat bottle necks with lint-free wipes soaked in pure acetone to prevent crusting and thread seal degradation.",
+      category: "Closing Ritual",
+      title: "Tidy drill bits into ultrasonic cleanse & wipe workstations",
+      description: "Leave the atelier sparkling clean so tomorrow morning begins effortless and peaceful.",
       mandatory: false,
-      completed: false,
-      completedAt: null,
-      signedBy: null
-    },
-    {
-      id: "chk_10",
-      shift: "closing",
-      category: "Sanitation",
-      title: "Dust Collector Empty & Surface Hospital Disinfection",
-      description: "Empty dust vacuum filter bag into outdoor sealed disposal; disinfect client leather chairs, armrests, and manicure station with Preempt RTU wipes.",
-      mandatory: true,
       completed: false,
       completedAt: null,
       signedBy: null
@@ -964,9 +920,43 @@ export const db = {
     writeDb(data);
   },
 
-  // Daily Sanitization Checklist
+  // Daily Studio Rituals & Personal Checklist
   getChecklist() {
     return readDb().checklist || [];
+  },
+  saveChecklistItem(item) {
+    const data = readDb();
+    if (!data.checklist) data.checklist = [];
+    const id = item.id || `chk_${Date.now()}`;
+    const cleanItem = {
+      id,
+      shift: item.shift || 'opening',
+      category: item.category || 'Station Prep',
+      title: item.title || 'Personal Check',
+      description: item.description || '',
+      mandatory: Boolean(item.mandatory),
+      completed: Boolean(item.completed),
+      completedAt: item.completed ? (item.completedAt || new Date().toISOString()) : null,
+      signedBy: item.completed ? (item.signedBy || 'Sirii') : null,
+      createdAt: item.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    const idx = data.checklist.findIndex(c => c.id === id);
+    if (idx >= 0) {
+      data.checklist[idx] = { ...data.checklist[idx], ...cleanItem };
+    } else {
+      data.checklist.push(cleanItem);
+    }
+    writeDb(data);
+    return idx >= 0 ? data.checklist[idx] : cleanItem;
+  },
+  deleteChecklistItem(id) {
+    const data = readDb();
+    if (!data.checklist) data.checklist = [];
+    const beforeLen = data.checklist.length;
+    data.checklist = data.checklist.filter(c => c.id !== id);
+    writeDb(data);
+    return data.checklist.length < beforeLen;
   },
   toggleChecklistItem(id, signedBy = 'Sirii') {
     const data = readDb();
