@@ -18,7 +18,8 @@ export default function CatalogueManagerView({
   designs = [],
   onSaveDesign,
   onDeleteDesign,
-  onAddToast
+  onAddToast,
+  onPreviewClientCatalogue
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [designToEdit, setDesignToEdit] = useState(null);
@@ -74,18 +75,21 @@ export default function CatalogueManagerView({
   const handleOpenModal = (design = null) => {
     if (design) {
       setDesignToEdit(design);
+      const hText = Array.isArray(design.highlights)
+        ? design.highlights.join('\n')
+        : (typeof design.highlights === 'string' ? design.highlights : '');
       setFormData({
         title: design.title || '',
         category: design.category || 'Acrylic Nails',
         tag: design.tag || '',
-        desc: design.desc || '',
+        desc: design.desc || design.description || '',
         imageUrl: design.imageUrl || '',
         shape: typeof design.shape === 'object' ? design.shape.name : (design.shape || 'Almond'),
         length: typeof design.length === 'object' ? design.length.name : (design.length || 'Medium'),
         baseColor: design.baseColor || (design.base?.hex) || '#E8C5C8',
         finish: typeof design.finish === 'object' ? design.finish.name : (design.finish || 'Natural Gloss'),
-        durationNum: design.durationNum || 90,
-        highlightsText: (design.highlights || []).join('\n')
+        durationNum: Number(design.durationNum) || 90,
+        highlightsText: hText
       });
     } else {
       setDesignToEdit(null);
@@ -119,12 +123,15 @@ export default function CatalogueManagerView({
       .map((s) => s.trim())
       .filter(Boolean);
 
+    const description = formData.desc.trim();
+
     const payload = {
       ...(designToEdit ? { id: designToEdit.id } : {}),
       title: formData.title.trim(),
       category: formData.category,
       tag: formData.tag.trim(),
-      desc: formData.desc.trim(),
+      desc: description,
+      description: description,
       imageUrl: formData.imageUrl.trim(),
       shape: formData.shape,
       length: formData.length,
@@ -177,6 +184,12 @@ export default function CatalogueManagerView({
         <div className="flex items-center gap-2.5">
           <a
             href="/#catalogue"
+            onClick={(e) => {
+              if (onPreviewClientCatalogue && !e.metaKey && !e.ctrlKey) {
+                e.preventDefault();
+                onPreviewClientCatalogue();
+              }
+            }}
             target="_blank"
             rel="noopener noreferrer"
             className="px-3.5 py-2.5 rounded-2xl border border-border-subtle bg-studio-surface hover:bg-studio-canvas text-text-secondary text-xs font-semibold shadow-xs transition-all flex items-center gap-1.5 min-h-[44px]"

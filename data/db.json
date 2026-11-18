@@ -295,29 +295,6 @@
       "updatedAt": "2026-11-18T08:53:25.484+00:00"
     },
     {
-      "id": "apt_1794995343729",
-      "clientName": "Pooja Verma",
-      "clientPhone": "9876543210",
-      "clientEmail": "",
-      "clientInstagram": "",
-      "serviceId": "",
-      "serviceName": "Russian BIAB Gel Overlay",
-      "category": "",
-      "date": "2026-11-19",
-      "time": "14:00",
-      "duration": 60,
-      "shape": "",
-      "length": "",
-      "notes": "",
-      "status": "Confirmed",
-      "price": 1600,
-      "createdAt": "2026-11-18T09:49:03.729+00:00",
-      "updatedAt": "2026-11-18T14:12:56.198Z",
-      "reminded24h": true,
-      "reminderSent": true,
-      "lastReminderAt": "2026-11-18T14:12:56.198Z"
-    },
-    {
       "id": "apt_1794996719666",
       "clientName": "Sanya Malhotra",
       "clientPhone": "+919811223344",
@@ -336,6 +313,29 @@
       "price": 1400,
       "createdAt": "2026-11-18T10:11:59.666+00:00",
       "updatedAt": "2026-11-18T10:12:17.012+00:00"
+    },
+    {
+      "id": "apt_1794995343729",
+      "clientName": "Pooja Verma",
+      "clientPhone": "9876543210",
+      "clientEmail": "",
+      "clientInstagram": "",
+      "serviceId": "",
+      "serviceName": "Russian BIAB Gel Overlay",
+      "category": "",
+      "date": "2026-11-19",
+      "time": "14:00",
+      "duration": 60,
+      "shape": "",
+      "length": "",
+      "notes": "",
+      "status": "Confirmed",
+      "price": 1600,
+      "createdAt": "2026-11-18T09:49:03.729+00:00",
+      "updatedAt": "2026-11-18T14:34:12.899Z",
+      "reminded24h": true,
+      "reminderSent": true,
+      "lastReminderAt": "2026-11-18T14:34:12.899Z"
     }
   ],
   "invoices": [
@@ -366,6 +366,17 @@
     }
   ],
   "notifications": [
+    {
+      "type": "appointment_reminder",
+      "title": "[24h Notice] Pooja Verma - 14:00",
+      "message": "🔔 24-HOUR ADVANCE ALERT • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n👤 Client: Pooja Verma\n📞 Phone: 9876543210\n💅 Service: Russian BIAB Gel Overlay\n📅 Schedule: 2026-11-19 at 14:00\n💰 Price: ₹1,600 (Full payment at studio)\n📍 Location: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "appointmentId": "apt_1794995343729",
+      "reminderType": "24h",
+      "id": "notif_1795012452898",
+      "sentAt": "2026-11-18T14:34:12.898Z"
+    },
     {
       "type": "appointment_reminder",
       "title": "[24h Notice] Pooja Verma - 14:00",
@@ -990,7 +1001,9 @@
         "Seamless pink-and-white ombré blend",
         "Structural apex reinforcement",
         "Russian dry e-file prep included"
-      ]
+      ],
+      "description": "Seamless airbrushed transition of soft white powder into a translucent blush pink acrylic bed. Sculpted with strong structural apex architecture.",
+      "updatedAt": "2026-11-18T14:39:43.442Z"
     },
     {
       "id": "acrylic_4",

@@ -39,8 +39,8 @@ export default function CataloguePageView({
 
   // Strictly filter to image-based designs only (no vector/schematic placeholders)
   const imageBasedDesigns = useMemo(() => {
-    return (designs || []).filter((item) => Boolean(item.imageUrl && item.imageUrl.trim() && !imgErrors[item.id]));
-  }, [designs, imgErrors]);
+    return (designs || []).filter((item) => Boolean(item.imageUrl && item.imageUrl.trim()));
+  }, [designs]);
 
   const categories = useMemo(() => {
     const set = new Set();
@@ -60,14 +60,14 @@ export default function CataloguePageView({
       if (!matchCat) return false;
 
       if (!q) return true;
-      return (
-        (item.title || '').toLowerCase().includes(q) ||
-        (item.category || '').toLowerCase().includes(q) ||
-        (item.desc || '').toLowerCase().includes(q) ||
-        (item.tag || '').toLowerCase().includes(q) ||
-        (typeof item.shape === 'string' && item.shape.toLowerCase().includes(q)) ||
-        (item.highlights && item.highlights.some((h) => h.toLowerCase().includes(q)))
-      );
+      const titleMatch = (item.title || '').toLowerCase().includes(q);
+      const catMatch = (item.category || '').toLowerCase().includes(q);
+      const descMatch = (item.desc || item.description || '').toLowerCase().includes(q);
+      const tagMatch = (item.tag || '').toLowerCase().includes(q);
+      const shapeStr = typeof item.shape === 'object' ? item.shape.name : item.shape;
+      const shapeMatch = typeof shapeStr === 'string' && shapeStr.toLowerCase().includes(q);
+      const highlightsMatch = Array.isArray(item.highlights) && item.highlights.some((h) => String(h).toLowerCase().includes(q));
+      return titleMatch || catMatch || descMatch || tagMatch || shapeMatch || highlightsMatch;
     });
   }, [imageBasedDesigns, activeCategory, searchQuery]);
 
@@ -251,8 +251,8 @@ export default function CataloguePageView({
                   {/* Visual Photography Header */}
                   <div className="relative h-60 bg-studio-canvas overflow-hidden flex items-center justify-center border-b border-studio-border">
                     <img
-                      src={item.imageUrl}
-                      alt={item.title}
+                      src={imgErrors[item.id] ? '/hero/soft-simple.jpg' : (item.imageUrl || '/hero/soft-simple.jpg')}
+                      alt={item.title || 'Nail Design'}
                       onError={() => handleImageError(item.id)}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
@@ -295,10 +295,10 @@ export default function CataloguePageView({
                       </div>
 
                       <p className="text-xs text-studio-secondary leading-relaxed font-sans line-clamp-3">
-                        {item.desc}
+                        {item.desc || item.description || ''}
                       </p>
 
-                      {item.highlights && item.highlights.length > 0 && (
+                      {Array.isArray(item.highlights) && item.highlights.length > 0 && (
                         <div className="pt-2 border-t border-studio-border/60 space-y-1.5 text-[11px] text-studio-secondary font-medium">
                           {item.highlights.slice(0, 3).map((h, i) => (
                             <div key={i} className="flex items-center gap-1.5">

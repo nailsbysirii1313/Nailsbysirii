@@ -1234,12 +1234,20 @@ export const db = {
     }
     const idx = data.catalogueDesigns.findIndex(d => d.id === item.id);
     let record;
+    const cleanItem = {
+      ...item,
+      desc: item.desc || item.description || '',
+      description: item.description || item.desc || '',
+      highlights: Array.isArray(item.highlights)
+        ? item.highlights
+        : (typeof item.highlights === 'string' ? item.highlights.split('\n').map(s => s.trim()).filter(Boolean) : [])
+    };
     if (idx >= 0) {
-      record = { ...data.catalogueDesigns[idx], ...item, updatedAt: new Date().toISOString() };
+      record = { ...data.catalogueDesigns[idx], ...cleanItem, updatedAt: new Date().toISOString() };
       data.catalogueDesigns[idx] = record;
     } else {
       record = {
-        ...item,
+        ...cleanItem,
         id: item.id || `design_${Date.now()}`,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()

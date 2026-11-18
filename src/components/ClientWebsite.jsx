@@ -271,7 +271,8 @@ export default function ClientWebsite({
   onSaveReview,
   onAddToast,
   onOpenCatalogue,
-  catalogueDesigns = []
+  catalogueDesigns = [],
+  initialSelectedLook = null
 }) {
   // Navigation & Modals
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -673,19 +674,28 @@ export default function ClientWebsite({
 
   // Select design from catalogue
   const handleSelectLook = (item) => {
+    if (!item) return;
     setBookingMode('lookbook');
     setSelectedLook(item);
-    setSelectedAesthetic(item.title);
-    setSelectedShape(item.shape.name);
-    setSelectedLength(item.length.name);
-    setClientNotes(`Catalogue Look: ${item.title} (${item.category})`);
+    setSelectedAesthetic(item.title || 'Signature Look');
+    const shapeName = typeof item.shape === 'object' ? item.shape.name : (item.shape || 'Almond');
+    const lengthName = typeof item.length === 'object' ? item.length.name : (item.length || 'Medium');
+    setSelectedShape(shapeName);
+    setSelectedLength(lengthName);
+    setClientNotes(`Catalogue Look: ${item.title || 'Signature Look'} (${item.category || 'Atelier Set'})`);
 
     scrollTo('booking-section');
     setBookingStep(1);
     if (onAddToast) {
-      onAddToast('Design Selected', `"${item.title}" loaded into reservation.`, 'success');
+      onAddToast('Design Selected', `"${item.title || 'Design'}" loaded into reservation.`, 'success');
     }
   };
+
+  useEffect(() => {
+    if (initialSelectedLook) {
+      handleSelectLook(initialSelectedLook);
+    }
+  }, [initialSelectedLook]);
 
   // Bring Your Own Inspo (Found online)
   const handleSelectCustomInspo = () => {
@@ -1610,7 +1620,7 @@ export default function ClientWebsite({
                   <div className="h-48 sm:h-52 rounded-2xl bg-studio-canvas border border-studio-border relative overflow-hidden group-hover:border-studio-wine/30 transition-all">
                     <img
                       src={item.imageUrl || '/hero/soft-simple.jpg'}
-                      alt={item.title}
+                      alt={item.title || 'Signature Design'}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                       decoding="async"
@@ -1621,7 +1631,7 @@ export default function ClientWebsite({
                     </span>
 
                     <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-studio-surface/90 backdrop-blur-sm border border-studio-border text-[10px] font-bold text-studio-wine">
-                      {item.category}
+                      {item.category || 'Signature Art'}
                     </span>
                   </div>
 
@@ -1629,7 +1639,7 @@ export default function ClientWebsite({
                   <div className="space-y-1">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block">
-                        {item.tag}
+                        {item.tag || 'Studio Look'}
                       </span>
                       <span className="text-[10px] text-studio-muted font-medium flex items-center gap-1">
                         <Clock className="w-3 h-3 text-studio-wine" />
@@ -1642,19 +1652,21 @@ export default function ClientWebsite({
                     </h3>
 
                     <p className="text-xs text-studio-secondary leading-relaxed font-sans pt-1">
-                      {item.desc}
+                      {item.desc || item.description || ''}
                     </p>
                   </div>
 
                   {/* Highlights Checklist */}
-                  <div className="pt-2 border-t border-studio-border/60 space-y-1.5 text-[11px] text-studio-secondary font-medium">
-                    {item.highlights.slice(0, 2).map((h, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <Check className="w-3 h-3 text-studio-wine shrink-0" />
-                        <span>{h}</span>
-                      </div>
-                    ))}
-                  </div>
+                  {Array.isArray(item.highlights) && item.highlights.length > 0 && (
+                    <div className="pt-2 border-t border-studio-border/60 space-y-1.5 text-[11px] text-studio-secondary font-medium">
+                      {item.highlights.slice(0, 2).map((h, i) => (
+                        <div key={i} className="flex items-center gap-2">
+                          <Check className="w-3 h-3 text-studio-wine shrink-0" />
+                          <span>{h}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Card Action: Book This Look */}

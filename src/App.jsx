@@ -150,6 +150,7 @@ export default function App() {
   const [pressOnProducts, setPressOnProducts] = useState([]);
   const [pressOnOrders, setPressOnOrders] = useState([]);
   const [catalogueDesigns, setCatalogueDesigns] = useState([]);
+  const [selectedCatalogueLook, setSelectedCatalogueLook] = useState(null);
 
   // Aftercare Modal State
   const [isAftercareModalOpen, setIsAftercareModalOpen] = useState(false);
@@ -262,6 +263,81 @@ export default function App() {
   const removeToast = (id) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
+
+  // Cross-tab broadcast synchronization helper
+  const broadcastSync = (type, payload) => {
+    try {
+      if (typeof window !== 'undefined') {
+        if ('BroadcastChannel' in window) {
+          const ch = new BroadcastChannel('nails_by_sirii_sync');
+          ch.postMessage({ type, payload, timestamp: Date.now() });
+          ch.close();
+        }
+        localStorage.setItem(
+          'sirii_sync_event',
+          JSON.stringify({ type, payload, timestamp: Date.now() })
+        );
+      }
+    } catch (err) {
+      // ignore
+    }
+  };
+
+  // Cross-tab real-time sync for catalogue and studio events
+  useEffect(() => {
+    let channel = null;
+    try {
+      if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+        channel = new BroadcastChannel('nails_by_sirii_sync');
+        channel.onmessage = (event) => {
+          const { type, payload } = event.data || {};
+          if (type === 'CATALOGUE_SAVED' && payload) {
+            setCatalogueDesigns((prev) => {
+              const exists = prev.some((d) => d.id === payload.id);
+              return exists
+                ? prev.map((d) => (d.id === payload.id ? payload : d))
+                : [payload, ...prev];
+            });
+          } else if (type === 'CATALOGUE_DELETED' && payload?.id) {
+            setCatalogueDesigns((prev) => prev.filter((d) => d.id !== payload.id));
+          } else if (type === 'REFRESH_CATALOGUE') {
+            api.getCatalogueDesigns().then((designs) => {
+              if (Array.isArray(designs)) setCatalogueDesigns(designs);
+            }).catch(() => {});
+          }
+        };
+      }
+    } catch (e) {
+      // ignore
+    }
+
+    const handleStorageEvent = (e) => {
+      if (e.key === 'sirii_sync_event' && e.newValue) {
+        try {
+          const { type, payload } = JSON.parse(e.newValue);
+          if (type === 'CATALOGUE_SAVED' && payload) {
+            setCatalogueDesigns((prev) => {
+              const exists = prev.some((d) => d.id === payload.id);
+              return exists
+                ? prev.map((d) => (d.id === payload.id ? payload : d))
+                : [payload, ...prev];
+            });
+          } else if (type === 'CATALOGUE_DELETED' && payload?.id) {
+            setCatalogueDesigns((prev) => prev.filter((d) => d.id !== payload.id));
+          }
+        } catch (err) {}
+      }
+    };
+
+    window.addEventListener('storage', handleStorageEvent);
+
+    return () => {
+      if (channel) {
+        channel.close();
+      }
+      window.removeEventListener('storage', handleStorageEvent);
+    };
+  }, []);
 
   // Load Studio Data (Fast Public Hydration + On-Demand Admin Hydration)
   const loadData = async (forceAdmin = false) => {
@@ -917,11 +993,13 @@ export default function App() {
         const updated = await api.updateCatalogueDesign(formData.id, formData);
         setCatalogueDesigns((prev) => prev.map((d) => (d.id === formData.id ? updated : d)));
         addToast('Design Saved', `"${updated.title}" updated in catalogue.`);
+        broadcastSync('CATALOGUE_SAVED', updated);
         return updated;
       } else {
         const created = await api.createCatalogueDesign(formData);
         setCatalogueDesigns((prev) => [created, ...prev]);
         addToast('Design Added', `"${created.title}" added to catalogue.`);
+        broadcastSync('CATALOGUE_SAVED', created);
         return created;
       }
     } catch (err) {
@@ -936,6 +1014,7 @@ export default function App() {
       await api.deleteCatalogueDesign(id);
       setCatalogueDesigns((prev) => prev.filter((d) => d.id !== id));
       addToast('Design Removed', 'Deleted from catalogue.', 'info');
+      broadcastSync('CATALOGUE_DELETED', { id });
     } catch (err) {
       console.error('Failed to delete catalogue design:', err);
       addToast('Error', 'Failed to remove design', 'error');
@@ -1116,6 +1195,7 @@ export default function App() {
               setTabState('clientWebsite');
             }}
             onSelectLook={(design) => {
+              setSelectedCatalogueLook(design);
               window.location.hash = '#booking-section';
               setTabState('clientWebsite');
               setTimeout(() => {
@@ -1193,6 +1273,7 @@ export default function App() {
             setTabState('catalogue');
           }}
           catalogueDesigns={catalogueDesigns}
+          initialSelectedLook={selectedCatalogueLook}
         />
 
         {/* Studio Passcode Gate Modal (nbs0812) */}
@@ -1371,6 +1452,10 @@ export default function App() {
                   onSaveDesign={handleSaveCatalogueDesign}
                   onDeleteDesign={handleDeleteCatalogueDesign}
                   onAddToast={addToast}
+                  onPreviewClientCatalogue={() => {
+                    window.location.hash = '#catalogue';
+                    setTabState('catalogue');
+                  }}
                 />
               )}
 
