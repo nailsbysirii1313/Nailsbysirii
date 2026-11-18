@@ -38,26 +38,56 @@ export default function Header({
     day: 'numeric'
   });
 
+  const tabTitles = {
+    dashboard: 'Studio Dashboard',
+    clients: 'Clients & Profiles',
+    appointments: 'Appointments & Schedule',
+    invoices: 'Invoices & Billing',
+    pressons: 'Press-On Nails & Orders',
+    giftcards: 'Gift Cards & Vouchers',
+    inventory: 'Inventory & Supplies',
+    analytics: 'Financials & Growth',
+    services: 'Services & Art Menu',
+    catalogueManager: 'Design Catalogue Lookbook',
+    reminders: 'Phone Reminders & NTFY',
+    settings: 'Studio Settings'
+  };
+
   return (
     <header className="sticky top-0 z-30 bg-studio-surface/95 backdrop-blur-xl border-b border-border-subtle px-4 py-2.5 pt-[calc(0.6rem+env(safe-area-inset-top))] transition-all">
       <div className="flex items-center justify-between gap-2 max-w-7xl mx-auto">
-        {/* Left: Atelier Brand & Monogram */}
+        {/* Left: Mobile Brand & Monogram (shown on mobile where Sidebar is hidden) */}
         <div
           onClick={() => setTab('dashboard')}
-          className="flex items-center gap-2.5 cursor-pointer group min-w-0"
+          className="flex md:hidden items-center gap-2.5 cursor-pointer group min-w-0"
         >
           <StudioLogo logoUrl={settings?.studioLogoUrl} size="sm" />
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              <h1 className="font-display font-semibold text-sm sm:text-base md:text-lg text-text-ink tracking-tight group-hover:text-brand-wine transition-colors truncate">
+              <h1 className="font-display font-semibold text-sm sm:text-base text-text-ink tracking-tight group-hover:text-brand-wine transition-colors truncate">
                 {settings?.studioName || 'Nails by Sirii'}
               </h1>
               <Heart className="w-3.5 h-3.5 text-brand-wine fill-brand-wine shrink-0" />
             </div>
-            <p className="text-[10px] sm:text-[11px] text-text-muted font-medium truncate">
+            <p className="text-[10px] text-text-muted font-medium truncate">
               {todayFormatted} • Studio Hub
             </p>
           </div>
+        </div>
+
+        {/* Left: Desktop Active Breadcrumb / Section Header (Sidebar already has the logo) */}
+        <div className="hidden md:flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-2 text-xs font-semibold">
+            <span className="text-text-muted">Studio Hub</span>
+            <span className="text-border-strong">/</span>
+            <span className="text-text-ink font-bold text-sm tracking-tight">
+              {tabTitles[currentTab] || 'Studio Dashboard'}
+            </span>
+          </div>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-studio-canvas border border-border-subtle text-[11px] font-medium text-text-muted">
+            <Heart className="w-2.5 h-2.5 text-brand-wine fill-brand-wine shrink-0" />
+            <span>{todayFormatted}</span>
+          </span>
         </div>
 
         {/* Right: Quick Action Controls */}

@@ -16,12 +16,12 @@ export default function StudioLogo({
       sub: 'text-[8px]'
     },
     sm: {
-      img: 'h-7 sm:h-8 md:h-8.5 w-auto max-h-9',
+      img: 'h-8 md:h-9 w-auto max-h-9',
       title: 'text-sm',
       sub: 'text-[9px]'
     },
     md: {
-      img: 'h-7.5 sm:h-8.5 md:h-9.5 w-auto max-h-10',
+      img: 'h-8 sm:h-9 md:h-10 w-auto max-h-10',
       title: 'text-base',
       sub: 'text-[10px]'
     },
@@ -53,18 +53,18 @@ export default function StudioLogo({
     }
 
     return (
-      <div className={`inline-flex items-center gap-2.5 ${className}`}>
+      <div className={`inline-flex items-center gap-2.5 min-w-0 ${className}`}>
         <img
           src={effectiveLogoUrl}
           alt="Nails by Sirii"
           className={`${current.img} object-contain shrink-0 select-none`}
           onError={() => setImgError(true)}
         />
-        <div className="leading-tight">
-          <span className={`font-display font-semibold text-text-ink block tracking-tight ${current.title}`}>
+        <div className="flex flex-col justify-center min-w-0 leading-tight">
+          <span className={`font-display font-semibold text-text-ink block tracking-tight truncate ${current.title}`}>
             Nails by Sirii
           </span>
-          <span className={`tracking-wider uppercase text-brand-wine font-medium block ${current.sub}`}>
+          <span className={`tracking-wider uppercase text-brand-wine font-medium block truncate ${current.sub}`}>
             Contemporary Nail Atelier • Dehradun
           </span>
         </div>
@@ -82,15 +82,15 @@ export default function StudioLogo({
   }
 
   return (
-    <div className={`inline-flex items-center gap-2.5 ${className}`}>
+    <div className={`inline-flex items-center gap-2.5 min-w-0 ${className}`}>
       <span className={`font-display font-bold text-brand-wine tracking-wider select-none shrink-0 ${current.title}`}>
         NBS
       </span>
-      <div className="leading-tight">
-        <span className={`font-display font-semibold text-text-ink block tracking-tight ${current.title}`}>
+      <div className="flex flex-col justify-center min-w-0 leading-tight">
+        <span className={`font-display font-semibold text-text-ink block tracking-tight truncate ${current.title}`}>
           Nails by Sirii
         </span>
-        <span className={`tracking-wider uppercase text-brand-wine font-medium block ${current.sub}`}>
+        <span className={`tracking-wider uppercase text-brand-wine font-medium block truncate ${current.sub}`}>
           Contemporary Nail Atelier • Dehradun
         </span>
       </div>

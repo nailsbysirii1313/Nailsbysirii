@@ -100,14 +100,14 @@ export default function Sidebar({
 
   return (
     <aside className="hidden md:flex w-64 bg-studio-surface border-r border-border-subtle flex-col justify-between h-screen sticky top-0 shrink-0 z-20">
-      {/* Top Branding & Navigation */}
-      <div className="overflow-y-auto no-scrollbar">
-        <div className="p-5 border-b border-border-subtle">
-          <StudioLogo logoUrl={settings?.studioLogoUrl} size="md" showText />
-        </div>
+      {/* Pinned Top Atelier Branding (Never scrolls) */}
+      <div className="p-4 sm:p-5 border-b border-border-subtle shrink-0 bg-studio-surface">
+        <StudioLogo logoUrl={settings?.studioLogoUrl} size="md" showText />
+      </div>
 
-        {/* Navigation items */}
-        <nav className="p-3 space-y-1">
+      {/* Scrollable Navigation items only */}
+      <div className="flex-1 overflow-y-auto no-scrollbar p-3 space-y-1">
+        <nav className="space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;
