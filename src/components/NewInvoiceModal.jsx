@@ -236,7 +236,7 @@ export default function NewInvoiceModal({
                   <select
                     value={clientId}
                     onChange={(e) => handleClientChange(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-xs font-medium text-text-ink"
+                    className="w-full px-3 py-2 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs font-medium text-text-ink"
                   >
                     <option value="">Select existing client...</option>
                     {clients.map((c) => (
@@ -252,7 +252,7 @@ export default function NewInvoiceModal({
                       placeholder="Or enter new client name..."
                       value={clientName}
                       onChange={(e) => setClientName(e.target.value)}
-                      className="w-full mt-1.5 px-3 py-1.5 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-xs"
+                      className="w-full mt-1.5 px-3 py-1.5 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs"
                     />
                   )}
                 </div>
@@ -263,7 +263,7 @@ export default function NewInvoiceModal({
                   placeholder="Client full name"
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-xs"
+                  className="w-full px-3 py-2 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs"
                 />
               )}
             </div>
@@ -277,7 +277,7 @@ export default function NewInvoiceModal({
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-xs font-medium text-text-ink"
+                className="w-full px-3 py-2 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs font-medium text-text-ink"
               />
             </div>
           </div>
@@ -417,7 +417,7 @@ export default function NewInvoiceModal({
                 <select
                   value={paymentMethod}
                   onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="w-full px-3 py-1.5 rounded-xl border border-border-subtle bg-studio-canvas outline-none text-xs font-medium text-text-ink"
+                  className="w-full px-3 py-1.5 rounded-xl border border-border-subtle bg-studio-canvas outline-none text-base sm:text-xs font-medium text-text-ink"
                 >
                   <option value="UPI">UPI (Google Pay / PhonePe / Paytm)</option>
                   <option value="Cash">Cash in Hand</option>
@@ -504,7 +504,7 @@ export default function NewInvoiceModal({
               placeholder="e.g. Keep cuticles nourished daily."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full px-3 py-1.5 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-xs"
+              className="w-full px-3 py-1.5 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs"
             />
           </div>
 

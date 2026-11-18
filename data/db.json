@@ -7,7 +7,7 @@
     "email": "hello@nailsbysirii.com",
     "address": "Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi Cantt, Dehradun, Uttarakhand 248003",
     "instagram": "@nails.by.sirii",
-    "currency": "\u20b9",
+    "currency": "₹",
     "upiId": "nailsbysirii@okaxis",
     "upiName": "Nails by Sirii",
     "studioLogoUrl": "/logo.png",
@@ -15,10 +15,10 @@
     "ntfyServer": "https://ntfy.sh",
     "reminderLeadHours": 2,
     "autoRemindersEnabled": true,
-    "paymentInstructions": "UPI: 7302623493 / nailsbysirii@okaxis (GPay, PhonePe, Paytm) \u2022 Cash accepted at studio",
+    "paymentInstructions": "UPI: 7302623493 / nailsbysirii@okaxis (GPay, PhonePe, Paytm) • Cash accepted at studio",
     "defaultTaxRate": 0,
     "depositRequirement": 500,
-    "timings": "12:00 PM \u2013 7:00 PM",
+    "timings": "12:00 PM – 7:00 PM",
     "googleRating": "4.9",
     "googleReviewCount": 344,
     "googleMapsUrl": "https://maps.google.com/?q=Nails+by+Sirii+Laxmi+Navraj+Plaza+Garhi+Cantonment+Dehradun",
@@ -30,7 +30,7 @@
         "shape": "Almond",
         "length": "Short",
         "imageUrl": "/hero/soft-simple.jpg",
-        "subtitle": "Sheer strawberry nude \u2022 Natural almond",
+        "subtitle": "Sheer strawberry nude • Natural almond",
         "tag": "Trending Now"
       },
       {
@@ -40,7 +40,7 @@
         "shape": "Coffin",
         "length": "Medium",
         "imageUrl": "/hero/little-sparkle.jpg",
-        "subtitle": "Champagne porcelain \u2022 Molten chrome shine",
+        "subtitle": "Champagne porcelain • Molten chrome shine",
         "tag": "Studio Fav"
       },
       {
@@ -50,7 +50,7 @@
         "shape": "Stiletto",
         "length": "Long",
         "imageUrl": "/hero/make-statement.jpg",
-        "subtitle": "Magnetic silk shimmer \u2022 Sculpted stiletto",
+        "subtitle": "Magnetic silk shimmer • Sculpted stiletto",
         "tag": "Statement Art"
       }
     ]
@@ -149,6 +149,20 @@
   ],
   "clients": [
     {
+      "name": "Pooja Verma",
+      "phone": "+91 98765 11223",
+      "email": "",
+      "instagram": "",
+      "address": "Rajpur Road, Dehradun 248001",
+      "preferredShape": "Almond",
+      "notes": "Press-On Order #ORD-2026-004: Hailey Glazed Pearl Chrome (Size: M)",
+      "id": "cl_1794991305278",
+      "totalVisits": 0,
+      "totalSpent": 0,
+      "createdAt": "2026-11-18T08:41:45.278Z",
+      "updatedAt": "2026-11-18T08:41:45.278Z"
+    },
+    {
       "id": "cl_1794934257817",
       "name": "Sanya Malhotra",
       "phone": "9811223344",
@@ -198,7 +212,7 @@
       "instagram": "@kavya_styles",
       "address": "",
       "preferredShape": "Almond",
-      "notes": "Selected Design: French Ombr\u00e9 Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
+      "notes": "Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
       "totalSpent": 0,
       "totalVisits": 0,
       "createdAt": "2026-11-17T16:24:33.404+00:00",
@@ -233,77 +247,59 @@
       "clientEmail": "kavya@example.com",
       "clientInstagram": "@kavya_styles",
       "serviceId": "acrylic_1",
-      "serviceName": "French Ombr\u00e9 Acrylic Sculpture",
+      "serviceName": "French Ombré Acrylic Sculpture",
       "category": "Acrylic Nails",
       "date": "2026-11-20",
       "time": "14:00",
       "duration": 90,
       "shape": "Almond",
       "length": "Long",
-      "notes": "Selected Design: French Ombr\u00e9 Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
+      "notes": "Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
       "status": "Confirmed",
       "price": 0,
       "createdAt": "2026-11-17T16:24:33.405+00:00",
       "updatedAt": "2026-11-17T16:24:33.405+00:00"
-    },
-    {
-      "id": "apt_1794928415040",
-      "clientName": "Phase3 TestClient",
-      "clientPhone": "+91 98765 43210",
-      "clientEmail": "testclient@example.com",
-      "clientInstagram": "@testclient",
-      "serviceId": "srv_custom",
-      "serviceName": "Custom Set: Almond (Medium)",
-      "category": "",
-      "date": "2026-11-18",
-      "time": "14:00",
-      "duration": 105,
-      "shape": "",
-      "length": "",
-      "notes": "Preferences: Almond, Medium, 3D Chrome & Glaze. Allergies: None. Note: Phase 3 Verification",
-      "status": "Confirmed",
-      "price": 3100,
-      "createdAt": "2026-11-17T15:13:35.04+00:00",
-      "updatedAt": "2026-11-18T06:44:27.103Z",
-      "reminderSent": true,
-      "lastReminderAt": "2026-11-18T06:44:27.102Z"
     }
   ],
-  "invoices": [],
+  "invoices": [
+    {
+      "clientName": "Pooja Verma",
+      "clientPhone": "+91 98765 11223",
+      "date": "2026-11-18",
+      "dueDate": "2026-11-18",
+      "items": [
+        {
+          "description": "Signature BIAB Manicure",
+          "quantity": 1,
+          "unitPrice": 1100,
+          "total": 1100
+        }
+      ],
+      "subtotal": 1100,
+      "total": 1100,
+      "balanceDue": 1100,
+      "paymentStatus": "Unpaid / Balance Due",
+      "paymentMethod": "Pending UPI",
+      "id": "INV-2026-001",
+      "invoiceNumber": "INV-2026-001",
+      "createdAt": "2026-11-18T08:40:31.011Z",
+      "updatedAt": "2026-11-18T08:40:31.013Z",
+      "paidAt": null,
+      "status": "Unpaid"
+    }
+  ],
   "notifications": [
     {
-      "type": "appointment_reminder",
-      "title": "Upcoming Client: Phase3 TestClient",
-      "message": "Phase3 TestClient is booked for Custom Set: Almond (Medium) on 2026-11-18 at 14:00.\nPhone: +91 98765 43210\nNotes: Preferences: Almond, Medium, 3D Chrome & Glaze. Allergies: None. Note: Phase 3 Verification",
-      "topic": "nails-by-sirii-alerts",
-      "status": "delivered",
-      "appointmentId": "apt_1794928415040",
-      "id": "notif_1794984267100",
-      "sentAt": "2026-11-18T06:44:27.100Z"
-    },
-    {
       "type": "press_on_order",
-      "title": "New Press-On Order: Test Order Client (INR 1299)",
-      "message": "Test Order Client ordered \"Hailey Glazed Pearl Chrome\"!\n\nSize: M (Qty: 1)\nTotal: INR 1299\nPhone: +91 99999 33333\nAddress: 123 Rajpur Road, Dehradun 248001\nWear Kit: Adhesive Tabs",
+      "title": "New Press-On Order: Pooja Verma (INR 1299)",
+      "message": "Pooja Verma ordered \"Hailey Glazed Pearl Chrome\"!\n\nSize: M (Qty: 1)\nTotal: INR 1299\nPhone: +91 98765 11223\nAddress: Rajpur Road, Dehradun 248001\nWear Kit: Adhesive Jelly Tabs",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
       "orderId": "ORD-2026-004",
-      "clientName": "Test Order Client",
+      "clientName": "Pooja Verma",
       "totalAmount": 1299,
-      "id": "notif_1794947176370",
-      "sentAt": "2026-11-17T20:26:16.370Z"
-    },
-    {
-      "type": "emergency_repair",
-      "title": "URGENT REPAIR: Test Client Repair (Ring Finger)",
-      "message": "Test Client Repair submitted an urgent repair request!\n\nHand & Finger: Left Ring Finger\nService: Acrylic Extension\nIssue: Corner chipped\nUrgency: Standard\nPhone: +91 99999 22222",
-      "topic": "nails-by-sirii-alerts",
-      "status": "delivered",
-      "repairId": "rep_1794947175347",
-      "clientName": "Test Client Repair",
-      "finger": "Ring Finger",
-      "id": "notif_1794947176107",
-      "sentAt": "2026-11-17T20:26:16.107Z"
+      "id": "notif_1794991306560",
+      "sentAt": "2026-11-18T08:41:46.560Z"
     },
     {
       "type": "press_on_order",
@@ -328,72 +324,6 @@
       "totalAmount": 1299,
       "id": "notif_1794933306643",
       "sentAt": "2026-11-17T16:35:06.644Z"
-    },
-    {
-      "type": "test_alert",
-      "title": "Batch 4D Verification Alert",
-      "message": "Testing NTFY dispatch after complete creative redesign.",
-      "topic": "nails-by-sirii-alerts",
-      "status": "delivered",
-      "id": "notif_1794931697734",
-      "sentAt": "2026-11-17T16:08:17.734Z"
-    },
-    {
-      "type": "emergency_repair",
-      "title": "URGENT REPAIR: Emergency TestClient (Index Finger)",
-      "message": "Emergency TestClient submitted an urgent repair request!\n\nHand & Finger: Right Hand Index Finger\nService: Builder Gel (BIAB) Chip Fix\nIssue: Corner chipped while travelling\nUrgency: Today ASAP (Urgent)\nPhone: +91 98765 43210",
-      "topic": "nails-by-sirii-alerts",
-      "status": "delivered",
-      "repairId": "rep_1794928415042",
-      "clientName": "Emergency TestClient",
-      "finger": "Index Finger",
-      "id": "notif_1794928419002",
-      "sentAt": "2026-11-17T15:13:39.002Z"
-    },
-    {
-      "type": "test_alert",
-      "title": "Nails by Sirii \u2022 Client Alert",
-      "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
-      "topic": "nails-by-sirii-alerts",
-      "status": "delivered",
-      "id": "notif_1794925233921",
-      "sentAt": "2026-11-17T14:20:33.921Z"
-    },
-    {
-      "type": "test_alert",
-      "title": "Nails by Sirii \u2022 Client Alert",
-      "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
-      "topic": "nails-by-sirii-alerts",
-      "status": "delivered",
-      "id": "notif_1794925018054",
-      "sentAt": "2026-11-17T14:16:58.054Z"
-    },
-    {
-      "type": "test_alert",
-      "title": "Nails by Sirii \u2022 Client Alert",
-      "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
-      "topic": "nails-by-sirii-alerts",
-      "status": "delivered",
-      "id": "notif_1794924410496",
-      "sentAt": "2026-11-17T14:06:50.496Z"
-    },
-    {
-      "type": "test_alert",
-      "title": "Nails by Sirii \u2022 Client Alert",
-      "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
-      "topic": "nails-by-sirii-alerts",
-      "status": "delivered",
-      "id": "notif_1794924383238",
-      "sentAt": "2026-11-17T14:06:23.238Z"
-    },
-    {
-      "type": "test_alert",
-      "title": "Nails by Sirii \u2022 Client Alert",
-      "message": "Studio test alert: Phone notification service is connected and ready for live bookings.",
-      "topic": "nails-by-sirii-alerts",
-      "status": "delivered",
-      "id": "notif_1794924351816",
-      "sentAt": "2026-11-17T14:05:51.816Z"
     }
   ],
   "inventory": [
@@ -652,21 +582,7 @@
       "signedBy": null
     }
   ],
-  "repairs": [
-    {
-      "id": "rep_1794928415042",
-      "clientName": "Emergency TestClient",
-      "clientPhone": "+91 98765 43210",
-      "hand": "Right Hand",
-      "finger": "Index Finger",
-      "serviceType": "Builder Gel (BIAB) Chip Fix",
-      "issue": "Corner chipped while travelling",
-      "urgency": "Today ASAP (Urgent)",
-      "status": "Pending Squeeze-in",
-      "createdAt": "2026-11-17T15:13:35.042+00:00",
-      "updatedAt": "2026-11-17T15:13:35.042+00:00"
-    }
-  ],
+  "repairs": [],
   "giftCards": [],
   "reviews": [
     {
@@ -726,7 +642,7 @@
       "clientName": "Ashutosh Duklan",
       "rating": 5,
       "serviceRendered": "Nail Extensions",
-      "aestheticTag": "Local Guide \u2022 Warm Hospitality",
+      "aestheticTag": "Local Guide • Warm Hospitality",
       "comment": "Recently visited Nails by Siri with my sister, and this review isn't just about the amazing nail services, it's also about the incredible hospitality we experienced there. The couple running the studio was genuinely warm, sweet, and extremely welcoming. The services were absolutely top-notch!",
       "date": "7 months ago",
       "source": "Google Review"
@@ -757,7 +673,7 @@
       "rating": 5,
       "serviceRendered": "1:1 Certified Nail Course",
       "aestheticTag": "Nail Tech Academy",
-      "comment": "Simran ma'am is so good in teaching Nail Course. I was a beginner to understand the whole things about Nails, but Ma'am and Sir both made me super Pro and trust me everyone now I am doing so good. If you are planning to get your nails done or take a Nail Tech Course, I'll genuinely suggest Nails by Sirii \u2014 super reasonable!",
+      "comment": "Simran ma'am is so good in teaching Nail Course. I was a beginner to understand the whole things about Nails, but Ma'am and Sir both made me super Pro and trust me everyone now I am doing so good. If you are planning to get your nails done or take a Nail Tech Course, I'll genuinely suggest Nails by Sirii — super reasonable!",
       "date": "4 months ago",
       "source": "Google Review"
     },
@@ -792,7 +708,7 @@
       "baseColor": "#FDF2F8",
       "finish": "Hailey Glazed Chrome",
       "price": 1299,
-      "stock": 6,
+      "stock": 5,
       "isAvailable": true,
       "tag": "Bestseller",
       "description": "Ultra-popular pearlescent glazed chrome over sheer strawberry milk builder gel. Hand-buffed with salon chrome powder for an ethereal mirror shine.",
@@ -833,7 +749,7 @@
     },
     {
       "id": "pop_4",
-      "title": "French Ombr\u00e9 Classic Porcelain",
+      "title": "French Ombré Classic Porcelain",
       "collection": "Everyday Minimalist",
       "shape": "Squoval",
       "length": "Short",
@@ -843,7 +759,7 @@
       "stock": 10,
       "isAvailable": true,
       "tag": "Clean Aesthetic",
-      "description": "Seamless airbrushed baby boomer pink-and-white ombr\u00e9 gradient with high-apex reinforcement. Natural, clean, and workplace ready.",
+      "description": "Seamless airbrushed baby boomer pink-and-white ombré gradient with high-apex reinforcement. Natural, clean, and workplace ready.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
       "imageUrl": null
     },
@@ -973,7 +889,7 @@
     {
       "id": "acrylic_1",
       "category": "Acrylic Nails",
-      "title": "French Ombr\u00e9 Acrylic Sculpture",
+      "title": "French Ombré Acrylic Sculpture",
       "tag": "Studio Classic",
       "desc": "Seamless airbrushed transition of soft white powder into a translucent blush pink acrylic bed. Sculpted with strong structural apex architecture.",
       "shape": "Almond",
@@ -983,7 +899,7 @@
       "durationNum": 90,
       "imageUrl": "/catalogue/french-ombre.jpg",
       "highlights": [
-        "Seamless pink-and-white ombr\u00e9 blend",
+        "Seamless pink-and-white ombré blend",
         "Structural apex reinforcement",
         "Russian dry e-file prep included"
       ]

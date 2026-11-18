@@ -308,8 +308,11 @@ app.patch('/api/invoices/:id/status', requireAuth, (req, res) => {
   const target = invoices.find(i => i.id === req.params.id);
   if (!target) return res.status(404).json({ error: 'Invoice not found' });
 
-  target.status = req.body.status;
-  if (req.body.status === 'Paid') {
+  const newStatus = req.body.status || req.body.paymentStatus || 'Paid';
+  target.status = newStatus;
+  target.paymentStatus = (newStatus === 'Paid' || newStatus === 'Paid in Full') ? 'Paid in Full' : (newStatus || 'Unpaid / Balance Due');
+
+  if (newStatus === 'Paid' || newStatus === 'Paid in Full') {
     target.balanceDue = 0;
     target.paidAt = new Date().toISOString();
     if (req.body.paymentMethod) target.paymentMethod = req.body.paymentMethod;

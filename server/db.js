@@ -843,15 +843,27 @@ export const db = {
     if (!data.invoices) data.invoices = [];
     const idx = data.invoices.findIndex(i => i.id === invoice.id);
     let record;
+
+    // Normalize status and paymentStatus
+    const isPaid = invoice.status === 'Paid' || invoice.status === 'Paid in Full' || invoice.paymentStatus === 'Paid in Full' || invoice.paymentStatus === 'Paid';
+    const normalizedStatus = isPaid ? 'Paid' : 'Unpaid';
+    const normalizedPaymentStatus = isPaid ? 'Paid in Full' : 'Unpaid / Balance Due';
+
+    const normalizedPayload = {
+      ...invoice,
+      status: invoice.status || normalizedStatus,
+      paymentStatus: invoice.paymentStatus || normalizedPaymentStatus
+    };
+
     if (idx >= 0) {
-      record = { ...data.invoices[idx], ...invoice, updatedAt: new Date().toISOString() };
+      record = { ...data.invoices[idx], ...normalizedPayload, updatedAt: new Date().toISOString() };
       data.invoices[idx] = record;
     } else {
       const count = (data.invoices || []).length + 1;
       const num = String(count).padStart(3, '0');
       const invoiceNumber = invoice.invoiceNumber || `INV-${new Date().getFullYear()}-${num}`;
       record = {
-        ...invoice,
+        ...normalizedPayload,
         id: invoice.id || invoiceNumber,
         invoiceNumber,
         createdAt: new Date().toISOString(),

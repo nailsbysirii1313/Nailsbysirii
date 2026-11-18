@@ -8,7 +8,8 @@ import {
   Gift,
   Smartphone,
   ChevronRight,
-  Share2
+  Share2,
+  Heart
 } from 'lucide-react';
 
 export default function MobileQuickActionSheet({
@@ -127,7 +128,7 @@ export default function MobileQuickActionSheet({
         <div className="flex items-center justify-between pb-2 border-b border-stone-100">
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+              <Heart className="w-3.5 h-3.5 text-brand-wine fill-brand-wine shrink-0" />
               <h3 className="font-serif font-bold text-lg text-stone-900">
                 Quick Studio Action
               </h3>

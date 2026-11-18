@@ -12,7 +12,8 @@ import {
   FileSpreadsheet,
   ChevronRight,
   AlertTriangle,
-  BookOpen
+  BookOpen,
+  ShoppingBag
 } from 'lucide-react';
 
 export default function MobileStudioHubSheet({
@@ -40,6 +41,14 @@ export default function MobileStudioHubSheet({
           icon: CreditCard,
           color: 'text-rose-600 bg-rose-50',
           badge: counts?.unpaidInvoices ? `${counts.unpaidInvoices} due` : null
+        },
+        {
+          id: 'pressons',
+          label: 'Press-On Nails & Orders',
+          desc: 'Manage handcrafted press-on inventory & orders',
+          icon: ShoppingBag,
+          color: 'text-purple-600 bg-purple-50',
+          badge: counts?.pendingOrders ? `${counts.pendingOrders} new` : null
         },
         {
           id: 'inventory',

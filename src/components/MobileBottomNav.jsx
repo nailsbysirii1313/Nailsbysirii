@@ -15,16 +15,14 @@ export default function MobileBottomNav({
   onOpenHubSheet
 }) {
   const isHubActive = [
-    'pressons',
     'invoices',
-    'inventory',
+    'pressons',
     'giftcards',
-    'customizer',
-    'clientWebsite',
-    'publicBooking',
-    'analytics',
-    'reminders',
+    'inventory',
+    'financials',
     'services',
+    'catalogueManager',
+    'reminders',
     'settings'
   ].includes(currentTab);
 
@@ -49,7 +47,7 @@ export default function MobileBottomNav({
               }`}
             />
             {currentTab === 'dashboard' && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-brand-wine" />
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3.5 h-0.5 rounded-full bg-brand-wine" />
             )}
           </div>
           <span className="text-[10px] tracking-tight mt-1">Today</span>
@@ -76,7 +74,7 @@ export default function MobileBottomNav({
               </span>
             )}
             {currentTab === 'appointments' && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-brand-wine" />
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3.5 h-0.5 rounded-full bg-brand-wine" />
             )}
           </div>
           <span className="text-[10px] tracking-tight mt-1">Schedule</span>
@@ -109,7 +107,7 @@ export default function MobileBottomNav({
               }`}
             />
             {currentTab === 'clients' && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-brand-wine" />
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3.5 h-0.5 rounded-full bg-brand-wine" />
             )}
           </div>
           <span className="text-[10px] tracking-tight mt-1">Clients</span>
@@ -134,7 +132,7 @@ export default function MobileBottomNav({
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-600 border-2 border-studio-surface animate-pulse" />
             )}
             {isHubActive && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-brand-wine" />
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3.5 h-0.5 rounded-full bg-brand-wine" />
             )}
           </div>
           <span className="text-[10px] tracking-tight mt-1">Studio Hub</span>

@@ -1196,74 +1196,28 @@ export default function App() {
           ) : (
             <>
               {currentTab === 'dashboard' && (
-                <div className="space-y-4">
-                  {/* Phase 2 Design Pilot Switcher Header */}
-                  <div className="flex items-center justify-between p-2 rounded-2xl bg-studio-surface border border-studio-border">
-                    <div className="flex items-center gap-2 pl-2">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-xs font-semibold text-studio-ink">
-                        {designMode === 'pilot' ? 'Redesigned "Today" Pilot (Mobile-First)' : 'Classic Dashboard Baseline'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1 bg-studio-canvas p-1 rounded-xl border border-studio-border">
-                      <button
-                        onClick={() => setDesignMode('pilot')}
-                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${designMode === 'pilot' ? 'bg-studio-wine text-white shadow-xs' : 'text-studio-secondary hover:text-studio-ink'
-                          }`}
-                      >
-                        Redesigned Pilot
-                      </button>
-                      <button
-                        onClick={() => setDesignMode('classic')}
-                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${designMode === 'classic' ? 'bg-studio-wine text-white shadow-xs' : 'text-studio-secondary hover:text-studio-ink'
-                          }`}
-                      >
-                        Classic Baseline
-                      </button>
-                    </div>
-                  </div>
-
-                  {designMode === 'pilot' ? (
-                    <StudioTodayPilot
-                      appointments={appointments}
-                      clients={clients}
-                      invoices={invoices}
-                      repairs={repairs}
-                      checklist={checklist}
-                      settings={settings}
-                      onOpenNewAppointment={() => openNewAppointment(null)}
-                      onOpenNewInvoice={() => openNewInvoice(null)}
-                      onOpenClientProfile={openClientProfile}
-                      onUpdateStatus={handleUpdateAppointmentStatus}
-                      onTestAlert={handleTestAlert}
-                      onLockStudio={handleLockStudio}
-                      onSwitchTab={setTab}
-                    />
-                  ) : (
-                    <DashboardView
-                      overview={overview}
-                      appointments={appointments}
-                      clients={clients}
-                      invoices={invoices}
-                      settings={settings}
-                      inventory={inventory}
-                      checklist={checklist}
-                      repairs={repairs}
-                      onUpdateRepairStatus={handleUpdateRepairStatus}
-                      onToggleChecklistItem={handleToggleChecklistItem}
-                      onRemindAppointment={handleRemindAppointment}
-                      onOpenNewAppointment={() => openNewAppointment(null)}
-                      onOpenNewClient={openNewClient}
-                      onOpenNewInvoice={openNewInvoice}
-                      onOpenInvoiceDetail={openInvoiceDetail}
-                      onOpenClientProfile={openClientProfile}
-                      onUpdateAppointmentStatus={handleUpdateAppointmentStatus}
-                      onTestAlert={handleTestAlert}
-                      onOpenQrModal={() => setIsQrModalOpen(true)}
-                      setTab={setTab}
-                    />
-                  )}
-                </div>
+                <DashboardView
+                  overview={overview}
+                  appointments={appointments}
+                  clients={clients}
+                  invoices={invoices}
+                  settings={settings}
+                  inventory={inventory}
+                  checklist={checklist}
+                  repairs={repairs}
+                  onUpdateRepairStatus={handleUpdateRepairStatus}
+                  onToggleChecklistItem={handleToggleChecklistItem}
+                  onRemindAppointment={handleRemindAppointment}
+                  onOpenNewAppointment={() => openNewAppointment(null)}
+                  onOpenNewClient={openNewClient}
+                  onOpenNewInvoice={openNewInvoice}
+                  onOpenInvoiceDetail={openInvoiceDetail}
+                  onOpenClientProfile={openClientProfile}
+                  onUpdateAppointmentStatus={handleUpdateAppointmentStatus}
+                  onTestAlert={handleTestAlert}
+                  onOpenQrModal={() => setIsQrModalOpen(true)}
+                  setTab={setTab}
+                />
               )}
 
               {currentTab === 'inventory' && (
