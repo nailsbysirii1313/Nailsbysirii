@@ -357,17 +357,17 @@ export default function App() {
       // Load admin-only datasets only if authenticated
       const adminFetches = isAuth
         ? [
-            api.getOverview().catch(() => null),
-            api.getClients().catch(() => []),
-            api.getAppointments().catch(() => []),
-            api.getInvoices().catch(() => []),
-            api.getNotifications().catch(() => []),
-            api.getInventory().catch(() => []),
-            api.getChecklist().catch(() => []),
-            api.getRepairs().catch(() => []),
-            api.getGiftCards().catch(() => []),
-            api.getPressOnOrders().catch(() => [])
-          ]
+          api.getOverview().catch(() => null),
+          api.getClients().catch(() => []),
+          api.getAppointments().catch(() => []),
+          api.getInvoices().catch(() => []),
+          api.getNotifications().catch(() => []),
+          api.getInventory().catch(() => []),
+          api.getChecklist().catch(() => []),
+          api.getRepairs().catch(() => []),
+          api.getGiftCards().catch(() => []),
+          api.getPressOnOrders().catch(() => [])
+        ]
         : [];
 
       const [publicResults, adminResults] = await Promise.all([
@@ -1550,188 +1550,188 @@ export default function App() {
           clientToEdit={clientToEdit}
         />
 
-      <NewAppointmentModal
-        isOpen={isNewAppointmentOpen}
-        onClose={() => {
-          setIsNewAppointmentOpen(false);
-          setIsAppointmentFromNewClient(false);
-        }}
-        onSave={handleSaveAppointment}
-        clients={clients}
-        services={services}
-        appointments={appointments}
-        preselectedClient={preselectedClientForAppointment}
-        preselectedDate={preselectedDateForAppointment}
-        preselectedTime={preselectedTimeForAppointment}
-        appointmentToEdit={appointmentToEdit}
-        isFromNewClient={isAppointmentFromNewClient}
-      />
+        <NewAppointmentModal
+          isOpen={isNewAppointmentOpen}
+          onClose={() => {
+            setIsNewAppointmentOpen(false);
+            setIsAppointmentFromNewClient(false);
+          }}
+          onSave={handleSaveAppointment}
+          clients={clients}
+          services={services}
+          appointments={appointments}
+          preselectedClient={preselectedClientForAppointment}
+          preselectedDate={preselectedDateForAppointment}
+          preselectedTime={preselectedTimeForAppointment}
+          appointmentToEdit={appointmentToEdit}
+          isFromNewClient={isAppointmentFromNewClient}
+        />
 
-      <NewInvoiceModal
-        isOpen={isNewInvoiceOpen}
-        onClose={() => setIsNewInvoiceOpen(false)}
-        onSave={handleSaveInvoice}
-        clients={clients}
-        services={services}
-        preselectedAppointment={preselectedAppointmentForInvoice}
-        preselectedClient={preselectedClientForInvoice}
-        invoiceToEdit={invoiceToEdit}
-      />
+        <NewInvoiceModal
+          isOpen={isNewInvoiceOpen}
+          onClose={() => setIsNewInvoiceOpen(false)}
+          onSave={handleSaveInvoice}
+          clients={clients}
+          services={services}
+          preselectedAppointment={preselectedAppointmentForInvoice}
+          preselectedClient={preselectedClientForInvoice}
+          invoiceToEdit={invoiceToEdit}
+        />
 
-      <InvoiceModal
-        invoice={selectedInvoice}
-        settings={settings}
-        isOpen={isInvoiceDetailOpen}
-        onClose={() => setIsInvoiceDetailOpen(false)}
-        onMarkPaid={handleMarkPaid}
-        onUpdateStatus={handleSaveInvoice}
-        onOpenPublicInvoice={(inv) => {
-          setSelectedInvoice(inv);
-          setTab('publicInvoice');
-        }}
-      />
+        <InvoiceModal
+          invoice={selectedInvoice}
+          settings={settings}
+          isOpen={isInvoiceDetailOpen}
+          onClose={() => setIsInvoiceDetailOpen(false)}
+          onMarkPaid={handleMarkPaid}
+          onUpdateStatus={handleSaveInvoice}
+          onOpenPublicInvoice={(inv) => {
+            setSelectedInvoice(inv);
+            setTab('publicInvoice');
+          }}
+        />
 
-      <ClientDetailDrawer
-        client={selectedClient}
-        appointments={appointments}
-        invoices={invoices}
-        isOpen={isClientDetailOpen}
-        onClose={() => setIsClientDetailOpen(false)}
-        onEditClient={openEditClient}
-        onDeleteClient={handleDeleteClient}
-        onBookAppointment={(c) => {
-          setIsClientDetailOpen(false);
-          openNewAppointment(c);
-        }}
-        onOpenInvoice={(inv) => {
-          setIsClientDetailOpen(false);
-          openInvoiceDetail(inv);
-        }}
-        onCreateInvoice={(c) => {
-          setIsClientDetailOpen(false);
-          openNewInvoice(c);
-        }}
-        onOpenMessageModal={(c) => openQuickMessage(c)}
-        onOpenAftercareModal={(c, apt) => openAftercareModal(c, apt)}
-      />
+        <ClientDetailDrawer
+          client={selectedClient}
+          appointments={appointments}
+          invoices={invoices}
+          isOpen={isClientDetailOpen}
+          onClose={() => setIsClientDetailOpen(false)}
+          onEditClient={openEditClient}
+          onDeleteClient={handleDeleteClient}
+          onBookAppointment={(c) => {
+            setIsClientDetailOpen(false);
+            openNewAppointment(c);
+          }}
+          onOpenInvoice={(inv) => {
+            setIsClientDetailOpen(false);
+            openInvoiceDetail(inv);
+          }}
+          onCreateInvoice={(c) => {
+            setIsClientDetailOpen(false);
+            openNewInvoice(c);
+          }}
+          onOpenMessageModal={(c) => openQuickMessage(c)}
+          onOpenAftercareModal={(c, apt) => openAftercareModal(c, apt)}
+        />
 
-      <AftercareCardModal
-        isOpen={isAftercareModalOpen}
-        onClose={() => setIsAftercareModalOpen(false)}
-        client={aftercareClient}
-        appointment={aftercareAppointment}
-        settings={settings}
-        onAddToast={addToast}
-      />
+        <AftercareCardModal
+          isOpen={isAftercareModalOpen}
+          onClose={() => setIsAftercareModalOpen(false)}
+          client={aftercareClient}
+          appointment={aftercareAppointment}
+          settings={settings}
+          onAddToast={addToast}
+        />
 
-      <QuickMessageModal
-        isOpen={isQuickMessageOpen}
-        onClose={() => setIsQuickMessageOpen(false)}
-        client={quickMessageClient}
-        appointment={quickMessageAppointment}
-        settings={settings}
-      />
+        <QuickMessageModal
+          isOpen={isQuickMessageOpen}
+          onClose={() => setIsQuickMessageOpen(false)}
+          client={quickMessageClient}
+          appointment={quickMessageAppointment}
+          settings={settings}
+        />
 
-      <QrModal
-        isOpen={isQrModalOpen}
-        onClose={() => setIsQrModalOpen(false)}
-        settings={settings}
-        onTestAlert={handleTestAlert}
-      />
+        <QrModal
+          isOpen={isQrModalOpen}
+          onClose={() => setIsQrModalOpen(false)}
+          settings={settings}
+          onTestAlert={handleTestAlert}
+        />
 
-      <CommandPalette
-        isOpen={isCommandPaletteOpen}
-        onClose={() => setIsCommandPaletteOpen(false)}
-        clients={clients}
-        appointments={appointments}
-        invoices={invoices}
-        onSelectClient={openClientProfile}
-        onSelectAppointment={() => setTab('appointments')}
-        onSelectInvoice={openInvoiceDetail}
-        onAction={(actId) => {
-          if (actId === 'new_apt') openNewAppointment(null);
-          else if (actId === 'new_client') openNewClient();
-          else if (actId === 'new_invoice') openNewInvoice(null);
-          else if (actId === 'giftcards') setTab('giftcards');
-          else if (actId === 'catalogue_manager') setTab('catalogueManager');
-          else if (actId === 'view_catalogue') {
-            window.location.hash = '#catalogue';
-            setTabState('catalogue');
-          }
-          else if (actId === 'repairs_queue') setTab('appointments');
-          else if (actId === 'aftercare') openAftercareModal(clients[0] || null, appointments[0] || null);
-          else if (actId === 'inventory' || actId === 'sanitization') setTab('inventory');
-          else if (actId === 'restock_alert') handleSendInventoryAlert();
-          else if (actId === 'customizer') setTab('customizer');
-          else if (actId === 'portal') setTab('clientWebsite');
-          else if (actId === 'test_phone') handleTestAlert();
-          else if (actId === 'export_csv') {
-            window.location.href = '/api/backup/invoices-csv';
-          }
-        }}
-      />
+        <CommandPalette
+          isOpen={isCommandPaletteOpen}
+          onClose={() => setIsCommandPaletteOpen(false)}
+          clients={clients}
+          appointments={appointments}
+          invoices={invoices}
+          onSelectClient={openClientProfile}
+          onSelectAppointment={() => setTab('appointments')}
+          onSelectInvoice={openInvoiceDetail}
+          onAction={(actId) => {
+            if (actId === 'new_apt') openNewAppointment(null);
+            else if (actId === 'new_client') openNewClient();
+            else if (actId === 'new_invoice') openNewInvoice(null);
+            else if (actId === 'giftcards') setTab('giftcards');
+            else if (actId === 'catalogue_manager') setTab('catalogueManager');
+            else if (actId === 'view_catalogue') {
+              window.location.hash = '#catalogue';
+              setTabState('catalogue');
+            }
+            else if (actId === 'repairs_queue') setTab('appointments');
+            else if (actId === 'aftercare') openAftercareModal(clients[0] || null, appointments[0] || null);
+            else if (actId === 'inventory' || actId === 'sanitization') setTab('inventory');
+            else if (actId === 'restock_alert') handleSendInventoryAlert();
+            else if (actId === 'customizer') setTab('customizer');
+            else if (actId === 'portal') setTab('clientWebsite');
+            else if (actId === 'test_phone') handleTestAlert();
+            else if (actId === 'export_csv') {
+              window.location.href = '/api/backup/invoices-csv';
+            }
+          }}
+        />
 
-      {/* Mobile-First Bottom Navigation Bar */}
-      <MobileBottomNav
-        currentTab={currentTab}
-        setTab={setTab}
-        counts={{
-          todayAppointments: todayAppointments.length,
-          pendingAppointments: pendingAppointments.length,
-          unpaidInvoices: unpaidInvoices.length,
-          lowStockCount: inventory.filter(
-            (i) => (Number(i.quantity) || 0) <= (Number(i.minThreshold) || 0)
-          ).length,
-          pendingRepairs: repairs.filter((r) => r.status === 'Pending Squeeze-in').length
-        }}
-        onOpenQuickAction={() => setIsMobileQuickActionOpen(true)}
-        onOpenHubSheet={() => setIsMobileHubSheetOpen(true)}
-      />
+        {/* Mobile-First Bottom Navigation Bar */}
+        <MobileBottomNav
+          currentTab={currentTab}
+          setTab={setTab}
+          counts={{
+            todayAppointments: todayAppointments.length,
+            pendingAppointments: pendingAppointments.length,
+            unpaidInvoices: unpaidInvoices.length,
+            lowStockCount: inventory.filter(
+              (i) => (Number(i.quantity) || 0) <= (Number(i.minThreshold) || 0)
+            ).length,
+            pendingRepairs: repairs.filter((r) => r.status === 'Pending Squeeze-in').length
+          }}
+          onOpenQuickAction={() => setIsMobileQuickActionOpen(true)}
+          onOpenHubSheet={() => setIsMobileHubSheetOpen(true)}
+        />
 
-      {/* Mobile Center Quick Action Bottom Sheet */}
-      <MobileQuickActionSheet
-        isOpen={isMobileQuickActionOpen}
-        onClose={() => setIsMobileQuickActionOpen(false)}
-        onOpenNewAppointment={() => openNewAppointment(null)}
-        onOpenNewClient={openNewClient}
-        onOpenNewInvoice={() => openNewInvoice(null)}
-        onOpenRepairQueue={() => setTab('appointments')}
-        onOpenGiftCard={() => setTab('giftcards')}
-        onOpenQrModal={() => setIsQrModalOpen(true)}
-        onOpenShareCatalogue={() => setIsShareCatalogueOpen(true)}
-      />
+        {/* Mobile Center Quick Action Bottom Sheet */}
+        <MobileQuickActionSheet
+          isOpen={isMobileQuickActionOpen}
+          onClose={() => setIsMobileQuickActionOpen(false)}
+          onOpenNewAppointment={() => openNewAppointment(null)}
+          onOpenNewClient={openNewClient}
+          onOpenNewInvoice={() => openNewInvoice(null)}
+          onOpenRepairQueue={() => setTab('appointments')}
+          onOpenGiftCard={() => setTab('giftcards')}
+          onOpenQrModal={() => setIsQrModalOpen(true)}
+          onOpenShareCatalogue={() => setIsShareCatalogueOpen(true)}
+        />
 
-      {/* Mobile Studio Hub Bottom Sheet */}
-      <MobileStudioHubSheet
-        isOpen={isMobileHubSheetOpen}
-        onClose={() => setIsMobileHubSheetOpen(false)}
-        setTab={setTab}
-        counts={{
-          todayAppointments: todayAppointments.length,
-          unpaidInvoices: unpaidInvoices.length,
-          lowStockCount: inventory.filter(
-            (i) => (Number(i.quantity) || 0) <= (Number(i.minThreshold) || 0)
-          ).length,
-          pendingRepairs: repairs.filter((r) => r.status === 'Pending Squeeze-in').length
-        }}
-        onOpenQrModal={() => setIsQrModalOpen(true)}
-      />
+        {/* Mobile Studio Hub Bottom Sheet */}
+        <MobileStudioHubSheet
+          isOpen={isMobileHubSheetOpen}
+          onClose={() => setIsMobileHubSheetOpen(false)}
+          setTab={setTab}
+          counts={{
+            todayAppointments: todayAppointments.length,
+            unpaidInvoices: unpaidInvoices.length,
+            lowStockCount: inventory.filter(
+              (i) => (Number(i.quantity) || 0) <= (Number(i.minThreshold) || 0)
+            ).length,
+            pendingRepairs: repairs.filter((r) => r.status === 'Pending Squeeze-in').length
+          }}
+          onOpenQrModal={() => setIsQrModalOpen(true)}
+        />
 
-      {/* Studio Passcode Gate Modal (nbs0812) */}
-      <PasscodeModal
-        isOpen={isPasscodeModalOpen}
-        onClose={() => setIsPasscodeModalOpen(false)}
-        onSuccess={handleAuthSuccess}
-        settings={settings}
-      />
+        {/* Studio Passcode Gate Modal (nbs0812) */}
+        <PasscodeModal
+          isOpen={isPasscodeModalOpen}
+          onClose={() => setIsPasscodeModalOpen(false)}
+          onSuccess={handleAuthSuccess}
+          settings={settings}
+        />
 
-      {/* Share Catalogue Modal */}
-      <ShareCatalogueModal
-        isOpen={isShareCatalogueOpen}
-        onClose={() => setIsShareCatalogueOpen(false)}
-        settings={settings}
-        onAddToast={addToast}
-      />
+        {/* Share Catalogue Modal */}
+        <ShareCatalogueModal
+          isOpen={isShareCatalogueOpen}
+          onClose={() => setIsShareCatalogueOpen(false)}
+          settings={settings}
+          onAddToast={addToast}
+        />
       </Suspense>
     </div>
   );
