@@ -251,6 +251,14 @@ export default function NewAppointmentModal({
       return;
     }
 
+    const pad = (n) => String(n).padStart(2, '0');
+    const [y, m, d] = (date || '').split('-').map(Number);
+    const [h, min] = (time || '12:00').split(':').map(Number);
+    const targetMs = new Date(`${y}-${pad(m)}-${pad(d)}T${pad(h)}:${pad(min || 0)}:00+05:30`).getTime();
+    const isFutureSlot = targetMs > Date.now();
+    const isRescheduled = appointmentToEdit && (appointmentToEdit.date !== date || appointmentToEdit.time !== time);
+    const resetToConfirmed = isRescheduled && isFutureSlot;
+
     onSave({
       ...(appointmentToEdit?.id ? { id: appointmentToEdit.id } : {}),
       clientId,
@@ -275,11 +283,11 @@ export default function NewAppointmentModal({
       remind24h,
       remind4h,
       remind1h,
-      reminded24h: appointmentToEdit?.reminded24h || false,
-      reminded4h: appointmentToEdit?.reminded4h || false,
-      reminded1h: appointmentToEdit?.reminded1h || false,
+      reminded24h: resetToConfirmed ? false : (appointmentToEdit?.reminded24h || false),
+      reminded4h: resetToConfirmed ? false : (appointmentToEdit?.reminded4h || false),
+      reminded1h: resetToConfirmed ? false : (appointmentToEdit?.reminded1h || false),
       notifyImmediate,
-      status: appointmentToEdit ? appointmentToEdit.status : 'Confirmed'
+      status: resetToConfirmed ? 'Confirmed' : (appointmentToEdit ? appointmentToEdit.status : 'Confirmed')
     });
   };
 

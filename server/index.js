@@ -31,6 +31,46 @@ function getKolkataDateString() {
   return formatter.format(new Date());
 }
 
+// Automatically marks appointments as Completed/Done when their scheduled time arrives
+function autoUpdatePassedAppointments(appointments = db.getAppointments()) {
+  const nowMs = Date.now();
+  let changed = false;
+
+  for (const apt of appointments) {
+    if (apt.status === 'Confirmed' && apt.date && apt.time) {
+      const [y, m, d] = apt.date.split('-').map(Number);
+      const [hour, min] = apt.time.split(':').map(Number);
+      if (!y || !m || !d || isNaN(hour)) continue;
+
+      const pad = (n) => String(n).padStart(2, '0');
+      const aptIso = `${y}-${pad(m)}-${pad(d)}T${pad(hour)}:${pad(min || 0)}:00+05:30`;
+      const aptTimeMs = new Date(aptIso).getTime();
+      if (isNaN(aptTimeMs)) continue;
+
+      // When appointment scheduled time arrives or has passed
+      if (nowMs >= aptTimeMs) {
+        console.log(`[Auto-Complete] Marking appointment Done as scheduled time hit: ${apt.clientName} at ${apt.time} on ${apt.date}`);
+        apt.status = 'Completed';
+        apt.completedAt = apt.completedAt || new Date().toISOString();
+        apt.autoCompleted = true;
+        apt.updatedAt = new Date().toISOString();
+        db.saveAppointment(apt);
+        changed = true;
+
+        if (apt.clientId) {
+          const client = db.getClientById(apt.clientId);
+          if (client) {
+            client.totalVisits = (client.totalVisits || 0) + 1;
+            client.totalSpent = (client.totalSpent || 0) + (Number(apt.price) || 0);
+            db.saveClient(client);
+          }
+        }
+      }
+    }
+  }
+  return changed ? db.getAppointments() : appointments;
+}
+
 // Studio Hub Owner Authentication Middleware
 function isValidToken(token) {
   if (!token || typeof token !== 'string') return false;
@@ -75,7 +115,7 @@ app.post('/api/auth/verify', (req, res) => {
 // Studio Overview / Dashboard stats
 app.get('/api/overview', requireAuth, (req, res) => {
   const clients = db.getClients();
-  const appointments = db.getAppointments();
+  const appointments = autoUpdatePassedAppointments();
   const invoices = db.getInvoices();
   const notifications = db.getNotifications();
   const settings = db.getSettings();
@@ -177,7 +217,7 @@ app.delete('/api/services/:id', requireAuth, (req, res) => {
 
 // Appointments API (POST is public for clients; listing/updating requires auth)
 app.get('/api/appointments', requireAuth, (req, res) => {
-  const apts = db.getAppointments();
+  const apts = autoUpdatePassedAppointments();
   res.json(apts);
 });
 
@@ -236,16 +276,34 @@ app.post('/api/appointments', async (req, res) => {
 app.put('/api/appointments/:id', requireAuth, (req, res) => {
   const apts = db.getAppointments();
   const existing = apts.find(a => a.id === req.params.id) || {};
+
+  // Check if appointment is being rescheduled to a new future date/time
+  const targetDate = req.body.date || existing.date;
+  const targetTime = req.body.time || existing.time;
+  let isFutureSlot = false;
+  if (targetDate && targetTime) {
+    const [y, m, d] = targetDate.split('-').map(Number);
+    const [hour, min] = targetTime.split(':').map(Number);
+    const pad = (n) => String(n).padStart(2, '0');
+    const targetMs = new Date(`${y}-${pad(m)}-${pad(d)}T${pad(hour)}:${pad(min || 0)}:00+05:30`).getTime();
+    isFutureSlot = targetMs > Date.now();
+  }
+
+  const isRescheduled = (req.body.date && req.body.date !== existing.date) || (req.body.time && req.body.time !== existing.time);
+  const resetToConfirmed = isRescheduled && isFutureSlot;
+
   const apt = db.saveAppointment({
     ...existing,
     ...req.body,
     id: req.params.id,
+    status: resetToConfirmed ? 'Confirmed' : (req.body.status || existing.status),
+    reminderSent: resetToConfirmed ? false : (req.body.reminderSent !== undefined ? req.body.reminderSent : existing.reminderSent),
     remind24h: req.body.remind24h !== undefined ? req.body.remind24h : (existing.remind24h !== undefined ? existing.remind24h : true),
     remind4h: req.body.remind4h !== undefined ? req.body.remind4h : (existing.remind4h !== undefined ? existing.remind4h : true),
     remind1h: req.body.remind1h !== undefined ? req.body.remind1h : (existing.remind1h || false),
-    reminded24h: req.body.reminded24h !== undefined ? req.body.reminded24h : (existing.reminded24h || false),
-    reminded4h: req.body.reminded4h !== undefined ? req.body.reminded4h : (existing.reminded4h || false),
-    reminded1h: req.body.reminded1h !== undefined ? req.body.reminded1h : (existing.reminded1h || false),
+    reminded24h: resetToConfirmed ? false : (req.body.reminded24h !== undefined ? req.body.reminded24h : (existing.reminded24h || false)),
+    reminded4h: resetToConfirmed ? false : (req.body.reminded4h !== undefined ? req.body.reminded4h : (existing.reminded4h || false)),
+    reminded1h: resetToConfirmed ? false : (req.body.reminded1h !== undefined ? req.body.reminded1h : (existing.reminded1h || false)),
   });
   res.json(apt);
 });
@@ -685,6 +743,9 @@ function startReminderScheduler() {
     try {
       const settings = db.getSettings();
       if (!settings.autoRemindersEnabled) return;
+
+      // Auto-mark passed appointments as Done
+      autoUpdatePassedAppointments();
 
       const appointments = db.getAppointments();
       const nowMs = Date.now();

@@ -157,10 +157,10 @@
       "address": "14 Cross Road, Dalanwala, Dehradun 248001",
       "preferredShape": "Almond",
       "notes": "Press-On Order #ORD-2026-003: Hailey Glazed Pearl Chrome (Size: S)",
-      "totalSpent": 0,
-      "totalVisits": 0,
+      "totalSpent": 1400,
+      "totalVisits": 1,
       "createdAt": "2026-11-17T16:50:57.817+00:00",
-      "updatedAt": "2026-11-17T16:50:57.817+00:00"
+      "updatedAt": "2026-11-18T10:12:17.013Z"
     },
     {
       "id": "cl_1794933305768",
@@ -234,6 +234,30 @@
     }
   ],
   "appointments": [
+    {
+      "clientName": "Sanya Malhotra",
+      "clientPhone": "+919811223344",
+      "serviceName": "Acrylic Nail Extension (Full Set)",
+      "date": "2026-11-18",
+      "time": "12:00",
+      "price": 1400,
+      "advancePaid": 500,
+      "status": "Completed",
+      "clientId": "cl_1794934257817",
+      "remind24h": true,
+      "remind4h": true,
+      "remind1h": false,
+      "reminded24h": false,
+      "reminded4h": false,
+      "reminded1h": false,
+      "id": "apt_1794996719666",
+      "reminderSent": false,
+      "lastReminderAt": null,
+      "createdAt": "2026-11-18T10:11:59.666Z",
+      "updatedAt": "2026-11-18T10:12:17.012Z",
+      "completedAt": "2026-11-18T10:12:17.012Z",
+      "autoCompleted": true
+    },
     {
       "id": "apt_1794932673409",
       "clientName": "Meera Kapoor",
@@ -312,11 +336,10 @@
       "status": "Confirmed",
       "price": 1600,
       "createdAt": "2026-11-18T09:49:03.729+00:00",
-      "updatedAt": "2026-11-18T09:50:20.881Z",
-      "reminderSent": true,
+      "updatedAt": "2026-11-18T10:09:38.475Z",
       "reminded24h": true,
-      "lastReminderAt": "2026-11-18T09:50:20.880Z",
-      "reminded4h": true
+      "reminderSent": true,
+      "lastReminderAt": "2026-11-18T10:09:38.475Z"
     }
   ],
   "invoices": [
@@ -347,6 +370,17 @@
     }
   ],
   "notifications": [
+    {
+      "type": "appointment_reminder",
+      "title": "[24h Notice] Pooja Verma - 14:00",
+      "message": "🔔 24-HOUR ADVANCE ALERT • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n👤 Client: Pooja Verma\n📞 Phone: 9876543210\n💅 Service: Russian BIAB Gel Overlay\n📅 Schedule: 2026-11-19 at 14:00\n💰 Price: ₹1,600 (Full payment at studio)\n📍 Location: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "appointmentId": "apt_1794995343729",
+      "reminderType": "24h",
+      "id": "notif_1794996578474",
+      "sentAt": "2026-11-18T10:09:38.474Z"
+    },
     {
       "type": "appointment_reminder",
       "title": "[4h Urgent Alert] Pooja Verma - 14:00",

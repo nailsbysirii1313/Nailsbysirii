@@ -23,9 +23,19 @@ import {
   User,
   ShieldCheck,
   ExternalLink,
-  MessageCircle
+  MessageCircle,
+  CalendarClock
 } from 'lucide-react';
-import { getKolkataTodayString, formatKolkataDate, STUDIO_OPENING_TIME, STUDIO_CLOSING_TIME } from '../utils/dateTime';
+import {
+  getKolkataTodayString,
+  formatKolkataDate,
+  STUDIO_OPENING_TIME,
+  STUDIO_CLOSING_TIME,
+  isAppointmentActiveInSchedule,
+  isAppointmentTimePassed,
+  isWithin12HoursAfterAppointment,
+  getRemainingGraceHours
+} from '../utils/dateTime';
 
 export default function AppointmentsView({
   appointments = [],
@@ -66,11 +76,11 @@ export default function AppointmentsView({
 
       let matchesTab = true;
       if (filterTab === 'TODAY') {
-        matchesTab = apt.date === todayStr;
+        matchesTab = isAppointmentActiveInSchedule(apt);
       } else if (filterTab === 'UPCOMING') {
-        matchesTab = apt.date >= todayStr && apt.status !== 'Completed' && apt.status !== 'Cancelled';
+        matchesTab = apt.date >= todayStr && !isAppointmentTimePassed(apt) && apt.status !== 'Completed' && apt.status !== 'Cancelled';
       } else if (filterTab === 'COMPLETED') {
-        matchesTab = apt.status === 'Completed';
+        matchesTab = apt.status === 'Completed' || isAppointmentTimePassed(apt);
       }
 
       return matchesSearch && matchesTab;
@@ -1104,17 +1114,24 @@ export default function AppointmentsView({
                                 Today
                               </span>
                             )}
-                            <select
-                              value={apt.status}
-                              onChange={(e) => onUpdateStatus && onUpdateStatus(apt.id, e.target.value)}
-                              className="px-3 py-1 rounded-full text-xs font-bold border border-border-subtle bg-studio-canvas text-text-ink cursor-pointer outline-none hover:border-brand-wine focus:ring-1 focus:ring-brand-wine"
-                            >
-                              <option value="Confirmed">Confirmed</option>
-                              <option value="In Progress">In Progress</option>
-                              <option value="Completed">Completed</option>
-                              <option value="Cancelled">Cancelled</option>
-                              <option value="No Show">No Show</option>
-                            </select>
+                            {(isAppointmentTimePassed(apt) || apt.status === 'Completed') ? (
+                              <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                                <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                                <span>Done</span>
+                              </span>
+                            ) : (
+                              <select
+                                value={apt.status}
+                                onChange={(e) => onUpdateStatus && onUpdateStatus(apt.id, e.target.value)}
+                                className="px-3 py-1 rounded-full text-xs font-bold border border-border-subtle bg-studio-canvas text-text-ink cursor-pointer outline-none hover:border-brand-wine focus:ring-1 focus:ring-brand-wine"
+                              >
+                                <option value="Confirmed">Confirmed</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Cancelled">Cancelled</option>
+                                <option value="No Show">No Show</option>
+                              </select>
+                            )}
                           </div>
 
                           <div className="flex items-center gap-3 text-xs text-text-secondary font-medium">
@@ -1124,6 +1141,13 @@ export default function AppointmentsView({
                             <span>•</span>
                             <span className="text-text-muted font-mono">{apt.clientPhone}</span>
                           </div>
+
+                          {(isAppointmentTimePassed(apt) || apt.status === 'Completed') && isWithin12HoursAfterAppointment(apt) && (
+                            <div className="flex items-center gap-1.5 text-[11px] text-emerald-800 font-medium pt-0.5">
+                              <Clock className="w-3 h-3 text-emerald-600 shrink-0" />
+                              <span>Marked Done at slot time • Vanishes in {Math.max(1, Math.ceil(getRemainingGraceHours(apt)))}h • Reschedule available</span>
+                            </div>
+                          )}
 
                           {/* Add-ons Chips */}
                           {apt.addonServiceNames && apt.addonServiceNames.length > 0 && (
@@ -1198,6 +1222,27 @@ export default function AppointmentsView({
                             <Receipt className="w-3.5 h-3.5 text-brand-wine" />
                             <span className="hidden sm:inline">Invoice</span>
                           </button>
+
+                          {/* Reschedule Button during 12h grace window OR Mark Done */}
+                          {(isAppointmentTimePassed(apt) || apt.status === 'Completed') ? (
+                            <button
+                              onClick={() => onEditAppointment && onEditAppointment(apt)}
+                              className="px-3.5 py-2 rounded-xl bg-brand-wineLight hover:bg-brand-wine hover:text-white text-brand-wine border border-brand-wine/25 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs active:scale-95 min-h-[40px]"
+                              title={`Reschedule appointment slot (Vanishes in ${Math.max(1, Math.ceil(getRemainingGraceHours(apt)))}h)`}
+                            >
+                              <CalendarClock className="w-3.5 h-3.5" />
+                              <span>Reschedule</span>
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => onUpdateStatus && onUpdateStatus(apt.id, 'Completed')}
+                              className="px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs active:scale-95 min-h-[40px]"
+                              title="Mark appointment as Done"
+                            >
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              <span>Done</span>
+                            </button>
+                          )}
 
                           {/* Edit / Update Advance */}
                           <button

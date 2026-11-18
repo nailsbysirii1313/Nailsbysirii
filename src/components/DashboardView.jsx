@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Calendar,
   Clock,
@@ -18,9 +18,18 @@ import {
   AlertTriangle,
   CheckSquare,
   Square,
-  ChevronRight
+  ChevronRight,
+  CalendarClock
 } from 'lucide-react';
-import { getKolkataTodayString, formatTime12h, formatKolkataDate } from '../utils/dateTime';
+import {
+  getKolkataTodayString,
+  formatTime12h,
+  formatKolkataDate,
+  isAppointmentTimePassed,
+  isWithin12HoursAfterAppointment,
+  isAppointmentActiveInSchedule,
+  getRemainingGraceHours
+} from '../utils/dateTime';
 
 export default function DashboardView({
   overview,
@@ -34,6 +43,8 @@ export default function DashboardView({
   onToggleChecklistItem,
   onRemindAppointment,
   onOpenNewAppointment,
+  onEditAppointment,
+  onReschedule,
   onOpenNewClient,
   onOpenNewInvoice,
   onOpenInvoiceDetail,
@@ -44,7 +55,13 @@ export default function DashboardView({
   setTab
 }) {
   const todayStr = getKolkataTodayString();
-  const todayAppointments = appointments.filter((a) => a.date === todayStr);
+  // Active schedule: includes today's bookings + completed slots that remain visible for 12 hours with reschedule option
+  const activeScheduleAppointments = useMemo(() => {
+    return appointments
+      .filter((a) => isAppointmentActiveInSchedule(a))
+      .sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+  }, [appointments]);
+  const todayAppointments = activeScheduleAppointments;
   const pendingAppointments = appointments.filter((a) => a.status === 'Confirmed');
 
   const currency = settings?.currency || '₹';
@@ -248,7 +265,7 @@ export default function DashboardView({
                 Today's Studio Schedule
               </h3>
               <p className="text-xs text-text-muted">
-                {todayAppointments.length} appointment{todayAppointments.length === 1 ? '' : 's'} scheduled for today
+                {activeScheduleAppointments.length} appointment{activeScheduleAppointments.length === 1 ? '' : 's'} scheduled for today
               </p>
             </div>
             <button
@@ -260,7 +277,7 @@ export default function DashboardView({
             </button>
           </div>
 
-          {todayAppointments.length === 0 ? (
+          {activeScheduleAppointments.length === 0 ? (
             <div className="bg-studio-surface rounded-3xl p-8 border border-border-subtle text-center space-y-3 shadow-xs">
               <div className="w-12 h-12 mx-auto rounded-full bg-studio-canvas text-brand-wine flex items-center justify-center border border-border-subtle">
                 <Calendar className="w-5 h-5" />
@@ -281,24 +298,37 @@ export default function DashboardView({
             </div>
           ) : (
             <div className="space-y-3">
-              {todayAppointments.map((apt) => {
+              {activeScheduleAppointments.map((apt) => {
                 const client = clients.find((c) => c.id === apt.clientId);
                 const depositNum = Number(apt.depositPaid || apt.advancePaid || 0);
                 const priceNum = Number(apt.price || 0);
                 const balanceDue = Math.max(0, priceNum - depositNum);
 
+                const isPassed = isAppointmentTimePassed(apt);
+                const isDone = apt.status === 'Completed' || isPassed;
+                const withinGrace = isWithin12HoursAfterAppointment(apt);
+                const remainingGraceHours = getRemainingGraceHours(apt);
+
                 return (
                   <div
                     key={apt.id}
-                    className="bg-studio-surface rounded-3xl p-5 border border-border-subtle hover:border-brand-wine/40 shadow-xs transition-all space-y-3"
+                    className={`bg-studio-surface rounded-3xl p-5 border shadow-xs transition-all space-y-3 ${
+                      isDone
+                        ? 'border-emerald-200/80 bg-emerald-50/15 hover:border-emerald-300'
+                        : 'border-border-subtle hover:border-brand-wine/40'
+                    }`}
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       {/* Left: Time & Client Details */}
                       <div className="flex items-start gap-4">
-                        <div className="w-14 h-14 rounded-2xl bg-studio-canvas border border-border-subtle flex flex-col items-center justify-center text-center shrink-0">
-                          <Clock className="w-3.5 h-3.5 text-brand-wine mb-0.5" />
-                          <span className="font-bold text-xs text-text-ink">{formatTime12h(apt.time) || apt.time}</span>
-                          <span className="text-[10px] text-text-muted font-medium">{apt.duration}m</span>
+                        <div className={`w-14 h-14 rounded-2xl border flex flex-col items-center justify-center text-center shrink-0 ${
+                          isDone
+                            ? 'bg-emerald-50/70 border-emerald-200 text-emerald-800'
+                            : 'bg-studio-canvas border-border-subtle text-text-ink'
+                        }`}>
+                          <Clock className={`w-3.5 h-3.5 mb-0.5 ${isDone ? 'text-emerald-700' : 'text-brand-wine'}`} />
+                          <span className="font-bold text-xs">{formatTime12h(apt.time) || apt.time}</span>
+                          <span className="text-[10px] text-text-muted font-medium">{apt.duration || 60}m</span>
                         </div>
 
                         <div className="space-y-1">
@@ -315,15 +345,16 @@ export default function DashboardView({
                               </span>
                             )}
                             <span
-                              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                                apt.status === 'Completed'
+                              className={`px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1 ${
+                                isDone
                                   ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                                   : apt.status === 'In Progress'
                                   ? 'bg-purple-50 text-purple-800 border border-purple-200'
                                   : 'bg-studio-canvas text-brand-wine border border-border-subtle'
                               }`}
                             >
-                              {apt.status}
+                              {isDone && <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />}
+                              <span>{isDone ? 'Done' : apt.status}</span>
                             </span>
                           </div>
 
@@ -348,6 +379,13 @@ export default function DashboardView({
                             <p className="text-xs text-text-muted italic pt-0.5 line-clamp-1">
                               Note: {apt.notes}
                             </p>
+                          )}
+
+                          {isDone && withinGrace && (
+                            <div className="flex items-center gap-1.5 text-[10px] text-emerald-800 font-medium pt-1">
+                              <Clock className="w-3 h-3 text-emerald-600 shrink-0" />
+                              <span>Marked Done at appointment time • Vanishes in {Math.max(1, Math.ceil(remainingGraceHours))}h • Reschedule available</span>
+                            </div>
                           )}
                         </div>
                       </div>
@@ -411,11 +449,21 @@ export default function DashboardView({
                             <Receipt className="w-3.5 h-3.5" />
                           </button>
 
-                          {/* Status toggle */}
-                          {apt.status !== 'Completed' && (
+                          {/* Status toggle & Reschedule Action */}
+                          {isDone ? (
+                            <button
+                              onClick={() => (onReschedule ? onReschedule(apt) : onEditAppointment && onEditAppointment(apt))}
+                              title={`Reschedule appointment slot (Vanishes from active board in ${Math.max(1, Math.ceil(remainingGraceHours))}h)`}
+                              className="px-3 py-1.5 rounded-xl bg-studio-wineLight hover:bg-studio-wine hover:text-white text-studio-wine border border-studio-wine/30 text-[11px] font-semibold transition-all shadow-xs flex items-center gap-1.5 active:scale-95 min-h-[36px]"
+                            >
+                              <CalendarClock className="w-3.5 h-3.5" />
+                              <span>Reschedule</span>
+                            </button>
+                          ) : (
                             <button
                               onClick={() => onUpdateAppointmentStatus(apt.id, 'Completed')}
                               className="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-semibold transition-all shadow-xs flex items-center gap-1 active:scale-95 min-h-[36px]"
+                              title="Mark appointment as Done"
                             >
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               <span>Done</span>

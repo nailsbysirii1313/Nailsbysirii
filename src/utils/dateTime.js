@@ -114,3 +114,78 @@ export function getAvailableSlotsForDuration(durationMinutes = 60, slots = STAND
     return startMins >= timeToMinutes(STUDIO_OPENING_TIME) && (startMins + durationMinutes) <= closingMinutes;
   });
 }
+
+/**
+ * Convert appointment date & time to Unix milliseconds (Asia/Kolkata)
+ */
+export function getAppointmentTimeMs(apt) {
+  if (!apt || !apt.date) return null;
+  const timeStr = apt.time || '12:00';
+  const [y, m, d] = apt.date.split('-').map(Number);
+  const [h, min] = timeStr.split(':').map(Number);
+  if (!y || !m || !d || isNaN(h)) return null;
+
+  const pad = (n) => String(n).padStart(2, '0');
+  const iso = `${y}-${pad(m)}-${pad(d)}T${pad(h)}:${pad(min || 0)}:00+05:30`;
+  const time = new Date(iso).getTime();
+  return isNaN(time) ? null : time;
+}
+
+/**
+ * Checks if appointment scheduled time has arrived/passed
+ */
+export function isAppointmentTimePassed(apt, now = new Date()) {
+  const timeMs = getAppointmentTimeMs(apt);
+  if (!timeMs) return false;
+  return now.getTime() >= timeMs;
+}
+
+/**
+ * Returns elapsed hours since the appointment scheduled time
+ */
+export function getAppointmentElapsedHours(apt, now = new Date()) {
+  const timeMs = getAppointmentTimeMs(apt);
+  if (!timeMs) return -999;
+  return (now.getTime() - timeMs) / (1000 * 60 * 60);
+}
+
+/**
+ * Checks if appointment is within the 12-hour grace period after hitting its scheduled time
+ */
+export function isWithin12HoursAfterAppointment(apt, now = new Date()) {
+  const elapsed = getAppointmentElapsedHours(apt, now);
+  return elapsed >= 0 && elapsed <= 12;
+}
+
+/**
+ * Checks if appointment should be visible in the active today/studio schedule board:
+ * 1. Future appointment scheduled for today, OR
+ * 2. Past appointment whose scheduled time arrived, but less than or equal to 12 hours ago!
+ * (Once > 12 hours have elapsed, it vanishes from the active schedule view)
+ */
+export function isAppointmentActiveInSchedule(apt, now = new Date()) {
+  const timeMs = getAppointmentTimeMs(apt);
+  if (!timeMs) return false;
+  const nowMs = now.getTime();
+  const diffMs = timeMs - nowMs;
+  const elapsedHours = (nowMs - timeMs) / (1000 * 60 * 60);
+
+  // Future appointment:
+  if (diffMs > 0) {
+    const todayStr = getKolkataDateString(now);
+    return apt.date === todayStr;
+  }
+
+  // Appointment time has arrived/passed:
+  // Must stay visible for 12 hours, then vanish!
+  return elapsedHours <= 12;
+}
+
+/**
+ * Returns hours remaining in the 12-hour grace window
+ */
+export function getRemainingGraceHours(apt, now = new Date()) {
+  const elapsed = getAppointmentElapsedHours(apt, now);
+  if (elapsed < 0 || elapsed > 12) return 0;
+  return Math.max(0, 12 - elapsed);
+}

@@ -1245,6 +1245,8 @@ export default function App() {
                   onToggleChecklistItem={handleToggleChecklistItem}
                   onRemindAppointment={handleRemindAppointment}
                   onOpenNewAppointment={() => openNewAppointment(null)}
+                  onEditAppointment={openEditAppointment}
+                  onReschedule={openEditAppointment}
                   onOpenNewClient={openNewClient}
                   onOpenNewInvoice={openNewInvoice}
                   onOpenInvoiceDetail={openInvoiceDetail}
