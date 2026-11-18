@@ -57,6 +57,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { InstagramIcon } from './Icons';
 import StudioLogo from './StudioLogo';
 import ModalPortal from './ModalPortal';
+import InteractiveHeroCardFan from './InteractiveHeroCardFan';
 
 // Lazy-load modal dialogs triggered only on specific user clicks
 const EmergencyRepairModal = React.lazy(() => import('./EmergencyRepairModal'));
@@ -1265,121 +1266,15 @@ export default function ClientWebsite({
             Simple, sparkly, or something totally you. Let’s find your next look.
           </p>
 
-          {/* 4. Interactive nail-card fan with Real Photography */}
-          <div className="relative w-full max-w-[320px] sm:max-w-[360px] h-[260px] sm:h-[285px] flex items-center justify-center my-1 select-none">
-            {/* Soft pink ambient blur aura */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10" aria-hidden="true">
-              <div className="w-[300px] h-[230px] rounded-full bg-gradient-to-tr from-pink-300/30 via-rose-200/25 to-pink-100/20 blur-3xl" />
-            </div>
-
-            {/* Three Overlapping Cards with Real Photography */}
-            {heroCards.map((style, idx) => {
-              const isFront = activeHeroStyle === style.id;
-              const activeIdx = heroCards.findIndex(s => s.id === activeHeroStyle);
-              const thisIdx = idx;
-              const diff = (thisIdx - (activeIdx >= 0 ? activeIdx : 0) + heroCards.length) % heroCards.length;
-
-              let positionClass = '';
-              if (isFront) {
-                positionClass = 'z-20 scale-100 rotate-0 translate-x-0 shadow-float border-studio-wine/40 ring-4 ring-studio-wine/10 opacity-100';
-              } else if (diff === 1) {
-                positionClass = 'z-10 scale-[0.88] rotate-[8deg] translate-x-[54px] sm:translate-x-[68px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
-              } else {
-                positionClass = 'z-10 scale-[0.88] -rotate-[8deg] -translate-x-[54px] sm:-translate-x-[68px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
-              }
-
-              const fallbackImg = idx === 0 ? '/hero/soft-simple.jpg' : idx === 1 ? '/hero/little-sparkle.jpg' : '/hero/make-statement.jpg';
-              const cardImage = style.imageUrl || fallbackImg;
-
-              return (
-                <div
-                  key={style.id || idx}
-                  onClick={() => setActiveHeroStyle(style.id)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setActiveHeroStyle(style.id);
-                    }
-                  }}
-                  role="button"
-                  tabIndex={0}
-                  aria-pressed={isFront}
-                  aria-label={`Select ${style.label} look`}
-                  className={`absolute w-[165px] sm:w-[185px] h-[250px] sm:h-[272px] rounded-[22px] bg-white border overflow-hidden flex flex-col justify-between transition-all duration-[320ms] ease-out outline-none focus-visible:ring-2 focus-visible:ring-studio-wine ${positionClass}`}
-                >
-                  {/* Photo area */}
-                  <div className="relative w-full h-[62%] overflow-hidden bg-studio-canvas group">
-                    <img
-                      src={cardImage}
-                      alt={style.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="eager"
-                      decoding="async"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/25 pointer-events-none" />
-
-                    <div className="absolute top-2.5 left-2.5 z-10">
-                      <span className="text-[9px] font-extrabold uppercase tracking-wider text-white bg-black/50 backdrop-blur-md border border-white/25 px-2 py-0.5 rounded-full shadow-xs">
-                        {style.tag || 'Trending'}
-                      </span>
-                    </div>
-
-                    <div className="absolute bottom-2 right-2.5 z-10">
-                      <span className="text-[9px] font-bold text-white bg-studio-wine/90 backdrop-blur-md px-2 py-0.5 rounded-full shadow-xs">
-                        {style.shape} • {style.length}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Card Details (Solid Opaque White Background) */}
-                  <div className="p-2.5 sm:p-3 bg-white flex-1 flex flex-col justify-center text-left border-t border-border-subtle/50 relative z-10">
-                    <div className="flex items-center justify-between gap-1">
-                      <h4 className="font-sans font-bold text-xs sm:text-[13px] text-studio-ink leading-tight truncate">
-                        {style.title}
-                      </h4>
-                      <Heart className="w-3.5 h-3.5 text-studio-wine fill-studio-wine/15 group-hover:fill-studio-wine transition-colors shrink-0" />
-                    </div>
-                    <p className="text-[10px] text-studio-secondary line-clamp-1 mt-0.5 leading-snug">
-                      {style.subtitle}
-                    </p>
-                  </div>
-
-                  {/* Glint on front card */}
-                  {isFront && (
-                    <div className="absolute inset-0 pointer-events-none rounded-[22px] overflow-hidden z-20" aria-hidden="true">
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent animate-hero-shine" />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* 5. Three style buttons with hint */}
-          <div className="space-y-2 w-full pt-1">
-            <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-studio-muted">
-              <span>Pick your mood</span>
-              <Heart className="w-2.5 h-2.5 text-studio-wine fill-studio-wine shrink-0" />
-              <span className="text-[10px] text-studio-wine lowercase font-normal">tap to switch</span>
-            </div>
-            <div className="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap">
-              {heroCards.map((style) => {
-                const isSelected = activeHeroStyle === style.id;
-                return (
-                  <button
-                    key={style.id}
-                    onClick={() => setActiveHeroStyle(style.id)}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 ${isSelected
-                      ? 'bg-studio-wine text-white shadow-studio font-bold scale-105'
-                      : 'bg-white border border-studio-border text-studio-secondary hover:text-studio-ink hover:border-studio-wine/40'
-                      }`}
-                  >
-                    {style.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          {/* 4. Smooth Finger-Slidable & Interactive Hero Card Deck */}
+          <InteractiveHeroCardFan
+            heroCards={heroCards}
+            activeHeroStyle={activeHeroStyle}
+            setActiveHeroStyle={setActiveHeroStyle}
+            onBookHeroStyle={handleBookHeroStyle}
+            onAddToast={onAddToast}
+            className="my-1"
+          />
 
           {/* 6. Primary booking button & 7. Secondary nail-ideas link */}
           <div className="w-full pt-2 flex flex-col items-center gap-3">
@@ -1442,122 +1337,15 @@ export default function ClientWebsite({
             </div>
           </div>
 
-          {/* Right Column: Card Fan & Style Buttons */}
-          <div className="lg:col-span-6 flex flex-col items-center justify-center space-y-5">
-            <div className="relative w-full max-w-[390px] h-[290px] flex items-center justify-center select-none">
-              {/* Soft pink ambient blur aura */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10" aria-hidden="true">
-                <div className="w-[360px] h-[250px] rounded-full bg-gradient-to-tr from-pink-300/30 via-rose-200/25 to-pink-100/20 blur-3xl" />
-              </div>
-
-              {/* Three Overlapping Cards with Real Photography */}
-              {heroCards.map((style, idx) => {
-                const isFront = activeHeroStyle === style.id;
-                const activeIdx = heroCards.findIndex(s => s.id === activeHeroStyle);
-                const thisIdx = idx;
-                const diff = (thisIdx - (activeIdx >= 0 ? activeIdx : 0) + heroCards.length) % heroCards.length;
-
-                let positionClass = '';
-                if (isFront) {
-                  positionClass = 'z-20 scale-100 rotate-0 translate-x-0 shadow-float border-studio-wine/40 ring-4 ring-studio-wine/10 opacity-100';
-                } else if (diff === 1) {
-                  positionClass = 'z-10 scale-[0.88] rotate-[8deg] translate-x-[76px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
-                } else {
-                  positionClass = 'z-10 scale-[0.88] -rotate-[8deg] -translate-x-[76px] shadow-sm border-studio-border opacity-85 hover:opacity-100 cursor-pointer';
-                }
-
-                const fallbackImg = idx === 0 ? '/hero/soft-simple.jpg' : idx === 1 ? '/hero/little-sparkle.jpg' : '/hero/make-statement.jpg';
-                const cardImage = style.imageUrl || fallbackImg;
-
-                return (
-                  <div
-                    key={style.id || idx}
-                    onClick={() => setActiveHeroStyle(style.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setActiveHeroStyle(style.id);
-                      }
-                    }}
-                    role="button"
-                    tabIndex={0}
-                    aria-pressed={isFront}
-                    aria-label={`Select ${style.label} look`}
-                    className={`absolute w-[185px] h-[270px] rounded-[22px] bg-white border overflow-hidden flex flex-col justify-between transition-all duration-[320ms] ease-out outline-none focus-visible:ring-2 focus-visible:ring-studio-wine ${positionClass}`}
-                  >
-                    {/* Photo area */}
-                    <div className="relative w-full h-[62%] overflow-hidden bg-studio-canvas group">
-                      <img
-                        src={cardImage}
-                        alt={style.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        loading="eager"
-                        decoding="async"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/25 pointer-events-none" />
-
-                      <div className="absolute top-2.5 left-2.5 z-10">
-                        <span className="text-[9px] font-extrabold uppercase tracking-wider text-white bg-black/50 backdrop-blur-md border border-white/25 px-2 py-0.5 rounded-full shadow-xs">
-                          {style.tag || 'Trending'}
-                        </span>
-                      </div>
-
-                      <div className="absolute bottom-2 right-2.5 z-10">
-                        <span className="text-[9px] font-bold text-white bg-studio-wine/90 backdrop-blur-md px-2 py-0.5 rounded-full shadow-xs">
-                          {style.shape} • {style.length}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Card Details (Solid Opaque White Background) */}
-                    <div className="p-3 bg-white flex-1 flex flex-col justify-center text-left border-t border-border-subtle/50 relative z-10">
-                      <div className="flex items-center justify-between gap-1">
-                        <h4 className="font-sans font-bold text-xs sm:text-[13px] text-studio-ink leading-tight truncate">
-                          {style.title}
-                        </h4>
-                        <Heart className="w-3.5 h-3.5 text-studio-wine fill-studio-wine/15 group-hover:fill-studio-wine transition-colors shrink-0" />
-                      </div>
-                      <p className="text-[10px] text-studio-secondary line-clamp-1 mt-0.5 leading-snug">
-                        {style.subtitle}
-                      </p>
-                    </div>
-
-                    {/* Glint on front card */}
-                    {isFront && (
-                      <div className="absolute inset-0 pointer-events-none rounded-[22px] overflow-hidden z-20" aria-hidden="true">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent animate-hero-shine" />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Style Buttons with Hint */}
-            <div className="space-y-2 text-center w-full">
-              <div className="flex items-center justify-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-studio-muted">
-                <span>Pick your mood</span>
-                <Heart className="w-2.5 h-2.5 text-studio-wine fill-studio-wine shrink-0" />
-                <span className="text-[10px] text-studio-wine lowercase font-normal">tap to switch</span>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                {heroCards.map((style) => {
-                  const isSelected = activeHeroStyle === style.id;
-                  return (
-                    <button
-                      key={style.id}
-                      onClick={() => setActiveHeroStyle(style.id)}
-                      className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 ${isSelected
-                        ? 'bg-studio-wine text-white shadow-studio font-bold scale-105'
-                        : 'bg-white border border-studio-border text-studio-secondary hover:text-studio-ink hover:border-studio-wine/40'
-                        }`}
-                    >
-                      {style.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+          {/* Right Column: Smooth Finger-Slidable & Interactive Hero Card Deck */}
+          <div className="lg:col-span-6 flex flex-col items-center justify-center">
+            <InteractiveHeroCardFan
+              heroCards={heroCards}
+              activeHeroStyle={activeHeroStyle}
+              setActiveHeroStyle={setActiveHeroStyle}
+              onBookHeroStyle={handleBookHeroStyle}
+              onAddToast={onAddToast}
+            />
           </div>
         </div>
       </section>

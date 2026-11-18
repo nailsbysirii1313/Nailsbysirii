@@ -303,7 +303,7 @@ export default function App() {
           } else if (type === 'REFRESH_CATALOGUE') {
             api.getCatalogueDesigns().then((designs) => {
               if (Array.isArray(designs)) setCatalogueDesigns(designs);
-            }).catch(() => {});
+            }).catch(() => { });
           }
         };
       }
@@ -325,7 +325,7 @@ export default function App() {
           } else if (type === 'CATALOGUE_DELETED' && payload?.id) {
             setCatalogueDesigns((prev) => prev.filter((d) => d.id !== payload.id));
           }
-        } catch (err) {}
+        } catch (err) { }
       }
     };
 
