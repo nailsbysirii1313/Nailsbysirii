@@ -256,6 +256,7 @@ export default function CataloguePageView({
                       onError={() => handleImageError(item.id)}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
+                      decoding="async"
                     />
 
                     {/* Top Badges */}

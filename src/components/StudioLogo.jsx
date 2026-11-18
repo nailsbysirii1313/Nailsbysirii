@@ -46,6 +46,8 @@ export default function StudioLogo({
         <img
           src={effectiveLogoUrl}
           alt="Nails by Sirii"
+          decoding="async"
+          loading="eager"
           className={`${current.img} object-contain shrink-0 select-none ${className}`}
           onError={() => setImgError(true)}
         />
@@ -57,6 +59,8 @@ export default function StudioLogo({
         <img
           src={effectiveLogoUrl}
           alt="Nails by Sirii"
+          decoding="async"
+          loading="eager"
           className={`${current.img} object-contain shrink-0 select-none`}
           onError={() => setImgError(true)}
         />

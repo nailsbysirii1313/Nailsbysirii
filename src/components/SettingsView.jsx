@@ -392,6 +392,8 @@ export default function SettingsView({ settings, onSaveSettings }) {
                       <img
                         src={card.imageUrl}
                         alt={card.title}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     ) : (

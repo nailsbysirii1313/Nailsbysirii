@@ -56,9 +56,11 @@ import {
 import { QRCodeSVG } from 'qrcode.react';
 import { InstagramIcon } from './Icons';
 import StudioLogo from './StudioLogo';
-import EmergencyRepairModal from './EmergencyRepairModal';
-import ShareCatalogueModal from './ShareCatalogueModal';
 import ModalPortal from './ModalPortal';
+
+// Lazy-load modal dialogs triggered only on specific user clicks
+const EmergencyRepairModal = React.lazy(() => import('./EmergencyRepairModal'));
+const ShareCatalogueModal = React.lazy(() => import('./ShareCatalogueModal'));
 import confetti from 'canvas-confetti';
 import { calculateCustomSet, SHAPES, LENGTHS, BASE_COLORS, FINISHES } from '../utils/customizerCalculator';
 import { getKolkataTodayString, getKolkataTomorrowString, getAvailableSlotsForDuration, formatTime12h } from '../utils/dateTime';
@@ -1302,6 +1304,7 @@ export default function ClientWebsite({
                       alt={style.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="eager"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/25 pointer-events-none" />
 
@@ -1479,6 +1482,7 @@ export default function ClientWebsite({
                         alt={style.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         loading="eager"
+                        decoding="async"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/25 pointer-events-none" />
 
@@ -1609,6 +1613,7 @@ export default function ClientWebsite({
                       alt={item.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
+                      decoding="async"
                     />
 
                     <span className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-studio-surface/90 backdrop-blur-sm border border-studio-border text-[10px] font-semibold text-studio-secondary">
@@ -2410,20 +2415,21 @@ export default function ClientWebsite({
         </p>
       </footer>
 
-      {/* EMERGENCY REPAIR MODAL */}
-      <EmergencyRepairModal
-        isOpen={isRepairModalOpen}
-        onClose={() => setIsRepairModalOpen(false)}
-        onSubmitRepair={onSubmitRepair}
-        onAddToast={onAddToast}
-      />
+      {/* EMERGENCY REPAIR & SHARE MODALS (Lazy-Loaded) */}
+      <React.Suspense fallback={null}>
+        <EmergencyRepairModal
+          isOpen={isRepairModalOpen}
+          onClose={() => setIsRepairModalOpen(false)}
+          onSubmitRepair={onSubmitRepair}
+          onAddToast={onAddToast}
+        />
 
-      {/* SHARE CATALOGUE MODAL */}
-      <ShareCatalogueModal
-        isOpen={isShareModalOpen}
-        onClose={() => setIsShareModalOpen(false)}
-        settings={settings}
-      />
+        <ShareCatalogueModal
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
+          settings={settings}
+        />
+      </React.Suspense>
 
       {/* CLIENT REVIEW MODAL */}
       {showReviewModal && (

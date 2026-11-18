@@ -1,0 +1,19 @@
+# Nails by Sirii - Robots.txt
+# Contemporary Nail Atelier & Bespoke Extensions | Dehradun
+
+User-agent: *
+Allow: /
+Allow: /#catalogue
+Allow: /catalogue
+Allow: /#services
+Allow: /#pressons
+Allow: /#book
+Allow: /#reviews
+
+# Disallow internal API routes and private owner console
+Disallow: /api/
+Disallow: /#studio
+Disallow: /studio
+
+# XML Sitemap Location
+Sitemap: https://nailsbysirii.vercel.app/sitemap.xml

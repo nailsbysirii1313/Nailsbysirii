@@ -266,6 +266,7 @@ export default function CatalogueManagerView({
                     onError={() => setImgErrors((prev) => ({ ...prev, [item.id]: true }))}
                     className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-300"
                     loading="lazy"
+                    decoding="async"
                   />
 
                   <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-studio-surface/90 text-brand-wine text-[10px] font-bold border border-border-subtle shadow-xs">

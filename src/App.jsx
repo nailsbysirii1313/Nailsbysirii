@@ -1,44 +1,60 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { api } from './api';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Toast from './components/Toast';
-import DashboardView from './components/DashboardView';
-import ClientsView from './components/ClientsView';
-import AppointmentsView from './components/AppointmentsView';
-import InvoicesView from './components/InvoicesView';
-import ServicesView from './components/ServicesView';
-import RemindersView from './components/RemindersView';
-import SettingsView from './components/SettingsView';
-import AnalyticsView from './components/AnalyticsView';
-import InventoryView from './components/InventoryView';
-import GiftCardsView from './components/GiftCardsView';
-import PublicBookingView from './components/PublicBookingView';
-import NailCustomizerView from './components/NailCustomizerView';
-import PublicInvoiceView from './components/PublicInvoiceView';
-import QuickMessageModal from './components/QuickMessageModal';
-import NewClientModal from './components/NewClientModal';
-import NewAppointmentModal from './components/NewAppointmentModal';
-import NewInvoiceModal from './components/NewInvoiceModal';
-import InvoiceModal from './components/InvoiceModal';
-import ClientDetailDrawer from './components/ClientDetailDrawer';
-import QrModal from './components/QrModal';
-import CommandPalette from './components/CommandPalette';
-import AftercareCardModal from './components/AftercareCardModal';
-import MobileBottomNav from './components/MobileBottomNav';
-import MobileQuickActionSheet from './components/MobileQuickActionSheet';
-import MobileStudioHubSheet from './components/MobileStudioHubSheet';
 import ClientWebsite from './components/ClientWebsite';
-import PasscodeModal from './components/PasscodeModal';
-import ShareCatalogueModal from './components/ShareCatalogueModal';
-import CataloguePageView from './components/CataloguePageView';
-import CatalogueManagerView from './components/CatalogueManagerView';
-import PublicHomePilot from './components/PublicHomePilot';
-import StudioTodayPilot from './components/StudioTodayPilot';
-import PressOnsView from './components/PressOnsView';
+import MobileBottomNav from './components/MobileBottomNav';
+
+// Lazy-loaded studio views (loaded on-demand when visiting studio tabs)
+const CataloguePageView = lazy(() => import('./components/CataloguePageView'));
+const DashboardView = lazy(() => import('./components/DashboardView'));
+const ClientsView = lazy(() => import('./components/ClientsView'));
+const AppointmentsView = lazy(() => import('./components/AppointmentsView'));
+const InvoicesView = lazy(() => import('./components/InvoicesView'));
+const ServicesView = lazy(() => import('./components/ServicesView'));
+const RemindersView = lazy(() => import('./components/RemindersView'));
+const SettingsView = lazy(() => import('./components/SettingsView'));
+const AnalyticsView = lazy(() => import('./components/AnalyticsView'));
+const InventoryView = lazy(() => import('./components/InventoryView'));
+const GiftCardsView = lazy(() => import('./components/GiftCardsView'));
+const PublicBookingView = lazy(() => import('./components/PublicBookingView'));
+const NailCustomizerView = lazy(() => import('./components/NailCustomizerView'));
+const PublicInvoiceView = lazy(() => import('./components/PublicInvoiceView'));
+const CatalogueManagerView = lazy(() => import('./components/CatalogueManagerView'));
+const PublicHomePilot = lazy(() => import('./components/PublicHomePilot'));
+const StudioTodayPilot = lazy(() => import('./components/StudioTodayPilot'));
+const PressOnsView = lazy(() => import('./components/PressOnsView'));
+
+// Lazy-loaded dialogs & drawers (loaded only when triggered by user)
+const QuickMessageModal = lazy(() => import('./components/QuickMessageModal'));
+const NewClientModal = lazy(() => import('./components/NewClientModal'));
+const NewAppointmentModal = lazy(() => import('./components/NewAppointmentModal'));
+const NewInvoiceModal = lazy(() => import('./components/NewInvoiceModal'));
+const InvoiceModal = lazy(() => import('./components/InvoiceModal'));
+const ClientDetailDrawer = lazy(() => import('./components/ClientDetailDrawer'));
+const QrModal = lazy(() => import('./components/QrModal'));
+const CommandPalette = lazy(() => import('./components/CommandPalette'));
+const AftercareCardModal = lazy(() => import('./components/AftercareCardModal'));
+const MobileQuickActionSheet = lazy(() => import('./components/MobileQuickActionSheet'));
+const MobileStudioHubSheet = lazy(() => import('./components/MobileStudioHubSheet'));
+const PasscodeModal = lazy(() => import('./components/PasscodeModal'));
+const ShareCatalogueModal = lazy(() => import('./components/ShareCatalogueModal'));
+
 import { playStudioChime } from './utils/audio';
 import { customSetToInvoiceItems } from './utils/customizerCalculator';
 import { getKolkataTodayString } from './utils/dateTime';
+
+function TabSuspenseFallback() {
+  return (
+    <div className="flex flex-col items-center justify-center py-24 space-y-3 animate-fade-in">
+      <div className="w-8 h-8 rounded-full border-2 border-border-subtle border-t-studio-wine animate-spin" />
+      <p className="font-display italic text-xs text-text-muted">
+        Loading Atelier module...
+      </p>
+    </div>
+  );
+}
 
 export default function App() {
   // Authentication & Passcode protection (nbs0812)
@@ -104,6 +120,7 @@ export default function App() {
   const handleAuthSuccess = () => {
     setIsAuthenticated(true);
     setTabState(pendingTab || 'dashboard');
+    loadData(true);
     addToast('Studio Hub Unlocked', 'Welcome back, Sirii! Management console ready.', 'success');
   };
 
@@ -246,67 +263,82 @@ export default function App() {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
-  // Load All Studio Data
-  const loadData = async () => {
+  // Load Studio Data (Fast Public Hydration + On-Demand Admin Hydration)
+  const loadData = async (forceAdmin = false) => {
     try {
       setLoading(true);
-      const [
-        overviewData,
-        clientsData,
-        appointmentsData,
-        servicesData,
-        invoicesData,
-        notificationsData,
-        settingsData,
-        inventoryData,
-        checklistData,
-        repairsData,
-        giftCardsData,
-        reviewsData,
-        pressOnProductsData,
-        pressOnOrdersData,
-        catalogueDesignsData
-      ] = await Promise.all([
-        api.getOverview().catch(() => null),
-        api.getClients().catch(() => []),
-        api.getAppointments().catch(() => []),
+      const isAuth = forceAdmin || isAuthenticated;
+
+      // Always load public-facing datasets
+      const publicFetches = [
         api.getServices().catch(() => []),
-        api.getInvoices().catch(() => []),
-        api.getNotifications().catch(() => []),
         api.getSettings().catch(() => null),
-        api.getInventory().catch(() => []),
-        api.getChecklist().catch(() => []),
-        api.getRepairs().catch(() => []),
-        api.getGiftCards().catch(() => []),
         api.getReviews().catch(() => []),
         api.getPressOnProducts().catch(() => []),
-        api.getPressOnOrders().catch(() => []),
         api.getCatalogueDesigns().catch(() => [])
+      ];
+
+      // Load admin-only datasets only if authenticated
+      const adminFetches = isAuth
+        ? [
+            api.getOverview().catch(() => null),
+            api.getClients().catch(() => []),
+            api.getAppointments().catch(() => []),
+            api.getInvoices().catch(() => []),
+            api.getNotifications().catch(() => []),
+            api.getInventory().catch(() => []),
+            api.getChecklist().catch(() => []),
+            api.getRepairs().catch(() => []),
+            api.getGiftCards().catch(() => []),
+            api.getPressOnOrders().catch(() => [])
+          ]
+        : [];
+
+      const [publicResults, adminResults] = await Promise.all([
+        Promise.all(publicFetches),
+        Promise.all(adminFetches)
       ]);
 
-      if (overviewData) setOverview(overviewData);
-      setClients(clientsData);
-      setAppointments(appointmentsData);
+      const [servicesData, settingsData, reviewsData, pressOnProductsData, catalogueDesignsData] = publicResults;
       setServices(servicesData);
-      setInvoices(invoicesData);
-      setNotifications(notificationsData);
       if (settingsData) setSettings(settingsData);
-      setInventory(inventoryData);
-      setChecklist(checklistData);
-      setRepairs(repairsData);
-      setGiftCards(giftCardsData);
       setReviews(reviewsData);
       setPressOnProducts(pressOnProductsData);
-      setPressOnOrders(pressOnOrdersData);
       setCatalogueDesigns(catalogueDesignsData || []);
 
-      // Deep link to client invoice if opened with #invoice-xxx
-      if (typeof window !== 'undefined' && window.location.hash.startsWith('#invoice-')) {
-        const invId = window.location.hash.replace('#invoice-', '');
-        const target = invoicesData.find((i) => i.id === invId);
-        if (target) {
-          setSelectedInvoice(target);
-          setTabState('publicInvoice');
+      if (isAuth && adminResults.length > 0) {
+        const [
+          overviewData,
+          clientsData,
+          appointmentsData,
+          invoicesData,
+          notificationsData,
+          inventoryData,
+          checklistData,
+          repairsData,
+          giftCardsData,
+          pressOnOrdersData
+        ] = adminResults;
+
+        if (overviewData) setOverview(overviewData);
+        setClients(clientsData);
+        setAppointments(appointmentsData);
+        setInvoices(invoicesData);
+        setNotifications(notificationsData);
+        setInventory(inventoryData);
+        setChecklist(checklistData);
+        setRepairs(repairsData);
+        setGiftCards(giftCardsData);
+        setPressOnOrders(pressOnOrdersData);
+
+        // Deep link to client invoice if opened with #invoice-xxx
+        if (typeof window !== 'undefined' && window.location.hash.startsWith('#invoice-')) {
+          const invId = window.location.hash.replace('#invoice-', '');
+          const target = invoicesData.find((i) => i.id === invId);
+          if (target) {
+            setSelectedInvoice(target);
+            setTabState('publicInvoice');
+          }
         }
       }
     } catch (err) {
@@ -1040,54 +1072,56 @@ export default function App() {
         {/* Toast Notifications */}
         <Toast toasts={toasts} onDismiss={removeToast} />
 
-        <CataloguePageView
-          designs={catalogueDesigns}
-          settings={settings}
-          onGoHome={() => {
-            window.location.hash = '';
-            setTabState('clientWebsite');
-          }}
-          onSelectLook={(design) => {
-            window.location.hash = '#booking-section';
-            setTabState('clientWebsite');
-            setTimeout(() => {
-              const el = document.getElementById('booking-section') || document.getElementById('book') || document.getElementById('booking');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-          }}
-          onSelectCustomInspo={() => {
-            window.location.hash = '#booking-section';
-            setTabState('clientWebsite');
-            setTimeout(() => {
-              const el = document.getElementById('booking-section') || document.getElementById('book') || document.getElementById('booking');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-          }}
-          onBookAppointment={() => {
-            window.location.hash = '#booking-section';
-            setTabState('clientWebsite');
-            setTimeout(() => {
-              const el = document.getElementById('booking-section') || document.getElementById('book') || document.getElementById('booking');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-          }}
-        />
+        <Suspense fallback={<div className="min-h-screen bg-studio-canvas" />}>
+          <CataloguePageView
+            designs={catalogueDesigns}
+            settings={settings}
+            onGoHome={() => {
+              window.location.hash = '';
+              setTabState('clientWebsite');
+            }}
+            onSelectLook={(design) => {
+              window.location.hash = '#booking-section';
+              setTabState('clientWebsite');
+              setTimeout(() => {
+                const el = document.getElementById('booking-section') || document.getElementById('book') || document.getElementById('booking');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }}
+            onSelectCustomInspo={() => {
+              window.location.hash = '#booking-section';
+              setTabState('clientWebsite');
+              setTimeout(() => {
+                const el = document.getElementById('booking-section') || document.getElementById('book') || document.getElementById('booking');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }}
+            onBookAppointment={() => {
+              window.location.hash = '#booking-section';
+              setTabState('clientWebsite');
+              setTimeout(() => {
+                const el = document.getElementById('booking-section') || document.getElementById('book') || document.getElementById('booking');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }}
+          />
 
-        {/* Studio Passcode Gate Modal (nbs0812) */}
-        <PasscodeModal
-          isOpen={isPasscodeModalOpen}
-          onClose={() => setIsPasscodeModalOpen(false)}
-          onSuccess={handleAuthSuccess}
-          settings={settings}
-        />
+          {/* Studio Passcode Gate Modal (nbs0812) */}
+          <PasscodeModal
+            isOpen={isPasscodeModalOpen}
+            onClose={() => setIsPasscodeModalOpen(false)}
+            onSuccess={handleAuthSuccess}
+            settings={settings}
+          />
 
-        {/* Share Catalogue Modal (With & Without Prices) */}
-        <ShareCatalogueModal
-          isOpen={isShareCatalogueOpen}
-          onClose={() => setIsShareCatalogueOpen(false)}
-          settings={settings}
-          onAddToast={addToast}
-        />
+          {/* Share Catalogue Modal (With & Without Prices) */}
+          <ShareCatalogueModal
+            isOpen={isShareCatalogueOpen}
+            onClose={() => setIsShareCatalogueOpen(false)}
+            settings={settings}
+            onAddToast={addToast}
+          />
+        </Suspense>
       </div>
     );
   }
@@ -1127,20 +1161,22 @@ export default function App() {
         />
 
         {/* Studio Passcode Gate Modal (nbs0812) */}
-        <PasscodeModal
-          isOpen={isPasscodeModalOpen}
-          onClose={() => setIsPasscodeModalOpen(false)}
-          onSuccess={handleAuthSuccess}
-          settings={settings}
-        />
+        <Suspense fallback={null}>
+          <PasscodeModal
+            isOpen={isPasscodeModalOpen}
+            onClose={() => setIsPasscodeModalOpen(false)}
+            onSuccess={handleAuthSuccess}
+            settings={settings}
+          />
 
-        {/* Share Catalogue Modal (With & Without Prices) */}
-        <ShareCatalogueModal
-          isOpen={isShareCatalogueOpen}
-          onClose={() => setIsShareCatalogueOpen(false)}
-          settings={settings}
-          onAddToast={addToast}
-        />
+          {/* Share Catalogue Modal (With & Without Prices) */}
+          <ShareCatalogueModal
+            isOpen={isShareCatalogueOpen}
+            onClose={() => setIsShareCatalogueOpen(false)}
+            settings={settings}
+            onAddToast={addToast}
+          />
+        </Suspense>
       </div>
     );
   }
@@ -1194,7 +1230,7 @@ export default function App() {
               </p>
             </div>
           ) : (
-            <>
+            <Suspense fallback={<TabSuspenseFallback />}>
               {currentTab === 'dashboard' && (
                 <DashboardView
                   overview={overview}
@@ -1376,18 +1412,19 @@ export default function App() {
                   onSaveSettings={handleSaveSettings}
                 />
               )}
-            </>
+            </Suspense>
           )}
         </main>
       </div>
 
-      {/* Global Modals */}
-      <NewClientModal
-        isOpen={isNewClientOpen}
-        onClose={() => setIsNewClientOpen(false)}
-        onSave={handleSaveClient}
-        clientToEdit={clientToEdit}
-      />
+      {/* Global Modals (Lazy-Loaded) */}
+      <Suspense fallback={null}>
+        <NewClientModal
+          isOpen={isNewClientOpen}
+          onClose={() => setIsNewClientOpen(false)}
+          onSave={handleSaveClient}
+          clientToEdit={clientToEdit}
+        />
 
       <NewAppointmentModal
         isOpen={isNewAppointmentOpen}
@@ -1570,6 +1607,7 @@ export default function App() {
         settings={settings}
         onAddToast={addToast}
       />
+      </Suspense>
     </div>
   );
 }
