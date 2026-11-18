@@ -208,7 +208,13 @@ app.post('/api/appointments', async (req, res) => {
 
   const aptData = {
     ...req.body,
-    clientId: clientId || req.body.clientId
+    clientId: clientId || req.body.clientId,
+    remind24h: req.body.remind24h !== undefined ? req.body.remind24h : true,
+    remind4h: req.body.remind4h !== undefined ? req.body.remind4h : true,
+    remind1h: req.body.remind1h !== undefined ? req.body.remind1h : false,
+    reminded24h: req.body.reminded24h || false,
+    reminded4h: req.body.reminded4h || false,
+    reminded1h: req.body.reminded1h || false,
   };
   const apt = db.saveAppointment(aptData);
 
@@ -228,7 +234,19 @@ app.post('/api/appointments', async (req, res) => {
 });
 
 app.put('/api/appointments/:id', requireAuth, (req, res) => {
-  const apt = db.saveAppointment({ ...req.body, id: req.params.id });
+  const apts = db.getAppointments();
+  const existing = apts.find(a => a.id === req.params.id) || {};
+  const apt = db.saveAppointment({
+    ...existing,
+    ...req.body,
+    id: req.params.id,
+    remind24h: req.body.remind24h !== undefined ? req.body.remind24h : (existing.remind24h !== undefined ? existing.remind24h : true),
+    remind4h: req.body.remind4h !== undefined ? req.body.remind4h : (existing.remind4h !== undefined ? existing.remind4h : true),
+    remind1h: req.body.remind1h !== undefined ? req.body.remind1h : (existing.remind1h || false),
+    reminded24h: req.body.reminded24h !== undefined ? req.body.reminded24h : (existing.reminded24h || false),
+    reminded4h: req.body.reminded4h !== undefined ? req.body.reminded4h : (existing.reminded4h || false),
+    reminded1h: req.body.reminded1h !== undefined ? req.body.reminded1h : (existing.reminded1h || false),
+  });
   res.json(apt);
 });
 
@@ -266,10 +284,14 @@ app.post('/api/appointments/:id/remind', requireAuth, async (req, res) => {
   if (!appointment) return res.status(404).json({ error: 'Appointment not found' });
 
   const client = appointment.clientId ? db.getClientById(appointment.clientId) : null;
-  const result = await sendAppointmentReminder(appointment, client);
+  const reminderType = req.body.reminderType || 'manual';
+  const result = await sendAppointmentReminder(appointment, client, reminderType);
 
   // Update appointment reminder status
   appointment.reminderSent = true;
+  if (reminderType === '24h') appointment.reminded24h = true;
+  if (reminderType === '4h') appointment.reminded4h = true;
+  if (reminderType === '1h') appointment.reminded1h = true;
   appointment.lastReminderAt = new Date().toISOString();
   db.saveAppointment(appointment);
 
@@ -655,9 +677,9 @@ app.get('/api/backup/invoices-csv', requireAuth, (req, res) => {
   res.send(csvContent);
 });
 
-// Background Automated Reminder Worker
+// Background Automated Multi-Stage Reminder Worker (24h & 4h alerts)
 function startReminderScheduler() {
-  console.log('[Worker] Automated appointment reminder worker initiated (interval: 60s)');
+  console.log('[Worker] Automated appointment multi-stage reminder worker initiated (interval: 60s)');
   
   setInterval(async () => {
     try {
@@ -665,31 +687,65 @@ function startReminderScheduler() {
       if (!settings.autoRemindersEnabled) return;
 
       const appointments = db.getAppointments();
-      const now = new Date();
-      const todayStr = getKolkataDateString();
+      const nowMs = Date.now();
 
       for (const apt of appointments) {
-        if (apt.date !== todayStr) continue;
         if (apt.status !== 'Confirmed') continue;
-        if (apt.reminderSent) continue;
+        if (!apt.date || !apt.time) continue;
 
-        // Check appointment time vs current time
-        const [hours, minutes] = apt.time.split(':').map(Number);
-        const aptDateTime = new Date();
-        aptDateTime.setHours(hours, minutes, 0, 0);
+        // Parse date and time in Asia/Kolkata timezone
+        const [y, m, d] = apt.date.split('-').map(Number);
+        const [hour, min] = apt.time.split(':').map(Number);
+        if (!y || !m || !d || isNaN(hour)) continue;
 
-        const diffMinutes = (aptDateTime - now) / (1000 * 60);
-        const leadMinutes = (settings.reminderLeadHours || 2) * 60;
+        const pad = (n) => String(n).padStart(2, '0');
+        const aptIsoString = `${y}-${pad(m)}-${pad(d)}T${pad(hour)}:${pad(min || 0)}:00+05:30`;
+        const aptTimeMs = new Date(aptIsoString).getTime();
+        if (isNaN(aptTimeMs)) continue;
 
-        // If appointment is within lead time and hasn't passed by more than 15 mins
-        if (diffMinutes <= leadMinutes && diffMinutes >= -15) {
-          console.log(`[Worker] Auto-triggering reminder for ${apt.clientName} at ${apt.time}`);
-          const client = apt.clientId ? db.getClientById(apt.clientId) : null;
-          await sendAppointmentReminder(apt, client);
-          
-          apt.reminderSent = true;
-          apt.lastReminderAt = new Date().toISOString();
-          db.saveAppointment(apt);
+        const diffMs = aptTimeMs - nowMs;
+        const diffHours = diffMs / (1000 * 60 * 60);
+        const diffMinutes = diffMs / (1000 * 60);
+
+        // 1. Stage 1: 24-Hour Advance Alert
+        // Fires if enabled (default true) and appointment is between 12 and 24.5 hours away
+        if (apt.remind24h !== false && !apt.reminded24h) {
+          if (diffHours <= 24.5 && diffHours >= 12.0) {
+            console.log(`[Worker] Auto-triggering 24h reminder for ${apt.clientName} at ${apt.time} on ${apt.date}`);
+            const client = apt.clientId ? db.getClientById(apt.clientId) : null;
+            await sendAppointmentReminder(apt, client, '24h');
+            apt.reminded24h = true;
+            apt.reminderSent = true;
+            apt.lastReminderAt = new Date().toISOString();
+            db.saveAppointment(apt);
+          }
+        }
+
+        // 2. Stage 2: 4-Hour Arrival Alert
+        // Fires if enabled (default true) and appointment is between 1.5 and 4.5 hours away
+        if (apt.remind4h !== false && !apt.reminded4h) {
+          if (diffHours <= 4.5 && diffHours >= 1.5) {
+            console.log(`[Worker] Auto-triggering 4h reminder for ${apt.clientName} at ${apt.time}`);
+            const client = apt.clientId ? db.getClientById(apt.clientId) : null;
+            await sendAppointmentReminder(apt, client, '4h');
+            apt.reminded4h = true;
+            apt.reminderSent = true;
+            apt.lastReminderAt = new Date().toISOString();
+            db.saveAppointment(apt);
+          }
+        }
+
+        // 3. Stage 3: 1-Hour Final Alert (Optional)
+        if (apt.remind1h === true && !apt.reminded1h) {
+          if (diffHours <= 1.25 && diffMinutes >= -15) {
+            console.log(`[Worker] Auto-triggering 1h reminder for ${apt.clientName} at ${apt.time}`);
+            const client = apt.clientId ? db.getClientById(apt.clientId) : null;
+            await sendAppointmentReminder(apt, client, '1h');
+            apt.reminded1h = true;
+            apt.reminderSent = true;
+            apt.lastReminderAt = new Date().toISOString();
+            db.saveAppointment(apt);
+          }
         }
       }
     } catch (err) {

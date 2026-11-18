@@ -149,20 +149,6 @@
   ],
   "clients": [
     {
-      "name": "Pooja Verma",
-      "phone": "+91 98765 11223",
-      "email": "",
-      "instagram": "",
-      "address": "Rajpur Road, Dehradun 248001",
-      "preferredShape": "Almond",
-      "notes": "Press-On Order #ORD-2026-004: Hailey Glazed Pearl Chrome (Size: M)",
-      "id": "cl_1794991305278",
-      "totalVisits": 0,
-      "totalSpent": 0,
-      "createdAt": "2026-11-18T08:41:45.278Z",
-      "updatedAt": "2026-11-18T08:41:45.278Z"
-    },
-    {
       "id": "cl_1794934257817",
       "name": "Sanya Malhotra",
       "phone": "9811223344",
@@ -217,6 +203,34 @@
       "totalVisits": 0,
       "createdAt": "2026-11-17T16:24:33.404+00:00",
       "updatedAt": "2026-11-17T16:24:33.404+00:00"
+    },
+    {
+      "id": "cl_1794991305278",
+      "name": "Pooja Verma",
+      "phone": "+91 98765 11223",
+      "email": "",
+      "instagram": "",
+      "address": "Rajpur Road, Dehradun 248001",
+      "preferredShape": "Almond",
+      "notes": "Press-On Order #ORD-2026-004: Hailey Glazed Pearl Chrome (Size: M)",
+      "totalSpent": 0,
+      "totalVisits": 0,
+      "createdAt": "2026-11-18T08:41:45.278+00:00",
+      "updatedAt": "2026-11-18T08:41:45.278+00:00"
+    },
+    {
+      "id": "cl_1794992005478",
+      "name": "E2E Client Updated",
+      "phone": "+91 99999 88888",
+      "email": "",
+      "instagram": "@e2e",
+      "address": "",
+      "preferredShape": "",
+      "notes": "",
+      "totalSpent": 0,
+      "totalVisits": 0,
+      "createdAt": "2026-11-18T08:53:25.478+00:00",
+      "updatedAt": "2026-11-18T08:53:25.482+00:00"
     }
   ],
   "appointments": [
@@ -259,6 +273,50 @@
       "price": 0,
       "createdAt": "2026-11-17T16:24:33.405+00:00",
       "updatedAt": "2026-11-17T16:24:33.405+00:00"
+    },
+    {
+      "id": "apt_1794992005484",
+      "clientName": "E2E Client Updated",
+      "clientPhone": "+91 99999 88888",
+      "clientEmail": "",
+      "clientInstagram": "",
+      "serviceId": "",
+      "serviceName": "BIAB Overlay",
+      "category": "",
+      "date": "2026-11-26",
+      "time": "15:00",
+      "duration": 60,
+      "shape": "",
+      "length": "",
+      "notes": "",
+      "status": "Confirmed",
+      "price": 0,
+      "createdAt": "2026-11-18T08:53:25.484+00:00",
+      "updatedAt": "2026-11-18T08:53:25.484+00:00"
+    },
+    {
+      "id": "apt_1794995343729",
+      "clientName": "Pooja Verma",
+      "clientPhone": "9876543210",
+      "clientEmail": "",
+      "clientInstagram": "",
+      "serviceId": "",
+      "serviceName": "Russian BIAB Gel Overlay",
+      "category": "",
+      "date": "2026-11-19",
+      "time": "14:00",
+      "duration": 60,
+      "shape": "",
+      "length": "",
+      "notes": "",
+      "status": "Confirmed",
+      "price": 1600,
+      "createdAt": "2026-11-18T09:49:03.729+00:00",
+      "updatedAt": "2026-11-18T09:50:20.881Z",
+      "reminderSent": true,
+      "reminded24h": true,
+      "lastReminderAt": "2026-11-18T09:50:20.880Z",
+      "reminded4h": true
     }
   ],
   "invoices": [
@@ -289,6 +347,39 @@
     }
   ],
   "notifications": [
+    {
+      "type": "appointment_reminder",
+      "title": "[4h Urgent Alert] Pooja Verma - 14:00",
+      "message": "🔔 4-HOUR ARRIVAL ALERT • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n👤 Client: Pooja Verma\n📞 Phone: 9876543210\n💅 Service: Russian BIAB Gel Overlay\n📅 Schedule: 2026-11-19 at 14:00\n💰 Price: ₹1,600 (Full payment at studio)\n📍 Location: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "appointmentId": "apt_1794995343729",
+      "reminderType": "4h",
+      "id": "notif_1794995420880",
+      "sentAt": "2026-11-18T09:50:20.880Z"
+    },
+    {
+      "type": "appointment_reminder",
+      "title": "[24h Notice] Pooja Verma - 14:00",
+      "message": "🔔 24-HOUR ADVANCE ALERT • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n👤 Client: Pooja Verma\n📞 Phone: 9876543210\n💅 Service: Russian BIAB Gel Overlay\n📅 Schedule: 2026-11-19 at 14:00\n💰 Price: ₹1,600 (Full payment at studio)\n📍 Location: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "appointmentId": "apt_1794995343729",
+      "reminderType": "24h",
+      "id": "notif_1794995413088",
+      "sentAt": "2026-11-18T09:50:13.088Z"
+    },
+    {
+      "type": "appointment_reminder",
+      "title": "Upcoming Client: Pooja Verma",
+      "message": "Pooja Verma is booked for Russian BIAB Gel Overlay on 2026-11-19 at 14:00.\nPhone: +91 98765 11223\nNotes: None",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "appointmentId": "apt_1794995343729",
+      "clientId": "cl_1794991305278",
+      "id": "notif_1794995375309",
+      "sentAt": "2026-11-18T09:49:35.309Z"
+    },
     {
       "type": "press_on_order",
       "title": "New Press-On Order: Pooja Verma (INR 1299)",
@@ -708,7 +799,7 @@
       "baseColor": "#FDF2F8",
       "finish": "Hailey Glazed Chrome",
       "price": 1299,
-      "stock": 5,
+      "stock": 6,
       "isAvailable": true,
       "tag": "Bestseller",
       "description": "Ultra-popular pearlescent glazed chrome over sheer strawberry milk builder gel. Hand-buffed with salon chrome powder for an ethereal mirror shine.",

@@ -71,26 +71,65 @@ export async function sendNtfyNotification({
   }
 }
 
-export async function sendAppointmentReminder(appointment, client = null) {
-  const settings = db.getSettings();
-  const cName = client ? client.name : appointment.clientName;
-  const cPhone = client ? client.phone : appointment.clientPhone;
+export async function sendAppointmentReminder(appointment, client = null, reminderType = 'manual') {
+  const cName = client ? client.name : (appointment.clientName || 'Client');
+  const cPhone = client ? client.phone : (appointment.clientPhone || 'No phone provided');
   const addons = appointment.addonServiceNames && appointment.addonServiceNames.length > 0
     ? ` + ${appointment.addonServiceNames.join(', ')}`
     : '';
 
-  const title = `Upcoming Client: ${cName}`;
-  const message = `${cName} is booked for ${appointment.serviceName}${addons} on ${appointment.date} at ${appointment.time}.\nPhone: ${cPhone || 'N/A'}\nNotes: ${appointment.notes || 'None'}`;
+  let badge = 'APPOINTMENT ALERT';
+  let priority = 'high';
+  let tags = 'calendar,sparkles,bell';
+  let asciiType = 'Reminder';
+
+  if (reminderType === '24h') {
+    badge = '24-HOUR ADVANCE ALERT';
+    priority = 'high';
+    tags = 'calendar,alarm_clock';
+    asciiType = '24h Notice';
+  } else if (reminderType === '4h') {
+    badge = '4-HOUR ARRIVAL ALERT';
+    priority = 'urgent';
+    tags = 'alarm_clock,rotating_light,nail_care';
+    asciiType = '4h Urgent Alert';
+  } else if (reminderType === '1h') {
+    badge = '1-HOUR FINAL ALERT';
+    priority = 'urgent';
+    tags = 'rotating_light,zap,heart';
+    asciiType = '1h Final Call';
+  }
+
+  const title = `[${asciiType}] ${cName} - ${appointment.time}`;
+
+  const priceNum = Number(appointment.price) || 0;
+  const depositNum = Number(appointment.depositPaid || appointment.advancePaid) || 0;
+  const balanceNum = Math.max(0, priceNum - depositNum);
+
+  const message = [
+    `🔔 ${badge} • NAILS BY SIRII`,
+    `━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    `👤 Client: ${cName}`,
+    `📞 Phone: ${cPhone}`,
+    `💅 Service: ${appointment.serviceName || 'Custom Nail Service'}${addons}`,
+    `📅 Schedule: ${appointment.date} at ${appointment.time}`,
+    `💰 Price: ₹${priceNum.toLocaleString('en-IN')}${depositNum > 0 ? ` (Advance: ₹${depositNum.toLocaleString('en-IN')}, Due: ₹${balanceNum.toLocaleString('en-IN')})` : ' (Full payment at studio)'}`,
+    `📍 Location: Nails by Sirii Atelier, Garhi Cantt, Dehradun`,
+    appointment.notes ? `📝 Note: ${appointment.notes}` : null,
+    `━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    `Action: Please ensure sterilization buffers & station ready.`
+  ].filter(Boolean).join('\n');
 
   return await sendNtfyNotification({
     title,
     message,
-    priority: "high",
-    tags: "sparkles,calendar,gem",
-    type: "appointment_reminder",
+    priority,
+    tags,
+    type: 'appointment_reminder',
     metadata: {
       appointmentId: appointment.id,
-      clientId: appointment.clientId
+      clientId: appointment.clientId,
+      reminderType
     }
   });
 }

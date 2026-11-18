@@ -1435,6 +1435,7 @@ export default function App() {
         onSave={handleSaveAppointment}
         clients={clients}
         services={services}
+        appointments={appointments}
         preselectedClient={preselectedClientForAppointment}
         preselectedDate={preselectedDateForAppointment}
         preselectedTime={preselectedTimeForAppointment}
