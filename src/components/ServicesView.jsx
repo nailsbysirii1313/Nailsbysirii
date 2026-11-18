@@ -207,8 +207,15 @@ export default function ServicesView({
       {/* Add / Edit Service Modal */}
       {isModalOpen && (
         <ModalPortal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md">
-            <div className="bg-studio-surface rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-studio border border-border-subtle relative font-sans">
+          {/* Dedicated full-bleed non-scrolling backdrop */}
+          <div
+            className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+            onClick={() => setIsModalOpen(false)}
+            aria-hidden="true"
+          />
+          {/* Scrollable floating dialog container */}
+          <div className="fixed inset-0 z-[71] overflow-y-auto p-4 flex items-center justify-center pointer-events-none animate-fade-in">
+            <div className="bg-studio-surface rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-studio border border-border-subtle relative font-sans my-auto pointer-events-auto">
             <button
               onClick={() => setIsModalOpen(false)}
               className="absolute top-5 right-5 p-2 rounded-full text-text-muted hover:text-text-ink hover:bg-studio-canvas transition-colors min-h-[38px] min-w-[38px] flex items-center justify-center"
@@ -334,8 +341,8 @@ export default function ServicesView({
             </form>
           </div>
         </div>
-        </ModalPortal>
-      )}
-    </div>
-  );
+      </ModalPortal>
+    )}
+  </div>
+);
 }

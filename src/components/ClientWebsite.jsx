@@ -2446,8 +2446,15 @@ export default function ClientWebsite({
       {/* CLIENT REVIEW MODAL */}
       {showReviewModal && (
         <ModalPortal isOpen={showReviewModal} onClose={() => setShowReviewModal(false)}>
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-fade-in overflow-y-auto">
-            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 border border-studio-border shadow-studio-float space-y-5 my-6 max-h-[92vh] overflow-y-auto">
+          {/* Dedicated full-bleed non-scrolling backdrop */}
+          <div
+            className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+            onClick={() => setShowReviewModal(false)}
+            aria-hidden="true"
+          />
+          {/* Scrollable floating dialog container */}
+          <div className="fixed inset-0 z-[71] overflow-y-auto p-4 flex items-center justify-center pointer-events-none animate-fade-in">
+            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 border border-studio-border shadow-studio-float space-y-5 my-6 max-h-[92vh] overflow-y-auto pointer-events-auto">
             <div className="flex items-center justify-between pb-3.5 border-b border-studio-border">
               <div className="space-y-0.5">
                 <span className="text-[10px] font-bold text-studio-wine uppercase tracking-widest block">
@@ -2610,14 +2617,21 @@ export default function ClientWebsite({
             </form>
           </div>
         </div>
-        </ModalPortal>
-      )}
+      </ModalPortal>
+    )}
 
       {/* 8. MODAL: NAIL SIZING GUIDE & MEASUREMENT ASSISTANT */}
       {isSizingModalOpen && (
         <ModalPortal isOpen={isSizingModalOpen} onClose={() => setIsSizingModalOpen(false)}>
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in overflow-y-auto">
-            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto">
+          {/* Dedicated full-bleed non-scrolling backdrop */}
+          <div
+            className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+            onClick={() => setIsSizingModalOpen(false)}
+            aria-hidden="true"
+          />
+          {/* Scrollable floating dialog container */}
+          <div className="fixed inset-0 z-[71] overflow-y-auto p-4 flex items-center justify-center pointer-events-none animate-in fade-in">
+            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto pointer-events-auto">
             {/* Header */}
             <div className="flex items-center justify-between pb-3 border-b border-studio-border">
               <div className="flex items-center gap-2">
@@ -2744,14 +2758,21 @@ export default function ClientWebsite({
             </div>
           </div>
         </div>
-        </ModalPortal>
-      )}
+      </ModalPortal>
+    )}
 
       {/* 9. MODAL: PRESS-ON BOUTIQUE CHECKOUT & INSTANT UPI */}
       {isCheckoutModalOpen && selectedPressOnForOrder && (
         <ModalPortal isOpen={isCheckoutModalOpen} onClose={() => setIsCheckoutModalOpen(false)}>
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in overflow-y-auto">
-            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto">
+          {/* Dedicated full-bleed non-scrolling backdrop */}
+          <div
+            className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+            onClick={() => setIsCheckoutModalOpen(false)}
+            aria-hidden="true"
+          />
+          {/* Scrollable floating dialog container */}
+          <div className="fixed inset-0 z-[71] overflow-y-auto p-4 flex items-center justify-center pointer-events-none animate-in fade-in">
+            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto pointer-events-auto">
             {/* Header & Close */}
             <div className="flex items-center justify-between pb-3 border-b border-studio-border">
               <div className="flex items-center gap-2">
@@ -3193,8 +3214,8 @@ export default function ClientWebsite({
             )}
           </div>
         </div>
-        </ModalPortal>
-      )}
+      </ModalPortal>
+    )}
     </div>
   );
 }

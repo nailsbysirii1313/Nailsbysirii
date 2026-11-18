@@ -107,15 +107,15 @@ export async function sendAppointmentReminder(appointment, client = null, remind
   const balanceNum = Math.max(0, priceNum - depositNum);
 
   const message = [
-    `🔔 ${badge} • NAILS BY SIRII`,
+    `[${badge.toUpperCase()}] • NAILS BY SIRII`,
     `━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `👤 Client: ${cName}`,
-    `📞 Phone: ${cPhone}`,
-    `💅 Service: ${appointment.serviceName || 'Custom Nail Service'}${addons}`,
-    `📅 Schedule: ${appointment.date} at ${appointment.time}`,
-    `💰 Price: ₹${priceNum.toLocaleString('en-IN')}${depositNum > 0 ? ` (Advance: ₹${depositNum.toLocaleString('en-IN')}, Due: ₹${balanceNum.toLocaleString('en-IN')})` : ' (Full payment at studio)'}`,
-    `📍 Location: Nails by Sirii Atelier, Garhi Cantt, Dehradun`,
-    appointment.notes ? `📝 Note: ${appointment.notes}` : null,
+    `Client: ${cName}`,
+    `Phone: ${cPhone}`,
+    `Service: ${appointment.serviceName || 'Custom Nail Service'}${addons}`,
+    `Schedule: ${appointment.date} at ${appointment.time}`,
+    `Price: ₹${priceNum.toLocaleString('en-IN')}${depositNum > 0 ? ` (Advance: ₹${depositNum.toLocaleString('en-IN')}, Due: ₹${balanceNum.toLocaleString('en-IN')})` : ' (Full payment at studio)'}`,
+    `Location: Nails by Sirii Atelier, Garhi Cantt, Dehradun`,
+    appointment.notes ? `Note: ${appointment.notes}` : null,
     `━━━━━━━━━━━━━━━━━━━━━━━━━━`,
     `Action: Please ensure sterilization buffers & station ready.`
   ].filter(Boolean).join('\n');

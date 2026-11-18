@@ -101,8 +101,13 @@ export default function Sidebar({
   return (
     <aside className="hidden md:flex w-64 bg-studio-surface border-r border-border-subtle flex-col justify-between h-screen sticky top-0 shrink-0 z-20">
       {/* Pinned Top Atelier Branding (Never scrolls) */}
-      <div className="p-4 sm:p-5 border-b border-border-subtle shrink-0 bg-studio-surface">
-        <StudioLogo logoUrl={settings?.studioLogoUrl} size="md" showText />
+      <div className="p-4 sm:p-5 border-b border-border-subtle shrink-0 bg-studio-surface space-y-2">
+        <StudioLogo logoUrl={settings?.studioLogoUrl} size="md" showText={false} />
+        <div className="flex items-center gap-1.5 text-[10px] font-semibold text-brand-wine tracking-wider uppercase">
+          <span>Contemporary Atelier</span>
+          <span className="text-border-strong">•</span>
+          <span>Dehradun</span>
+        </div>
       </div>
 
       {/* Scrollable Navigation items only */}

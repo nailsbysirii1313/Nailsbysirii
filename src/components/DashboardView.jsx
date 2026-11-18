@@ -567,8 +567,9 @@ export default function DashboardView({
               <div className="flex items-center justify-between text-[11px]">
                 <span className="text-text-muted font-medium flex items-center gap-1">
                   {checklist.length > 0 && checklist.every((c) => c.completed) ? (
-                    <span className="text-emerald-700 font-bold flex items-center gap-1">
-                      <span>👑 100% Atelier Perfection</span>
+                    <span className="text-emerald-700 font-bold flex items-center gap-1.5">
+                      <Crown className="w-3.5 h-3.5 text-amber-500 fill-amber-500 shrink-0" />
+                      <span>100% Atelier Perfection</span>
                     </span>
                   ) : (
                     <span>Studio Readiness</span>

@@ -224,11 +224,11 @@ export default function InventoryView({
   }, [checklist, ritualFilter]);
 
   const getRitualStatusMessage = () => {
-    if (totalRituals === 0) return { title: 'No Checks Added Yet', subtitle: 'Tap below to add your first daily studio check ✨', icon: Sparkles, color: 'text-brand-wine' };
-    if (isAllRitualsDone) return { title: '👑 100% Atelier Perfection!', subtitle: "All personal rituals complete. Ready for today's queens! ✨", icon: Trophy, color: 'text-emerald-700' };
-    if (ritualProgressPercent >= 75) return { title: '✨ Almost Studio Ready!', subtitle: 'Only 1 or 2 small checks remaining • Final polish!', icon: Sparkles, color: 'text-brand-wine' };
-    if (ritualProgressPercent >= 40) return { title: '🔥 In the Flow!', subtitle: 'Halfway there • Your studio space is looking immaculate.', icon: Flame, color: 'text-amber-700' };
-    return { title: '☀️ Morning Prep Underway', subtitle: 'Take your time and begin your daily studio rituals.', icon: Sun, color: 'text-brand-wine' };
+    if (totalRituals === 0) return { title: 'No Checks Added Yet', subtitle: 'Tap below to add your first daily studio check', icon: Sparkles, color: 'text-brand-wine' };
+    if (isAllRitualsDone) return { title: '100% Atelier Perfection!', subtitle: "All personal rituals complete. Ready for today's clients!", icon: Trophy, color: 'text-emerald-700' };
+    if (ritualProgressPercent >= 75) return { title: 'Almost Studio Ready!', subtitle: 'Only 1 or 2 small checks remaining • Final polish!', icon: Sparkles, color: 'text-brand-wine' };
+    if (ritualProgressPercent >= 40) return { title: 'In the Flow!', subtitle: 'Halfway there • Your studio space is looking immaculate.', icon: Flame, color: 'text-amber-700' };
+    return { title: 'Morning Prep Underway', subtitle: 'Take your time and begin your daily studio rituals.', icon: Sun, color: 'text-brand-wine' };
   };
 
   // Filtering inventory
@@ -728,13 +728,13 @@ export default function InventoryView({
 
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-900 text-[11px] font-bold border border-amber-200">
                     <Flame className="w-3.5 h-3.5 text-amber-600" />
-                    <span>7-Day Studio Streak 🔥</span>
+                    <span>7-Day Studio Streak</span>
                   </div>
 
                   {isAllRitualsDone && (
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[11px] font-bold border border-emerald-300 animate-bounce">
                       <Trophy className="w-3.5 h-3.5 text-emerald-700" />
-                      <span>Ready for Queens ✨</span>
+                      <span>Ready for Clients</span>
                     </div>
                   )}
                 </div>
@@ -943,7 +943,10 @@ export default function InventoryView({
                     onChange={(e) => setRitualForm({ ...ritualForm, mandatory: e.target.checked })}
                     className="w-4 h-4 accent-brand-wine rounded"
                   />
-                  <span>⭐ Mark as High Priority check</span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500 shrink-0" />
+                    <span>Mark as High Priority check</span>
+                  </span>
                 </label>
 
                 <div className="flex items-center gap-2">
@@ -1077,8 +1080,9 @@ export default function InventoryView({
                           </span>
 
                           {item.mandatory && (
-                            <span className="px-2 py-0.5 rounded-full bg-rose-100 text-brand-wine text-[9px] font-bold border border-rose-200">
-                              ⭐ Priority
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-100 text-brand-wine text-[9px] font-bold border border-rose-200">
+                              <Star className="w-2.5 h-2.5 text-brand-wine fill-brand-wine shrink-0" />
+                              <span>Priority</span>
                             </span>
                           )}
                         </div>
@@ -1144,8 +1148,15 @@ export default function InventoryView({
       {/* Add / Edit Supply Item Modal */}
       {isModalOpen && (
         <ModalPortal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md overflow-y-auto">
-            <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 border-t sm:border border-border-subtle shadow-studio relative max-h-[92vh] overflow-y-auto font-sans">
+          {/* Dedicated full-bleed non-scrolling backdrop */}
+          <div
+            className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+            onClick={() => setIsModalOpen(false)}
+            aria-hidden="true"
+          />
+          {/* Scrollable floating dialog container */}
+          <div className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center sm:p-4 overflow-y-auto pointer-events-none">
+            <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 border-t sm:border border-border-subtle shadow-studio relative max-h-[92vh] overflow-y-auto font-sans pointer-events-auto">
             <div className="w-10 h-1.5 rounded-full bg-border-subtle mx-auto mb-3 sm:hidden" />
             <button
               onClick={() => setIsModalOpen(false)}
@@ -1348,8 +1359,8 @@ export default function InventoryView({
             </form>
           </div>
         </div>
-        </ModalPortal>
-      )}
-    </div>
-  );
+      </ModalPortal>
+    )}
+  </div>
+);
 }

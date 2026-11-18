@@ -737,7 +737,7 @@ export default function App() {
         const created = await api.createChecklistItem(itemData);
         setChecklist((prev) => [...prev, created]);
         playStudioChime('crystal');
-        addToast('Ritual Added ✨', `Added "${created.title}" to personal checks.`);
+        addToast('Ritual Added', `Added "${created.title}" to personal checks.`);
       }
     } catch (err) {
       addToast('Error', err.message, 'error');
@@ -763,10 +763,10 @@ export default function App() {
         const completed = next.filter((c) => c.completed).length;
         if (updated.completed && total > 0 && completed === total) {
           playStudioChime('crystal');
-          addToast('👑 100% Atelier Perfection!', 'All personal checks complete. Ready for today’s queens! ✨');
+          addToast('100% Atelier Perfection!', 'All personal checks complete. Ready for today\'s appointments.');
         } else if (updated.completed) {
           playStudioChime('crystal');
-          addToast('Personal Check Done ✨', `Checked off "${updated.title}".`);
+          addToast('Personal Check Done', `Checked off "${updated.title}".`);
         }
         return next;
       });
@@ -780,7 +780,7 @@ export default function App() {
     try {
       const reset = await api.resetChecklist();
       setChecklist(reset);
-      addToast('Studio Rituals Reset ✨', 'Ready for a fresh, mindful day at the atelier.');
+      addToast('Studio Rituals Reset', 'Ready for a fresh, mindful day at the atelier.');
     } catch (err) {
       addToast('Error', err.message, 'error');
     }

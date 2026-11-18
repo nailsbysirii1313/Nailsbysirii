@@ -88,8 +88,15 @@ export default function ClientDetailDrawer({
 
   return (
     <ModalPortal isOpen={isOpen} onClose={onClose}>
-      <div className="fixed inset-0 z-[70] flex justify-end bg-studio-ink/60 backdrop-blur-md animate-fade-in font-sans">
-        <div className="bg-studio-surface w-full max-w-md h-full shadow-studio-float border-l border-studio-border flex flex-col justify-between overflow-y-auto">
+      {/* Dedicated full-bleed non-scrolling backdrop */}
+      <div
+        className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      {/* Drawer slide-in panel */}
+      <div className="fixed inset-0 z-[71] flex justify-end pointer-events-none animate-fade-in font-sans">
+        <div className="bg-studio-surface w-full max-w-md h-full shadow-studio-float border-l border-studio-border flex flex-col justify-between overflow-y-auto pointer-events-auto">
         {/* Header */}
         <div>
           <div className="p-6 border-b border-studio-border bg-studio-subtle/50 relative">
@@ -630,6 +637,6 @@ export default function ClientDetailDrawer({
         </div>
       </div>
     </div>
-    </ModalPortal>
+  </ModalPortal>
   );
 }

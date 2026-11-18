@@ -27,8 +27,15 @@ export default function QrModal({ isOpen, onClose, settings, onTestAlert }) {
 
   return (
     <ModalPortal isOpen={isOpen} onClose={onClose}>
-      <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md animate-fade-in overflow-y-auto">
-        <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 shadow-studio border-t sm:border border-border-subtle relative max-h-[92vh] overflow-y-auto">
+      {/* Dedicated full-bleed non-scrolling backdrop */}
+      <div
+        className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      {/* Scrollable floating dialog container */}
+      <div className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center sm:p-4 overflow-y-auto pointer-events-none animate-fade-in">
+        <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 shadow-studio border-t sm:border border-border-subtle relative max-h-[92vh] overflow-y-auto pointer-events-auto">
         <div className="w-12 h-1.5 rounded-full bg-border-subtle mx-auto mb-3 sm:hidden" />
         <button
           onClick={onClose}
@@ -134,6 +141,7 @@ export default function QrModal({ isOpen, onClose, settings, onTestAlert }) {
         </div>
       </div>
     </div>
-    </ModalPortal>
+  
+</ModalPortal>
   );
 }

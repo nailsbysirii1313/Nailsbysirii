@@ -360,8 +360,15 @@ export default function CatalogueManagerView({
 
       {/* Add / Edit Design Modal */}
       <ModalPortal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 bg-studio-ink/60 backdrop-blur-md overflow-y-auto animate-fade-in">
-          <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-studio-float border border-border-subtle relative max-h-[92vh] overflow-y-auto font-sans my-auto">
+        {/* Dedicated non-scrolling backdrop covering 100vw x 100vh with full edge-to-edge blur */}
+        <div
+          className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+          onClick={() => setIsModalOpen(false)}
+          aria-hidden="true"
+        />
+        {/* Floating scrollable dialog container */}
+        <div className="fixed inset-0 z-[71] overflow-y-auto p-3 sm:p-4 flex items-center justify-center pointer-events-none animate-fade-in">
+          <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-studio-float border border-border-subtle relative max-h-[92vh] overflow-y-auto font-sans my-auto pointer-events-auto">
             <button
               onClick={() => setIsModalOpen(false)}
               className="absolute top-4 sm:top-5 right-4 sm:right-5 p-2 rounded-full text-text-muted hover:text-text-ink hover:bg-studio-canvas transition-colors min-h-[38px] min-w-[38px] flex items-center justify-center"

@@ -201,8 +201,15 @@ export default function NewInvoiceModal({
 
   return (
     <ModalPortal isOpen={isOpen} onClose={onClose}>
-      <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 bg-studio-ink/60 backdrop-blur-md overflow-y-auto animate-fade-in">
-        <div className="bg-studio-surface rounded-3xl max-w-xl w-full p-4 sm:p-6 shadow-studio-float border border-border-subtle relative max-h-[92vh] overflow-y-auto font-sans my-auto">
+      {/* Dedicated full-bleed non-scrolling backdrop */}
+      <div
+        className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      {/* Scrollable floating dialog container */}
+      <div className="fixed inset-0 z-[71] overflow-y-auto p-3 sm:p-4 flex items-center justify-center pointer-events-none animate-fade-in">
+        <div className="bg-studio-surface rounded-3xl max-w-xl w-full p-4 sm:p-6 shadow-studio-float border border-border-subtle relative max-h-[92vh] overflow-y-auto font-sans my-auto pointer-events-auto">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -529,6 +536,7 @@ export default function NewInvoiceModal({
         </form>
       </div>
     </div>
-  </ModalPortal>
+  
+</ModalPortal>
   );
 }

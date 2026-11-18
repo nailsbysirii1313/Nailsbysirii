@@ -631,10 +631,11 @@ export default function PressOnsView({
 
                 {/* Edit & Delete Controls */}
                 <div className="pt-3 border-t border-border-subtle flex items-center justify-between text-xs">
-                  <span className={`text-[10px] font-semibold ${
+                  <span className={`inline-flex items-center gap-1.5 text-[10px] font-semibold ${
                     prod.stock > 0 && prod.isAvailable ? 'text-emerald-700' : 'text-red-700'
                   }`}>
-                    {prod.stock > 0 && prod.isAvailable ? '● In Stock (Active)' : '○ Out of Stock'}
+                    <span className={`w-1.5 h-1.5 rounded-full ${prod.stock > 0 && prod.isAvailable ? 'bg-emerald-500' : 'bg-red-400'}`}></span>
+                    {prod.stock > 0 && prod.isAvailable ? 'In Stock (Active)' : 'Out of Stock'}
                   </span>
 
                   <div className="flex items-center gap-2">
@@ -768,8 +769,13 @@ export default function PressOnsView({
       {/* 6. MODAL: ADD / EDIT PRODUCT */}
       {isAddProductModalOpen && (
         <ModalPortal isOpen={isAddProductModalOpen} onClose={() => setIsAddProductModalOpen(false)}>
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in overflow-y-auto">
-            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 shadow-studio-float border border-border-subtle space-y-5 my-8 max-h-[90vh] overflow-y-auto">
+          <div
+            className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+            onClick={() => setIsAddProductModalOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="fixed inset-0 z-[71] flex items-center justify-center p-4 overflow-y-auto pointer-events-none animate-in fade-in">
+            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 shadow-studio-float border border-border-subtle space-y-5 my-8 max-h-[90vh] overflow-y-auto pointer-events-auto">
             <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
               <div className="flex items-center gap-2">
                 <Package className="w-4 h-4 text-brand-wine" />

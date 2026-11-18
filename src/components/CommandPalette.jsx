@@ -85,8 +85,15 @@ export default function CommandPalette({
 
   return (
     <ModalPortal isOpen={isOpen} onClose={onClose}>
-      <div className="fixed inset-0 z-[70] flex items-start justify-center pt-16 sm:pt-20 p-4 bg-studio-ink/60 backdrop-blur-md animate-fade-in">
-        <div className="bg-studio-surface rounded-3xl max-w-xl w-full shadow-studio border border-border-subtle overflow-hidden relative">
+      {/* Dedicated full-bleed non-scrolling backdrop */}
+      <div
+        className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      {/* Scrollable floating dialog container */}
+      <div className="fixed inset-0 z-[71] flex items-start justify-center pt-16 sm:pt-20 p-4 pointer-events-none animate-fade-in">
+        <div className="bg-studio-surface rounded-3xl max-w-xl w-full shadow-studio border border-border-subtle overflow-hidden relative pointer-events-auto">
         {/* Search Input Bar */}
         <div className="p-4 border-b border-border-subtle flex items-center gap-3">
           <Search className="w-5 h-5 text-brand-wine shrink-0" />
@@ -224,6 +231,7 @@ export default function CommandPalette({
         </div>
       </div>
     </div>
-    </ModalPortal>
+  
+</ModalPortal>
   );
 }

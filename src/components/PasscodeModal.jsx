@@ -57,8 +57,15 @@ export default function PasscodeModal({
 
   return (
     <ModalPortal isOpen={isOpen} onClose={onClose}>
-      <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-studio-ink/60 backdrop-blur-md animate-in fade-in duration-200">
-        <div className="bg-studio-surface rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-studio-float border border-studio-border space-y-6 relative overflow-hidden">
+      {/* Dedicated full-bleed non-scrolling backdrop */}
+      <div
+        className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      {/* Scrollable floating dialog container */}
+      <div className="fixed inset-0 z-[71] overflow-y-auto p-4 flex items-center justify-center pointer-events-none animate-in fade-in duration-200">
+        <div className="bg-studio-surface rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-studio-float border border-studio-border space-y-6 relative overflow-hidden pointer-events-auto my-auto">
         {/* Decorative background glow */}
         <div className="absolute -top-16 -right-16 w-36 h-36 bg-studio-wineLight rounded-full blur-2xl pointer-events-none" />
         <div className="absolute -bottom-16 -left-16 w-36 h-36 bg-studio-subtle rounded-full blur-2xl pointer-events-none" />
@@ -176,6 +183,7 @@ export default function PasscodeModal({
         </div>
       </div>
     </div>
-  </ModalPortal>
+  
+</ModalPortal>
   );
 }

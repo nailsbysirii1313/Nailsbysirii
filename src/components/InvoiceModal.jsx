@@ -164,8 +164,15 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for visiting Nai
 
   return (
     <ModalPortal isOpen={isOpen} onClose={onClose}>
-      <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md overflow-y-auto animate-fade-in">
-        <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-2xl w-full shadow-studio-float border-t sm:border border-border-subtle relative max-h-[96vh] flex flex-col font-sans my-auto">
+      {/* Dedicated full-bleed non-scrolling backdrop */}
+      <div
+        className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      {/* Scrollable floating dialog container */}
+      <div className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center sm:p-4 overflow-y-auto pointer-events-none animate-fade-in">
+        <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-2xl w-full shadow-studio-float border-t sm:border border-border-subtle relative max-h-[96vh] flex flex-col font-sans my-auto pointer-events-auto">
         {/* Mobile Drag Indicator */}
         <div className="w-10 h-1.5 rounded-full bg-border-subtle mx-auto my-2.5 sm:hidden shrink-0" />
 
@@ -560,6 +567,7 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for visiting Nai
         )}
       </div>
     </div>
-  </ModalPortal>
+  
+</ModalPortal>
   );
 }

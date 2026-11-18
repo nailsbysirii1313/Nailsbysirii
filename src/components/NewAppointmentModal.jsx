@@ -293,8 +293,15 @@ export default function NewAppointmentModal({
 
   return (
     <ModalPortal isOpen={isOpen} onClose={onClose}>
-      <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center sm:p-4 bg-studio-ink/60 backdrop-blur-md animate-fade-in overflow-y-auto">
-        <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-7 shadow-studio-float border-t sm:border border-studio-border relative max-h-[92vh] overflow-y-auto font-sans my-auto">
+      {/* Dedicated full-bleed non-scrolling backdrop */}
+      <div
+        className="fixed inset-0 z-[70] bg-studio-ink/60 backdrop-blur-md transition-opacity"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      {/* Scrollable floating dialog container */}
+      <div className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center sm:p-4 overflow-y-auto pointer-events-none animate-fade-in">
+        <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-7 shadow-studio-float border-t sm:border border-studio-border relative max-h-[92vh] overflow-y-auto font-sans my-auto pointer-events-auto">
           <div className="w-10 h-1.5 rounded-full bg-studio-borderStrong mx-auto mb-3 sm:hidden" />
           <button
             onClick={onClose}
@@ -898,6 +905,7 @@ export default function NewAppointmentModal({
           </form>
         </div>
       </div>
-    </ModalPortal>
-  );
+    
+  </ModalPortal>
+);
 }
