@@ -1286,7 +1286,7 @@ export default function ClientWebsite({
           </div>
 
           {/* 2. Refined headline with balanced line height */}
-          <h1 className="font-sans font-extrabold text-[36px] sm:text-5xl text-studio-ink leading-[1.12] tracking-tight">
+          <h1 className="font-sans font-extrabold text-[42px] xs:text-[45px] sm:text-5xl text-studio-ink leading-[1.08] tracking-tight">
             Your next<br />
             <span className="text-studio-wine inline-flex items-baseline">
               nail <span className="font-display italic font-bold pr-0.5">crush.</span>
@@ -1294,7 +1294,7 @@ export default function ClientWebsite({
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 aria-hidden="true"
-                className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-studio-wine ml-0.5 -translate-y-2 inline-block select-none pointer-events-none flex-shrink-0"
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-studio-wine ml-0.5 -translate-y-2.5 inline-block select-none pointer-events-none flex-shrink-0"
               >
                 <path d="M12 0C12 7.2 14 10.8 24 12C14 13.2 12 16.8 12 24C12 16.8 10 13.2 0 12C10 10.8 12 7.2 12 0Z" />
               </svg>
@@ -1302,7 +1302,7 @@ export default function ClientWebsite({
           </h1>
 
           {/* 3. Supporting sentence */}
-          <p className="mt-2 text-base text-studio-secondary leading-normal max-w-xs sm:max-w-sm px-1">
+          <p className="mt-2 text-[13.5px] sm:text-sm text-studio-secondary leading-relaxed max-w-xs sm:max-w-sm px-1">
             Simple, sparkly, or something totally you. Let’s find your next look.
           </p>
 
@@ -1347,7 +1347,7 @@ export default function ClientWebsite({
               <span>Viral Nail Studio in Dehradun</span>
             </div>
 
-            <h1 className="font-sans font-extrabold text-5xl xl:text-6xl text-studio-ink leading-[1.08] tracking-tight">
+            <h1 className="font-sans font-extrabold text-5xl lg:text-[56px] xl:text-6xl text-studio-ink leading-[1.06] tracking-tight">
               Your next<br />
               <span className="text-studio-wine inline-flex items-baseline">
                 nail <span className="font-display italic font-bold pr-1">crush.</span>
@@ -1362,7 +1362,7 @@ export default function ClientWebsite({
               </span>
             </h1>
 
-            <p className="text-base text-studio-secondary leading-relaxed max-w-md">
+            <p className="text-sm lg:text-[15px] text-studio-secondary leading-relaxed max-w-md">
               Simple, sparkly, or something totally you. Let’s find your next look.
             </p>
 

@@ -279,29 +279,6 @@
       "updatedAt": "2026-11-17T16:24:33.409+00:00"
     },
     {
-      "id": "apt_1794932673405",
-      "clientName": "Kavya Singhania",
-      "clientPhone": "9897123456",
-      "clientEmail": "kavya@example.com",
-      "clientInstagram": "@kavya_styles",
-      "serviceId": "acrylic_1",
-      "serviceName": "French Ombré Acrylic Sculpture",
-      "category": "Acrylic Nails",
-      "date": "2026-11-20",
-      "time": "14:00",
-      "duration": 90,
-      "shape": "Almond",
-      "length": "Long",
-      "notes": "Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
-      "status": "Confirmed",
-      "price": 0,
-      "createdAt": "2026-11-17T16:24:33.405+00:00",
-      "updatedAt": "2026-11-19T08:53:13.108Z",
-      "reminded24h": true,
-      "reminderSent": true,
-      "lastReminderAt": "2026-11-19T08:53:13.108Z"
-    },
-    {
       "id": "apt_1794992005484",
       "clientName": "E2E Client Updated",
       "clientPhone": "+91 99999 88888",
@@ -360,6 +337,29 @@
       "price": 1600,
       "createdAt": "2026-11-18T09:49:03.729+00:00",
       "updatedAt": "2026-11-19T08:38:38.517+00:00"
+    },
+    {
+      "id": "apt_1794932673405",
+      "clientName": "Kavya Singhania",
+      "clientPhone": "9897123456",
+      "clientEmail": "kavya@example.com",
+      "clientInstagram": "@kavya_styles",
+      "serviceId": "acrylic_1",
+      "serviceName": "French Ombré Acrylic Sculpture",
+      "category": "Acrylic Nails",
+      "date": "2026-11-20",
+      "time": "14:00",
+      "duration": 90,
+      "shape": "Almond",
+      "length": "Long",
+      "notes": "Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
+      "status": "Confirmed",
+      "price": 0,
+      "createdAt": "2026-11-17T16:24:33.405+00:00",
+      "updatedAt": "2026-11-19T17:32:12.203Z",
+      "reminded24h": true,
+      "reminderSent": true,
+      "lastReminderAt": "2026-11-19T17:32:12.202Z"
     }
   ],
   "invoices": [
@@ -390,6 +390,17 @@
     }
   ],
   "notifications": [
+    {
+      "type": "appointment_reminder",
+      "title": "[24h Notice] Kavya Singhania - 14:00",
+      "message": "[24-HOUR ADVANCE ALERT] • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nClient: Kavya Singhania\nPhone: 9897123456\nService: French Ombré Acrylic Sculpture\nSchedule: 2026-11-20 at 14:00\nPrice: ₹0 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\nNote: Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "appointmentId": "apt_1794932673405",
+      "reminderType": "24h",
+      "id": "notif_1795109532202",
+      "sentAt": "2026-11-19T17:32:12.202Z"
+    },
     {
       "type": "appointment_reminder",
       "title": "[24h Notice] Kavya Singhania - 14:00",
