@@ -1668,6 +1668,7 @@ export default function App() {
           isOpen={isClientDetailOpen}
           onClose={() => setIsClientDetailOpen(false)}
           onEditClient={openEditClient}
+          onUpdateClient={async (id, data) => handleSaveClient(data)}
           onDeleteClient={handleDeleteClient}
           onBookAppointment={(c) => {
             setIsClientDetailOpen(false);

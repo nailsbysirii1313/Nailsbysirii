@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { api } from '../api';
 import {
   Settings,
   Crown,
@@ -20,7 +21,8 @@ import {
   ShieldCheck,
   RotateCcw,
   Plus,
-  Trash2
+  Trash2,
+  Loader2
 } from 'lucide-react';
 import StudioLogo from './StudioLogo';
 
@@ -111,6 +113,30 @@ export default function SettingsView({ settings, onSaveSettings }) {
   const [saving, setSaving] = useState(false);
   const [logoUploadedMsg, setLogoUploadedMsg] = useState(false);
   const [cardUploadedMsgs, setCardUploadedMsgs] = useState({});
+  const [downloadingCsv, setDownloadingCsv] = useState(false);
+  const [downloadingBackup, setDownloadingBackup] = useState(false);
+
+  const handleDownloadCsv = async () => {
+    try {
+      setDownloadingCsv(true);
+      await api.downloadInvoicesCsv();
+    } catch (err) {
+      window.open(api.getInvoicesCsvUrl(), '_blank');
+    } finally {
+      setDownloadingCsv(false);
+    }
+  };
+
+  const handleDownloadBackup = async () => {
+    try {
+      setDownloadingBackup(true);
+      await api.downloadBackup();
+    } catch (err) {
+      window.open(api.getBackupExportUrl(), '_blank');
+    } finally {
+      setDownloadingBackup(false);
+    }
+  };
 
   useEffect(() => {
     if (settings) {
@@ -747,23 +773,25 @@ export default function SettingsView({ settings, onSaveSettings }) {
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-1">
-            <a
-              href="/api/backup/invoices-csv"
-              download
-              className="px-4 py-2.5 rounded-2xl border border-border-subtle bg-studio-surface hover:bg-studio-canvas text-text-ink font-semibold text-xs transition-colors flex items-center gap-2 shadow-xs min-h-[44px]"
+            <button
+              type="button"
+              onClick={handleDownloadCsv}
+              disabled={downloadingCsv}
+              className="px-4 py-2.5 rounded-2xl border border-border-subtle bg-studio-surface hover:bg-studio-canvas text-text-ink font-semibold text-xs transition-colors flex items-center gap-2 shadow-xs min-h-[44px] cursor-pointer disabled:opacity-60"
             >
-              <FileSpreadsheet className="w-4 h-4 text-emerald-700" />
+              {downloadingCsv ? <Loader2 className="w-4 h-4 animate-spin text-emerald-700" /> : <FileSpreadsheet className="w-4 h-4 text-emerald-700" />}
               <span>Download Invoices CSV Spreadsheet</span>
-            </a>
+            </button>
 
-            <a
-              href="/api/backup/export"
-              download
-              className="px-4 py-2.5 rounded-2xl border border-border-subtle bg-studio-surface hover:bg-studio-canvas text-text-ink font-semibold text-xs transition-colors flex items-center gap-2 shadow-xs min-h-[44px]"
+            <button
+              type="button"
+              onClick={handleDownloadBackup}
+              disabled={downloadingBackup}
+              className="px-4 py-2.5 rounded-2xl border border-border-subtle bg-studio-surface hover:bg-studio-canvas text-text-ink font-semibold text-xs transition-colors flex items-center gap-2 shadow-xs min-h-[44px] cursor-pointer disabled:opacity-60"
             >
-              <Download className="w-4 h-4 text-brand-wine" />
+              {downloadingBackup ? <Loader2 className="w-4 h-4 animate-spin text-brand-wine" /> : <Download className="w-4 h-4 text-brand-wine" />}
               <span>Download Full Database Backup (.JSON)</span>
-            </a>
+            </button>
           </div>
         </div>
 

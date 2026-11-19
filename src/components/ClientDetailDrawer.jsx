@@ -34,6 +34,7 @@ export default function ClientDetailDrawer({
   onClose,
   onEditClient,
   onDeleteClient,
+  onUpdateClient,
   onBookAppointment,
   onOpenInvoice,
   onCreateInvoice,
@@ -50,40 +51,49 @@ export default function ClientDetailDrawer({
     .reduce((sum, inv) => sum + (Number(inv.total) || 0), client.totalSpent || 0);
 
   const [drawerTab, setDrawerTab] = useState('profile');
-  const [moodboardItems, setMoodboardItems] = useState([
-    {
-      id: 1,
-      title: 'Bridal Trial • Micro French Ombre',
-      date: '2026-11-10',
-      shape: client.preferredShape || 'Medium Almond',
-      notes: 'Sheer strawberry milk base with ultra-fine white tips.'
-    },
-    {
-      id: 2,
-      title: 'Hailey Glazed Donut Chrome',
-      date: '2026-10-18',
-      shape: client.preferredShape || 'Medium Almond',
-      notes: 'White pearl chrome powder over natural BIAB overlay.'
-    }
-  ]);
+  const [moodboardItems, setMoodboardItems] = useState(
+    Array.isArray(client.moodboardItems)
+      ? client.moodboardItems
+      : Array.isArray(client.nailHistory)
+      ? client.nailHistory
+      : []
+  );
   const [newSetTitle, setNewSetTitle] = useState('');
   const [newSetNotes, setNewSetNotes] = useState('');
 
-  const handleAddSet = (e) => {
+  const handleAddSet = async (e) => {
     e.preventDefault();
     if (!newSetTitle.trim()) return;
-    setMoodboardItems([
-      {
-        id: Date.now(),
-        title: newSetTitle.trim(),
-        date: getKolkataTodayString(),
-        shape: client.preferredShape || 'Almond',
-        notes: newSetNotes.trim() || 'Custom studio set'
-      },
-      ...moodboardItems
-    ]);
+    const newItem = {
+      id: Date.now(),
+      title: newSetTitle.trim(),
+      date: getKolkataTodayString(),
+      shape: client.preferredShape || 'Almond',
+      notes: newSetNotes.trim() || 'Custom studio set'
+    };
+    const updated = [newItem, ...moodboardItems];
+    setMoodboardItems(updated);
     setNewSetTitle('');
     setNewSetNotes('');
+    if (onUpdateClient) {
+      try {
+        await onUpdateClient(client.id, { ...client, moodboardItems: updated });
+      } catch (err) {
+        console.error('Failed to save client lookbook item', err);
+      }
+    }
+  };
+
+  const handleDeleteSet = async (itemId) => {
+    const updated = moodboardItems.filter((m) => m.id !== itemId);
+    setMoodboardItems(updated);
+    if (onUpdateClient) {
+      try {
+        await onUpdateClient(client.id, { ...client, moodboardItems: updated });
+      } catch (err) {
+        console.error('Failed to update client lookbook', err);
+      }
+    }
   };
 
   return (
@@ -461,25 +471,43 @@ export default function ClientDetailDrawer({
 
                   {/* Looks List */}
                   <div className="space-y-2.5">
-                    {moodboardItems.map((item) => (
-                      <div
-                        key={item.id}
-                        className="p-3.5 rounded-2xl border border-studio-border bg-studio-surface space-y-1.5 shadow-xs"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-display italic font-bold text-sm text-studio-ink">
-                            {item.title}
-                          </span>
-                          <span className="text-[10px] text-studio-muted">{item.date}</span>
-                        </div>
-                        <span className="inline-block px-2 py-0.5 rounded-md bg-studio-wineLight text-studio-wine text-[10px] font-semibold border border-studio-border">
-                          {item.shape}
-                        </span>
-                        <p className="text-[11px] text-studio-secondary leading-relaxed">
-                          {item.notes}
+                    {moodboardItems.length === 0 ? (
+                      <div className="p-6 text-center rounded-2xl border border-dashed border-studio-border bg-studio-canvas/50">
+                        <Palette className="w-6 h-6 text-studio-muted mx-auto mb-2 opacity-60" />
+                        <p className="text-xs font-semibold text-studio-ink">No documented looks yet</p>
+                        <p className="text-[11px] text-studio-muted mt-0.5">
+                          Use the form above to log this client's signature sets, inspo photos, or retention notes.
                         </p>
                       </div>
-                    ))}
+                    ) : (
+                      moodboardItems.map((item) => (
+                        <div
+                          key={item.id}
+                          className="p-3.5 rounded-2xl border border-studio-border bg-studio-surface space-y-1.5 shadow-xs relative group"
+                        >
+                          <div className="flex items-center justify-between pr-6">
+                            <span className="font-display italic font-bold text-sm text-studio-ink">
+                              {item.title}
+                            </span>
+                            <span className="text-[10px] text-studio-muted">{item.date}</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteSet(item.id)}
+                            className="absolute top-3 right-3 p-1.5 rounded-lg text-studio-muted hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                            title="Delete look"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                          <span className="inline-block px-2 py-0.5 rounded-md bg-studio-wineLight text-studio-wine text-[10px] font-semibold border border-studio-border">
+                            {item.shape}
+                          </span>
+                          <p className="text-[11px] text-studio-secondary leading-relaxed">
+                            {item.notes}
+                          </p>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
               ) : (

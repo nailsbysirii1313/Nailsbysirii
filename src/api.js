@@ -547,5 +547,45 @@ export const api = {
     });
     if (!res.ok) throw new Error('Failed to delete catalogue design');
     return res.json();
+  },
+
+  // Backups & Accounting Exports
+  getInvoicesCsvUrl() {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('nbs_studio_token') || '' : '';
+    return `/api/backup/invoices-csv${token ? `?token=${encodeURIComponent(token)}` : ''}`;
+  },
+  getBackupExportUrl() {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('nbs_studio_token') || '' : '';
+    return `/api/backup/export${token ? `?token=${encodeURIComponent(token)}` : ''}`;
+  },
+  async downloadInvoicesCsv() {
+    const res = await fetch(`${API_BASE}/backup/invoices-csv`, {
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error('Failed to export invoices CSV');
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nails-by-sirii-invoices-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  },
+  async downloadBackup() {
+    const res = await fetch(`${API_BASE}/backup/export`, {
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error('Failed to export database backup');
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nails-by-sirii-backup-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
   }
 };

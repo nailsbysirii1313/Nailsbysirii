@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ModalPortal from './ModalPortal';
+import { api } from '../api';
 import {
   X,
   CreditCard,
@@ -14,7 +15,8 @@ import {
   ChevronRight,
   AlertTriangle,
   BookOpen,
-  ShoppingBag
+  ShoppingBag,
+  Loader2
 } from 'lucide-react';
 
 export default function MobileStudioHubSheet({
@@ -24,11 +26,24 @@ export default function MobileStudioHubSheet({
   counts = {},
   onOpenQrModal
 }) {
+  const [downloading, setDownloading] = useState(false);
+
   if (!isOpen) return null;
 
   const navigateTo = (tabId) => {
     setTab(tabId);
     onClose();
+  };
+
+  const handleDownloadCsv = async () => {
+    try {
+      setDownloading(true);
+      await api.downloadInvoicesCsv();
+    } catch (err) {
+      window.open(api.getInvoicesCsvUrl(), '_blank');
+    } finally {
+      setDownloading(false);
+    }
   };
 
   const sections = [
@@ -193,13 +208,15 @@ export default function MobileStudioHubSheet({
 
           {/* Quick Accounting CSV Backup Button */}
           <div className="pt-2">
-            <a
-              href="/api/backup/invoices-csv"
-              className="w-full py-2.5 px-4 rounded-xl border border-dashed border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-600 text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
+            <button
+              type="button"
+              onClick={handleDownloadCsv}
+              disabled={downloading}
+              className="w-full py-2.5 px-4 rounded-xl border border-dashed border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-600 text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-60"
             >
-              <FileSpreadsheet className="w-4 h-4 text-stone-400" />
+              {downloading ? <Loader2 className="w-4 h-4 animate-spin text-stone-400" /> : <FileSpreadsheet className="w-4 h-4 text-stone-400" />}
               <span>Export Accounting CSV Spreadsheet</span>
-            </a>
+            </button>
           </div>
         </div>
       </div>

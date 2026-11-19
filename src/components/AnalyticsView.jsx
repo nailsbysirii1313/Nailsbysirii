@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { api } from '../api';
 import {
   TrendingUp,
   DollarSign,
@@ -11,7 +12,8 @@ import {
   PieChart,
   CheckCircle2,
   Wallet,
-  Clock
+  Clock,
+  Loader2
 } from 'lucide-react';
 
 export default function AnalyticsView({
@@ -21,6 +23,31 @@ export default function AnalyticsView({
   services = [],
   settings = {}
 }) {
+  const [downloadingCsv, setDownloadingCsv] = useState(false);
+  const [downloadingBackup, setDownloadingBackup] = useState(false);
+
+  const handleDownloadCsv = async () => {
+    try {
+      setDownloadingCsv(true);
+      await api.downloadInvoicesCsv();
+    } catch (err) {
+      window.open(api.getInvoicesCsvUrl(), '_blank');
+    } finally {
+      setDownloadingCsv(false);
+    }
+  };
+
+  const handleDownloadBackup = async () => {
+    try {
+      setDownloadingBackup(true);
+      await api.downloadBackup();
+    } catch (err) {
+      window.open(api.getBackupExportUrl(), '_blank');
+    } finally {
+      setDownloadingBackup(false);
+    }
+  };
+
   const currency = settings?.currency || '₹';
 
   // 1. Total Revenue metrics
@@ -75,23 +102,25 @@ export default function AnalyticsView({
 
         {/* Quick CSV Export */}
         <div className="flex items-center gap-2 flex-wrap">
-          <a
-            href="/api/backup/invoices-csv"
-            download
-            className="px-4 py-2.5 rounded-xl bg-studio-surface border border-border-subtle hover:border-brand-wine text-text-secondary hover:text-text-ink text-xs font-semibold shadow-xs transition-all flex items-center gap-2 min-h-[44px]"
+          <button
+            type="button"
+            onClick={handleDownloadCsv}
+            disabled={downloadingCsv}
+            className="px-4 py-2.5 rounded-xl bg-studio-surface border border-border-subtle hover:border-brand-wine text-text-secondary hover:text-text-ink text-xs font-semibold shadow-xs transition-all flex items-center gap-2 min-h-[44px] cursor-pointer disabled:opacity-60"
           >
-            <FileSpreadsheet className="w-4 h-4 text-emerald-700" />
+            {downloadingCsv ? <Loader2 className="w-4 h-4 animate-spin text-emerald-700" /> : <FileSpreadsheet className="w-4 h-4 text-emerald-700" />}
             <span>Export CSV for Taxes</span>
-          </a>
+          </button>
 
-          <a
-            href="/api/backup/export"
-            download
-            className="px-4 py-2.5 rounded-xl bg-text-ink hover:bg-neutral-800 text-white text-xs font-semibold shadow-studio transition-all flex items-center gap-2 min-h-[44px]"
+          <button
+            type="button"
+            onClick={handleDownloadBackup}
+            disabled={downloadingBackup}
+            className="px-4 py-2.5 rounded-xl bg-text-ink hover:bg-neutral-800 text-white text-xs font-semibold shadow-studio transition-all flex items-center gap-2 min-h-[44px] cursor-pointer disabled:opacity-60"
           >
-            <Download className="w-4 h-4" />
+            {downloadingBackup ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
             <span>Backup Studio Data</span>
-          </a>
+          </button>
         </div>
       </div>
 

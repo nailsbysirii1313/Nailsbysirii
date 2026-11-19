@@ -236,7 +236,7 @@ export function settingsToRow(s) {
     upi_name: s.upiName || 'Nails by Sirii',
     studio_logo_url: s.studioLogoUrl || '/logo.png',
     ntfy_topic: s.ntfyTopic || 'nails-by-sirii-alerts',
-    timings: s.timings || '12:00 PM – 7:00 PM',
+    timings: s.timings || '12:00 PM - 7:00 PM',
     google_rating: String(s.googleRating || '4.9')
   };
 }

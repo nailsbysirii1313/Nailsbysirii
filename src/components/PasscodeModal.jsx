@@ -41,6 +41,9 @@ export default function PasscodeModal({
       const res = await api.verifyPasscode(passcode.trim());
 
       if (res.success) {
+        if (res.token) {
+          localStorage.setItem('nbs_studio_token', res.token);
+        }
         localStorage.setItem('nbs_studio_auth', 'true');
         playStudioChime();
         onSuccess();

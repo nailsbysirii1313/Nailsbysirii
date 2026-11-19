@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS studio_settings (
   upi_name TEXT DEFAULT 'Nails by Sirii',
   studio_logo_url TEXT DEFAULT '/logo.png',
   ntfy_topic TEXT DEFAULT 'nails-by-sirii-alerts',
-  timings TEXT DEFAULT '12:00 PM – 7:00 PM',
+  timings TEXT DEFAULT '12:00 PM - 7:00 PM',
   google_rating TEXT DEFAULT '4.9',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

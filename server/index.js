@@ -82,8 +82,10 @@ function isValidToken(token) {
 
 function requireAuth(req, res, next) {
   const authHeader = req.headers['authorization'] || '';
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : req.headers['x-studio-token'];
-  const directPasscode = req.headers['x-studio-passcode'];
+  const token = authHeader.startsWith('Bearer ')
+    ? authHeader.slice(7).trim()
+    : (req.headers['x-studio-token'] || req.query?.token);
+  const directPasscode = req.headers['x-studio-passcode'] || req.query?.passcode;
   const settings = db.getSettings();
   const validPasscode = settings?.studioPasscode || process.env.STUDIO_PASSCODE || 'nbs0812';
 
