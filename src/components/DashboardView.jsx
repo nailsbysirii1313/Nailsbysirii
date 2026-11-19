@@ -503,35 +503,41 @@ export default function DashboardView({
             </div>
 
             <div className="space-y-2.5">
-              {invoices.slice(0, 4).map((inv) => (
-                <div
-                  key={inv.id}
-                  onClick={() => onOpenInvoiceDetail(inv)}
-                  className="p-3.5 rounded-2xl bg-studio-canvas/50 hover:bg-studio-canvas border border-border-subtle cursor-pointer transition-all space-y-1"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-text-ink">
-                      {inv.clientName}
-                    </span>
-                    <span
-                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                        inv.status === 'Paid'
-                          ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                          : 'bg-amber-50 text-amber-800 border border-amber-200'
-                      }`}
-                    >
-                      {inv.status}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs text-text-muted">
-                    <span className="font-mono text-[10px]">{inv.invoiceNumber}</span>
-                    <span className="font-display font-semibold text-text-ink">
-                      {currency}{Number(inv.total).toLocaleString('en-IN')}
-                    </span>
-                  </div>
+              {invoices.length === 0 ? (
+                <div className="py-6 text-center text-xs text-text-muted">
+                  No invoices created yet
                 </div>
-              ))}
+              ) : (
+                invoices.slice(0, 4).map((inv) => (
+                  <div
+                    key={inv.id}
+                    onClick={() => onOpenInvoiceDetail(inv)}
+                    className="p-3.5 rounded-2xl bg-studio-canvas/50 hover:bg-studio-canvas border border-border-subtle cursor-pointer transition-all space-y-1"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-text-ink">
+                        {inv.clientName}
+                      </span>
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                          inv.status === 'Paid'
+                            ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                            : 'bg-amber-50 text-amber-800 border border-amber-200'
+                        }`}
+                      >
+                        {inv.status}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-text-muted">
+                      <span className="font-mono text-[10px]">{inv.invoiceNumber}</span>
+                      <span className="font-display font-semibold text-text-ink">
+                        {currency}{Number(inv.total).toLocaleString('en-IN')}
+                      </span>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
 
             <button

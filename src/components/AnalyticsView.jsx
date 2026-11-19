@@ -81,7 +81,7 @@ export default function AnalyticsView({
   const sortedClients = [...clients].sort((a, b) => (b.totalSpent || 0) - (a.totalSpent || 0));
 
   // 6. Recent Months Performance Run-rate
-  const monthlyRunRate = Math.round((totalRevenue / 3) * 1.2) || 4500;
+  const monthlyRunRate = totalRevenue > 0 ? Math.round((totalRevenue / 3) * 1.2) : 0;
 
   return (
     <div className="space-y-8 pb-16 font-sans">
@@ -205,26 +205,32 @@ export default function AnalyticsView({
           </div>
 
           <div className="space-y-4 pt-2">
-            {Object.entries(categoryMap).map(([category, amount]) => {
-              const pct = Math.round((amount / totalCatRevenue) * 100);
+            {Object.keys(categoryMap).length === 0 ? (
+              <div className="py-8 text-center text-xs text-text-muted">
+                No category breakdown available yet. Complete client invoices to see treatment revenue.
+              </div>
+            ) : (
+              Object.entries(categoryMap).map(([category, amount]) => {
+                const pct = Math.round((amount / totalCatRevenue) * 100);
 
-              return (
-                <div key={category} className="space-y-1.5 text-xs">
-                  <div className="flex items-center justify-between font-semibold">
-                    <span className="text-text-secondary">{category}</span>
-                    <span className="text-text-ink font-display font-bold">
-                      {currency}{Number(amount).toLocaleString('en-IN')} ({pct}%)
-                    </span>
+                return (
+                  <div key={category} className="space-y-1.5 text-xs">
+                    <div className="flex items-center justify-between font-semibold">
+                      <span className="text-text-secondary">{category}</span>
+                      <span className="text-text-ink font-display font-bold">
+                        {currency}{Number(amount).toLocaleString('en-IN')} ({pct}%)
+                      </span>
+                    </div>
+                    <div className="w-full bg-studio-canvas h-2.5 rounded-full overflow-hidden border border-border-subtle/50">
+                      <div
+                        className="bg-brand-wine h-full rounded-full transition-all duration-500"
+                        style={{ width: `${Math.max(5, pct)}%` }}
+                      />
+                    </div>
                   </div>
-                  <div className="w-full bg-studio-canvas h-2.5 rounded-full overflow-hidden border border-border-subtle/50">
-                    <div
-                      className="bg-brand-wine h-full rounded-full transition-all duration-500"
-                      style={{ width: `${Math.max(5, pct)}%` }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
 
           <div className="p-4 rounded-2xl bg-studio-canvas border border-border-subtle text-xs text-text-secondary leading-relaxed">
@@ -250,40 +256,46 @@ export default function AnalyticsView({
           </div>
 
           <div className="space-y-3 pt-1">
-            {sortedClients.slice(0, 5).map((client, index) => (
-              <div
-                key={client.id}
-                className="p-3.5 rounded-2xl bg-studio-canvas border border-border-subtle flex items-center justify-between gap-3 text-xs"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="w-7 h-7 rounded-full bg-studio-surface border border-border-subtle text-brand-wine font-bold flex items-center justify-center text-xs shrink-0 font-display">
-                    {index + 1}
-                  </span>
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-display font-semibold text-sm text-text-ink">
-                        {client.name}
-                      </span>
-                      {client.vip && (
-                        <span className="px-2 py-0.5 rounded-md text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                          VIP
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-xs text-text-muted block">
-                      {client.preferredShape || 'Almond'} • {client.totalVisits || 1} sessions
+            {sortedClients.length === 0 ? (
+              <div className="py-8 text-center text-xs text-text-muted">
+                No client records yet. When clients book appointments or make purchases, your top clients will appear here.
+              </div>
+            ) : (
+              sortedClients.slice(0, 5).map((client, index) => (
+                <div
+                  key={client.id}
+                  className="p-3.5 rounded-2xl bg-studio-canvas border border-border-subtle flex items-center justify-between gap-3 text-xs"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="w-7 h-7 rounded-full bg-studio-surface border border-border-subtle text-brand-wine font-bold flex items-center justify-center text-xs shrink-0 font-display">
+                      {index + 1}
                     </span>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-display font-semibold text-sm text-text-ink">
+                          {client.name}
+                        </span>
+                        {client.vip && (
+                          <span className="px-2 py-0.5 rounded-md text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                            VIP
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-xs text-text-muted block">
+                        {client.preferredShape || 'Almond'} • {client.totalVisits || 1} sessions
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="text-right">
+                    <span className="font-display font-bold text-brand-wine text-base block">
+                      {currency}{(client.totalSpent || 0).toLocaleString('en-IN')}
+                    </span>
+                    <span className="text-[10px] text-text-muted block">Lifetime Spend</span>
                   </div>
                 </div>
-
-                <div className="text-right">
-                  <span className="font-display font-bold text-brand-wine text-base block">
-                    {currency}{(client.totalSpent || 0).toLocaleString('en-IN')}
-                  </span>
-                  <span className="text-[10px] text-text-muted block">Lifetime Spend</span>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>
