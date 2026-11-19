@@ -18,40 +18,66 @@ import {
   Lock,
   KeyRound,
   ShieldCheck,
-  RotateCcw
+  RotateCcw,
+  Plus,
+  Trash2
 } from 'lucide-react';
 import StudioLogo from './StudioLogo';
 
 export const DEFAULT_HERO_CARDS = [
   {
     id: 'soft',
-    label: 'Soft & Simple',
     title: 'Clean Glazed Donut',
     shape: 'Almond',
     length: 'Short',
     imageUrl: '/hero/soft-simple.jpg',
-    subtitle: 'Sheer strawberry nude • Natural almond',
-    tag: 'Trending Now'
+    subtitle: 'Sheer strawberry gel with pearl chrome on natural nails.',
+    tag: 'Studio Look'
   },
   {
     id: 'sparkle',
-    label: 'A Little Sparkle',
     title: 'Golden Pearl Chrome',
     shape: 'Coffin',
     length: 'Medium',
     imageUrl: '/hero/little-sparkle.jpg',
-    subtitle: 'Champagne porcelain • Molten chrome shine',
+    subtitle: 'Champagne porcelain with pearl chrome on coffin nails.',
     tag: 'Studio Fav'
   },
   {
     id: 'statement',
-    label: 'Make a Statement',
     title: 'Velvet Rose Cat-Eye',
     shape: 'Stiletto',
     length: 'Long',
     imageUrl: '/hero/make-statement.jpg',
-    subtitle: 'Magnetic silk shimmer • Sculpted stiletto',
-    tag: 'Statement Art'
+    subtitle: 'Deep berry velvet cat-eye shimmer on long sculpted tips.',
+    tag: 'Studio Look'
+  },
+  {
+    id: 'french_ombre',
+    title: 'French Ombré Sculpture',
+    shape: 'Almond',
+    length: 'Long',
+    imageUrl: '/catalogue/french-ombre.jpg',
+    subtitle: 'Seamless baby boomer gradient with crystalline high-apex gloss.',
+    tag: 'Studio Classic'
+  },
+  {
+    id: 'luxe_pearl',
+    title: 'Baroque Molten Gold & Pearls',
+    shape: 'Coffin',
+    length: 'Medium',
+    imageUrl: '/catalogue/luxe-pearl.jpg',
+    subtitle: 'Hand-sculpted 3D molten gold curves with real freshwater baroque pearls.',
+    tag: 'Luxury Edition'
+  },
+  {
+    id: 'milky_white',
+    title: 'Milky White Gold Flake',
+    shape: 'Almond',
+    length: 'Medium',
+    imageUrl: '/catalogue/milky-white.jpg',
+    subtitle: 'Semi-translucent milk builder gel with 24k gold leaf accents.',
+    tag: 'Atelier Pick'
   }
 ];
 
@@ -166,6 +192,36 @@ export default function SettingsView({ settings, onSaveSettings }) {
         return { ...prev, heroCards: updated };
       });
     }
+  };
+
+  const handleAddHeroCard = () => {
+    const newId = `look_${Date.now()}`;
+    const newCard = {
+      id: newId,
+      title: 'New Signature Look',
+      shape: 'Almond',
+      length: 'Medium',
+      imageUrl: '/catalogue/french-ombre.jpg',
+      subtitle: 'Handcrafted signature atelier nail art design.',
+      tag: 'Studio Look'
+    };
+    setFormData((prev) => ({
+      ...prev,
+      heroCards: [...(prev.heroCards || DEFAULT_HERO_CARDS), newCard]
+    }));
+  };
+
+  const handleDeleteHeroCard = (index) => {
+    const current = formData.heroCards || DEFAULT_HERO_CARDS;
+    if (current.length <= 3) {
+      alert('The booklet deck requires at least 3 cards.');
+      return;
+    }
+    setFormData((prev) => {
+      const updated = [...(prev.heroCards || DEFAULT_HERO_CARDS)];
+      updated.splice(index, 1);
+      return { ...prev, heroCards: updated };
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -349,40 +405,62 @@ export default function SettingsView({ settings, onSaveSettings }) {
 
         {/* Hero Showcase Cards (Homepage "Your Next Nail Crush") */}
         <div className="bg-studio-surface rounded-3xl p-5 sm:p-7 border border-border-subtle shadow-xs space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-border-subtle">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border-subtle">
             <div className="flex items-center gap-2.5">
               <Palette className="w-4 h-4 text-brand-wine" />
               <div>
                 <h3 className="font-display font-semibold text-base text-text-ink">
-                  Hero Showcase Cards ("Your Next Nail Crush")
+                  Hero Lookbook & Booklet Cards ("Your Next Nail Crush")
                 </h3>
                 <p className="text-xs text-text-muted mt-0.5 leading-relaxed">
-                  Customize the 3 interactive nail look cards featured on the homepage hero. Upload real photos or paste URLs.
+                  Manage the interactive booklet cards deck featured on the homepage hero. Upload photos, edit titles, descriptions, tags, shapes, and lengths. (Minimum 3 cards).
                 </p>
               </div>
             </div>
+            <button
+              type="button"
+              onClick={handleAddHeroCard}
+              className="px-4 py-2 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all active:scale-95 shrink-0 self-start sm:self-auto"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add Booklet Card</span>
+            </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {formData.heroCards.map((card, idx) => (
               <div
                 key={card.id || idx}
                 className="rounded-2xl border border-border-subtle p-4 bg-studio-canvas/40 space-y-3.5 flex flex-col justify-between hover:border-brand-wine/30 transition-colors shadow-xs"
               >
-                {/* Card Header & Mood Badge */}
+                {/* Card Header */}
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-studio-wineLight text-brand-wine border border-brand-wine/20">
-                    Card #{idx + 1} • {card.label}
+                    Card #{idx + 1} • {card.title || 'Untitled'}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => handleResetHeroCard(idx)}
-                    className="text-[11px] text-text-muted hover:text-brand-wine flex items-center gap-1 transition-colors"
-                    title="Reset to default preset"
-                  >
-                    <RotateCcw className="w-3 h-3" />
-                    <span>Reset</span>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    {idx < DEFAULT_HERO_CARDS.length && (
+                      <button
+                        type="button"
+                        onClick={() => handleResetHeroCard(idx)}
+                        className="text-[11px] text-text-muted hover:text-brand-wine flex items-center gap-1 transition-colors"
+                        title="Reset to default preset"
+                      >
+                        <RotateCcw className="w-3 h-3" />
+                        <span>Reset</span>
+                      </button>
+                    )}
+                    {formData.heroCards.length > 3 && (
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteHeroCard(idx)}
+                        className="text-[11px] text-red-500 hover:text-red-700 flex items-center gap-1 transition-colors ml-1 p-1"
+                        title="Delete card from booklet deck"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 {/* Photo Preview & Upload */}
@@ -402,12 +480,11 @@ export default function SettingsView({ settings, onSaveSettings }) {
                         <span>No image selected</span>
                       </div>
                     )}
-                    <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-wider">
-                      {card.tag || 'Featured'}
-                    </span>
-                    <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-text-ink text-[9px] font-semibold">
-                      {card.shape} • {card.length}
-                    </span>
+                    {card.tag && (
+                      <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-wider">
+                        {card.tag}
+                      </span>
+                    )}
                   </div>
 
                   {cardUploadedMsgs[idx] && (
@@ -435,7 +512,7 @@ export default function SettingsView({ settings, onSaveSettings }) {
                     </label>
                     <input
                       type="text"
-                      value={card.imageUrl}
+                      value={card.imageUrl || ''}
                       onChange={(e) => handleHeroCardFieldChange(idx, 'imageUrl', e.target.value)}
                       placeholder="/hero/photo.jpg or https://..."
                       className="w-full px-2.5 py-1.5 rounded-lg border border-border-subtle text-[11px] bg-studio-surface text-text-ink focus:border-brand-wine outline-none font-mono"
@@ -451,7 +528,7 @@ export default function SettingsView({ settings, onSaveSettings }) {
                     </label>
                     <input
                       type="text"
-                      value={card.title}
+                      value={card.title || ''}
                       onChange={(e) => handleHeroCardFieldChange(idx, 'title', e.target.value)}
                       className="w-full px-2.5 py-1.5 rounded-lg border border-border-subtle text-xs font-semibold bg-studio-surface text-text-ink focus:border-brand-wine outline-none"
                       placeholder="e.g. Clean Glazed Donut"
@@ -464,38 +541,24 @@ export default function SettingsView({ settings, onSaveSettings }) {
                     </label>
                     <input
                       type="text"
-                      value={card.subtitle}
+                      value={card.subtitle || ''}
                       onChange={(e) => handleHeroCardFieldChange(idx, 'subtitle', e.target.value)}
                       className="w-full px-2.5 py-1.5 rounded-lg border border-border-subtle text-[11px] bg-studio-surface text-text-muted focus:border-brand-wine outline-none"
-                      placeholder="e.g. Sheer strawberry nude • Natural almond"
+                      placeholder="e.g. Sheer strawberry gel with pearl chrome on natural nails."
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="block text-[10px] font-semibold text-text-ink mb-1">
-                        Tag Badge
-                      </label>
-                      <input
-                        type="text"
-                        value={card.tag}
-                        onChange={(e) => handleHeroCardFieldChange(idx, 'tag', e.target.value)}
-                        className="w-full px-2 py-1.5 rounded-lg border border-border-subtle text-[11px] bg-studio-surface text-text-ink focus:border-brand-wine outline-none"
-                        placeholder="e.g. Trending Now"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-semibold text-text-ink mb-1">
-                        Mood Label
-                      </label>
-                      <input
-                        type="text"
-                        value={card.label}
-                        onChange={(e) => handleHeroCardFieldChange(idx, 'label', e.target.value)}
-                        className="w-full px-2 py-1.5 rounded-lg border border-border-subtle text-[11px] bg-studio-surface text-text-ink focus:border-brand-wine outline-none"
-                        placeholder="e.g. Soft & Simple"
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-[10px] font-semibold text-text-ink mb-1">
+                      Tag Badge (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={card.tag || ''}
+                      onChange={(e) => handleHeroCardFieldChange(idx, 'tag', e.target.value)}
+                      className="w-full px-2 py-1.5 rounded-lg border border-border-subtle text-[11px] bg-studio-surface text-text-ink focus:border-brand-wine outline-none"
+                      placeholder="e.g. Studio Fav, Trending Now"
+                    />
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
@@ -504,7 +567,7 @@ export default function SettingsView({ settings, onSaveSettings }) {
                         Nail Shape
                       </label>
                       <select
-                        value={card.shape}
+                        value={card.shape || 'Almond'}
                         onChange={(e) => handleHeroCardFieldChange(idx, 'shape', e.target.value)}
                         className="w-full px-2 py-1.5 rounded-lg border border-border-subtle text-[11px] bg-studio-surface text-text-ink focus:border-brand-wine outline-none"
                       >
@@ -521,7 +584,7 @@ export default function SettingsView({ settings, onSaveSettings }) {
                         Length
                       </label>
                       <select
-                        value={card.length}
+                        value={card.length || 'Medium'}
                         onChange={(e) => handleHeroCardFieldChange(idx, 'length', e.target.value)}
                         className="w-full px-2 py-1.5 rounded-lg border border-border-subtle text-[11px] bg-studio-surface text-text-ink focus:border-brand-wine outline-none"
                       >

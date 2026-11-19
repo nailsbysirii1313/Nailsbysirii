@@ -18,14 +18,13 @@
     "paymentInstructions": "UPI: 7302623493 / nailsbysirii@okaxis (GPay, PhonePe, Paytm) • Cash accepted at studio",
     "defaultTaxRate": 0,
     "depositRequirement": 500,
-    "timings": "12:00 PM - 7:00 PM",
+    "timings": "12:00 PM – 7:00 PM",
     "googleRating": "4.9",
     "googleReviewCount": 344,
     "googleMapsUrl": "https://maps.google.com/?q=Nails+by+Sirii+Laxmi+Navraj+Plaza+Garhi+Cantonment+Dehradun",
     "heroCards": [
       {
         "id": "soft",
-        "label": "Simple",
         "title": "Clean Glazed Donut",
         "shape": "Almond",
         "length": "Short",
@@ -35,7 +34,6 @@
       },
       {
         "id": "sparkle",
-        "label": "Sparkly",
         "title": "Golden Pearl Chrome",
         "shape": "Coffin",
         "length": "Medium",
@@ -45,13 +43,39 @@
       },
       {
         "id": "statement",
-        "label": "Bold",
         "title": "Velvet Rose Cat-Eye",
         "shape": "Stiletto",
         "length": "Long",
         "imageUrl": "/hero/make-statement.jpg",
         "subtitle": "Deep berry velvet cat-eye shimmer on long sculpted tips.",
         "tag": "Studio Look"
+      },
+      {
+        "id": "french_ombre",
+        "title": "French Ombré Sculpture",
+        "shape": "Almond",
+        "length": "Long",
+        "imageUrl": "/catalogue/french-ombre.jpg",
+        "subtitle": "Seamless baby boomer gradient with crystalline high-apex gloss.",
+        "tag": "Studio Classic"
+      },
+      {
+        "id": "luxe_pearl",
+        "title": "Baroque Molten Gold & Pearls",
+        "shape": "Coffin",
+        "length": "Medium",
+        "imageUrl": "/catalogue/luxe-pearl.jpg",
+        "subtitle": "Hand-sculpted 3D molten gold curves with real freshwater baroque pearls.",
+        "tag": "Luxury Edition"
+      },
+      {
+        "id": "milky_white",
+        "title": "Milky White Gold Flake",
+        "shape": "Almond",
+        "length": "Medium",
+        "imageUrl": "/catalogue/milky-white.jpg",
+        "subtitle": "Semi-translucent milk builder gel with 24k gold leaf accents.",
+        "tag": "Atelier Pick"
       }
     ]
   },
@@ -272,7 +296,10 @@
       "status": "Confirmed",
       "price": 0,
       "createdAt": "2026-11-17T16:24:33.405+00:00",
-      "updatedAt": "2026-11-17T16:24:33.405+00:00"
+      "updatedAt": "2026-11-19T08:53:13.108Z",
+      "reminded24h": true,
+      "reminderSent": true,
+      "lastReminderAt": "2026-11-19T08:53:13.108Z"
     },
     {
       "id": "apt_1794992005484",
@@ -329,14 +356,10 @@
       "shape": "",
       "length": "",
       "notes": "",
-      "status": "Confirmed",
+      "status": "Completed",
       "price": 1600,
       "createdAt": "2026-11-18T09:49:03.729+00:00",
-      "updatedAt": "2026-11-19T04:03:30.549Z",
-      "reminded24h": true,
-      "reminderSent": true,
-      "lastReminderAt": "2026-11-19T04:03:30.549Z",
-      "reminded4h": true
+      "updatedAt": "2026-11-19T08:38:38.517+00:00"
     }
   ],
   "invoices": [
@@ -367,6 +390,17 @@
     }
   ],
   "notifications": [
+    {
+      "type": "appointment_reminder",
+      "title": "[24h Notice] Kavya Singhania - 14:00",
+      "message": "[24-HOUR ADVANCE ALERT] • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nClient: Kavya Singhania\nPhone: 9897123456\nService: French Ombré Acrylic Sculpture\nSchedule: 2026-11-20 at 14:00\nPrice: ₹0 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\nNote: Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "appointmentId": "apt_1794932673405",
+      "reminderType": "24h",
+      "id": "notif_1795078393106",
+      "sentAt": "2026-11-19T08:53:13.106Z"
+    },
     {
       "type": "appointment_reminder",
       "title": "[4h Urgent Alert] Pooja Verma - 14:00",
@@ -824,7 +858,7 @@
       "tag": "Bestseller",
       "description": "Ultra-popular pearlescent glazed chrome over sheer strawberry milk builder gel. Hand-buffed with salon chrome powder for an ethereal mirror shine.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": "/hero/little-sparkle.jpg"
+      "imageUrl": null
     },
     {
       "id": "pop_2",
@@ -840,7 +874,7 @@
       "tag": "Studio Pick",
       "description": "Deep dimensional velvet magnetic shimmer refracting light across long sculpted stilettos. Dramatic, luxurious, and chip-proof.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": "/hero/make-statement.jpg"
+      "imageUrl": null
     },
     {
       "id": "pop_3",
@@ -856,7 +890,7 @@
       "tag": "Luxury Edition",
       "description": "Hand-sculpted 3D liquid molten gold curves and real freshwater baroque pearl accents encrusted over an ivory porcelain bed.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": "/catalogue/french-ombre.jpg"
+      "imageUrl": null
     },
     {
       "id": "pop_4",
@@ -872,7 +906,7 @@
       "tag": "Clean Aesthetic",
       "description": "Seamless airbrushed baby boomer pink-and-white ombré gradient with high-apex reinforcement. Natural, clean, and workplace ready.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": "/hero/soft-simple.jpg"
+      "imageUrl": null
     },
     {
       "id": "pop_5",
@@ -888,7 +922,7 @@
       "tag": "Trending",
       "description": "High-shine liquid silver chrome starbursts, cross-stars, and geometric cyber accents set against a sheer neutral canvas.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": "/hero/little-sparkle.jpg"
+      "imageUrl": null
     },
     {
       "id": "pop_6",
@@ -904,7 +938,7 @@
       "tag": "Handcrafted",
       "description": "Subtle translucent white marble veining swirled with pure 24K gold foil flecks suspended in crystal clear gel depth.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": "/catalogue/french-ombre.jpg"
+      "imageUrl": null
     }
   ],
   "pressOnOrders": [

@@ -274,13 +274,6 @@ export default function CataloguePageView({
                         </span>
                       )}
                     </div>
-
-                    {/* Bottom Specs Badge */}
-                    <div className="absolute bottom-2.5 right-3 pointer-events-none">
-                      <span className="px-2.5 py-0.5 rounded-full bg-studio-ink/80 text-white backdrop-blur-md text-[10px] font-medium shadow-xs">
-                        {shapeName} • {lengthName}
-                      </span>
-                    </div>
                   </div>
 
                   {/* Body Content */}

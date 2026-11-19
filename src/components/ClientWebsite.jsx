@@ -224,39 +224,57 @@ function classifyReview(r) {
 export const DEFAULT_HERO_CARDS = [
   {
     id: 'soft',
-    label: 'Simple',
     title: 'Clean Glazed Donut',
     shape: 'Almond',
     length: 'Short',
     imageUrl: '/hero/soft-simple.jpg',
-    baseColor: '#FDF2F8',
-    finish: 'chrome',
     subtitle: 'Sheer strawberry gel with pearl chrome on natural nails.',
     tag: 'Studio Look'
   },
   {
     id: 'sparkle',
-    label: 'Sparkly',
     title: 'Golden Pearl Chrome',
     shape: 'Coffin',
     length: 'Medium',
     imageUrl: '/hero/little-sparkle.jpg',
-    baseColor: '#FFFBEB',
-    finish: 'chrome',
     subtitle: 'Champagne porcelain with pearl chrome on coffin nails.',
     tag: 'Studio Fav'
   },
   {
     id: 'statement',
-    label: 'Bold',
     title: 'Velvet Rose Cat-Eye',
     shape: 'Stiletto',
     length: 'Long',
     imageUrl: '/hero/make-statement.jpg',
-    baseColor: '#D4386A',
-    finish: 'cat-eye',
     subtitle: 'Deep berry velvet cat-eye shimmer on long sculpted tips.',
     tag: 'Studio Look'
+  },
+  {
+    id: 'french_ombre',
+    title: 'French Ombré Sculpture',
+    shape: 'Almond',
+    length: 'Long',
+    imageUrl: '/catalogue/french-ombre.jpg',
+    subtitle: 'Seamless baby boomer gradient with crystalline high-apex gloss.',
+    tag: 'Studio Classic'
+  },
+  {
+    id: 'luxe_pearl',
+    title: 'Baroque Molten Gold & Pearls',
+    shape: 'Coffin',
+    length: 'Medium',
+    imageUrl: '/catalogue/luxe-pearl.jpg',
+    subtitle: 'Hand-sculpted 3D molten gold curves with real freshwater baroque pearls.',
+    tag: 'Luxury Edition'
+  },
+  {
+    id: 'milky_white',
+    title: 'Milky White Gold Flake',
+    shape: 'Almond',
+    length: 'Medium',
+    imageUrl: '/catalogue/milky-white.jpg',
+    subtitle: 'Semi-translucent milk builder gel with 24k gold leaf accents.',
+    tag: 'Atelier Pick'
   }
 ];
 
@@ -722,28 +740,34 @@ export default function ClientWebsite({
 
   // Hero Look Quick Booking Handler
   const handleBookHeroStyle = (styleId) => {
-    const styleObj = heroCards.find((s) => s.id === styleId) || heroCards[1];
-    let matchedLook = null;
-    if (styleObj.id === 'soft') {
-      matchedLook = catalogueBooklet.find((b) => b.id === 'natural_1') || catalogueBooklet[0];
-    } else if (styleObj.id === 'sparkle') {
-      matchedLook = catalogueBooklet.find((b) => b.id === 'biab_1') || catalogueBooklet[2];
-    } else {
-      matchedLook = catalogueBooklet.find((b) => b.id === 'acrylic_4') || catalogueBooklet[1];
+    const styleObj = heroCards.find((s) => s.id === styleId) || heroCards[1] || heroCards[0];
+    let matchedLook = catalogueBooklet.find((b) => b.id === styleObj.id || b.title?.toLowerCase() === styleObj.title?.toLowerCase());
+    if (!matchedLook) {
+      if (styleObj.id === 'soft') {
+        matchedLook = catalogueBooklet.find((b) => b.id === 'natural_1') || catalogueBooklet[0];
+      } else if (styleObj.id === 'sparkle') {
+        matchedLook = catalogueBooklet.find((b) => b.id === 'biab_1') || catalogueBooklet[2];
+      } else if (styleObj.id === 'french_ombre') {
+        matchedLook = catalogueBooklet.find((b) => b.id === 'gel_2') || catalogueBooklet[1];
+      } else if (styleObj.id === 'luxe_pearl') {
+        matchedLook = catalogueBooklet.find((b) => b.id === 'acrylic_4') || catalogueBooklet[1];
+      } else {
+        matchedLook = catalogueBooklet[0] || null;
+      }
     }
 
     setBookingMode('lookbook');
     setSelectedLook(matchedLook);
-    setSelectedAesthetic(`${styleObj.label} (${styleObj.title})`);
+    setSelectedAesthetic(styleObj.title || 'Signature Design');
     const shapeStr = String(styleObj.shape || 'Almond');
     const lengthStr = String(styleObj.length || 'Medium');
     setSelectedShape(shapeStr.charAt(0).toUpperCase() + shapeStr.slice(1));
     setSelectedLength(lengthStr.charAt(0).toUpperCase() + lengthStr.slice(1));
-    setClientNotes(`Hero Selection: ${styleObj.label} - ${styleObj.title} (${styleObj.subtitle})`);
+    setClientNotes(`Hero Selection: ${styleObj.title} (${styleObj.subtitle || ''})`);
     scrollTo('booking-section');
     setBookingStep(1);
     if (onAddToast) {
-      onAddToast('Look Selected', `"${styleObj.label}" loaded into booking reservation.`, 'success');
+      onAddToast('Look Selected', `"${styleObj.title}" loaded into booking reservation.`, 'success');
     }
   };
 
@@ -1439,10 +1463,6 @@ export default function ClientWebsite({
                       decoding="async"
                     />
 
-                    <span className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-studio-surface/90 backdrop-blur-sm border border-studio-border text-[10px] font-semibold text-studio-secondary">
-                      {typeof item.shape === 'object' ? item.shape.name : item.shape || 'Almond'} • {typeof item.length === 'object' ? item.length.name : item.length || 'Medium'}
-                    </span>
-
                     <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-studio-surface/90 backdrop-blur-sm border border-studio-border text-[10px] font-bold text-studio-wine">
                       {item.category || 'Signature Art'}
                     </span>
@@ -1626,11 +1646,6 @@ export default function ClientWebsite({
                     {/* Tag badge */}
                     <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/25 text-[10px] font-bold text-white shadow-xs">
                       {product.tag || 'Handcrafted'}
-                    </span>
-
-                    {/* Silhouette info */}
-                    <span className="absolute bottom-3 right-3 px-2.5 py-0.5 rounded-full bg-studio-wine/90 backdrop-blur-md text-[10px] font-bold text-white shadow-xs">
-                      {product.shape} • {product.length}
                     </span>
                   </div>
 

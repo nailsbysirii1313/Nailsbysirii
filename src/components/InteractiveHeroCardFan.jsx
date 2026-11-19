@@ -1,45 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Info, X, Maximize2 } from 'lucide-react';
+import { X, Maximize2 } from 'lucide-react';
 import { playStudioChime } from '../utils/audio';
 import ModalPortal from './ModalPortal';
-
-// Verified plain-language descriptions for each displayed look
-const VERIFIED_DESCRIPTIONS = {
-  soft: 'Sheer strawberry gel with pearl chrome on natural nails.',
-  sparkle: 'Champagne porcelain with pearl chrome on coffin nails.',
-  statement: 'Deep berry velvet cat-eye shimmer on long sculpted tips.'
-};
-
-const MOOD_LABELS = {
-  soft: 'Simple',
-  sparkle: 'Sparkly',
-  statement: 'Bold'
-};
-
-// Nail recipe details for optional info modal
-const NAIL_RECIPES = {
-  soft: {
-    prep: 'Dry Russian cuticle care with precision e-file',
-    base: 'Sheer strawberry milk builder gel reinforcement',
-    finish: 'Pearlized glazed chrome buffed to high-mirror shine',
-    wear: '3-4 weeks chip-free wear',
-    time: '60-75 mins'
-  },
-  sparkle: {
-    prep: 'Apex alignment and diamond cuticle buffer',
-    base: 'Champagne porcelain acrylic or soft gel sculpture',
-    finish: 'Molten pearl chrome with glass topcoat',
-    wear: '4+ weeks high-gloss retention',
-    time: '75-90 mins'
-  },
-  statement: {
-    prep: 'Stiletto architecture and apex balance',
-    base: 'Deep berry velvet rose magnetic cat-eye gel',
-    finish: 'Multi-angle optical shimmer and gloss topcoat',
-    wear: '4+ weeks structural durability',
-    time: '90-105 mins'
-  }
-};
 
 export default function InteractiveHeroCardFan({
   heroCards = [],
@@ -51,7 +13,6 @@ export default function InteractiveHeroCardFan({
 }) {
   const [dragX, setDragX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [showRecipeModal, setShowRecipeModal] = useState(false);
   const [showPhotoModal, setShowPhotoModal] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
@@ -102,7 +63,8 @@ export default function InteractiveHeroCardFan({
   // Cycle through cards (-1 = previous, +1 = next)
   const cycleCard = (direction) => {
     if (!heroCards.length) return;
-    const nextIdx = (activeIdx + direction + heroCards.length) % heroCards.length;
+    const len = heroCards.length;
+    const nextIdx = (activeIdx + direction + len) % len;
     const nextCard = heroCards[nextIdx];
     if (nextCard) {
       setActiveHeroStyle(nextCard.id);
@@ -197,14 +159,13 @@ export default function InteractiveHeroCardFan({
   };
 
   const activeCard = heroCards[activeIdx] || heroCards[1] || heroCards[0];
-  const recipeData = NAIL_RECIPES[activeCard?.id] || NAIL_RECIPES.sparkle;
-
   const transitionDuration = prefersReducedMotion ? '0ms' : '300ms';
   const transitionEase = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
+  const totalCards = heroCards.length || 1;
 
   return (
     <div className={`relative flex flex-col items-center select-none w-full ${className}`}>
-      {/* 1. Touch & Mouse Interactive Fan Deck Container */}
+      {/* 1. Touch & Mouse Interactive Booklet Fan Deck Container */}
       <div
         ref={deckRef}
         onTouchStart={handleTouchStart}
@@ -224,16 +185,19 @@ export default function InteractiveHeroCardFan({
           className="absolute left-1/2 top-[46%] -translate-x-[47%] -translate-y-1/2 w-[265px] sm:w-[305px] h-[185px] sm:h-[205px] rounded-[50%] bg-[#F5E6E5]/70 pointer-events-none select-none z-0"
         />
 
-        {/* Three Overlapping Cards */}
+        {/* Booklet Overlapping Cards */}
         {heroCards.map((style, idx) => {
           const isFront = activeIdx === idx;
-          const diff = (idx - activeIdx + heroCards.length) % heroCards.length;
+          const diff = (idx - activeIdx + totalCards) % totalCards;
+          const isRight = diff === 1;
+          const isLeft = diff === totalCards - 1;
 
           // Card transformation calculation based on position & dragOffset
           let transformStyle = {};
           let zIndex = 10;
-          let opacity = 0.94;
-          let cursor = 'pointer';
+          let opacity = 0;
+          let cursor = 'default';
+          let isInteractive = isFront || isRight || isLeft;
 
           if (isFront) {
             zIndex = 30;
@@ -251,9 +215,10 @@ export default function InteractiveHeroCardFan({
                 ? 'none'
                 : `transform ${transitionDuration} ${transitionEase}, box-shadow ${transitionDuration} ease`
             };
-          } else if (diff === 1) {
+          } else if (isRight) {
             // Right Card: default translate right +8deg
             zIndex = 15;
+            cursor = 'pointer';
             const baseTranslate = 64; // px
             const dragFactor = isDragging && dragX < 0 ? Math.min(Math.abs(dragX) / 75, 1) : 0;
             const currentTranslate = baseTranslate - dragFactor * 38;
@@ -267,9 +232,10 @@ export default function InteractiveHeroCardFan({
                 ? 'none'
                 : `transform ${transitionDuration} ${transitionEase}, opacity ${transitionDuration} ease`
             };
-          } else {
+          } else if (isLeft) {
             // Left Card: default translate left -8deg
             zIndex = 15;
+            cursor = 'pointer';
             const baseTranslate = -64; // px
             const dragFactor = isDragging && dragX > 0 ? Math.min(dragX / 75, 1) : 0;
             const currentTranslate = baseTranslate + dragFactor * 38;
@@ -283,24 +249,29 @@ export default function InteractiveHeroCardFan({
                 ? 'none'
                 : `transform ${transitionDuration} ${transitionEase}, opacity ${transitionDuration} ease`
             };
+          } else {
+            // Deep stacked cards in booklet: hidden offstage until cycled
+            zIndex = 5;
+            opacity = 0;
+            cursor = 'default';
+            transformStyle = {
+              transform: 'translate3d(0px, 0px, -40px) scale(0.85)',
+              transition: `transform ${transitionDuration} ${transitionEase}, opacity ${transitionDuration} ease`,
+              pointerEvents: 'none'
+            };
           }
 
-          const fallbackImg =
-            idx === 0
-              ? '/hero/soft-simple.jpg'
-              : idx === 1
-              ? '/hero/little-sparkle.jpg'
-              : '/hero/make-statement.jpg';
+          const fallbackImg = '/hero/soft-simple.jpg';
           const cardImage = style.imageUrl || fallbackImg;
-          const description = VERIFIED_DESCRIPTIONS[style.id] || style.subtitle || '';
+          const description = style.subtitle || style.description || '';
 
           return (
             <div
               key={style.id || idx}
-              role={!isFront ? 'button' : undefined}
-              aria-label={!isFront ? `Select ${style.title}` : undefined}
+              role={!isFront && isInteractive ? 'button' : undefined}
+              aria-label={!isFront && isInteractive ? `Select ${style.title}` : undefined}
               onClick={() => {
-                if (!isFront) {
+                if (!isFront && isInteractive) {
                   setActiveHeroStyle(style.id);
                   playStudioChime();
                 }
@@ -327,14 +298,14 @@ export default function InteractiveHeroCardFan({
                   decoding="async"
                 />
 
-                {/* Subtle gradient for label contrast */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/15 pointer-events-none" />
+                {/* Subtle gradient for contrast */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 pointer-events-none" />
 
-                {/* Studio Fav badge (only on Studio Pick card when in front) */}
-                {isFront && style.id === 'sparkle' && (
+                {/* Studio Tag / Badge (if configured in Studio Hub) */}
+                {isFront && style.tag && (
                   <div className="absolute top-2 left-2 z-10">
                     <span className="text-[9px] font-semibold text-white/95 bg-black/45 backdrop-blur-sm px-2 py-0.5 rounded-full">
-                      Studio Fav
+                      {style.tag}
                     </span>
                   </div>
                 )}
@@ -350,31 +321,6 @@ export default function InteractiveHeroCardFan({
                     className="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-white/90 hover:bg-white text-studio-ink flex items-center justify-center transition-transform active:scale-95 shadow-xs"
                   >
                     <Maximize2 className="w-3.5 h-3.5 text-studio-secondary hover:text-studio-ink" />
-                  </button>
-                )}
-
-                {/* Shape and Length Pill (only on front card to prevent edge clutter on back cards) */}
-                {isFront && (
-                  <div className="absolute bottom-2 right-2 z-10">
-                    <span className="text-[10px] font-medium text-white/95 bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded-full shadow-2xs">
-                      {style.shape} • {style.length}
-                    </span>
-                  </div>
-                )}
-
-                {/* Recipe Info Button on front card */}
-                {isFront && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowRecipeModal(true);
-                    }}
-                    title="Nail design details"
-                    aria-label="View nail details"
-                    className="absolute bottom-2 left-2 z-10 w-6 h-6 rounded-full bg-white/90 hover:bg-white text-studio-ink flex items-center justify-center transition-transform active:scale-95 shadow-xs"
-                  >
-                    <Info className="w-3.5 h-3.5 text-studio-wine" />
                   </button>
                 )}
               </div>
@@ -400,135 +346,27 @@ export default function InteractiveHeroCardFan({
         })}
       </div>
 
-      {/* 2. Mood Selectors Row */}
-      <div className="w-full max-w-[320px] flex flex-col items-center gap-1.5 mt-2">
-        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-studio-muted">
-          Pick your mood
-        </span>
-
-        <div
-          role="radiogroup"
-          aria-label="Pick your mood"
-          className="grid grid-cols-3 gap-2 w-full"
-        >
-          {heroCards.map((style, idx) => {
-            const isSelected = activeIdx === idx;
-            const moodLabel = MOOD_LABELS[style.id] || (idx === 0 ? 'Simple' : idx === 1 ? 'Sparkly' : 'Bold');
-
-            return (
-              <button
-                key={style.id || idx}
-                type="button"
-                role="radio"
-                aria-checked={isSelected}
-                onClick={() => {
-                  setActiveHeroStyle(style.id);
-                  playStudioChime();
-                }}
-                className={`min-h-[44px] px-2 rounded-xl text-xs font-semibold transition-all flex items-center justify-center text-center select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-studio-wine active:scale-95 ${
-                  isSelected
-                    ? 'bg-studio-wine text-white shadow-xs font-bold'
-                    : 'bg-studio-surface border border-studio-border text-studio-secondary hover:text-studio-ink hover:border-studio-borderStrong'
-                }`}
-              >
-                {moodLabel}
-              </button>
-            );
-          })}
-        </div>
+      {/* 2. Booklet Cards Pagination Indicator */}
+      <div className="flex items-center justify-center gap-1.5 mt-2.5 mb-1 select-none" aria-label="Booklet cards navigation">
+        {heroCards.map((card, i) => (
+          <button
+            key={card.id || i}
+            type="button"
+            onClick={() => {
+              setActiveHeroStyle(card.id);
+              playStudioChime();
+            }}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              activeIdx === i
+                ? 'w-6 bg-studio-wine'
+                : 'w-1.5 bg-studio-borderStrong/50 hover:bg-studio-muted'
+            }`}
+            aria-label={`View look ${i + 1}: ${card.title}`}
+          />
+        ))}
       </div>
 
-      {/* 3. Nail Recipe Floating Modal */}
-      {showRecipeModal && (
-        <ModalPortal isOpen={showRecipeModal} onClose={() => setShowRecipeModal(false)}>
-          <div
-            className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in"
-            onClick={() => setShowRecipeModal(false)}
-          >
-            <div
-              className="bg-studio-surface rounded-3xl max-w-sm w-full p-5 sm:p-6 shadow-studio-float border border-studio-border space-y-4 text-xs font-sans relative my-auto animate-in zoom-in-95 duration-200"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-studio-border">
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block">
-                    Design Details
-                  </span>
-                  <h3 className="font-display font-semibold text-base text-studio-ink">
-                    {activeCard?.title}
-                  </h3>
-                </div>
-                <button
-                  onClick={() => setShowRecipeModal(false)}
-                  className="w-8 h-8 rounded-full bg-studio-canvas flex items-center justify-center text-studio-muted hover:text-studio-ink"
-                  aria-label="Close modal"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Recipe Details List */}
-              <div className="space-y-2.5">
-                <div className="p-3 rounded-2xl bg-studio-canvas border border-studio-border space-y-1">
-                  <span className="text-[10px] font-bold text-studio-muted uppercase tracking-wider block">
-                    Prep & Base
-                  </span>
-                  <p className="text-xs font-medium text-studio-ink leading-relaxed">
-                    {recipeData.prep}
-                  </p>
-                </div>
-
-                <div className="p-3 rounded-2xl bg-studio-canvas border border-studio-border space-y-1">
-                  <span className="text-[10px] font-bold text-studio-muted uppercase tracking-wider block">
-                    Color & Finish
-                  </span>
-                  <p className="text-xs font-medium text-studio-ink leading-relaxed">
-                    {recipeData.base}
-                  </p>
-                  <p className="text-xs font-medium text-studio-wine leading-relaxed pt-0.5">
-                    Finish: {recipeData.finish}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 text-[11px]">
-                  <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900">
-                    <span className="text-[9px] font-bold uppercase tracking-wider block text-emerald-700">Durability</span>
-                    <span className="font-bold">{recipeData.wear}</span>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-purple-50 border border-purple-200 text-purple-900">
-                    <span className="text-[9px] font-bold uppercase tracking-wider block text-purple-700">Studio Session</span>
-                    <span className="font-bold">{recipeData.time}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action inside modal */}
-              <div className="pt-2 flex items-center justify-between gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowRecipeModal(false)}
-                  className="px-4 py-2.5 rounded-xl border border-studio-border text-studio-secondary text-xs font-semibold hover:bg-studio-canvas min-h-[40px]"
-                >
-                  Close
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowRecipeModal(false);
-                    if (onBookHeroStyle) onBookHeroStyle(activeCard?.id);
-                  }}
-                  className="flex-1 py-2.5 px-4 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio transition-all active:scale-95 flex items-center justify-center gap-1.5 min-h-[40px]"
-                >
-                  <span>Book This Look</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </ModalPortal>
-      )}
-
-      {/* 4. Full-Size Nail Photo Modal */}
+      {/* 3. Full-Size Nail Photo Modal */}
       {showPhotoModal && (
         <ModalPortal isOpen={showPhotoModal} onClose={handleClosePhotoModal}>
           <div
@@ -546,7 +384,7 @@ export default function InteractiveHeroCardFan({
               <div className="flex items-center justify-between p-3.5 sm:p-4 border-b border-studio-border bg-studio-surface">
                 <div className="pr-2">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block">
-                    {activeCard?.shape} • {activeCard?.length}
+                    {activeCard?.tag || 'Signature Look'}
                   </span>
                   <h3 id="hero-photo-modal-title" className="font-display font-semibold text-base sm:text-lg text-studio-ink line-clamp-1">
                     {activeCard?.title}
@@ -565,7 +403,7 @@ export default function InteractiveHeroCardFan({
               {/* Complete Photo Display without card overlap */}
               <div className="relative bg-studio-canvas p-3 sm:p-4 flex items-center justify-center max-h-[60vh] overflow-hidden">
                 <img
-                  src={activeCard?.imageUrl || (activeIdx === 0 ? '/hero/soft-simple.jpg' : activeIdx === 1 ? '/hero/little-sparkle.jpg' : '/hero/make-statement.jpg')}
+                  src={activeCard?.imageUrl || '/hero/soft-simple.jpg'}
                   alt={activeCard?.title}
                   className="max-h-[52vh] w-auto max-w-full object-contain rounded-2xl shadow-xs"
                 />
@@ -574,7 +412,7 @@ export default function InteractiveHeroCardFan({
               {/* Footer info & action */}
               <div className="p-3.5 sm:p-4 bg-studio-surface border-t border-studio-border flex items-center justify-between gap-3">
                 <p className="text-[11px] text-studio-secondary line-clamp-1 pr-2">
-                  {VERIFIED_DESCRIPTIONS[activeCard?.id] || activeCard?.subtitle || ''}
+                  {activeCard?.subtitle || activeCard?.description || ''}
                 </p>
                 <button
                   type="button"
