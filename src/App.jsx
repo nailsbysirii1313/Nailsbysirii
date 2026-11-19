@@ -225,6 +225,14 @@ export default function App() {
         const target = (invoices || []).find((i) => i.id === invId);
         if (target) {
           setSelectedInvoice(target);
+        } else {
+          api.getInvoiceById(invId)
+            .then((inv) => {
+              if (inv && inv.id) {
+                setSelectedInvoice(inv);
+              }
+            })
+            .catch(() => {});
         }
         setTabState('publicInvoice');
       } else if (hash.startsWith('#catalogue') || params.get('page') === 'catalogue') {
@@ -481,6 +489,20 @@ export default function App() {
           if (target) {
             setSelectedInvoice(target);
             setTabState('publicInvoice');
+          }
+        }
+      } else {
+        // Deep link for public unauthenticated clients
+        if (typeof window !== 'undefined' && window.location.hash.startsWith('#invoice-')) {
+          const invId = window.location.hash.replace('#invoice-', '');
+          try {
+            const publicInvoice = await api.getInvoiceById(invId);
+            if (publicInvoice && publicInvoice.id) {
+              setSelectedInvoice(publicInvoice);
+              setTabState('publicInvoice');
+            }
+          } catch (e) {
+            console.warn('Could not load public invoice by id:', e);
           }
         }
       }

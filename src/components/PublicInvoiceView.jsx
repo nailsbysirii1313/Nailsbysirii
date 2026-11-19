@@ -25,6 +25,7 @@ export default function PublicInvoiceView({
 }) {
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedText, setCopiedText] = useState(false);
+  const [copiedUpi, setCopiedUpi] = useState(false);
   const [selectedTip, setSelectedTip] = useState(invoice?.tip || 0);
 
   if (!invoice) {
@@ -44,10 +45,13 @@ export default function PublicInvoiceView({
   }
 
   const studioName = settings?.studioName || 'Nails by Sirii';
-  const tagline = settings?.tagline || 'Bespoke Nail Architecture & Japanese Gel Studio';
+  const tagline = settings?.tagline || 'Sculptural Gel Architecture & Contemporary Nail Atelier';
   const phone = settings?.phone || '+91 73026 23493';
   const email = settings?.email || 'hello@nailsbysirii.com';
-  const address = settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi Cantt, Dehradun 248003';
+  const address =
+    settings?.address ||
+    'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi Cantt, Dehradun, Uttarakhand 248003';
+  const instagram = settings?.instagram || '@nails.by.sirii';
   const currency = settings?.currency || '₹';
   const upiId = settings?.upiId || 'nailsbysirii@okaxis';
   const upiName = settings?.upiName || studioName;
@@ -55,7 +59,10 @@ export default function PublicInvoiceView({
     settings?.paymentInstructions ||
     `UPI: 7302623493 / ${upiId} (GPay, PhonePe, Paytm) • Cash accepted at studio`;
 
-  const isPaid = invoice.status === 'Paid';
+  const isPaid =
+    invoice.status === 'Paid' ||
+    invoice.status === 'Paid in Full' ||
+    invoice.paymentStatus === 'Paid in Full';
   const currentTotal = Number(invoice.subtotal || 0) + Number(selectedTip || 0);
   const balanceDue = isPaid
     ? 0
@@ -222,8 +229,13 @@ export default function PublicInvoiceView({
               {invoice.status.toUpperCase()}
             </span>
             {isPaid && invoice.paymentMethod && (
-              <p className="text-xs text-text-muted mt-1 font-medium">
+              <p className="text-xs text-emerald-700 mt-1 font-medium">
                 via {invoice.paymentMethod}
+              </p>
+            )}
+            {!isPaid && (
+              <p className="text-xs text-amber-800 mt-1 font-medium">
+                Awaiting payment • UPI / Cash / Card
               </p>
             )}
           </div>
@@ -307,9 +319,32 @@ export default function PublicInvoiceView({
                 <p className="text-xs font-semibold text-text-ink">
                   Scan with GPay / PhonePe / Paytm / BHIM
                 </p>
-                <p className="text-[10px] font-mono text-text-muted break-all">
-                  {upiId}
-                </p>
+                <div className="flex items-center gap-1.5">
+                  <p className="text-[11px] font-mono font-semibold text-text-ink break-all select-all">
+                    {upiId}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(upiId);
+                      setCopiedUpi(true);
+                      setTimeout(() => setCopiedUpi(false), 2000);
+                    }}
+                    className="no-print p-1 hover:bg-studio-subtle rounded text-text-muted hover:text-brand-wine transition-colors"
+                    title="Copy UPI ID"
+                  >
+                    {copiedUpi ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
+                  </button>
+                  {copiedUpi && (
+                    <span className="no-print text-[10px] text-emerald-700 font-semibold">
+                      Copied!
+                    </span>
+                  )}
+                </div>
                 <a
                   href={upiUri}
                   className="no-print inline-flex items-center gap-1 text-[11px] font-bold text-brand-wine hover:text-brand-wineHover pt-0.5 underline"

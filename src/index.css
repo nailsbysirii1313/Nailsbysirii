@@ -141,24 +141,90 @@
   }
 }
 
-/* Print Styles for Chic Invoice */
+/* Print Styles for Chic Studio Tax Invoice & Download PDF */
 @media print {
+  @page {
+    size: auto;
+    margin: 12mm 15mm;
+  }
+
+  html,
   body {
     background: #ffffff !important;
-    color: #000000 !important;
+    color: #111111 !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
-  .no-print {
+
+  /* Hide non-printable elements */
+  .no-print,
+  #root:has(~ .modal-portal-root .invoice-printable),
+  body:has(.modal-portal-root .invoice-printable) > #root {
     display: none !important;
   }
+
   .print-only {
     display: block !important;
   }
+
+  /* Reset portal and fixed dialog when printing modal invoice */
+  .modal-portal-root {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    background: transparent !important;
+  }
+
+  .invoice-modal-container {
+    position: static !important;
+    inset: auto !important;
+    padding: 0 !important;
+    display: block !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  .invoice-modal-card {
+    position: static !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #ffffff !important;
+  }
+
   .invoice-printable {
     box-shadow: none !important;
-    border: 1px solid #ddd !important;
+    border: none !important;
     margin: 0 !important;
-    padding: 24px !important;
+    padding: 0 !important;
     width: 100% !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #111111 !important;
+    page-break-inside: auto;
+  }
+
+  /* Ensure tables and totals do not split awkwardly */
+  .invoice-printable table {
+    page-break-inside: auto;
+  }
+
+  .invoice-printable tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
   }
 }
 
