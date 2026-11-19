@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Info, X } from 'lucide-react';
+import { Info, X, Maximize2 } from 'lucide-react';
 import { playStudioChime } from '../utils/audio';
 import ModalPortal from './ModalPortal';
 
@@ -52,6 +52,7 @@ export default function InteractiveHeroCardFan({
   const [dragX, setDragX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [showRecipeModal, setShowRecipeModal] = useState(false);
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   const dragStartX = useRef(0);
@@ -60,6 +61,28 @@ export default function InteractiveHeroCardFan({
   const isVerticalScroll = useRef(false);
   const isPointerDown = useRef(false);
   const deckRef = useRef(null);
+  const expandBtnRef = useRef(null);
+  const closePhotoBtnRef = useRef(null);
+
+  const handleOpenPhotoModal = (e) => {
+    e.stopPropagation();
+    setShowPhotoModal(true);
+  };
+
+  const handleClosePhotoModal = () => {
+    setShowPhotoModal(false);
+    setTimeout(() => {
+      expandBtnRef.current?.focus();
+    }, 50);
+  };
+
+  useEffect(() => {
+    if (showPhotoModal) {
+      setTimeout(() => {
+        closePhotoBtnRef.current?.focus();
+      }, 50);
+    }
+  }, [showPhotoModal]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.matchMedia) {
@@ -195,6 +218,12 @@ export default function InteractiveHeroCardFan({
         className="relative w-full max-w-[320px] sm:max-w-[360px] h-[255px] sm:h-[275px] flex items-center justify-center cursor-grab active:cursor-grabbing touch-pan-y"
         style={{ perspective: '1000px' }}
       >
+        {/* Soft Faint Blush Oval Backdrop (Slightly off-centre, behind card imagery only) */}
+        <div
+          aria-hidden="true"
+          className="absolute left-1/2 top-[46%] -translate-x-[47%] -translate-y-1/2 w-[265px] sm:w-[305px] h-[185px] sm:h-[205px] rounded-[50%] bg-[#F5E6E5]/70 pointer-events-none select-none z-0"
+        />
+
         {/* Three Overlapping Cards */}
         {heroCards.map((style, idx) => {
           const isFront = activeIdx === idx;
@@ -284,8 +313,8 @@ export default function InteractiveHeroCardFan({
               }}
               className={`absolute w-[172px] sm:w-[192px] h-[246px] sm:h-[268px] rounded-2xl bg-white border overflow-hidden flex flex-col justify-between ${
                 isFront
-                  ? 'border-studio-borderStrong/70 shadow-[0_8px_20px_-6px_rgba(35,31,32,0.14)] ring-0'
-                  : 'border-studio-border shadow-[0_4px_12px_-4px_rgba(35,31,32,0.08)]'
+                  ? 'border-studio-borderStrong/70 shadow-[0_6px_16px_-6px_rgba(35,31,32,0.10)] ring-0'
+                  : 'border-studio-border shadow-[0_2px_8px_-3px_rgba(35,31,32,0.06)]'
               }`}
             >
               {/* Photo Area */}
@@ -308,6 +337,20 @@ export default function InteractiveHeroCardFan({
                       Studio Fav
                     </span>
                   </div>
+                )}
+
+                {/* Expand Photo Button on front card */}
+                {isFront && (
+                  <button
+                    ref={expandBtnRef}
+                    type="button"
+                    onClick={handleOpenPhotoModal}
+                    title={`View ${style.title} photo`}
+                    aria-label={`View ${style.title} photo`}
+                    className="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-white/90 hover:bg-white text-studio-ink flex items-center justify-center transition-transform active:scale-95 shadow-xs"
+                  >
+                    <Maximize2 className="w-3.5 h-3.5 text-studio-secondary hover:text-studio-ink" />
+                  </button>
                 )}
 
                 {/* Shape and Length Pill (only on front card to prevent edge clutter on back cards) */}
@@ -478,6 +521,67 @@ export default function InteractiveHeroCardFan({
                   className="flex-1 py-2.5 px-4 rounded-xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio transition-all active:scale-95 flex items-center justify-center gap-1.5 min-h-[40px]"
                 >
                   <span>Book This Look</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </ModalPortal>
+      )}
+
+      {/* 4. Full-Size Nail Photo Modal */}
+      {showPhotoModal && (
+        <ModalPortal isOpen={showPhotoModal} onClose={handleClosePhotoModal}>
+          <div
+            className="fixed inset-0 z-[130] flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-fade-in"
+            onClick={handleClosePhotoModal}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="hero-photo-modal-title"
+          >
+            <div
+              className="bg-studio-surface rounded-3xl max-w-sm sm:max-w-md w-full overflow-hidden shadow-studio-float border border-studio-border text-xs font-sans relative my-auto animate-in zoom-in-95 duration-200 outline-none"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-3.5 sm:p-4 border-b border-studio-border bg-studio-surface">
+                <div className="pr-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block">
+                    {activeCard?.shape} • {activeCard?.length}
+                  </span>
+                  <h3 id="hero-photo-modal-title" className="font-display font-semibold text-base sm:text-lg text-studio-ink line-clamp-1">
+                    {activeCard?.title}
+                  </h3>
+                </div>
+                <button
+                  ref={closePhotoBtnRef}
+                  onClick={handleClosePhotoModal}
+                  className="w-8 h-8 rounded-full bg-studio-canvas hover:bg-studio-subtle flex items-center justify-center text-studio-secondary hover:text-studio-ink transition-colors flex-shrink-0"
+                  aria-label="Close photo view"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Complete Photo Display without card overlap */}
+              <div className="relative bg-studio-canvas p-3 sm:p-4 flex items-center justify-center max-h-[60vh] overflow-hidden">
+                <img
+                  src={activeCard?.imageUrl || (activeIdx === 0 ? '/hero/soft-simple.jpg' : activeIdx === 1 ? '/hero/little-sparkle.jpg' : '/hero/make-statement.jpg')}
+                  alt={activeCard?.title}
+                  className="max-h-[52vh] w-auto max-w-full object-contain rounded-2xl shadow-xs"
+                />
+              </div>
+
+              {/* Footer info & action */}
+              <div className="p-3.5 sm:p-4 bg-studio-surface border-t border-studio-border flex items-center justify-between gap-3">
+                <p className="text-[11px] text-studio-secondary line-clamp-1 pr-2">
+                  {VERIFIED_DESCRIPTIONS[activeCard?.id] || activeCard?.subtitle || ''}
+                </p>
+                <button
+                  type="button"
+                  onClick={handleClosePhotoModal}
+                  className="px-4 py-2 rounded-xl bg-studio-canvas hover:bg-studio-subtle border border-studio-border text-studio-ink text-xs font-semibold flex-shrink-0 transition-colors"
+                >
+                  Close
                 </button>
               </div>
             </div>

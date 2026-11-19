@@ -1264,8 +1264,16 @@ export default function ClientWebsite({
           {/* 2. Refined headline with balanced line height */}
           <h1 className="font-sans font-extrabold text-[36px] sm:text-5xl text-studio-ink leading-[1.12] tracking-tight">
             Your next<br />
-            <span className="text-studio-wine">
-              nail <span className="font-display italic font-bold pr-1">crush.</span>
+            <span className="text-studio-wine inline-flex items-baseline">
+              nail <span className="font-display italic font-bold pr-0.5">crush.</span>
+              <svg
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+                className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-studio-wine ml-0.5 -translate-y-2 inline-block select-none pointer-events-none flex-shrink-0"
+              >
+                <path d="M12 0C12 7.2 14 10.8 24 12C14 13.2 12 16.8 12 24C12 16.8 10 13.2 0 12C10 10.8 12 7.2 12 0Z" />
+              </svg>
             </span>
           </h1>
 
@@ -1291,8 +1299,8 @@ export default function ClientWebsite({
               onClick={() => handleBookHeroStyle(activeHeroStyle)}
               className="w-full max-w-xs py-3 px-6 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-sm font-bold shadow-studio transition-all active:scale-95 flex items-center justify-center gap-2 min-h-[44px]"
             >
-              <Heart className="w-4 h-4 fill-white text-white" />
-              <span>Book Your Nails</span>
+              <span>Book This Look</span>
+              <ArrowRight className="w-4 h-4" />
             </a>
 
             <button
@@ -1316,8 +1324,16 @@ export default function ClientWebsite({
 
             <h1 className="font-sans font-extrabold text-5xl xl:text-6xl text-studio-ink leading-[1.08] tracking-tight">
               Your next<br />
-              <span className="text-studio-wine">
-                nail <span className="font-display italic font-bold">crush.</span>
+              <span className="text-studio-wine inline-flex items-baseline">
+                nail <span className="font-display italic font-bold pr-1">crush.</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  className="w-4 h-4 text-studio-wine ml-1 -translate-y-3 inline-block select-none pointer-events-none flex-shrink-0"
+                >
+                  <path d="M12 0C12 7.2 14 10.8 24 12C14 13.2 12 16.8 12 24C12 16.8 10 13.2 0 12C10 10.8 12 7.2 12 0Z" />
+                </svg>
               </span>
             </h1>
 
@@ -1331,8 +1347,8 @@ export default function ClientWebsite({
                 onClick={() => handleBookHeroStyle(activeHeroStyle)}
                 className="py-3.5 px-7 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-sm font-bold shadow-studio hover:shadow-glow transition-all active:scale-95 inline-flex items-center justify-center gap-2"
               >
-                <Heart className="w-4 h-4 fill-white text-white" />
-                <span>Book Your Nails</span>
+                <span>Book This Look</span>
+                <ArrowRight className="w-4 h-4" />
               </a>
 
               <button
