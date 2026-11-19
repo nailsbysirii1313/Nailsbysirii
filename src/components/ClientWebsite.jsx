@@ -1016,7 +1016,7 @@ export default function ClientWebsite({
                 <Heart className="w-3 h-3 text-studio-wine fill-studio-wine shrink-0" />
               </div>
               <p className="text-[10px] text-studio-muted font-medium truncate hidden sm:block">
-                Nail Studio • Dehradun
+                Viral Nail Studio • Dehradun
               </p>
             </div>
           </a>
@@ -1106,7 +1106,7 @@ export default function ClientWebsite({
                       <span className="font-sans font-bold text-sm text-studio-ink block">
                         {settings?.studioName || 'Nails by Sirii'}
                       </span>
-                      <span className="text-[10px] text-studio-muted">Nail Studio • Dehradun</span>
+                      <span className="text-[10px] text-studio-muted">Viral Nail Studio • Dehradun</span>
                     </div>
                   </div>
                   <button
@@ -1255,10 +1255,10 @@ export default function ClientWebsite({
       <section className="relative pt-4 sm:pt-8 lg:pt-12 pb-8 sm:pb-12 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden">
         {/* MOBILE VIEW (< lg) */}
         <div className="flex flex-col items-center text-center lg:hidden animate-hero-fade-up">
-          {/* 1. Location badge */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight border border-studio-wine/20 text-studio-wine text-[11px] font-bold uppercase tracking-wider shadow-xs mb-2">
-            <MapPin className="w-3 h-3 text-studio-wine" />
-            <span>Nail studio in Dehradun</span>
+          {/* 1. Modern Location Eyebrow (No pill box) */}
+          <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-bold tracking-[0.18em] uppercase text-studio-wine mb-2 select-none">
+            <MapPin className="w-3 h-3 text-studio-wine stroke-[2.2]" />
+            <span>Viral Nail Studio in Dehradun</span>
           </div>
 
           {/* 2. Refined headline with balanced line height */}
@@ -1317,9 +1317,10 @@ export default function ClientWebsite({
         <div className="hidden lg:grid lg:grid-cols-12 lg:items-center lg:gap-12 animate-hero-fade-up">
           {/* Left Column: Copy & Actions */}
           <div className="lg:col-span-6 space-y-6 text-left">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight border border-studio-wine/20 text-studio-wine text-xs font-bold uppercase tracking-wider shadow-xs">
-              <MapPin className="w-3 h-3 text-studio-wine" />
-              <span>Nail studio in Dehradun</span>
+            {/* 1. Modern Location Eyebrow (No pill box) */}
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold tracking-[0.18em] uppercase text-studio-wine select-none">
+              <MapPin className="w-3.5 h-3.5 text-studio-wine stroke-[2.2]" />
+              <span>Viral Nail Studio in Dehradun</span>
             </div>
 
             <h1 className="font-sans font-extrabold text-5xl xl:text-6xl text-studio-ink leading-[1.08] tracking-tight">
