@@ -1180,7 +1180,7 @@ export default function InventoryView({
           />
           {/* Scrollable floating dialog container */}
           <div
-            className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center p-3 sm:p-4 overflow-y-auto"
+            className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center p-3 sm:p-4"
             onClick={(e) => {
               if (e.target === e.currentTarget) setIsModalOpen(false);
             }}

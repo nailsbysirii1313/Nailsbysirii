@@ -368,7 +368,7 @@ export default function CatalogueManagerView({
         />
         {/* Floating scrollable dialog container */}
         <div
-          className="fixed inset-0 z-[71] overflow-y-auto p-3 sm:p-4 flex items-center justify-center animate-fade-in"
+          className="fixed inset-0 z-[71] p-3 sm:p-4 flex items-center justify-center animate-fade-in"
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsModalOpen(false);
           }}

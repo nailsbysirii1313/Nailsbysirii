@@ -68,7 +68,7 @@ export default function PasscodeModal({
       />
       {/* Scrollable floating dialog container */}
       <div
-        className="fixed inset-0 z-[71] overflow-y-auto p-3 sm:p-4 flex items-center justify-center animate-in fade-in duration-200"
+        className="fixed inset-0 z-[71] p-3 sm:p-4 flex items-center justify-center animate-in fade-in duration-200"
         onClick={(e) => {
           if (e.target === e.currentTarget) onClose();
         }}

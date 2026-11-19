@@ -89,7 +89,7 @@ Address: ${settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, De
       />
       {/* Scrollable floating dialog container */}
       <div
-        className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fade-in print:p-0 print:bg-white"
+        className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center p-3 sm:p-4 animate-fade-in print:p-0 print:bg-white"
         onClick={(e) => {
           if (e.target === e.currentTarget) onClose();
         }}

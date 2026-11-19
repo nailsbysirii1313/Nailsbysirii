@@ -172,7 +172,7 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for visiting Nai
       />
       {/* Scrollable floating dialog container */}
       <div
-        className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fade-in"
+        className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center p-3 sm:p-4 animate-fade-in"
         onClick={(e) => {
           if (e.target === e.currentTarget) onClose();
         }}
