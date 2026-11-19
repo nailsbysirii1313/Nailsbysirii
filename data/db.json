@@ -7,7 +7,7 @@
     "email": "hello@nailsbysirii.com",
     "address": "Shop No. 7, Laxmi Navraj Plaza, Garhi Cantonment, Garhi Cantt, Dehradun, Uttarakhand 248003",
     "instagram": "@nails.by.sirii",
-    "currency": "₹",
+    "currency": "\u20b9",
     "upiId": "nailsbysirii@okaxis",
     "upiName": "Nails by Sirii",
     "studioLogoUrl": "/logo.png",
@@ -15,7 +15,7 @@
     "ntfyServer": "https://ntfy.sh",
     "reminderLeadHours": 2,
     "autoRemindersEnabled": true,
-    "paymentInstructions": "UPI: 7302623493 / nailsbysirii@okaxis (GPay, PhonePe, Paytm) • Cash accepted at studio",
+    "paymentInstructions": "UPI: 7302623493 / nailsbysirii@okaxis (GPay, PhonePe, Paytm) \u2022 Cash accepted at studio",
     "defaultTaxRate": 0,
     "depositRequirement": 500,
     "timings": "12:00 PM - 7:00 PM",
@@ -52,7 +52,7 @@
       },
       {
         "id": "french_ombre",
-        "title": "French Ombré Sculpture",
+        "title": "French Ombr\u00e9 Sculpture",
         "shape": "Almond",
         "length": "Long",
         "imageUrl": "/catalogue/french-ombre.jpg",
@@ -208,7 +208,7 @@
       "instagram": "@kavya_styles",
       "address": "",
       "preferredShape": "Almond",
-      "notes": "Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
+      "notes": "Selected Design: French Ombr\u00e9 Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
       "totalSpent": 0,
       "totalVisits": 0,
       "createdAt": "2026-11-17T16:24:33.404+00:00",
@@ -345,14 +345,14 @@
       "clientEmail": "kavya@example.com",
       "clientInstagram": "@kavya_styles",
       "serviceId": "acrylic_1",
-      "serviceName": "French Ombré Acrylic Sculpture",
+      "serviceName": "French Ombr\u00e9 Acrylic Sculpture",
       "category": "Acrylic Nails",
       "date": "2026-11-20",
       "time": "14:00",
       "duration": 90,
       "shape": "Almond",
       "length": "Long",
-      "notes": "Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
+      "notes": "Selected Design: French Ombr\u00e9 Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.",
       "status": "Confirmed",
       "price": 0,
       "createdAt": "2026-11-17T16:24:33.405+00:00",
@@ -390,7 +390,7 @@
     {
       "type": "appointment_reminder",
       "title": "[24h Notice] Kavya Singhania - 14:00",
-      "message": "[24-HOUR ADVANCE ALERT] • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nClient: Kavya Singhania\nPhone: 9897123456\nService: French Ombré Acrylic Sculpture\nSchedule: 2026-11-20 at 14:00\nPrice: ₹0 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\nNote: Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "message": "[24-HOUR ADVANCE ALERT] \u2022 NAILS BY SIRII\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nClient: Kavya Singhania\nPhone: 9897123456\nService: French Ombr\u00e9 Acrylic Sculpture\nSchedule: 2026-11-20 at 14:00\nPrice: \u20b90 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\nNote: Selected Design: French Ombr\u00e9 Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nAction: Please ensure sterilization buffers & station ready.",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
       "appointmentId": "apt_1794932673405",
@@ -401,7 +401,7 @@
     {
       "type": "appointment_reminder",
       "title": "[24h Notice] Kavya Singhania - 14:00",
-      "message": "[24-HOUR ADVANCE ALERT] • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nClient: Kavya Singhania\nPhone: 9897123456\nService: French Ombré Acrylic Sculpture\nSchedule: 2026-11-20 at 14:00\nPrice: ₹0 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\nNote: Selected Design: French Ombré Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "message": "[24-HOUR ADVANCE ALERT] \u2022 NAILS BY SIRII\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nClient: Kavya Singhania\nPhone: 9897123456\nService: French Ombr\u00e9 Acrylic Sculpture\nSchedule: 2026-11-20 at 14:00\nPrice: \u20b90 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\nNote: Selected Design: French Ombr\u00e9 Acrylic Sculpture. Preferred Shape: Almond, Length: Long. Allergies: None.\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nAction: Please ensure sterilization buffers & station ready.",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
       "appointmentId": "apt_1794932673405",
@@ -412,7 +412,7 @@
     {
       "type": "appointment_reminder",
       "title": "[4h Urgent Alert] Pooja Verma - 14:00",
-      "message": "[4-HOUR ARRIVAL ALERT] • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nClient: Pooja Verma\nPhone: 9876543210\nService: Russian BIAB Gel Overlay\nSchedule: 2026-11-19 at 14:00\nPrice: ₹1,600 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "message": "[4-HOUR ARRIVAL ALERT] \u2022 NAILS BY SIRII\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nClient: Pooja Verma\nPhone: 9876543210\nService: Russian BIAB Gel Overlay\nSchedule: 2026-11-19 at 14:00\nPrice: \u20b91,600 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nAction: Please ensure sterilization buffers & station ready.",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
       "appointmentId": "apt_1794995343729",
@@ -423,7 +423,7 @@
     {
       "type": "appointment_reminder",
       "title": "[24h Notice] Pooja Verma - 14:00",
-      "message": "[ALERT] 24-HOUR ADVANCE ALERT • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nClient: Pooja Verma\nPhone: 9876543210\nService: Russian BIAB Gel Overlay\nSchedule: 2026-11-19 at 14:00\nPrice: ₹1,600 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "message": "[ALERT] 24-HOUR ADVANCE ALERT \u2022 NAILS BY SIRII\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nClient: Pooja Verma\nPhone: 9876543210\nService: Russian BIAB Gel Overlay\nSchedule: 2026-11-19 at 14:00\nPrice: \u20b91,600 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nAction: Please ensure sterilization buffers & station ready.",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
       "appointmentId": "apt_1794995343729",
@@ -434,7 +434,7 @@
     {
       "type": "appointment_reminder",
       "title": "[24h Notice] Pooja Verma - 14:00",
-      "message": "[ALERT] 24-HOUR ADVANCE ALERT • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nClient: Pooja Verma\nPhone: 9876543210\nService: Russian BIAB Gel Overlay\nSchedule: 2026-11-19 at 14:00\nPrice: ₹1,600 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "message": "[ALERT] 24-HOUR ADVANCE ALERT \u2022 NAILS BY SIRII\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nClient: Pooja Verma\nPhone: 9876543210\nService: Russian BIAB Gel Overlay\nSchedule: 2026-11-19 at 14:00\nPrice: \u20b91,600 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nAction: Please ensure sterilization buffers & station ready.",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
       "appointmentId": "apt_1794995343729",
@@ -445,7 +445,7 @@
     {
       "type": "appointment_reminder",
       "title": "[24h Notice] Pooja Verma - 14:00",
-      "message": "[ALERT] 24-HOUR ADVANCE ALERT • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nClient: Pooja Verma\nPhone: 9876543210\nService: Russian BIAB Gel Overlay\nSchedule: 2026-11-19 at 14:00\nPrice: ₹1,600 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "message": "[ALERT] 24-HOUR ADVANCE ALERT \u2022 NAILS BY SIRII\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nClient: Pooja Verma\nPhone: 9876543210\nService: Russian BIAB Gel Overlay\nSchedule: 2026-11-19 at 14:00\nPrice: \u20b91,600 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nAction: Please ensure sterilization buffers & station ready.",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
       "appointmentId": "apt_1794995343729",
@@ -456,7 +456,7 @@
     {
       "type": "appointment_reminder",
       "title": "[4h Urgent Alert] Pooja Verma - 14:00",
-      "message": "[ALERT] 4-HOUR ARRIVAL ALERT • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nClient: Pooja Verma\nPhone: 9876543210\nService: Russian BIAB Gel Overlay\nSchedule: 2026-11-19 at 14:00\nPrice: ₹1,600 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "message": "[ALERT] 4-HOUR ARRIVAL ALERT \u2022 NAILS BY SIRII\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nClient: Pooja Verma\nPhone: 9876543210\nService: Russian BIAB Gel Overlay\nSchedule: 2026-11-19 at 14:00\nPrice: \u20b91,600 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nAction: Please ensure sterilization buffers & station ready.",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
       "appointmentId": "apt_1794995343729",
@@ -467,7 +467,7 @@
     {
       "type": "appointment_reminder",
       "title": "[24h Notice] Pooja Verma - 14:00",
-      "message": "[ALERT] 24-HOUR ADVANCE ALERT • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nClient: Pooja Verma\nPhone: 9876543210\nService: Russian BIAB Gel Overlay\nSchedule: 2026-11-19 at 14:00\nPrice: ₹1,600 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "message": "[ALERT] 24-HOUR ADVANCE ALERT \u2022 NAILS BY SIRII\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nClient: Pooja Verma\nPhone: 9876543210\nService: Russian BIAB Gel Overlay\nSchedule: 2026-11-19 at 14:00\nPrice: \u20b91,600 (Full payment at studio)\nLocation: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\nAction: Please ensure sterilization buffers & station ready.",
       "topic": "nails-by-sirii-alerts",
       "status": "delivered",
       "appointmentId": "apt_1794995343729",
@@ -795,7 +795,7 @@
       "clientName": "Ashutosh Duklan",
       "rating": 5,
       "serviceRendered": "Nail Extensions",
-      "aestheticTag": "Local Guide • Warm Hospitality",
+      "aestheticTag": "Local Guide \u2022 Warm Hospitality",
       "comment": "Recently visited Nails by Siri with my sister, and this review isn't just about the amazing nail services, it's also about the incredible hospitality we experienced there. The couple running the studio was genuinely warm, sweet, and extremely welcoming. The services were absolutely top-notch!",
       "date": "7 months ago",
       "source": "Google Review"
@@ -866,7 +866,7 @@
       "tag": "Bestseller",
       "description": "Ultra-popular pearlescent glazed chrome over sheer strawberry milk builder gel. Hand-buffed with salon chrome powder for an ethereal mirror shine.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": null
+      "imageUrl": "/catalogue/glazed-donut.jpg"
     },
     {
       "id": "pop_2",
@@ -882,7 +882,7 @@
       "tag": "Studio Pick",
       "description": "Deep dimensional velvet magnetic shimmer refracting light across long sculpted stilettos. Dramatic, luxurious, and chip-proof.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": null
+      "imageUrl": "/hero/make-statement.jpg"
     },
     {
       "id": "pop_3",
@@ -898,11 +898,11 @@
       "tag": "Luxury Edition",
       "description": "Hand-sculpted 3D liquid molten gold curves and real freshwater baroque pearl accents encrusted over an ivory porcelain bed.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": null
+      "imageUrl": "/catalogue/luxe-pearl.jpg"
     },
     {
       "id": "pop_4",
-      "title": "French Ombré Classic Porcelain",
+      "title": "French Ombr\u00e9 Classic Porcelain",
       "collection": "Everyday Minimalist",
       "shape": "Squoval",
       "length": "Short",
@@ -912,9 +912,9 @@
       "stock": 10,
       "isAvailable": true,
       "tag": "Clean Aesthetic",
-      "description": "Seamless airbrushed baby boomer pink-and-white ombré gradient with high-apex reinforcement. Natural, clean, and workplace ready.",
+      "description": "Seamless airbrushed baby boomer pink-and-white ombr\u00e9 gradient with high-apex reinforcement. Natural, clean, and workplace ready.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": null
+      "imageUrl": "/catalogue/french-ombre.jpg"
     },
     {
       "id": "pop_5",
@@ -930,7 +930,7 @@
       "tag": "Trending",
       "description": "High-shine liquid silver chrome starbursts, cross-stars, and geometric cyber accents set against a sheer neutral canvas.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": null
+      "imageUrl": "/hero/little-sparkle.jpg"
     },
     {
       "id": "pop_6",
@@ -946,7 +946,7 @@
       "tag": "Handcrafted",
       "description": "Subtle translucent white marble veining swirled with pure 24K gold foil flecks suspended in crystal clear gel depth.",
       "includedKit": "10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes",
-      "imageUrl": null
+      "imageUrl": "/catalogue/milky-white.jpg"
     }
   ],
   "pressOnOrders": [
@@ -1042,7 +1042,7 @@
     {
       "id": "acrylic_1",
       "category": "Acrylic Nails",
-      "title": "French Ombré Acrylic Sculpture",
+      "title": "French Ombr\u00e9 Acrylic Sculpture",
       "tag": "Studio Classic",
       "desc": "Seamless airbrushed transition of soft white powder into a translucent blush pink acrylic bed. Sculpted with strong structural apex architecture.",
       "shape": "Almond",
@@ -1052,7 +1052,7 @@
       "durationNum": 90,
       "imageUrl": "/catalogue/french-ombre.jpg",
       "highlights": [
-        "Seamless pink-and-white ombré blend",
+        "Seamless pink-and-white ombr\u00e9 blend",
         "Structural apex reinforcement",
         "Russian dry e-file prep included"
       ],
