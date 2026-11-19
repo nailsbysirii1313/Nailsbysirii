@@ -22,7 +22,7 @@ export default function NewInvoiceModal({
   const [status, setStatus] = useState('Unpaid');
   const [paymentMethod, setPaymentMethod] = useState('UPI');
   const [items, setItems] = useState([
-    { description: 'Signature BIAB / Builder Gel Manicure', quantity: 1, unitPrice: 2200, amount: 2200 }
+    { description: '', quantity: 1, unitPrice: '', amount: 0 }
   ]);
   const [tip, setTip] = useState(0);
   const [depositDeducted, setDepositDeducted] = useState(0);
@@ -40,7 +40,7 @@ export default function NewInvoiceModal({
       setStatus(invoiceToEdit.status || 'Unpaid');
       setPaymentMethod(invoiceToEdit.paymentMethod || 'UPI');
       setItems(invoiceToEdit.items && invoiceToEdit.items.length > 0 ? invoiceToEdit.items : [
-        { description: 'Studio Treatment', quantity: 1, unitPrice: 2200, amount: 2200 }
+        { description: '', quantity: 1, unitPrice: '', amount: 0 }
       ]);
       setTip(invoiceToEdit.tip || 0);
       setDepositDeducted(invoiceToEdit.depositDeducted || 0);
@@ -82,9 +82,9 @@ export default function NewInvoiceModal({
           };
         });
 
-        const mainPrice = Number(apt.price) || 2200;
+        const mainPrice = Number(apt.servicePrice || apt.price) || 0;
         const mainItem = {
-          description: apt.serviceName || 'Nail Architecture & Art Session',
+          description: apt.serviceName || 'Nail Treatment Session',
           quantity: 1,
           unitPrice: mainPrice,
           amount: mainPrice
@@ -93,7 +93,7 @@ export default function NewInvoiceModal({
       }
 
       setItems(lineItems.length > 0 ? lineItems : [
-        { description: apt.serviceName || 'Studio Treatment', quantity: 1, unitPrice: Number(apt.price) || 2200, amount: Number(apt.price) || 2200 }
+        { description: apt.serviceName || 'Nail Treatment Session', quantity: 1, unitPrice: Number(apt.servicePrice || apt.price) || 0, amount: Number(apt.servicePrice || apt.price) || 0 }
       ]);
 
       const advanceAmt = Number(apt.depositPaid || apt.advancePaid) || 0;
@@ -107,8 +107,20 @@ export default function NewInvoiceModal({
       setClientPhone(preselectedClient.phone || '');
       setClientEmail(preselectedClient.email || '');
       setDate(getKolkataTodayString());
+      setItems([{ description: '', quantity: 1, unitPrice: '', amount: 0 }]);
+      setDepositDeducted(0);
+      setTip(0);
+      setStatus('Unpaid');
     } else {
       setDate(getKolkataTodayString());
+      setClientId('');
+      setClientName('');
+      setClientPhone('');
+      setClientEmail('');
+      setItems([{ description: '', quantity: 1, unitPrice: '', amount: 0 }]);
+      setDepositDeducted(0);
+      setTip(0);
+      setStatus('Unpaid');
     }
   }, [invoiceToEdit, preselectedAppointment, preselectedClient, clients, services]);
 
@@ -139,14 +151,14 @@ export default function NewInvoiceModal({
     setItems(updated);
   };
 
-  const addItem = (description = '', unitPrice = 0) => {
+  const addItem = (description = '', unitPrice = '') => {
     setItems([
       ...items,
       {
         description,
         quantity: 1,
-        unitPrice: Number(unitPrice),
-        amount: Number(unitPrice)
+        unitPrice: unitPrice === '' ? '' : Number(unitPrice),
+        amount: Number(unitPrice) || 0
       }
     ]);
   };

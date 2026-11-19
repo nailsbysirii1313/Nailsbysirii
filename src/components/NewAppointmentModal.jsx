@@ -65,7 +65,7 @@ export default function NewAppointmentModal({
 
   // Primary Nail Service (Manual Writing Tab + Custom Price)
   const [serviceName, setServiceName] = useState('');
-  const [servicePrice, setServicePrice] = useState(1400);
+  const [servicePrice, setServicePrice] = useState('');
   const [serviceId, setServiceId] = useState('');
 
   const [selectedAddons, setSelectedAddons] = useState([]);
@@ -84,12 +84,12 @@ export default function NewAppointmentModal({
   const [remind1h, setRemind1h] = useState(false);
   const [notifyImmediate, setNotifyImmediate] = useState(true);
 
-  // Compute previous services from past appointments (not hardcoded presets)
+  // Compute previous services ONLY from real past appointments
   const previousServices = useMemo(() => {
     const list = [];
     const seen = new Set();
 
-    // 1. Prioritize this client's past appointments if selected
+    // Prioritize this client's past appointments if selected
     const clientApts = clientId ? appointments.filter((a) => a.clientId === clientId) : [];
     const otherApts = appointments.filter((a) => !clientId || a.clientId !== clientId);
     const prioritized = [...clientApts, ...otherApts];
@@ -98,31 +98,17 @@ export default function NewAppointmentModal({
       const name = (apt.serviceName || '').trim();
       if (!name || seen.has(name.toLowerCase())) continue;
       seen.add(name.toLowerCase());
+      const p = Number(apt.servicePrice || apt.price);
       list.push({
         name,
-        price: Number(apt.servicePrice || apt.price) || 1400,
+        price: !isNaN(p) && p > 0 ? p : 0,
         isClientPast: apt.clientId === clientId
       });
     }
 
-    // If appointments history is small or empty, fall back to recent services catalog
-    if (list.length === 0 && services.length > 0) {
-      services
-        .filter((s) => s.category !== 'Nail Art' && s.category !== 'Add-on')
-        .forEach((s) => {
-          if (!seen.has(s.name.toLowerCase())) {
-            seen.add(s.name.toLowerCase());
-            list.push({
-              name: s.name,
-              price: Number(s.price) || 1400,
-              isClientPast: false
-            });
-          }
-        });
-    }
-
-    return list.slice(0, 8); // Top recent past inputs
-  }, [appointments, clientId, services]);
+    // Only return actual past inputs from real appointments (no hardcoded presets)
+    return list.slice(0, 8);
+  }, [appointments, clientId]);
 
   useEffect(() => {
     if (appointmentToEdit) {
@@ -130,7 +116,7 @@ export default function NewAppointmentModal({
       setClientName(appointmentToEdit.clientName || '');
       setClientPhone(appointmentToEdit.clientPhone || '');
       setServiceName(appointmentToEdit.serviceName || '');
-      setServicePrice(appointmentToEdit.servicePrice || appointmentToEdit.price || 1400);
+      setServicePrice(appointmentToEdit.servicePrice !== undefined && appointmentToEdit.servicePrice !== null && appointmentToEdit.servicePrice !== '' ? appointmentToEdit.servicePrice : (appointmentToEdit.price || ''));
       setServiceId(appointmentToEdit.serviceId || '');
       setSelectedAddons(appointmentToEdit.addonServiceNames || []);
       setDate(appointmentToEdit.date || getKolkataTodayString());
@@ -155,10 +141,10 @@ export default function NewAppointmentModal({
       const clientPast = appointments.find((a) => a.clientId === preselectedClient.id);
       if (clientPast && clientPast.serviceName) {
         setServiceName(clientPast.serviceName);
-        setServicePrice(clientPast.servicePrice || clientPast.price || 1400);
+        setServicePrice(clientPast.servicePrice || clientPast.price || '');
       } else if (!serviceName) {
-        setServiceName('Acrylic Nail Extension (Full Set)');
-        setServicePrice(1400);
+        setServiceName('');
+        setServicePrice('');
       }
 
       if (preselectedDate) setDate(preselectedDate);
@@ -180,10 +166,10 @@ export default function NewAppointmentModal({
         const lastApt = appointments[0];
         if (lastApt && lastApt.serviceName) {
           setServiceName(lastApt.serviceName);
-          setServicePrice(lastApt.servicePrice || lastApt.price || 1400);
+          setServicePrice(lastApt.servicePrice || lastApt.price || '');
         } else {
-          setServiceName('Acrylic Nail Extension (Full Set)');
-          setServicePrice(1400);
+          setServiceName('');
+          setServicePrice('');
         }
       }
 
@@ -211,7 +197,7 @@ export default function NewAppointmentModal({
       const clientPast = appointments.find((a) => a.clientId === id);
       if (clientPast && clientPast.serviceName && !appointmentToEdit) {
         setServiceName(clientPast.serviceName);
-        setServicePrice(clientPast.servicePrice || clientPast.price || 1400);
+        setServicePrice(clientPast.servicePrice || clientPast.price || '');
       }
     }
   };
@@ -382,7 +368,7 @@ export default function NewAppointmentModal({
                   Primary Nail Service & Custom Price *
                 </label>
                 <span className="text-[11px] text-studio-muted">
-                  Write manually or tap past service
+                  {previousServices.length > 0 ? 'Write manually or tap past service' : 'Enter treatment name & rate'}
                 </span>
               </div>
 
@@ -409,7 +395,7 @@ export default function NewAppointmentModal({
                     min="0"
                     step="50"
                     required
-                    placeholder="1400"
+                    placeholder="e.g. 1500"
                     value={servicePrice}
                     onChange={(e) => setServicePrice(e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))}
                     className="w-full pl-7 pr-3 py-2.5 rounded-xl border border-studio-border bg-studio-surface focus:border-studio-wine outline-none font-bold text-base sm:text-xs text-studio-wine shadow-xs"
