@@ -339,15 +339,37 @@ export default function NewAppointmentModal({
           <form onSubmit={handleSubmit} className="space-y-4 text-xs">
             {/* Client Selection */}
             <div className="space-y-1.5">
-              <label className="block font-semibold text-studio-secondary">
-                Select Client *
-              </label>
-              {clients.length > 0 ? (
+              <div className="flex items-center justify-between">
+                <label className="block font-semibold text-studio-secondary">
+                  Select Client *
+                </label>
+                {clientId && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setClientId('');
+                      setClientName('');
+                      setClientPhone('');
+                    }}
+                    className="text-[10px] text-studio-muted hover:text-studio-wine underline"
+                  >
+                    Clear / Write New
+                  </button>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                {/* Option 1: Select from saved clients list */}
                 <select
                   value={clientId}
                   onChange={(e) => handleClientChange(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none font-medium text-base sm:text-xs text-studio-ink"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none font-medium text-base sm:text-xs text-studio-ink cursor-pointer"
                 >
+                  <option value="">
+                    {clients.length > 0
+                      ? `-- Select from saved clients (${clients.length}) --`
+                      : '-- No saved clients yet (type below) --'}
+                  </option>
                   {preselectedClient && !clients.some((c) => c.id === preselectedClient.id) && (
                     <option key={preselectedClient.id} value={preselectedClient.id}>
                       {preselectedClient.name} ({preselectedClient.phone})
@@ -355,20 +377,27 @@ export default function NewAppointmentModal({
                   )}
                   {clients.map((c) => (
                     <option key={c.id} value={c.id}>
-                      {c.name} ({c.phone}) {c.vip ? '[VIP Client]' : ''}
+                      {c.name} {c.phone ? `(${c.phone})` : ''} {c.vip ? '[VIP Client]' : ''}
                     </option>
                   ))}
                 </select>
-              ) : (
+
+                {/* Option 2: Write manually */}
                 <input
                   type="text"
-                  placeholder="Client Name"
+                  placeholder={clientId ? "Selected client name (editable)" : "Write client name manually..."}
                   required
                   value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none text-base sm:text-xs text-studio-ink"
+                  onChange={(e) => {
+                    setClientName(e.target.value);
+                    const matched = clients.find((c) => c.id === clientId);
+                    if (matched && matched.name !== e.target.value) {
+                      setClientId('');
+                    }
+                  }}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-studio-border bg-studio-canvas/50 focus:bg-studio-surface focus:border-studio-wine outline-none font-medium text-base sm:text-xs text-studio-ink"
                 />
-              )}
+              </div>
             </div>
 
             {/* Primary Nail Service: Manual Writing Tab + Previous Inputs */}

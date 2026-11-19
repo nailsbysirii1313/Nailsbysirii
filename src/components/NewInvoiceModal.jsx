@@ -259,44 +259,61 @@ export default function NewInvoiceModal({
           {/* Client & Date */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div>
-              <label className="block font-semibold text-text-secondary mb-1">
-                Client *
-              </label>
-              {clients.length > 0 ? (
-                <div>
-                  <select
-                    value={clientId}
-                    onChange={(e) => handleClientChange(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs font-medium text-text-ink"
+              <div className="flex items-center justify-between mb-1">
+                <label className="block font-semibold text-text-secondary">
+                  Client *
+                </label>
+                {clientId && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setClientId('');
+                      setClientName('');
+                      setClientPhone('');
+                      setClientEmail('');
+                    }}
+                    className="text-[10px] text-text-muted hover:text-brand-wine underline"
                   >
-                    <option value="">Select existing client...</option>
-                    {clients.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name} {c.phone ? `(${c.phone})` : ''}
-                      </option>
-                    ))}
-                  </select>
-                  {!clientId && (
-                    <input
-                      type="text"
-                      required
-                      placeholder="Or enter new client name..."
-                      value={clientName}
-                      onChange={(e) => setClientName(e.target.value)}
-                      className="w-full mt-1.5 px-3 py-1.5 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs"
-                    />
-                  )}
-                </div>
-              ) : (
+                    Clear / Write New
+                  </button>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                {/* Option 1: Select from existing clients list */}
+                <select
+                  value={clientId}
+                  onChange={(e) => handleClientChange(e.target.value)}
+                  className="w-full px-3 py-1.5 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs font-medium text-text-ink cursor-pointer"
+                >
+                  <option value="">
+                    {clients.length > 0
+                      ? `-- Select from saved clients (${clients.length}) --`
+                      : '-- No saved clients yet (type below) --'}
+                  </option>
+                  {clients.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} {c.phone ? `(${c.phone})` : ''} {c.vip ? '[VIP]' : ''}
+                    </option>
+                  ))}
+                </select>
+
+                {/* Option 2: Write manually */}
                 <input
                   type="text"
                   required
-                  placeholder="Client full name"
+                  placeholder={clientId ? "Selected client name (editable)" : "Write client name manually..."}
                   value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs"
+                  onChange={(e) => {
+                    setClientName(e.target.value);
+                    const matched = clients.find((c) => c.id === clientId);
+                    if (matched && matched.name !== e.target.value) {
+                      setClientId('');
+                    }
+                  }}
+                  className="w-full px-3 py-2 rounded-xl border border-border-subtle bg-studio-canvas focus:bg-white focus:border-brand-wine outline-none text-base sm:text-xs text-text-ink font-medium"
                 />
-              )}
+              </div>
             </div>
 
             <div>
