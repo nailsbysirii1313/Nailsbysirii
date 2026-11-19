@@ -148,7 +148,8 @@ async function seed() {
       is_available: p.isAvailable,
       tag: p.tag,
       description: p.description,
-      included_kit: p.includedKit
+      included_kit: p.includedKit,
+      image_url: p.imageUrl || null
     }));
 
     const { error: pErr } = await supabase.from('press_on_products').upsert(records, { onConflict: 'id' });
