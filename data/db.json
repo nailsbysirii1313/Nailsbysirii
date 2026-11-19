@@ -332,10 +332,11 @@
       "status": "Confirmed",
       "price": 1600,
       "createdAt": "2026-11-18T09:49:03.729+00:00",
-      "updatedAt": "2026-11-18T14:34:12.899Z",
+      "updatedAt": "2026-11-19T04:03:30.549Z",
       "reminded24h": true,
       "reminderSent": true,
-      "lastReminderAt": "2026-11-18T14:34:12.899Z"
+      "lastReminderAt": "2026-11-19T04:03:30.549Z",
+      "reminded4h": true
     }
   ],
   "invoices": [
@@ -366,6 +367,17 @@
     }
   ],
   "notifications": [
+    {
+      "type": "appointment_reminder",
+      "title": "[4h Urgent Alert] Pooja Verma - 14:00",
+      "message": "🔔 4-HOUR ARRIVAL ALERT • NAILS BY SIRII\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n👤 Client: Pooja Verma\n📞 Phone: 9876543210\n💅 Service: Russian BIAB Gel Overlay\n📅 Schedule: 2026-11-19 at 14:00\n💰 Price: ₹1,600 (Full payment at studio)\n📍 Location: Nails by Sirii Atelier, Garhi Cantt, Dehradun\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nAction: Please ensure sterilization buffers & station ready.",
+      "topic": "nails-by-sirii-alerts",
+      "status": "delivered",
+      "appointmentId": "apt_1794995343729",
+      "reminderType": "4h",
+      "id": "notif_1795061010547",
+      "sentAt": "2026-11-19T04:03:30.547Z"
+    },
     {
       "type": "appointment_reminder",
       "title": "[24h Notice] Pooja Verma - 14:00",
