@@ -2533,8 +2533,18 @@ export default function ClientWebsite({
             aria-hidden="true"
           />
           {/* Scrollable floating dialog container */}
-          <div className="fixed inset-0 z-[71] overflow-y-auto p-4 flex items-center justify-center pointer-events-none animate-fade-in">
-            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 border border-studio-border shadow-studio-float space-y-5 my-6 max-h-[92vh] overflow-y-auto pointer-events-auto">
+          <div
+            className="fixed inset-0 z-[71] overflow-y-auto p-3 sm:p-4 flex items-center justify-center animate-fade-in"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setShowReviewModal(false);
+            }}
+          >
+            <div
+              data-lenis-prevent
+              data-lenis-prevent-wheel
+              data-lenis-prevent-touch
+              className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 border border-studio-border shadow-studio-float space-y-5 my-auto max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
+            >
               <div className="flex items-center justify-between pb-3.5 border-b border-studio-border">
                 <div className="space-y-0.5">
                   <span className="text-[10px] font-bold text-studio-wine uppercase tracking-widest block">
@@ -2710,8 +2720,18 @@ export default function ClientWebsite({
             aria-hidden="true"
           />
           {/* Scrollable floating dialog container */}
-          <div className="fixed inset-0 z-[71] overflow-y-auto p-4 flex items-center justify-center pointer-events-none animate-in fade-in">
-            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto pointer-events-auto">
+          <div
+            className="fixed inset-0 z-[71] overflow-y-auto p-3 sm:p-4 flex items-center justify-center animate-in fade-in"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setIsSizingModalOpen(false);
+            }}
+          >
+            <div
+              data-lenis-prevent
+              data-lenis-prevent-wheel
+              data-lenis-prevent-touch
+              className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-auto max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
+            >
               {/* Header */}
               <div className="flex items-center justify-between pb-3 border-b border-studio-border">
                 <div className="flex items-center gap-2">
@@ -2851,8 +2871,18 @@ export default function ClientWebsite({
             aria-hidden="true"
           />
           {/* Scrollable floating dialog container */}
-          <div className="fixed inset-0 z-[71] overflow-y-auto p-4 flex items-center justify-center pointer-events-none animate-in fade-in">
-            <div className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-6 max-h-[92vh] overflow-y-auto pointer-events-auto">
+          <div
+            className="fixed inset-0 z-[71] overflow-y-auto p-3 sm:p-4 flex items-center justify-center animate-in fade-in"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setIsSizingModalOpen(false);
+            }}
+          >
+            <div
+              data-lenis-prevent
+              data-lenis-prevent-wheel
+              data-lenis-prevent-touch
+              className="bg-studio-surface rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-studio-float border border-studio-border space-y-5 my-auto max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
+            >
               {/* Header & Close */}
               <div className="flex items-center justify-between pb-3 border-b border-studio-border">
                 <div className="flex items-center gap-2">

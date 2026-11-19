@@ -28,6 +28,18 @@ export function initSmoothScroll() {
       wheelMultiplier: 0.95,
       touchMultiplier: 1.2,
       infinite: false,
+      allowNestedScroll: true,
+      prevent: (node) => {
+        if (!node || !(node instanceof HTMLElement)) return false;
+        return (
+          node.hasAttribute('data-lenis-prevent') ||
+          node.hasAttribute('data-lenis-prevent-wheel') ||
+          !!node.closest('[data-lenis-prevent]') ||
+          !!node.closest('.modal-portal-root') ||
+          !!node.closest('[role="dialog"]') ||
+          !!node.closest('.overflow-y-auto')
+        );
+      },
     });
 
     // Synchronize Lenis scroll position with GSAP ScrollTrigger

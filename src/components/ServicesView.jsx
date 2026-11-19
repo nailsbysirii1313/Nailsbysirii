@@ -214,8 +214,18 @@ export default function ServicesView({
             aria-hidden="true"
           />
           {/* Scrollable floating dialog container */}
-          <div className="fixed inset-0 z-[71] overflow-y-auto p-4 flex items-center justify-center pointer-events-none animate-fade-in">
-            <div className="bg-studio-surface rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-studio border border-border-subtle relative font-sans my-auto pointer-events-auto">
+          <div
+            className="fixed inset-0 z-[71] overflow-y-auto p-3 sm:p-4 flex items-center justify-center animate-fade-in"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setIsModalOpen(false);
+            }}
+          >
+            <div
+              data-lenis-prevent
+              data-lenis-prevent-wheel
+              data-lenis-prevent-touch
+              className="bg-studio-surface rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-studio border border-border-subtle relative font-sans max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
+            >
             <button
               onClick={() => setIsModalOpen(false)}
               className="absolute top-5 right-5 p-2 rounded-full text-text-muted hover:text-text-ink hover:bg-studio-canvas transition-colors min-h-[38px] min-w-[38px] flex items-center justify-center"

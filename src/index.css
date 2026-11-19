@@ -16,8 +16,12 @@
     scroll-behavior: auto !important;
   }
 
-  .lenis.lenis-smooth [data-lenis-prevent] {
+  .lenis.lenis-smooth [data-lenis-prevent],
+  [data-lenis-prevent],
+  .modal-portal-root,
+  .modal-portal-root * {
     overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
 
   .lenis.lenis-stopped {

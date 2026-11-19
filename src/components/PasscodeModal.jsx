@@ -67,8 +67,18 @@ export default function PasscodeModal({
         aria-hidden="true"
       />
       {/* Scrollable floating dialog container */}
-      <div className="fixed inset-0 z-[71] overflow-y-auto p-4 flex items-center justify-center pointer-events-none animate-in fade-in duration-200">
-        <div className="bg-studio-surface rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-studio-float border border-studio-border space-y-6 relative overflow-hidden pointer-events-auto my-auto">
+      <div
+        className="fixed inset-0 z-[71] overflow-y-auto p-3 sm:p-4 flex items-center justify-center animate-in fade-in duration-200"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <div
+          data-lenis-prevent
+          data-lenis-prevent-wheel
+          data-lenis-prevent-touch
+          className="bg-studio-surface rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-studio-float border border-studio-border space-y-6 relative overflow-hidden my-auto max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
+        >
         {/* Decorative background glow */}
         <div className="absolute -top-16 -right-16 w-36 h-36 bg-studio-wineLight rounded-full blur-2xl pointer-events-none" />
         <div className="absolute -bottom-16 -left-16 w-36 h-36 bg-studio-subtle rounded-full blur-2xl pointer-events-none" />

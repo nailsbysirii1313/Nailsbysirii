@@ -33,5 +33,16 @@ export default function ModalPortal({ isOpen, children, onClose }) {
 
   if (!isOpen || !mounted) return null;
 
-  return createPortal(children, document.body);
+  return createPortal(
+    <div
+      data-lenis-prevent="true"
+      data-lenis-prevent-wheel="true"
+      data-lenis-prevent-touch="true"
+      className="modal-portal-root"
+      style={{ isolation: 'isolate' }}
+    >
+      {children}
+    </div>,
+    document.body
+  );
 }

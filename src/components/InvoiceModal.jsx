@@ -171,8 +171,18 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for visiting Nai
         aria-hidden="true"
       />
       {/* Scrollable floating dialog container */}
-      <div className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center sm:p-4 overflow-y-auto pointer-events-none animate-fade-in">
-        <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-2xl w-full shadow-studio-float border-t sm:border border-border-subtle relative max-h-[96vh] flex flex-col font-sans my-auto pointer-events-auto">
+      <div
+        className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fade-in"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <div
+          data-lenis-prevent
+          data-lenis-prevent-wheel
+          data-lenis-prevent-touch
+          className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-2xl w-full shadow-studio-float border-t sm:border border-border-subtle relative max-h-[94vh] sm:max-h-[90vh] flex flex-col font-sans overscroll-contain"
+        >
         {/* Mobile Drag Indicator */}
         <div className="w-10 h-1.5 rounded-full bg-border-subtle mx-auto my-2.5 sm:hidden shrink-0" />
 

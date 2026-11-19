@@ -286,8 +286,18 @@ export default function NewAppointmentModal({
         aria-hidden="true"
       />
       {/* Scrollable floating dialog container */}
-      <div className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center sm:p-4 overflow-y-auto pointer-events-none animate-fade-in">
-        <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-7 shadow-studio-float border-t sm:border border-studio-border relative max-h-[92vh] overflow-y-auto font-sans my-auto pointer-events-auto">
+      <div
+        className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fade-in"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <div
+          data-lenis-prevent
+          data-lenis-prevent-wheel
+          data-lenis-prevent-touch
+          className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-7 shadow-studio-float border-t sm:border border-studio-border relative max-h-[90vh] sm:max-h-[85vh] overflow-y-auto font-sans overscroll-contain"
+        >
           <div className="w-10 h-1.5 rounded-full bg-studio-borderStrong mx-auto mb-3 sm:hidden" />
           <button
             onClick={onClose}

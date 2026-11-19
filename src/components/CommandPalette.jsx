@@ -92,8 +92,18 @@ export default function CommandPalette({
         aria-hidden="true"
       />
       {/* Scrollable floating dialog container */}
-      <div className="fixed inset-0 z-[71] flex items-start justify-center pt-16 sm:pt-20 p-4 pointer-events-none animate-fade-in">
-        <div className="bg-studio-surface rounded-3xl max-w-xl w-full shadow-studio border border-border-subtle overflow-hidden relative pointer-events-auto">
+      <div
+        className="fixed inset-0 z-[71] flex items-start justify-center pt-16 sm:pt-20 p-4 animate-fade-in"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <div
+          data-lenis-prevent
+          data-lenis-prevent-wheel
+          data-lenis-prevent-touch
+          className="bg-studio-surface rounded-3xl max-w-xl w-full shadow-studio border border-border-subtle overflow-hidden relative overscroll-contain"
+        >
         {/* Search Input Bar */}
         <div className="p-4 border-b border-border-subtle flex items-center gap-3">
           <Search className="w-5 h-5 text-brand-wine shrink-0" />

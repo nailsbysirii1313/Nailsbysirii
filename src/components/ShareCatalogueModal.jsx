@@ -59,8 +59,18 @@ export default function ShareCatalogueModal({
         aria-hidden="true"
       />
       {/* Scrollable floating dialog container */}
-      <div className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center sm:p-4 overflow-y-auto pointer-events-none animate-in fade-in duration-200">
-        <div className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-studio-float border-t sm:border border-studio-border space-y-5 sm:space-y-6 relative max-h-[92vh] overflow-y-auto pointer-events-auto">
+      <div
+        className="fixed inset-0 z-[71] flex items-end sm:items-center justify-center p-3 sm:p-4 overflow-y-auto animate-in fade-in duration-200"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <div
+          data-lenis-prevent
+          data-lenis-prevent-wheel
+          data-lenis-prevent-touch
+          className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-studio-float border-t sm:border border-studio-border space-y-5 sm:space-y-6 relative max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
+        >
         <div className="w-10 h-1.5 rounded-full bg-studio-borderStrong mx-auto sm:hidden" />
         
         {/* Close Button */}

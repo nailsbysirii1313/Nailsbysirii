@@ -220,8 +220,18 @@ export default function NewInvoiceModal({
         aria-hidden="true"
       />
       {/* Scrollable floating dialog container */}
-      <div className="fixed inset-0 z-[71] overflow-y-auto p-3 sm:p-4 flex items-center justify-center pointer-events-none animate-fade-in">
-        <div className="bg-studio-surface rounded-3xl max-w-xl w-full p-4 sm:p-6 shadow-studio-float border border-border-subtle relative max-h-[92vh] overflow-y-auto font-sans my-auto pointer-events-auto">
+      <div
+        className="fixed inset-0 z-[71] overflow-y-auto p-3 sm:p-4 flex items-center justify-center animate-fade-in"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <div
+          data-lenis-prevent
+          data-lenis-prevent-wheel
+          data-lenis-prevent-touch
+          className="bg-studio-surface rounded-3xl max-w-xl w-full p-4 sm:p-6 shadow-studio-float border border-border-subtle relative max-h-[90vh] sm:max-h-[85vh] overflow-y-auto font-sans overscroll-contain"
+        >
         {/* Close Button */}
         <button
           onClick={onClose}

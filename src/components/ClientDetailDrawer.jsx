@@ -105,8 +105,18 @@ export default function ClientDetailDrawer({
         aria-hidden="true"
       />
       {/* Drawer slide-in panel */}
-      <div className="fixed inset-0 z-[71] flex justify-end pointer-events-none animate-fade-in font-sans">
-        <div className="bg-studio-surface w-full max-w-md h-full shadow-studio-float border-l border-studio-border flex flex-col justify-between overflow-y-auto pointer-events-auto">
+      <div
+        className="fixed inset-0 z-[71] flex justify-end animate-fade-in font-sans"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <div
+          data-lenis-prevent
+          data-lenis-prevent-wheel
+          data-lenis-prevent-touch
+          className="bg-studio-surface w-full max-w-md h-full shadow-studio-float border-l border-studio-border flex flex-col justify-between overflow-y-auto overscroll-contain"
+        >
           {/* Header */}
           <div>
             <div className="p-6 border-b border-studio-border bg-studio-subtle/50 relative">
