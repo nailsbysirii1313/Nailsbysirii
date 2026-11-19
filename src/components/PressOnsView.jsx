@@ -560,118 +560,155 @@ export default function PressOnsView({
           </div>
 
           {/* Product Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredProducts.map((prod) => (
-              <div
-                key={prod.id}
-                className="bg-studio-surface rounded-3xl border border-border-subtle p-5 shadow-studio hover:border-brand-wine/30 transition-all flex flex-col justify-between space-y-4 group"
+          {products.length === 0 ? (
+            <div className="bg-studio-surface rounded-3xl border border-border-subtle p-12 text-center space-y-3 shadow-studio">
+              <div className="w-12 h-12 mx-auto rounded-full bg-studio-canvas text-brand-wine flex items-center justify-center border border-border-subtle">
+                <Package className="w-6 h-6 text-brand-wine" />
+              </div>
+              <h3 className="font-display italic font-bold text-lg text-text-ink">
+                No Press-On Sets in Boutique Yet
+              </h3>
+              <p className="text-xs text-text-muted max-w-sm mx-auto">
+                Your boutique catalog is empty and ready. Create and publish your handcrafted press-on sets with custom shapes, finishes, prices, and stock counts.
+              </p>
+              <button
+                onClick={handleOpenAddProduct}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-wine text-white text-xs font-semibold shadow-studio hover:bg-brand-wineHover min-h-[44px]"
               >
-                <div className="space-y-3.5">
-                  {/* Real Nail Photography Preview */}
-                  <div className="relative h-44 rounded-2xl overflow-hidden bg-studio-canvas border border-border-subtle group-hover:border-brand-wine/30 transition-all">
-                    <img
-                      src={prod.imageUrl || '/catalogue/glazed-donut.jpg'}
-                      alt={prod.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.src = '/catalogue/glazed-donut.jpg';
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20 pointer-events-none" />
+                <Plus className="w-4 h-4" />
+                <span>Add Press-On Set</span>
+              </button>
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="bg-studio-surface rounded-3xl border border-border-subtle p-8 text-center space-y-3 shadow-studio">
+              <Package className="w-10 h-10 text-text-muted mx-auto" />
+              <h3 className="font-display italic font-bold text-lg text-text-ink">
+                No sets match your search
+              </h3>
+              <p className="text-xs text-text-muted max-w-sm mx-auto">
+                Try searching for a different shape, collection, or nail style.
+              </p>
+              <button
+                onClick={() => setProductSearchQuery('')}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-studio-canvas border border-border-subtle text-xs font-semibold hover:bg-studio-surface"
+              >
+                <span>Clear Search</span>
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filteredProducts.map((prod) => (
+                <div
+                  key={prod.id}
+                  className="bg-studio-surface rounded-3xl border border-border-subtle p-5 shadow-studio hover:border-brand-wine/30 transition-all flex flex-col justify-between space-y-4 group"
+                >
+                  <div className="space-y-3.5">
+                    {/* Real Nail Photography Preview */}
+                    <div className="relative h-44 rounded-2xl overflow-hidden bg-studio-canvas border border-border-subtle group-hover:border-brand-wine/30 transition-all">
+                      <img
+                        src={prod.imageUrl || '/catalogue/glazed-donut.jpg'}
+                        alt={prod.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.src = '/catalogue/glazed-donut.jpg';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20 pointer-events-none" />
 
-                    <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/25 text-[10px] font-bold text-white shadow-xs">
-                      {prod.tag || 'Handcrafted'}
-                    </span>
+                      <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/25 text-[10px] font-bold text-white shadow-xs">
+                        {prod.tag || 'Handcrafted'}
+                      </span>
 
-                    <span className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-brand-wine/90 backdrop-blur-md text-[10px] font-bold text-white shadow-xs">
-                      {prod.shape} • {prod.length}
-                    </span>
-                  </div>
-
-                  {/* Title & Collection */}
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-brand-wine block">
-                      {prod.collection || 'Signature Boutique'}
-                    </span>
-                    <h3 className="font-display italic font-bold text-base text-text-ink group-hover:text-brand-wine transition-colors">
-                      {prod.title}
-                    </h3>
-                    <p className="text-xs text-text-muted line-clamp-2 leading-relaxed">
-                      {prod.description}
-                    </p>
-                  </div>
-
-                  {/* Price & Stock Controls */}
-                  <div className="pt-2 border-t border-border-subtle flex items-center justify-between text-xs">
-                    <div>
-                      <span className="text-[10px] text-text-muted block">Price</span>
-                      <span className="font-display italic font-bold text-base text-text-ink">
-                        ₹{prod.price}
+                      <span className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-brand-wine/90 backdrop-blur-md text-[10px] font-bold text-white shadow-xs">
+                        {prod.shape} • {prod.length}
                       </span>
                     </div>
 
-                    <div className="text-right">
-                      <span className="text-[10px] text-text-muted block">Inventory Stock</span>
-                      <div className="flex items-center gap-1.5 mt-0.5">
-                        <button
-                          onClick={() => handleQuickStockAdjust(prod, -1)}
-                          className="w-6 h-6 rounded-lg bg-studio-canvas border border-border-subtle text-text-ink font-bold hover:bg-studio-subtle flex items-center justify-center"
-                          title="Reduce stock by 1"
-                        >
-                          -
-                        </button>
-                        <span className={`font-bold px-2 text-xs ${
-                          prod.stock <= 3 ? 'text-amber-700' : 'text-text-ink'
-                        }`}>
-                          {prod.stock}
+                    {/* Title & Collection */}
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-brand-wine block">
+                        {prod.collection || 'Signature Boutique'}
+                      </span>
+                      <h3 className="font-display italic font-bold text-base text-text-ink group-hover:text-brand-wine transition-colors">
+                        {prod.title}
+                      </h3>
+                      <p className="text-xs text-text-muted line-clamp-2 leading-relaxed">
+                        {prod.description}
+                      </p>
+                    </div>
+
+                    {/* Price & Stock Controls */}
+                    <div className="pt-2 border-t border-border-subtle flex items-center justify-between text-xs">
+                      <div>
+                        <span className="text-[10px] text-text-muted block">Price</span>
+                        <span className="font-display italic font-bold text-base text-text-ink">
+                          ₹{prod.price}
                         </span>
-                        <button
-                          onClick={() => handleQuickStockAdjust(prod, 1)}
-                          className="w-6 h-6 rounded-lg bg-studio-canvas border border-border-subtle text-text-ink font-bold hover:bg-studio-subtle flex items-center justify-center"
-                          title="Increase stock by 1"
-                        >
-                          +
-                        </button>
+                      </div>
+
+                      <div className="text-right">
+                        <span className="text-[10px] text-text-muted block">Inventory Stock</span>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <button
+                            onClick={() => handleQuickStockAdjust(prod, -1)}
+                            className="w-6 h-6 rounded-lg bg-studio-canvas border border-border-subtle text-text-ink font-bold hover:bg-studio-subtle flex items-center justify-center"
+                            title="Reduce stock by 1"
+                          >
+                            -
+                          </button>
+                          <span className={`font-bold px-2 text-xs ${
+                            prod.stock <= 3 ? 'text-amber-700' : 'text-text-ink'
+                          }`}>
+                            {prod.stock}
+                          </span>
+                          <button
+                            onClick={() => handleQuickStockAdjust(prod, 1)}
+                            className="w-6 h-6 rounded-lg bg-studio-canvas border border-border-subtle text-text-ink font-bold hover:bg-studio-subtle flex items-center justify-center"
+                            title="Increase stock by 1"
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Edit & Delete Controls */}
-                <div className="pt-3 border-t border-border-subtle flex items-center justify-between text-xs">
-                  <span className={`inline-flex items-center gap-1.5 text-[10px] font-semibold ${
-                    prod.stock > 0 && prod.isAvailable ? 'text-emerald-700' : 'text-red-700'
-                  }`}>
-                    <span className={`w-1.5 h-1.5 rounded-full ${prod.stock > 0 && prod.isAvailable ? 'bg-emerald-500' : 'bg-red-400'}`}></span>
-                    {prod.stock > 0 && prod.isAvailable ? 'In Stock (Active)' : 'Out of Stock'}
-                  </span>
+                  {/* Edit & Delete Controls */}
+                  <div className="pt-3 border-t border-border-subtle flex items-center justify-between text-xs">
+                    <span className={`inline-flex items-center gap-1.5 text-[10px] font-semibold ${
+                      prod.stock > 0 && prod.isAvailable ? 'text-emerald-700' : 'text-red-700'
+                    }`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${prod.stock > 0 && prod.isAvailable ? 'bg-emerald-500' : 'bg-red-400'}`}></span>
+                      {prod.stock > 0 && prod.isAvailable ? 'In Stock (Active)' : 'Out of Stock'}
+                    </span>
 
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleOpenEditProduct(prod)}
-                      className="px-3 py-1.5 rounded-xl bg-studio-canvas hover:bg-studio-subtle text-text-ink border border-border-subtle font-semibold flex items-center gap-1"
-                    >
-                      <Edit2 className="w-3 h-3 text-brand-wine" />
-                      <span>Edit</span>
-                    </button>
-                    <button
-                      onClick={async () => {
-                        if (window.confirm(`Delete product "${prod.title}"?`)) {
-                          await onDeleteProduct(prod.id);
-                          if (onRefreshProducts) onRefreshProducts();
-                        }
-                      }}
-                      className="p-1.5 rounded-xl hover:bg-red-50 text-text-muted hover:text-red-700 transition-colors"
-                      title="Delete Product"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleOpenEditProduct(prod)}
+                        className="px-3 py-1.5 rounded-xl bg-studio-canvas hover:bg-studio-subtle text-text-ink border border-border-subtle font-semibold flex items-center gap-1"
+                      >
+                        <Edit2 className="w-3 h-3 text-brand-wine" />
+                        <span>Edit</span>
+                      </button>
+                      <button
+                        onClick={async () => {
+                          if (window.confirm(`Delete product "${prod.title}"?`)) {
+                            await onDeleteProduct(prod.id);
+                            if (onRefreshProducts) onRefreshProducts();
+                          }
+                        }}
+                        className="p-1.5 rounded-xl hover:bg-red-50 text-text-muted hover:text-red-700 transition-colors"
+                        title="Delete Product"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 

@@ -387,109 +387,7 @@ export default function ClientWebsite({
   };
 
   // Press-On Nails Boutique E-Commerce State
-  const defaultPressOnCatalog = [
-    {
-      id: 'pop_1',
-      title: 'Hailey Glazed Pearl Chrome',
-      collection: 'Signature Ethereal',
-      shape: 'Almond',
-      length: 'Medium',
-      baseColor: '#FDF2F8',
-      finish: 'Hailey Glazed Chrome',
-      price: 1299,
-      stock: 8,
-      isAvailable: true,
-      tag: 'Bestseller',
-      imageUrl: '/hero/little-sparkle.jpg',
-      description: 'Ultra-popular pearlescent glazed chrome over sheer strawberry milk builder gel. Hand-buffed with salon chrome powder for an ethereal mirror shine.',
-      includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
-    },
-    {
-      id: 'pop_2',
-      title: 'Velvet Rose Quartz Cat-Eye',
-      collection: 'Magnetic Silk',
-      shape: 'Almond',
-      length: 'Long',
-      baseColor: '#BE185D',
-      finish: 'Velvet Cat-Eye',
-      price: 1499,
-      stock: 6,
-      isAvailable: true,
-      tag: 'Studio Pick',
-      imageUrl: '/hero/make-statement.jpg',
-      description: 'Deep dimensional velvet magnetic shimmer refracting light across long sculpted stilettos. Dramatic, luxurious, and chip-proof.',
-      includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
-    },
-    {
-      id: 'pop_3',
-      title: '3D Molten Gold & Baroque Pearls',
-      collection: 'Artisan Couture',
-      shape: 'Coffin',
-      length: 'Medium',
-      baseColor: '#FFFBEB',
-      finish: 'Sculpted 3D Chrome',
-      price: 1699,
-      stock: 5,
-      isAvailable: true,
-      tag: 'Luxury Edition',
-      imageUrl: '/catalogue/french-ombre.jpg',
-      description: 'Hand-sculpted 3D liquid molten gold curves and real freshwater baroque pearl accents encrusted over an ivory porcelain bed.',
-      includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
-    },
-    {
-      id: 'pop_4',
-      title: 'French Ombré Classic Porcelain',
-      collection: 'Everyday Minimalist',
-      shape: 'Squoval',
-      length: 'Short',
-      baseColor: '#FCE7F3',
-      finish: 'High-Gloss Glass',
-      price: 1199,
-      stock: 10,
-      isAvailable: true,
-      tag: 'Clean Aesthetic',
-      imageUrl: '/hero/soft-simple.jpg',
-      description: 'Seamless airbrushed baby boomer pink-and-white ombré gradient with high-apex reinforcement. Natural, clean, and workplace ready.',
-      includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
-    },
-    {
-      id: 'pop_5',
-      title: 'Y2K Cyber Chrome Starbursts',
-      collection: 'Streetwear Art',
-      shape: 'Stiletto',
-      length: 'Long',
-      baseColor: '#F3F4F6',
-      finish: 'Reflective Chrome',
-      price: 1599,
-      stock: 4,
-      isAvailable: true,
-      tag: 'Trending',
-      imageUrl: '/hero/little-sparkle.jpg',
-      description: 'High-shine liquid silver chrome starbursts, cross-stars, and geometric cyber accents set against a sheer neutral canvas.',
-      includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
-    },
-    {
-      id: 'pop_6',
-      title: 'Milky Quartz & Gold Leaf Inlay',
-      collection: 'Mineral Geode',
-      shape: 'Coffin',
-      length: 'Long',
-      baseColor: '#F5F5F4',
-      finish: 'Encapsulated Leaf',
-      price: 1499,
-      stock: 7,
-      isAvailable: true,
-      tag: 'Handcrafted',
-      imageUrl: '/catalogue/french-ombre.jpg',
-      description: 'Subtle translucent white marble veining swirled with pure 24K gold foil flecks suspended in crystal clear gel depth.',
-      includedKit: '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer, 2 Prep Wipes'
-    }
-  ];
-
-  // Active products in the store
-  const activePressOnProducts = (pressOnProducts && pressOnProducts.length > 0)
-    ? pressOnProducts
-    : defaultPressOnCatalog;
+  const activePressOnProducts = Array.isArray(pressOnProducts) ? pressOnProducts : [];
 
   const [isSizingModalOpen, setIsSizingModalOpen] = useState(false);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
@@ -1623,76 +1521,99 @@ export default function ClientWebsite({
           </div>
 
           {/* Press-On Products Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {activePressOnProducts.map((product) => (
-              <div
-                key={product.id}
-                className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border hover:border-studio-wine/40 shadow-studio transition-all flex flex-col justify-between group space-y-4"
-              >
-                <div className="space-y-4">
-                  {/* Real Nail Photography Preview */}
-                  <div className="relative h-52 sm:h-56 rounded-2xl overflow-hidden bg-studio-canvas border border-studio-border group-hover:border-studio-wine/40 transition-all">
-                    <img
-                      src={product.imageUrl || '/catalogue/glazed-donut.jpg'}
-                      alt={product.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
-                      loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.src = '/catalogue/glazed-donut.jpg';
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20 pointer-events-none" />
-
-                    {/* Tag badge */}
-                    <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/25 text-[10px] font-bold text-white shadow-xs">
-                      {product.tag || 'Handcrafted'}
-                    </span>
-                  </div>
-
-                  {/* Product Details */}
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block">
-                      {product.collection || 'Signature Boutique'}
-                    </span>
-                    <h3 className="font-display italic font-bold text-lg text-studio-ink group-hover:text-studio-wine transition-colors">
-                      {product.title}
-                    </h3>
-                    <p className="text-xs text-studio-secondary leading-relaxed font-sans pt-0.5">
-                      {product.description}
-                    </p>
-                  </div>
-
-                  {/* Included Kit Summary */}
-                  <div className="pt-2 border-t border-studio-border/60 text-[11px] text-studio-secondary space-y-1">
-                    <span className="text-[10px] font-semibold text-studio-ink block">Included in Box:</span>
-                    <p className="text-[10px] text-studio-muted leading-relaxed">
-                      {product.includedKit || '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer & 2 Prep Wipes'}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Price, Stock & Order CTA */}
-                <div className="pt-4 border-t border-studio-border flex items-center justify-between gap-3">
-                  <div>
-                    <div className="font-display italic font-bold text-xl text-studio-ink">
-                      ₹{product.price}
-                    </div>
-                    <span className="text-[10px] text-emerald-700 font-semibold block">
-                      Free Pan-India Delivery
-                    </span>
-                  </div>
-
-                  <button
-                    onClick={() => handleOpenPressOnCheckout(product)}
-                    className="px-5 py-2.5 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio transition-all active:scale-95 flex items-center gap-1.5 min-h-[42px]"
-                  >
-                    <ShoppingBag className="w-3.5 h-3.5" />
-                    <span>Order Set</span>
-                  </button>
-                </div>
+          {activePressOnProducts.length === 0 ? (
+            <div className="bg-studio-surface rounded-3xl p-10 border border-studio-border text-center space-y-4 max-w-lg mx-auto shadow-studio">
+              <div className="w-12 h-12 mx-auto rounded-full bg-studio-canvas text-brand-wine flex items-center justify-center border border-studio-border">
+                <Package className="w-6 h-6 text-brand-wine" />
               </div>
-            ))}
-          </div>
+              <h3 className="font-display font-semibold text-lg text-studio-ink">
+                New Boutique Sets Launching Soon
+              </h3>
+              <p className="text-xs text-studio-secondary leading-relaxed">
+                Sirii is currently handcrafting our upcoming limited-edition press-on capsule. You can book an atelier session or order a bespoke set tailored to your exact nails.
+              </p>
+              <div className="pt-2">
+                <a
+                  href="#book"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-brand-wine text-white text-xs font-semibold shadow-studio hover:bg-brand-wineHover transition-all"
+                >
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>Book Studio Appointment</span>
+                </a>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {activePressOnProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="bg-studio-surface rounded-3xl p-5 sm:p-6 border border-studio-border hover:border-studio-wine/40 shadow-studio transition-all flex flex-col justify-between group space-y-4"
+                >
+                  <div className="space-y-4">
+                    {/* Real Nail Photography Preview */}
+                    <div className="relative h-52 sm:h-56 rounded-2xl overflow-hidden bg-studio-canvas border border-studio-border group-hover:border-studio-wine/40 transition-all">
+                      <img
+                        src={product.imageUrl || '/catalogue/glazed-donut.jpg'}
+                        alt={product.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.src = '/catalogue/glazed-donut.jpg';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20 pointer-events-none" />
+
+                      {/* Tag badge */}
+                      <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/25 text-[10px] font-bold text-white shadow-xs">
+                        {product.tag || 'Handcrafted'}
+                      </span>
+                    </div>
+
+                    {/* Product Details */}
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-studio-wine block">
+                        {product.collection || 'Signature Boutique'}
+                      </span>
+                      <h3 className="font-display italic font-bold text-lg text-studio-ink group-hover:text-studio-wine transition-colors">
+                        {product.title}
+                      </h3>
+                      <p className="text-xs text-studio-secondary leading-relaxed font-sans pt-0.5">
+                        {product.description}
+                      </p>
+                    </div>
+
+                    {/* Included Kit Summary */}
+                    <div className="pt-2 border-t border-studio-border/60 text-[11px] text-studio-secondary space-y-1">
+                      <span className="text-[10px] font-semibold text-studio-ink block">Included in Box:</span>
+                      <p className="text-[10px] text-studio-muted leading-relaxed">
+                        {product.includedKit || '10 Handcrafted Nails, Salon Liquid Glue, 24 Jelly Sticky Tabs, Cuticle Pusher, Mini Buffer & 2 Prep Wipes'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Price, Stock & Order CTA */}
+                  <div className="pt-4 border-t border-studio-border flex items-center justify-between gap-3">
+                    <div>
+                      <div className="font-display italic font-bold text-xl text-studio-ink">
+                        ₹{product.price}
+                      </div>
+                      <span className="text-[10px] text-emerald-700 font-semibold block">
+                        Free Pan-India Delivery
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => handleOpenPressOnCheckout(product)}
+                      className="px-5 py-2.5 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-xs font-semibold shadow-studio transition-all active:scale-95 flex items-center gap-1.5 min-h-[42px]"
+                    >
+                      <ShoppingBag className="w-3.5 h-3.5" />
+                      <span>Order Set</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -2421,25 +2342,25 @@ export default function ClientWebsite({
                 <li>
                   <a href="#press-ons" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
                     <ChevronRight className="w-3 h-3 text-studio-wine/60" />
-                    <span>Hailey Glazed Pearl Chrome Sets</span>
+                    <span>Handcrafted Atelier Sets</span>
                   </a>
                 </li>
                 <li>
                   <a href="#press-ons" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
                     <ChevronRight className="w-3 h-3 text-studio-wine/60" />
-                    <span>Velvet Rose Quartz Cat-Eye</span>
+                    <span>Custom Shapes & Lengths</span>
                   </a>
                 </li>
                 <li>
                   <a href="#press-ons" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
                     <ChevronRight className="w-3 h-3 text-studio-wine/60" />
-                    <span>3D Molten Gold & Baroque Pearls</span>
+                    <span>Application & Reusability Guide</span>
                   </a>
                 </li>
                 <li>
                   <a href="#press-ons" className="hover:text-studio-wine transition-colors flex items-center gap-1.5">
                     <ChevronRight className="w-3 h-3 text-studio-wine/60" />
-                    <span>French Ombré Classic Porcelain</span>
+                    <span>Pan-India Tracked Express</span>
                   </a>
                 </li>
               </ul>
