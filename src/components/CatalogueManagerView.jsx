@@ -438,7 +438,7 @@ export default function CatalogueManagerView({
               {/* Image URL & Presets */}
               <div>
                 <label className="block font-semibold text-text-secondary mb-1">
-                  Photo Image URL <span className="text-brand-wine">*</span> <span className="text-[11px] font-normal text-text-muted">(Required — Only image-based designs are published)</span>
+                  Photo Image URL <span className="text-brand-wine">*</span> <span className="text-[11px] font-normal text-text-muted">(Required: Only image-based designs are published)</span>
                 </label>
                 <div className="space-y-1.5">
                   <input

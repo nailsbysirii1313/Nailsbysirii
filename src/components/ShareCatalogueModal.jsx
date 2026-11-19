@@ -45,7 +45,7 @@ export default function ShareCatalogueModal({
 
   const getWhatsAppShareUrl = () => {
     const studioName = settings?.studioName || 'Nails by Sirii';
-    const text = `*${studioName} — Bespoke Nail Design Catalogue & Booklet (Dehradun)*\n\nExplore our signature acrylic nail sets, Japanese builder gel (BIAB), Gel-X extensions, and curated design booklet:\n${catalogueUrl}\n\nBrowse design options or bring any photo you found on Pinterest/Instagram for a handcrafted custom set!`;
+    const text = `*${studioName}: Bespoke Nail Design Catalogue & Booklet (Dehradun)*\n\nExplore our signature acrylic nail sets, Japanese builder gel (BIAB), Gel-X extensions, and curated design booklet:\n${catalogueUrl}\n\nBrowse design options or bring any photo you found on Pinterest/Instagram for a handcrafted custom set!`;
 
     return `https://wa.me/?text=${encodeURIComponent(text)}`;
   };

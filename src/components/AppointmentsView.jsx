@@ -154,7 +154,7 @@ export default function AppointmentsView({
     setSelectedDate(d.toISOString().split('T')[0]);
   };
 
-  // Timeline Hours: Aligned to studio operating hours (12:00 PM – 7:00 PM IST)
+  // Timeline Hours: Aligned to studio operating hours (12:00 PM - 7:00 PM IST)
   const timelineHours = [
     '12:00',
     '13:00',
@@ -195,7 +195,7 @@ export default function AppointmentsView({
             Schedule & Bookings
           </h2>
           <p className="text-xs text-text-muted mt-1 max-w-xl">
-            Manage client appointments, view daily timeline schedules (12:00 PM – 7:00 PM), and track upfront advance deposits.
+            Manage client appointments, view daily timeline schedules (12:00 PM - 7:00 PM), and track upfront advance deposits.
           </p>
         </div>
 
@@ -855,7 +855,7 @@ export default function AppointmentsView({
             <div className="bg-studio-canvas/80 p-3 rounded-2xl border border-border-subtle flex items-center justify-between text-xs text-text-secondary">
               <span className="flex items-center gap-1.5 font-medium">
                 <Clock className="w-3.5 h-3.5 text-brand-wine" />
-                <span>Operating Hours: <strong>12:00 PM – 7:00 PM IST</strong></span>
+                <span>Operating Hours: <strong>12:00 PM - 7:00 PM IST</strong></span>
               </span>
               <span className="text-text-muted hidden sm:inline">Click any open slot below to quickly book</span>
             </div>

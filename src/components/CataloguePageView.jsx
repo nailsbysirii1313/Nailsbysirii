@@ -160,7 +160,7 @@ export default function CataloguePageView({
                 Found a Look on Instagram or Pinterest?
               </span>
               <h3 className="font-display font-semibold text-base sm:text-lg text-studio-ink">
-                You are not limited to this booklet — Bring your own reference image!
+                You are not limited to this booklet. Bring your own reference image!
               </h3>
               <p className="text-xs text-studio-secondary leading-relaxed">
                 Have a specific photo from Pinterest, Google, or TikTok? Sirii recreates and customizes any reference image to suit your natural nail architecture.
@@ -416,7 +416,7 @@ export default function CataloguePageView({
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-studio-muted text-center sm:text-left">
             <p>
-              © {new Date().getFullYear()} Nails by Sirii • Dehradun • 100% Autoclave Sterilized • Hours: {settings?.timings || '12:00 PM – 7:00 PM'} (Prior Reservation Only)
+              © {new Date().getFullYear()} Nails by Sirii • Dehradun • 100% Autoclave Sterilized • Hours: {settings?.timings || '12:00 PM - 7:00 PM'} (Prior Reservation Only)
             </p>
             <p className="text-studio-secondary">
               Handcrafted with pride in Uttarakhand

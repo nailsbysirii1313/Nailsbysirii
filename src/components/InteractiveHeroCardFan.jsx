@@ -18,22 +18,22 @@ const NAIL_RECIPES = {
     prep: 'Russian dry manicure & precision cuticle e-file',
     base: 'Semi-sheer strawberry milk BIAB gel reinforcement',
     finish: 'Pearlized glazed chrome buffed to high-mirror sheen',
-    wear: '3–4 Weeks chip-free wear',
-    time: '60–75 mins'
+    wear: '3-4 Weeks chip-free wear',
+    time: '60-75 mins'
   },
   sparkle: {
     prep: 'Structural apex alignment & diamond cuticle buff',
     base: 'Champagne porcelain acrylic sculpture or soft gel',
     finish: 'Molten liquid gold pearl chrome with glass topcoat',
     wear: '4+ Weeks high-gloss retention',
-    time: '75–90 mins'
+    time: '75-90 mins'
   },
   statement: {
     prep: 'Razor-sharp stiletto architecture & apex balance',
     base: 'Deep dimensional velvet rose magnetic cat-eye',
     finish: 'Multi-angle optical shimmer & optional crystal accent',
     wear: '4+ Weeks structural durability',
-    time: '90–105 mins'
+    time: '90-105 mins'
   }
 };
 

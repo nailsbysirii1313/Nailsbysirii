@@ -430,9 +430,9 @@ export default function PublicInvoiceView({
             <p className="font-semibold text-text-secondary">
               Natural Nail Architecture Care Principles:
             </p>
-            <p>1. Oil daily — massage cuticle oil into nail matrix and eponychium daily to maintain flexibility.</p>
-            <p>2. Treat your nails like jewels, not tools — protect stress zones from blunt force.</p>
-            <p>3. Maintenance schedule — book a BIAB rebalance every 3 to 4 weeks to preserve structural apex integrity.</p>
+            <p>1. Oil daily: massage cuticle oil into nail matrix and eponychium daily to maintain flexibility.</p>
+            <p>2. Treat your nails like jewels, not tools: protect stress zones from blunt force.</p>
+            <p>3. Maintenance schedule: book a BIAB rebalance every 3 to 4 weeks to preserve structural apex integrity.</p>
           </div>
         </div>
       </div>

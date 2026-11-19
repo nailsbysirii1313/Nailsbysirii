@@ -269,7 +269,7 @@ export default function PublicHomePilot({
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-emeraldLight border border-emerald-200 text-[11px] font-semibold text-emerald-800">
               <Clock className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Open Daily: {settings?.timings || '12:00 PM – 7:00 PM'}</span>
+              <span>Open Daily: {settings?.timings || '12:00 PM - 7:00 PM'}</span>
             </span>
           </div>
 
@@ -531,7 +531,7 @@ export default function PublicHomePilot({
             className="flex-1 py-3 px-4 rounded-xl bg-studio-wine text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-studio active:scale-95 min-h-[44px]"
           >
             <Calendar className="w-4 h-4" />
-            <span>Book Appointment (12–7 PM)</span>
+            <span>Book Appointment (12-7 PM)</span>
           </button>
         </div>
       </div>

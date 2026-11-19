@@ -32,7 +32,7 @@ export default function QuickMessageModal({
     } else if (template === 'reminder') {
       text = `Hello ${cName}! Friendly reminder regarding your appointment tomorrow at ${aptTime} at Nails by Sirii.\n\nIf you have reference art or moodboard ideas, feel free to share them in advance. Looking forward to your session!`;
     } else if (template === 'aftercare') {
-      text = `Hello ${cName}! Thank you for visiting Nails by Sirii today. To preserve your manicure architecture and ensure 3–4 weeks of wear:\n\n1. Apply cuticle oil daily to nourish the nail matrix\n2. Avoid using nails as tools to open cans or containers\n3. Wear gloves during household cleaning\n4. Never peel or force off gel coatings\n\nTag us on Instagram @nails.by.sirii if you share your fresh set!`;
+      text = `Hello ${cName}! Thank you for visiting Nails by Sirii today. To preserve your manicure architecture and ensure 3-4 weeks of wear:\n\n1. Apply cuticle oil daily to nourish the nail matrix\n2. Avoid using nails as tools to open cans or containers\n3. Wear gloves during household cleaning\n4. Never peel or force off gel coatings\n\nTag us on Instagram @nails.by.sirii if you share your fresh set!`;
     } else if (template === 'birthday') {
       text = `Happy Birthday ${cName}! Warmest wishes from Nails by Sirii! To celebrate your special month, enjoy a complimentary nail art upgrade on your next visit anytime this month. Let us know when you'd like to book your birthday session!`;
     } else {

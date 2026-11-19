@@ -134,7 +134,7 @@ export default function DashboardView({
               Welcome to Nails by Sirii
             </h2>
             <p className="text-xs sm:text-sm text-text-muted leading-relaxed">
-              You have <span className="font-semibold text-text-ink">{todayAppointments.length} appointment{todayAppointments.length === 1 ? '' : 's'}</span> scheduled for today ({formatKolkataDate(todayStr, { weekday: 'long', month: 'short', day: 'numeric' })}). Studio operating hours are <span className="font-semibold text-text-ink">12:00 PM – 7:00 PM</span>.
+              You have <span className="font-semibold text-text-ink">{todayAppointments.length} appointment{todayAppointments.length === 1 ? '' : 's'}</span> scheduled for today ({formatKolkataDate(todayStr, { weekday: 'long', month: 'short', day: 'numeric' })}). Studio operating hours are <span className="font-semibold text-text-ink">12:00 PM - 7:00 PM</span>.
             </p>
           </div>
 

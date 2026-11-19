@@ -77,7 +77,7 @@ export default function StudioTodayPilot({
               </h1>
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-studio-emeraldLight text-emerald-800 border border-emerald-200">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>12–7 PM</span>
+                <span>12-7 PM</span>
               </span>
             </div>
           </div>

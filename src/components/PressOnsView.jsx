@@ -144,7 +144,7 @@ export default function PressOnsView({
   const getWhatsAppDispatchUrl = (order) => {
     const cleanPhone = (order.clientPhone || '').replace(/[^0-9]/g, '');
     const phoneWithCountry = cleanPhone.startsWith('91') ? cleanPhone : `91${cleanPhone}`;
-    const text = `*Nails by Sirii — Order Dispatch Update*\n\nHello ${order.clientName}!\n\nYour handcrafted press-on nail set *"${order.productTitle}"* (Size: ${order.size}) has been dispatched.\n\n• *Order ID:* ${order.orderNumber}\n• *Courier Partner:* ${order.courierPartner || 'Standard Courier'}\n• *Tracking No:* ${order.trackingNumber || 'In transit'}\n• *Delivery Address:* ${order.addressStreet}, ${order.addressCity}\n\nEvery set includes your complete prep kit (salon liquid glue, jelly sticky tabs, cuticle pusher, and mini buffer). Let us know once your package arrives!\n\n— *Simran (Sirii), Nails by Sirii Atelier*`;
+    const text = `*Nails by Sirii: Order Dispatch Update*\n\nHello ${order.clientName}!\n\nYour handcrafted press-on nail set *"${order.productTitle}"* (Size: ${order.size}) has been dispatched.\n\n• *Order ID:* ${order.orderNumber}\n• *Courier Partner:* ${order.courierPartner || 'Standard Courier'}\n• *Tracking No:* ${order.trackingNumber || 'In transit'}\n• *Delivery Address:* ${order.addressStreet}, ${order.addressCity}\n\nEvery set includes your complete prep kit (salon liquid glue, jelly sticky tabs, cuticle pusher, and mini buffer). Let us know once your package arrives!\n\n- *Simran (Sirii), Nails by Sirii Atelier*`;
     return `https://wa.me/${phoneWithCountry}?text=${encodeURIComponent(text)}`;
   };
 

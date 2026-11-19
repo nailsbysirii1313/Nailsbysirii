@@ -130,7 +130,7 @@ const DEFAULT_STUDIO_REVIEWS = [
     rating: 5,
     serviceRendered: '1:1 Certified Nail Course',
     aestheticTag: 'Nail Tech Academy',
-    comment: "Simran ma'am is so good in teaching Nail Course. I was a beginner to understand the whole things about Nails, but Ma'am and Sir both made me super Pro and trust me everyone now I am doing so good. If you are planning to get your nails done or take a Nail Tech Course, I'll genuinely suggest Nails by Sirii — super reasonable!",
+    comment: "Simran ma'am is so good in teaching Nail Course. I was a beginner to understand the whole things about Nails, but Ma'am and Sir both made me super Pro and trust me everyone now I am doing so good. If you are planning to get your nails done or take a Nail Tech Course, I'll genuinely suggest Nails by Sirii, super reasonable!",
     date: '4 months ago',
     source: 'Google Review',
     likes: 29
@@ -481,7 +481,7 @@ export default function ClientWebsite({
   const [pressOnOrderForm, setPressOnOrderForm] = useState({
     size: 'S',
     customSizes: '',
-    wearMethod: 'Adhesive Jelly Tabs (Temporary 3–5 days, 100% reusable)',
+    wearMethod: 'Adhesive Jelly Tabs (Temporary 3-5 days, 100% reusable)',
     quantity: 1,
     clientName: '',
     clientPhone: '',
@@ -639,7 +639,7 @@ export default function ClientWebsite({
         ? selectedLook.durationNum
         : 75;
 
-  // Operating Hours (12:00 PM – 7:00 PM): Filter slots so service finishes before closing
+  // Operating Hours (12:00 PM - 7:00 PM): Filter slots so service finishes before closing
   const timeSlots = getAvailableSlotsForDuration(totalDuration);
 
   // Synchronize slot when duration changes
@@ -738,7 +738,7 @@ export default function ClientWebsite({
     const lengthStr = String(styleObj.length || 'Medium');
     setSelectedShape(shapeStr.charAt(0).toUpperCase() + shapeStr.slice(1));
     setSelectedLength(lengthStr.charAt(0).toUpperCase() + lengthStr.slice(1));
-    setClientNotes(`Hero Selection: ${styleObj.label} — ${styleObj.title} (${styleObj.subtitle})`);
+    setClientNotes(`Hero Selection: ${styleObj.label} - ${styleObj.title} (${styleObj.subtitle})`);
     scrollTo('booking-section');
     setBookingStep(1);
     if (onAddToast) {
@@ -880,7 +880,7 @@ export default function ClientWebsite({
     setPressOnOrderForm({
       size: 'S',
       customSizes: '',
-      wearMethod: 'Adhesive Jelly Tabs (Temporary 3–5 days, 100% reusable)',
+      wearMethod: 'Adhesive Jelly Tabs (Temporary 3-5 days, 100% reusable)',
       quantity: 1,
       clientName: '',
       clientPhone: '',
@@ -1243,7 +1243,7 @@ export default function ClientWebsite({
               <div className="pt-6 border-t border-studio-border space-y-1 text-[11px] text-studio-muted">
                 <p className="font-semibold text-studio-ink">Nails by Sirii</p>
                 <p>Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, Dehradun</p>
-                <p className="text-studio-wine font-semibold">12:00 PM – 7:00 PM • Dedicated 1-on-1</p>
+                <p className="text-studio-wine font-semibold">12:00 PM - 7:00 PM • Dedicated 1-on-1</p>
               </div>
             </div>
           </div>
@@ -1385,7 +1385,7 @@ export default function ClientWebsite({
                   Found an Inspiring Design on Instagram or Pinterest?
                 </span>
                 <h3 className="font-display font-semibold text-base sm:text-lg text-studio-ink">
-                  You are not limited to this booklet — Bring your own reference image!
+                  You are not limited to this booklet. Bring your own reference image!
                 </h3>
                 <p className="text-xs text-studio-secondary leading-relaxed">
                   Have a specific screenshot from Pinterest, Google, or TikTok? Sirii recreates and customizes any reference photo to fit your natural nail architecture.
@@ -1551,7 +1551,7 @@ export default function ClientWebsite({
               </div>
               <h4 className="font-semibold text-xs text-studio-ink">Pan-India Express</h4>
               <p className="text-[10px] text-studio-secondary leading-normal">
-                Carefully packaged in Dehradun and shipped in 24–48 hours.
+                Carefully packaged in Dehradun and shipped in 24-48 hours.
               </p>
             </div>
           </div>
@@ -1784,7 +1784,7 @@ export default function ClientWebsite({
                     <span className="text-[10px] uppercase font-bold tracking-widest text-studio-wine bg-studio-wineLight px-2 py-0.5 rounded-full">
                       Instant Confirmation
                     </span>
-                    <span className="text-[11px] text-studio-muted font-medium">12 PM – 7 PM</span>
+                    <span className="text-[11px] text-studio-muted font-medium">12 PM - 7 PM</span>
                   </div>
                   <h3 className="font-display font-bold text-xl sm:text-2xl text-studio-ink mt-1.5 group-hover:text-studio-wine transition-colors">
                     Call Studio Directly
@@ -1811,7 +1811,7 @@ export default function ClientWebsite({
               <Clock className="w-4 h-4 text-studio-wine shrink-0 mt-0.5" />
               <div>
                 <strong className="text-studio-ink font-semibold block">Studio Hours</strong>
-                <span className="text-[11px] text-studio-secondary">Tue – Sun: 12:00 PM – 7:00 PM<br />(Monday Closed)</span>
+                <span className="text-[11px] text-studio-secondary">Tue - Sun: 12:00 PM - 7:00 PM<br />(Monday Closed)</span>
               </div>
             </div>
 
@@ -2196,7 +2196,7 @@ export default function ClientWebsite({
               </div>
               <div className="flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-studio-wine shrink-0" />
-                <span>Tuesday – Sunday • 12:00 PM – 7:00 PM (By Appointment)</span>
+                <span>Tuesday - Sunday • 12:00 PM - 7:00 PM (By Appointment)</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-studio-wine shrink-0" />
@@ -2225,7 +2225,7 @@ export default function ClientWebsite({
             <div className="flex items-center gap-2 text-studio-ink font-medium text-center md:text-left">
               <span className="w-2 h-2 rounded-full bg-studio-wine animate-pulse shrink-0" />
               <span className="font-semibold text-studio-wine">Pan-India Press-On Boutique Live:</span>
-              <span className="text-studio-secondary">Salon-grade reusable sets handcrafted in Dehradun and dispatched in 24–48 hours.</span>
+              <span className="text-studio-secondary">Salon-grade reusable sets handcrafted in Dehradun and dispatched in 24-48 hours.</span>
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <a
@@ -2467,7 +2467,7 @@ export default function ClientWebsite({
                   <Clock className="w-4 h-4 text-studio-wine shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold text-studio-ink">Studio Hours</p>
-                    <p>Tuesday – Sunday: {settings?.timings || '12:00 PM – 7:00 PM'}</p>
+                    <p>Tuesday - Sunday: {settings?.timings || '12:00 PM - 7:00 PM'}</p>
                     <p className="text-[11px] text-studio-muted">Monday: Closed (Art & Material Prep)</p>
                     <span className="inline-block mt-1 text-[10px] font-bold text-studio-wine bg-studio-wineLight px-2 py-0.5 rounded-full border border-studio-wine/20">
                       Prior Reservation Only
@@ -2605,11 +2605,11 @@ export default function ClientWebsite({
                   <div className="flex items-center justify-between">
                     <label className="font-semibold text-studio-ink">Overall Rating *</label>
                     <span className="text-[11px] font-bold text-amber-600">
-                      {reviewForm.rating === 5 && '5.0 / 5.0 — Exceptional Artistry & Retention'}
-                      {reviewForm.rating === 4 && '4.0 / 5.0 — Very Good Service & Beautiful Nails'}
-                      {reviewForm.rating === 3 && '3.0 / 5.0 — Good & Satisfactory'}
-                      {reviewForm.rating === 2 && '2.0 / 5.0 — Needs Attention'}
-                      {reviewForm.rating === 1 && '1.0 / 5.0 — Disappointing'}
+                      {reviewForm.rating === 5 && '5.0 / 5.0 - Exceptional Artistry & Retention'}
+                      {reviewForm.rating === 4 && '4.0 / 5.0 - Very Good Service & Beautiful Nails'}
+                      {reviewForm.rating === 3 && '3.0 / 5.0 - Good & Satisfactory'}
+                      {reviewForm.rating === 2 && '2.0 / 5.0 - Needs Attention'}
+                      {reviewForm.rating === 1 && '1.0 / 5.0 - Disappointing'}
                     </span>
                   </div>
                   <div className="flex items-center gap-2 pt-0.5">
@@ -3010,11 +3010,11 @@ export default function ClientWebsite({
                       {[
                         {
                           title: '24 Jelly Sticky Tabs (Temporary Wear)',
-                          desc: 'Lasts 3–5 days. 100% reusable, peels off cleanly with zero natural nail damage.'
+                          desc: 'Lasts 3-5 days. 100% reusable, peels off cleanly with zero natural nail damage.'
                         },
                         {
                           title: 'Salon Liquid Nail Glue (Long Wear)',
-                          desc: 'Lasts 2–3 weeks. Extra strong bond for weddings, holidays, and extended wear.'
+                          desc: 'Lasts 2-3 weeks. Extra strong bond for weddings, holidays, and extended wear.'
                         }
                       ].map((method) => (
                         <button
@@ -3315,7 +3315,7 @@ export default function ClientWebsite({
                     <p><strong className="text-studio-ink">Set:</strong> {confirmedPressOnOrder.productTitle}</p>
                     <p><strong className="text-studio-ink">Size:</strong> {confirmedPressOnOrder.size} • Qty: {confirmedPressOnOrder.quantity || 1}</p>
                     <p><strong className="text-studio-ink">Shipping To:</strong> {confirmedPressOnOrder.addressStreet}, {confirmedPressOnOrder.addressCity} - {confirmedPressOnOrder.addressPincode}</p>
-                    <p><strong className="text-studio-ink">Dispatch Estimate:</strong> Dispatched in 24–48 hours with live tracking on WhatsApp.</p>
+                    <p><strong className="text-studio-ink">Dispatch Estimate:</strong> Dispatched in 24-48 hours with live tracking on WhatsApp.</p>
                   </div>
 
                   <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">

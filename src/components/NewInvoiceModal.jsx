@@ -321,7 +321,7 @@ export default function NewInvoiceModal({
                 <option value="" disabled>+ Quick-add service from menu...</option>
                 {services.map((s) => (
                   <option key={s.id} value={s.id}>
-                    {s.name} — ₹{Number(s.price).toLocaleString('en-IN')}
+                    {s.name} - ₹{Number(s.price).toLocaleString('en-IN')}
                   </option>
                 ))}
               </select>

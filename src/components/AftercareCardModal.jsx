@@ -163,7 +163,7 @@ Address: ${settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, De
                 <Clock className="w-3.5 h-3.5" />
               </div>
               <div className="space-y-0.5">
-                <h4 className="font-bold text-text-ink text-xs">1. Gentle Care in First 24–48 Hours</h4>
+                <h4 className="font-bold text-text-ink text-xs">1. Gentle Care in First 24-48 Hours</h4>
                 <p className="text-[11px] text-text-muted leading-relaxed">
                   Avoid super hot steam baths, saunas, or extended water immersion while your gel structure settles and bonds completely.
                 </p>
@@ -228,7 +228,7 @@ Address: ${settings?.address || 'Shop No. 7, Laxmi Navraj Plaza, Garhi Cantt, De
               Recommended Refill / Touch-up: <span className="font-bold text-brand-wine">{infillDateStr}</span> (~3 Weeks)
             </p>
             <p className="text-[11px] text-text-muted">
-              Maintaining regular 3–4 week infills preserves nail balance and prevents stress fractures.
+              Maintaining regular 3-4 week infills preserves nail balance and prevents stress fractures.
             </p>
           </div>
 

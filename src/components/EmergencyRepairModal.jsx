@@ -107,7 +107,7 @@ export default function EmergencyRepairModal({
                   Quick Nail Repair Request
                 </h3>
               <p className="text-xs text-studio-secondary leading-relaxed">
-                Accidents happen. Send a direct squeeze-in request to Sirii's phone and we will accommodate a quick 15–20 minute repair slot today or tomorrow.
+                Accidents happen. Send a direct squeeze-in request to Sirii's phone and we will accommodate a quick 15-20 minute repair slot today or tomorrow.
               </p>
             </div>
 

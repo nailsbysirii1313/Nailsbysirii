@@ -202,7 +202,7 @@ export default function CommandPalette({
                     <Calendar className="w-4 h-4 text-brand-wine shrink-0" />
                     <div>
                       <span className="font-semibold text-text-ink text-xs block">
-                        {a.clientName} — {a.serviceName}
+                        {a.clientName} - {a.serviceName}
                       </span>
                       <span className="text-[10px] text-text-muted">
                         {a.date} at {a.time} (₹{Number(a.price).toLocaleString('en-IN')})
