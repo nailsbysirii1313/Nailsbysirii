@@ -44,6 +44,7 @@ const ShareCatalogueModal = lazy(() => import('./components/ShareCatalogueModal'
 import { playStudioChime } from './utils/audio';
 import { customSetToInvoiceItems } from './utils/customizerCalculator';
 import { getKolkataTodayString } from './utils/dateTime';
+import { initSmoothScroll, destroySmoothScroll, getSmoothScroll } from './utils/smoothScroll';
 
 function TabSuspenseFallback() {
   return (
@@ -260,6 +261,24 @@ export default function App() {
       window.removeEventListener('popstate', handleUrlRouting);
     };
   }, [invoices]);
+
+  // Initialize GSAP Smooth Scroll with Lenis
+  useEffect(() => {
+    initSmoothScroll();
+    return () => {
+      destroySmoothScroll();
+    };
+  }, []);
+
+  // Refresh smooth scroll dimensions on view/tab change
+  useEffect(() => {
+    const lenis = getSmoothScroll();
+    if (lenis) {
+      setTimeout(() => {
+        lenis.resize();
+      }, 60);
+    }
+  }, [currentTab]);
 
   // Quick Messaging State
   const [isQuickMessageOpen, setIsQuickMessageOpen] = useState(false);

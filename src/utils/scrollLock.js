@@ -1,3 +1,5 @@
+import { stopSmoothScroll, startSmoothScroll } from './smoothScroll';
+
 // Utility for thread-safe body & root scroll locking across multiple stacked modals
 let lockCount = 0;
 let previousBodyOverflow = '';
@@ -27,6 +29,9 @@ export function lockBodyScroll() {
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overscrollBehavior = 'none';
     document.documentElement.style.overscrollBehavior = 'none';
+
+    // Stop GSAP Lenis momentum scroll while modal is active
+    stopSmoothScroll();
   }
   lockCount++;
 }
@@ -41,5 +46,8 @@ export function unlockBodyScroll() {
     document.body.style.overscrollBehavior = previousBodyOverscroll;
     document.documentElement.style.overscrollBehavior = previousHtmlOverscroll;
     document.body.style.paddingRight = previousBodyPaddingRight;
+
+    // Resume GSAP Lenis momentum scroll
+    startSmoothScroll();
   }
 }

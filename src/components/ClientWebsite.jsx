@@ -67,6 +67,7 @@ import confetti from 'canvas-confetti';
 import { calculateCustomSet, SHAPES, LENGTHS, BASE_COLORS, FINISHES } from '../utils/customizerCalculator';
 import { getKolkataTodayString, getKolkataTomorrowString, getAvailableSlotsForDuration, formatTime12h } from '../utils/dateTime';
 import NailTipSchematic from './NailTipSchematic';
+import { scrollToTarget } from '../utils/smoothScroll';
 
 const DEFAULT_STUDIO_REVIEWS = [
   {
@@ -665,7 +666,7 @@ export default function ClientWebsite({
     ? allReviews
     : allReviews.filter((r) => classifyReview(r) === reviewFilter);
 
-  // Smooth scroll helper / standalone page router
+  // Smooth scroll helper powered by GSAP & Lenis
   const scrollTo = (id) => {
     if (id === 'catalogue') {
       if (onOpenCatalogue) onOpenCatalogue();
@@ -675,7 +676,7 @@ export default function ClientWebsite({
     }
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      scrollToTarget(el, { offset: -70 });
     }
     setMobileMenuOpen(false);
   };
@@ -2325,8 +2326,7 @@ export default function ClientWebsite({
                     onClick={() => {
                       if (onOpenCatalogue) onOpenCatalogue();
                       else {
-                        const el = document.getElementById('catalogue-showcase');
-                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                        scrollToTarget('#catalogue-showcase', { offset: -70 });
                       }
                     }}
                     className="hover:text-studio-wine transition-colors flex items-center gap-1.5 text-left"
@@ -2532,7 +2532,7 @@ export default function ClientWebsite({
               </button>
               <span>•</span>
               <button
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                onClick={() => scrollToTarget(0, { duration: 1.2 })}
                 className="hover:text-studio-wine transition-colors flex items-center gap-1"
                 title="Back to Top"
               >
