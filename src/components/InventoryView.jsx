@@ -437,7 +437,9 @@ export default function InventoryView({
             </span>
           </div>
           <p className="text-xs text-text-muted mt-2">
-            Estimated ~₹{Math.round(estimatedRestockCost).toLocaleString('en-IN')} restock budget
+            {lowStockItems.length > 0
+              ? `Estimated ~₹${Math.round(estimatedRestockCost).toLocaleString('en-IN')} restock budget`
+              : 'Zero restock required'}
           </p>
         </div>
 
@@ -538,7 +540,26 @@ export default function InventoryView({
           </div>
 
           {/* Supplies Grid */}
-          {filteredInventory.length === 0 ? (
+          {inventory.length === 0 ? (
+            <div className="bg-studio-surface rounded-3xl p-12 border border-border-subtle text-center space-y-3 shadow-xs">
+              <div className="w-12 h-12 mx-auto rounded-full bg-studio-canvas text-brand-wine flex items-center justify-center border border-border-subtle">
+                <Package className="w-6 h-6" />
+              </div>
+              <p className="font-display font-semibold text-lg text-text-ink">
+                No Supplies Cataloged Yet
+              </p>
+              <p className="text-xs text-text-muted max-w-sm mx-auto">
+                Your studio inventory is empty and ready. Catalog your salon builder gels, Gel-X tips, precision implements, and aftercare retail stock here.
+              </p>
+              <button
+                onClick={handleOpenAdd}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-wine text-white text-xs font-semibold shadow-studio hover:bg-brand-wineHover min-h-[44px]"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add Supply Item</span>
+              </button>
+            </div>
+          ) : filteredInventory.length === 0 ? (
             <div className="bg-studio-surface rounded-3xl p-12 border border-border-subtle text-center space-y-3 shadow-xs">
               <div className="w-12 h-12 mx-auto rounded-full bg-studio-canvas text-brand-wine flex items-center justify-center border border-border-subtle">
                 <Package className="w-6 h-6" />
@@ -547,14 +568,17 @@ export default function InventoryView({
                 No Supplies Found
               </p>
               <p className="text-xs text-text-muted max-w-sm mx-auto">
-                No items match your search or filter. Try clearing filters or add a new supply item to your studio inventory.
+                No items match your search or filter. Try clearing filters or search for another item.
               </p>
               <button
-                onClick={handleOpenAdd}
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedCategory('All');
+                  setShowLowStockOnly(false);
+                }}
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-wine text-white text-xs font-semibold shadow-studio hover:bg-brand-wineHover min-h-[44px]"
               >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Add Supply Item</span>
+                <span>Clear Filters</span>
               </button>
             </div>
           ) : (
