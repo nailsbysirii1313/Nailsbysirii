@@ -224,39 +224,39 @@ function classifyReview(r) {
 export const DEFAULT_HERO_CARDS = [
   {
     id: 'soft',
-    label: 'Soft & Simple',
+    label: 'Simple',
     title: 'Clean Glazed Donut',
     shape: 'Almond',
     length: 'Short',
     imageUrl: '/hero/soft-simple.jpg',
     baseColor: '#FDF2F8',
     finish: 'chrome',
-    subtitle: 'Sheer strawberry nude • Natural almond',
-    tag: 'Trending Now'
+    subtitle: 'Sheer strawberry gel with pearl chrome on natural nails.',
+    tag: 'Studio Look'
   },
   {
     id: 'sparkle',
-    label: 'A Little Sparkle',
+    label: 'Sparkly',
     title: 'Golden Pearl Chrome',
     shape: 'Coffin',
     length: 'Medium',
     imageUrl: '/hero/little-sparkle.jpg',
     baseColor: '#FFFBEB',
     finish: 'chrome',
-    subtitle: 'Champagne porcelain • Molten chrome shine',
+    subtitle: 'Champagne porcelain with pearl chrome on coffin nails.',
     tag: 'Studio Fav'
   },
   {
     id: 'statement',
-    label: 'Make a Statement',
+    label: 'Bold',
     title: 'Velvet Rose Cat-Eye',
     shape: 'Stiletto',
     length: 'Long',
     imageUrl: '/hero/make-statement.jpg',
     baseColor: '#D4386A',
     finish: 'cat-eye',
-    subtitle: 'Magnetic silk shimmer • Sculpted stiletto',
-    tag: 'Statement Art'
+    subtitle: 'Deep berry velvet cat-eye shimmer on long sculpted tips.',
+    tag: 'Studio Look'
   }
 ];
 
@@ -1252,44 +1252,44 @@ export default function ClientWebsite({
       )}
 
       {/* 2. HERO SECTION: "YOUR NEXT NAIL CRUSH" */}
-      <section className="relative pt-6 sm:pt-10 lg:pt-14 pb-10 sm:pb-14 px-5 sm:px-6 max-w-6xl mx-auto overflow-hidden">
+      <section className="relative pt-4 sm:pt-8 lg:pt-12 pb-8 sm:pb-12 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden">
         {/* MOBILE VIEW (< lg) */}
-        <div className="flex flex-col items-center text-center space-y-5 lg:hidden animate-hero-fade-up">
-          {/* 1. Small location line */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight border border-studio-wine/20 text-studio-wine text-xs font-bold uppercase tracking-wider shadow-xs">
+        <div className="flex flex-col items-center text-center lg:hidden animate-hero-fade-up">
+          {/* 1. Location badge */}
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-studio-wineLight border border-studio-wine/20 text-studio-wine text-[11px] font-bold uppercase tracking-wider shadow-xs mb-2">
             <MapPin className="w-3 h-3 text-studio-wine" />
             <span>Nail studio in Dehradun</span>
           </div>
 
-          {/* 2. Short headline with deliberate line breaks */}
-          <h1 className="font-sans font-extrabold text-[42px] sm:text-5xl text-studio-ink leading-[1.08] tracking-tight">
+          {/* 2. Refined headline with balanced line height */}
+          <h1 className="font-sans font-extrabold text-[36px] sm:text-5xl text-studio-ink leading-[1.12] tracking-tight">
             Your next<br />
             <span className="text-studio-wine">
-              nail <span className="font-display italic font-bold">crush.</span>
+              nail <span className="font-display italic font-bold pr-1">crush.</span>
             </span>
           </h1>
 
-          {/* 3. One supporting sentence */}
-          <p className="text-base text-studio-secondary leading-relaxed max-w-sm px-1">
+          {/* 3. Supporting sentence */}
+          <p className="mt-2 text-base text-studio-secondary leading-normal max-w-xs sm:max-w-sm px-1">
             Simple, sparkly, or something totally you. Let’s find your next look.
           </p>
 
-          {/* 4. Smooth Finger-Slidable & Interactive Hero Card Deck */}
+          {/* 4. Overlapping Three-Card Fan */}
           <InteractiveHeroCardFan
             heroCards={heroCards}
             activeHeroStyle={activeHeroStyle}
             setActiveHeroStyle={setActiveHeroStyle}
             onBookHeroStyle={handleBookHeroStyle}
             onAddToast={onAddToast}
-            className="my-1"
+            className="mt-3.5 mb-1"
           />
 
-          {/* 6. Primary booking button & 7. Secondary nail-ideas link */}
-          <div className="w-full pt-2 flex flex-col items-center gap-3">
+          {/* 5. Booking Actions */}
+          <div className="w-full mt-3 flex flex-col items-center gap-2">
             <a
               href="#booking-section"
               onClick={() => handleBookHeroStyle(activeHeroStyle)}
-              className="w-full max-w-xs py-3.5 px-6 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-sm font-bold shadow-studio hover:shadow-glow transition-all active:scale-95 flex items-center justify-center gap-2"
+              className="w-full max-w-xs py-3 px-6 rounded-2xl bg-studio-wine hover:bg-studio-wineHover text-white text-sm font-bold shadow-studio transition-all active:scale-95 flex items-center justify-center gap-2 min-h-[44px]"
             >
               <Heart className="w-4 h-4 fill-white text-white" />
               <span>Book Your Nails</span>

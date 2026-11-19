@@ -25,33 +25,33 @@
     "heroCards": [
       {
         "id": "soft",
-        "label": "Soft & Simple",
+        "label": "Simple",
         "title": "Clean Glazed Donut",
         "shape": "Almond",
         "length": "Short",
         "imageUrl": "/hero/soft-simple.jpg",
-        "subtitle": "Sheer strawberry nude • Natural almond",
-        "tag": "Trending Now"
+        "subtitle": "Sheer strawberry gel with pearl chrome on natural nails.",
+        "tag": "Studio Look"
       },
       {
         "id": "sparkle",
-        "label": "A Little Sparkle",
+        "label": "Sparkly",
         "title": "Golden Pearl Chrome",
         "shape": "Coffin",
         "length": "Medium",
         "imageUrl": "/hero/little-sparkle.jpg",
-        "subtitle": "Champagne porcelain • Molten chrome shine",
+        "subtitle": "Champagne porcelain with pearl chrome on coffin nails.",
         "tag": "Studio Fav"
       },
       {
         "id": "statement",
-        "label": "Make a Statement",
+        "label": "Bold",
         "title": "Velvet Rose Cat-Eye",
         "shape": "Stiletto",
         "length": "Long",
         "imageUrl": "/hero/make-statement.jpg",
-        "subtitle": "Magnetic silk shimmer • Sculpted stiletto",
-        "tag": "Statement Art"
+        "subtitle": "Deep berry velvet cat-eye shimmer on long sculpted tips.",
+        "tag": "Studio Look"
       }
     ]
   },
