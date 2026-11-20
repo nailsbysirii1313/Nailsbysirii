@@ -1,5 +1,5 @@
 # Nails by Sirii - Robots.txt
-# Contemporary Nail Atelier & Bespoke Extensions | Dehradun
+# Viral Nail Studio of Dehradun
 
 User-agent: *
 Allow: /

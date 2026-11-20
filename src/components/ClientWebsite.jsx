@@ -938,7 +938,7 @@ export default function ClientWebsite({
                 <Heart className="w-3 h-3 text-studio-wine fill-studio-wine shrink-0" />
               </div>
               <p className="text-[10px] text-studio-muted font-medium truncate hidden sm:block">
-                Viral Nail Studio • Dehradun
+                Viral Nail Studio of Dehradun
               </p>
             </div>
           </a>
@@ -1028,7 +1028,7 @@ export default function ClientWebsite({
                       <span className="font-sans font-bold text-sm text-studio-ink block">
                         {settings?.studioName || 'Nails by Sirii'}
                       </span>
-                      <span className="text-[10px] text-studio-muted">Viral Nail Studio • Dehradun</span>
+                      <span className="text-[10px] text-studio-muted">Viral Nail Studio of Dehradun</span>
                     </div>
                   </div>
                   <button
@@ -1180,7 +1180,7 @@ export default function ClientWebsite({
           {/* 1. Modern Location Eyebrow (No pill box) */}
           <div className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-bold tracking-[0.18em] uppercase text-studio-wine mb-2 select-none">
             <MapPin className="w-3 h-3 text-studio-wine stroke-[2.2]" />
-            <span>Viral Nail Studio in Dehradun</span>
+            <span>Viral Nail Studio of Dehradun</span>
           </div>
 
           {/* 2. Refined headline with balanced line height */}
@@ -1242,7 +1242,7 @@ export default function ClientWebsite({
             {/* 1. Modern Location Eyebrow (No pill box) */}
             <div className="inline-flex items-center gap-1.5 text-xs font-bold tracking-[0.18em] uppercase text-studio-wine select-none">
               <MapPin className="w-3.5 h-3.5 text-studio-wine stroke-[2.2]" />
-              <span>Viral Nail Studio in Dehradun</span>
+              <span>Viral Nail Studio of Dehradun</span>
             </div>
 
             <h1 className="font-sans font-extrabold text-5xl lg:text-[56px] xl:text-6xl text-studio-ink leading-[1.06] tracking-tight">
