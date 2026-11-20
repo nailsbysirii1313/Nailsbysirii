@@ -279,7 +279,10 @@ export default function InvoicesView({
 
                       {/* View & Share Modal */}
                       <button
-                        onClick={() => onOpenInvoiceDetail && onOpenInvoiceDetail(inv)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onOpenInvoiceDetail && onOpenInvoiceDetail(inv);
+                        }}
                         className="px-3 py-2 rounded-xl bg-studio-canvas hover:bg-studio-subtle text-brand-wine border border-border-subtle text-xs font-semibold flex items-center gap-1.5 transition-all shadow-xs min-h-[40px]"
                       >
                         <Eye className="w-3.5 h-3.5" />
@@ -289,7 +292,10 @@ export default function InvoicesView({
                       {/* Mark as Paid */}
                       {!isPaid && (
                         <button
-                          onClick={() => onMarkPaid && onMarkPaid(inv.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onMarkPaid && onMarkPaid(inv.id, { invoice: inv, paymentMethod: 'UPI' });
+                          }}
                           className="p-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold transition-all shadow-xs min-h-[40px] min-w-[40px] flex items-center justify-center"
                           title="Mark as Paid"
                           aria-label="Mark as Paid"
@@ -300,7 +306,10 @@ export default function InvoicesView({
 
                       {/* Delete */}
                       <button
-                        onClick={() => onDeleteInvoice && onDeleteInvoice(inv.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteInvoice && onDeleteInvoice(inv.id);
+                        }}
                         className="p-2.5 rounded-xl hover:bg-rose-50 text-text-muted hover:text-rose-600 transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center border border-border-subtle"
                         title="Delete Invoice"
                         aria-label="Delete Invoice"

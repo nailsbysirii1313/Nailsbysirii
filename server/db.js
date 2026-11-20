@@ -459,9 +459,23 @@ function writeDb(data) {
     const tempFile = `${DB_FILE}.tmp`;
     fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), 'utf-8');
     fs.renameSync(tempFile, DB_FILE);
+
+    // Asynchronously persist snapshot to Supabase Cloud Storage
+    persistToCloudStorage(data);
   } catch (err) {
     console.error('Error writing db:', err);
   }
+}
+
+function persistToCloudStorage(data) {
+  if (!isSupabaseConfigured || !supabase) return;
+  try {
+    const jsonStr = JSON.stringify(data, null, 2);
+    supabase.storage.from('studio-data').upload('db.json', jsonStr, {
+      contentType: 'application/json',
+      upsert: true
+    }).catch(() => {});
+  } catch (e) {}
 }
 
 let supabaseSyncCompleted = false;
@@ -474,6 +488,30 @@ export async function initSupabaseSync() {
 
   supabaseSyncPromise = (async () => {
     try {
+      // 1. First sync full database snapshot from studio-data/db.json in Supabase Cloud Storage
+      try {
+        const { data: storageBlob, error: storageErr } = await supabase.storage.from('studio-data').download('db.json');
+        if (storageBlob && !storageErr) {
+          const cloudText = await storageBlob.text();
+          const cloudData = JSON.parse(cloudText);
+          if (cloudData && typeof cloudData === 'object') {
+            const current = fs.existsSync(DB_FILE) ? JSON.parse(fs.readFileSync(DB_FILE, 'utf-8')) : {};
+            const merged = {
+              ...current,
+              ...cloudData,
+              invoices: Array.isArray(cloudData.invoices) ? cloudData.invoices : (current.invoices || []),
+              clients: Array.isArray(cloudData.clients) ? cloudData.clients : (current.clients || []),
+              appointments: Array.isArray(cloudData.appointments) ? cloudData.appointments : (current.appointments || [])
+            };
+            fs.writeFileSync(DB_FILE, JSON.stringify(merged, null, 2), 'utf-8');
+            console.log('[Cloud Storage Sync] Synced latest db.json from Supabase storage into local DB');
+          }
+        }
+      } catch (e) {
+        console.warn('[Cloud Storage Sync] Notice:', e.message);
+      }
+
+      // 2. Sync table records if configured
       const [clientsRes, aptsRes, repairsRes, prodRes, ordersRes, settingsRes] = await Promise.all([
         supabase.from('studio_clients').select('*'),
         supabase.from('studio_appointments').select('*'),
@@ -690,7 +728,7 @@ export const db = {
   },
   deleteInvoice(id) {
     const data = readDb();
-    data.invoices = (data.invoices || []).filter(i => i.id !== id);
+    data.invoices = (data.invoices || []).filter(i => i.id !== id && i.invoiceNumber !== id);
     writeDb(data);
   },
 

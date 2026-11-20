@@ -387,8 +387,22 @@ app.put('/api/invoices/:id', requireAuth, (req, res) => {
 
 app.patch('/api/invoices/:id/status', requireAuth, (req, res) => {
   const invoices = db.getInvoices();
-  const target = invoices.find(i => i.id === req.params.id);
-  if (!target) return res.status(404).json({ error: 'Invoice not found' });
+  let target = invoices.find(i => i.id === req.params.id || i.invoiceNumber === req.params.id);
+
+  if (!target) {
+    if (req.body.invoice) {
+      target = db.saveInvoice({ ...req.body.invoice, id: req.params.id });
+    } else {
+      const invoiceNumber = req.params.id.startsWith('INV-') ? req.params.id : `INV-${req.params.id}`;
+      target = db.saveInvoice({
+        id: req.params.id,
+        invoiceNumber,
+        clientName: req.body.clientName || 'Studio Client',
+        total: Number(req.body.total || 0),
+        status: 'Unpaid'
+      });
+    }
+  }
 
   const newStatus = req.body.status || req.body.paymentStatus || 'Paid';
   target.status = newStatus;
