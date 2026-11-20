@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { db } from './db.js';
+import { isSupabaseConfigured } from './supabase.js';
 import { sendNtfyNotification, sendAppointmentReminder, sendInventoryAlert, sendEmergencyRepairAlert, sendGiftCardIssuedAlert, sendPressOnOrderAlert } from './ntfy.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -97,7 +98,11 @@ function requireAuth(req, res, next) {
 
 // Health Check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', time: new Date().toISOString() });
+  res.json({
+    status: 'ok',
+    time: new Date().toISOString(),
+    supabaseConnected: isSupabaseConfigured
+  });
 });
 
 // Studio Hub Passcode Verification
