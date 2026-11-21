@@ -134,7 +134,7 @@ export default function MobileStudioHubSheet({
           onClick={onClose}
           aria-hidden="true"
         />
-        <div className="relative bg-white rounded-t-3xl max-w-lg w-full p-5 pb-8 shadow-2xl border-t border-rose-100 max-h-[88vh] overflow-y-auto space-y-5 animate-in slide-in-from-bottom duration-250">
+        <div className="relative bg-white rounded-t-3xl max-w-lg w-full p-5 pb-[calc(2rem+env(safe-area-inset-bottom))] shadow-2xl border-t border-rose-100 max-h-[88vh] overflow-y-auto space-y-5 animate-in slide-in-from-bottom duration-250 overscroll-contain">
         {/* Drag Handle */}
         <div className="w-12 h-1.5 rounded-full bg-stone-200 mx-auto" />
 

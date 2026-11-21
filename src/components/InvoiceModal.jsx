@@ -204,8 +204,8 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for visiting ${s
         <div className="no-print w-10 h-1.5 rounded-full bg-border-subtle mx-auto my-2.5 sm:hidden shrink-0" />
 
         {/* Action Bar (Top) */}
-        <div className="no-print p-3 sm:p-4 bg-studio-canvas border-b border-border-subtle flex flex-wrap items-center justify-between gap-2.5 shrink-0">
-          <div className="flex items-center gap-2">
+        <div className="no-print p-3 sm:p-4 bg-studio-canvas border-b border-border-subtle flex items-center justify-between gap-2.5 shrink-0 overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-2 shrink-0">
             <span
               className={`px-3 py-1 rounded-full text-xs font-bold ${
                 isPaid
@@ -220,7 +220,7 @@ ${invoice.notes ? `Note: "${invoice.notes}"\n\n` : ''}Thank you for visiting ${s
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             {/* Native Mobile Share / WhatsApp */}
             <button
               type="button"

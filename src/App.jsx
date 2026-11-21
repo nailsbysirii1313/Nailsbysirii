@@ -1824,7 +1824,10 @@ export default function App() {
             lowStockCount: inventory.filter(
               (i) => (Number(i.quantity) || 0) <= (Number(i.minThreshold) || 0)
             ).length,
-            pendingRepairs: repairs.filter((r) => r.status === 'Pending Squeeze-in').length
+            pendingRepairs: repairs.filter((r) => r.status === 'Pending Squeeze-in').length,
+            pendingOrders: pressOnOrders.filter(
+              (o) => o.fulfillmentStatus !== 'Delivered' && o.fulfillmentStatus !== 'Cancelled'
+            ).length
           }}
           onOpenQuickAction={() => setIsMobileQuickActionOpen(true)}
           onOpenHubSheet={() => setIsMobileHubSheetOpen(true)}
@@ -1854,7 +1857,10 @@ export default function App() {
             lowStockCount: inventory.filter(
               (i) => (Number(i.quantity) || 0) <= (Number(i.minThreshold) || 0)
             ).length,
-            pendingRepairs: repairs.filter((r) => r.status === 'Pending Squeeze-in').length
+            pendingRepairs: repairs.filter((r) => r.status === 'Pending Squeeze-in').length,
+            pendingOrders: pressOnOrders.filter(
+              (o) => o.fulfillmentStatus !== 'Delivered' && o.fulfillmentStatus !== 'Cancelled'
+            ).length
           }}
           onOpenQrModal={() => setIsQrModalOpen(true)}
         />

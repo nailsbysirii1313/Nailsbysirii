@@ -222,9 +222,9 @@ export default function DashboardView({
               <DollarSign className="w-4 h-4" />
             </div>
           </div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-xs text-text-muted font-semibold">{currency}</span>
-            <span className="text-2xl sm:text-3xl font-display font-semibold text-text-ink">
+          <div className="flex items-baseline gap-1 min-w-0 overflow-hidden">
+            <span className="text-xs text-text-muted font-semibold shrink-0">{currency}</span>
+            <span className="text-xl sm:text-2xl lg:text-3xl font-display font-semibold text-text-ink truncate">
               {totalPaid.toLocaleString('en-IN')}
             </span>
           </div>
@@ -394,35 +394,38 @@ export default function DashboardView({
                       </div>
 
                       {/* Right: Pricing & Actions */}
-                      <div className="flex sm:flex-col items-end justify-between sm:justify-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-border-subtle">
-                        <div className="text-right">
-                          <span className="font-display font-semibold text-base text-text-ink block">
-                            {currency}{priceNum.toLocaleString('en-IN')}
-                          </span>
-                          {depositNum > 0 ? (
-                            <div className="text-[11px] font-medium space-y-0.5">
-                              <span className="text-emerald-700 block">
-                                {currency}{depositNum.toLocaleString('en-IN')} advance paid
-                              </span>
-                              {balanceDue > 0 ? (
-                                <span className="text-amber-800 font-semibold block">
-                                  {currency}{balanceDue.toLocaleString('en-IN')} due
-                                </span>
-                              ) : (
-                                <span className="text-emerald-800 font-semibold flex items-center gap-1">
-                                  <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
-                                  <span>Settled in full</span>
-                                </span>
-                              )}
-                            </div>
-                          ) : (
-                            <span className="text-[11px] text-text-muted block">
-                              No advance logged
+                      <div className="flex flex-col sm:flex-col items-stretch sm:items-end justify-between sm:justify-center gap-2.5 pt-2.5 sm:pt-0 border-t sm:border-t-0 border-border-subtle">
+                        <div className="flex items-center justify-between sm:block text-right">
+                          <span className="text-xs text-text-muted font-medium sm:hidden">Appointment Fee:</span>
+                          <div className="text-right">
+                            <span className="font-display font-semibold text-base text-text-ink block">
+                              {currency}{priceNum.toLocaleString('en-IN')}
                             </span>
-                          )}
+                            {depositNum > 0 ? (
+                              <div className="text-[11px] font-medium space-y-0.5">
+                                <span className="text-emerald-700 block">
+                                  {currency}{depositNum.toLocaleString('en-IN')} advance paid
+                                </span>
+                                {balanceDue > 0 ? (
+                                  <span className="text-amber-800 font-semibold block">
+                                    {currency}{balanceDue.toLocaleString('en-IN')} due
+                                  </span>
+                                ) : (
+                                  <span className="text-emerald-800 font-semibold flex items-center gap-1 justify-end">
+                                    <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                                    <span>Settled in full</span>
+                                  </span>
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-[11px] text-text-muted block">
+                                No advance logged
+                              </span>
+                            )}
+                          </div>
                         </div>
 
-                        <div className="flex items-center gap-1.5 sm:gap-2">
+                        <div className="flex items-center justify-end gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap">
                           {/* Client Call Quick Action */}
                           {client?.phone && (
                             <a

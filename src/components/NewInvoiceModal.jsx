@@ -221,7 +221,7 @@ export default function NewInvoiceModal({
       />
       {/* Scrollable floating dialog container */}
       <div
-        className="fixed inset-0 z-[71] p-3 sm:p-4 flex items-center justify-center animate-fade-in"
+        className="fixed inset-0 z-[71] p-3 sm:p-4 flex items-end sm:items-center justify-center animate-fade-in"
         onClick={(e) => {
           if (e.target === e.currentTarget) onClose();
         }}
@@ -230,7 +230,7 @@ export default function NewInvoiceModal({
           data-lenis-prevent
           data-lenis-prevent-wheel
           data-lenis-prevent-touch
-          className="bg-studio-surface rounded-3xl max-w-xl w-full p-4 sm:p-6 shadow-studio-float border border-border-subtle relative max-h-[90vh] sm:max-h-[85vh] overflow-y-auto font-sans overscroll-contain"
+          className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-4 sm:p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:pb-6 shadow-studio-float border-t sm:border border-border-subtle relative max-h-[90vh] sm:max-h-[85vh] overflow-y-auto font-sans overscroll-contain"
         >
         {/* Close Button */}
         <button

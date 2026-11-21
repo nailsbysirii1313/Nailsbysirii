@@ -59,12 +59,12 @@ export default function Header({
         {/* Left: Mobile Brand & Monogram (shown on mobile where Sidebar is hidden) */}
         <div
           onClick={() => setTab('dashboard')}
-          className="flex md:hidden items-center gap-2.5 cursor-pointer group min-w-0"
+          className="flex md:hidden items-center gap-2 cursor-pointer group min-w-0 flex-1 max-w-[200px]"
         >
           <StudioLogo logoUrl={settings?.studioLogoUrl} size="sm" />
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              <h1 className="font-display font-semibold text-sm sm:text-base text-text-ink tracking-tight group-hover:text-brand-wine transition-colors truncate">
+              <h1 className="font-display font-semibold text-sm text-text-ink tracking-tight group-hover:text-brand-wine transition-colors truncate">
                 {settings?.studioName || 'Nails by Sirii'}
               </h1>
               <Heart className="w-3.5 h-3.5 text-brand-wine fill-brand-wine shrink-0" />
@@ -123,11 +123,11 @@ export default function Header({
             <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-emerald-600" />
           </button>
 
-          {/* Instant Test Alert */}
+          {/* Instant Test Alert (visible on sm+ to prevent mobile header crowding) */}
           <button
             onClick={handleTest}
             disabled={testingAlert}
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-studio-canvas hover:bg-studio-subtle border border-border-subtle text-brand-wine flex items-center justify-center transition-all active:scale-95 disabled:opacity-50 min-h-[36px]"
+            className="hidden sm:flex w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-studio-canvas hover:bg-studio-subtle border border-border-subtle text-brand-wine items-center justify-center transition-all active:scale-95 disabled:opacity-50 min-h-[36px]"
             title="Send Test Phone Notification"
           >
             <Bell className={`w-4 h-4 ${testingAlert ? 'animate-bounce' : ''}`} />
@@ -138,9 +138,10 @@ export default function Header({
             onClick={() => setTab('clientWebsite')}
             className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-2xl bg-studio-ink hover:bg-stone-800 text-white text-xs font-semibold transition-all shadow-xs active:scale-95 min-h-[36px] sm:min-h-[40px] border border-studio-ink"
             title="View public client website"
+            aria-label="View Client Website"
           >
             <Globe className="w-3.5 h-3.5 text-pink-300 shrink-0" />
-            <span className="text-[11px] sm:text-xs font-bold whitespace-nowrap text-white">Client Site</span>
+            <span className="text-[11px] sm:text-xs font-bold whitespace-nowrap text-white hidden xs:inline">Client Site</span>
           </button>
 
           {/* Lock Studio Hub */}

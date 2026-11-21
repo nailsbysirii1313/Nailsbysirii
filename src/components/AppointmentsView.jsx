@@ -201,10 +201,10 @@ export default function AppointmentsView({
 
         <div className="flex flex-wrap items-center gap-2.5">
           {/* View Mode Switcher Pills */}
-          <div className="flex items-center bg-studio-canvas p-1 rounded-2xl border border-border-subtle shadow-xs">
+          <div className="flex items-center bg-studio-canvas p-1 rounded-2xl border border-border-subtle shadow-xs max-w-full overflow-x-auto no-scrollbar">
             <button
               onClick={() => setViewMode('list')}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all min-h-[38px] ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold whitespace-nowrap transition-all min-h-[36px] sm:min-h-[38px] ${
                 viewMode === 'list'
                   ? 'bg-studio-surface text-text-ink shadow-studio border border-border-subtle font-bold'
                   : 'text-text-muted hover:text-text-ink'
@@ -216,7 +216,7 @@ export default function AppointmentsView({
 
             <button
               onClick={() => setViewMode('calendar')}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all min-h-[38px] ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold whitespace-nowrap transition-all min-h-[36px] sm:min-h-[38px] ${
                 viewMode === 'calendar'
                   ? 'bg-studio-surface text-text-ink shadow-studio border border-border-subtle font-bold'
                   : 'text-text-muted hover:text-text-ink'
@@ -228,7 +228,7 @@ export default function AppointmentsView({
 
             <button
               onClick={() => setViewMode('timeline')}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all min-h-[38px] ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-semibold whitespace-nowrap transition-all min-h-[36px] sm:min-h-[38px] ${
                 viewMode === 'timeline'
                   ? 'bg-studio-surface text-text-ink shadow-studio border border-border-subtle font-bold'
                   : 'text-text-muted hover:text-text-ink'
@@ -698,39 +698,42 @@ export default function AppointmentsView({
                       </div>
 
                       {/* Right: Advance & Pending Payment Badges + Actions */}
-                      <div className="flex flex-col sm:flex-row md:flex-col items-start md:items-end justify-between md:justify-center gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-border-subtle">
+                      <div className="flex flex-col sm:flex-row md:flex-col items-stretch sm:items-end justify-between md:justify-center gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-border-subtle">
                         {/* Financial Advance & Pending Breakdown */}
-                        <div className="text-left md:text-right space-y-0.5">
-                          <span className="font-display font-bold text-lg text-text-ink block">
-                            {currency}{Number(apt.price).toLocaleString('en-IN')}
-                          </span>
+                        <div className="flex items-center justify-between sm:block text-left md:text-right space-y-0.5">
+                          <span className="text-xs text-text-muted font-medium sm:hidden">Total Fee:</span>
+                          <div>
+                            <span className="font-display font-bold text-lg text-text-ink block text-right sm:text-left md:text-right">
+                              {currency}{Number(apt.price).toLocaleString('en-IN')}
+                            </span>
 
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            {advanceAmt > 0 ? (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 text-[10px] font-bold border border-emerald-200">
-                                <Check className="w-3 h-3" />
-                                <span>{currency}{advanceAmt.toLocaleString('en-IN')} Advance</span>
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-studio-canvas text-text-muted text-[10px] font-medium border border-border-subtle">
-                                No Advance
-                              </span>
-                            )}
+                            <div className="flex items-center gap-1.5 flex-wrap justify-end sm:justify-start md:justify-end">
+                              {advanceAmt > 0 ? (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 text-[10px] font-bold border border-emerald-200">
+                                  <Check className="w-3 h-3" />
+                                  <span>{currency}{advanceAmt.toLocaleString('en-IN')} Advance</span>
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-studio-canvas text-text-muted text-[10px] font-medium border border-border-subtle">
+                                  No Advance
+                                </span>
+                              )}
 
-                            {balanceDue > 0 ? (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-50 text-amber-800 text-[10px] font-bold border border-amber-200">
-                                <span>{currency}{balanceDue.toLocaleString('en-IN')} Due</span>
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-emerald-100 text-emerald-900 text-[10px] font-bold">
-                                Fully Paid
-                              </span>
-                            )}
+                              {balanceDue > 0 ? (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-50 text-amber-800 text-[10px] font-bold border border-amber-200">
+                                  <span>{currency}{balanceDue.toLocaleString('en-IN')} Due</span>
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-emerald-100 text-emerald-900 text-[10px] font-bold">
+                                  Fully Paid
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
 
                         {/* Action Buttons Toolbar */}
-                        <div className="flex items-center gap-1.5 sm:gap-2">
+                        <div className="flex items-center justify-end gap-1.5 sm:gap-2 flex-wrap">
                           {client?.phone && (
                             <a
                               href={`tel:${client.phone}`}
@@ -1172,37 +1175,40 @@ export default function AppointmentsView({
                       </div>
 
                       {/* Right: Advance Payment & Pending Financial Breakdown + Actions */}
-                      <div className="flex lg:flex-col items-end justify-between lg:justify-center gap-3 pt-3 lg:pt-0 border-t lg:border-t-0 border-border-subtle">
-                        <div className="text-left lg:text-right space-y-1">
-                          <span className="font-display font-bold text-xl text-text-ink block">
-                            {currency}{Number(apt.price).toLocaleString('en-IN')}
-                          </span>
+                      <div className="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-end justify-between lg:justify-center gap-3 pt-3 lg:pt-0 border-t lg:border-t-0 border-border-subtle">
+                        <div className="flex items-center justify-between sm:block text-left lg:text-right space-y-1">
+                          <span className="text-xs text-text-muted font-medium sm:hidden">Total Fee:</span>
+                          <div>
+                            <span className="font-display font-bold text-xl text-text-ink block text-right sm:text-left lg:text-right">
+                              {currency}{Number(apt.price).toLocaleString('en-IN')}
+                            </span>
 
-                          <div className="flex items-center lg:justify-end gap-1.5 flex-wrap">
-                            {advanceAmt > 0 ? (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 text-[10px] font-bold border border-emerald-200">
-                                <Check className="w-3 h-3" />
-                                <span>{currency}{advanceAmt.toLocaleString('en-IN')} Advance</span>
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-studio-canvas text-text-muted text-[10px] font-medium border border-border-subtle">
-                                No Advance
-                              </span>
-                            )}
+                            <div className="flex items-center lg:justify-end gap-1.5 flex-wrap justify-end sm:justify-start">
+                              {advanceAmt > 0 ? (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 text-[10px] font-bold border border-emerald-200">
+                                  <Check className="w-3 h-3" />
+                                  <span>{currency}{advanceAmt.toLocaleString('en-IN')} Advance</span>
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-studio-canvas text-text-muted text-[10px] font-medium border border-border-subtle">
+                                  No Advance
+                                </span>
+                              )}
 
-                            {balanceDue > 0 ? (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-50 text-amber-800 text-[10px] font-bold border border-amber-200">
-                                <span>{currency}{balanceDue.toLocaleString('en-IN')} Due</span>
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-emerald-100 text-emerald-900 text-[10px] font-bold">
-                                Fully Paid
-                              </span>
-                            )}
+                              {balanceDue > 0 ? (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-50 text-amber-800 text-[10px] font-bold border border-amber-200">
+                                  <span>{currency}{balanceDue.toLocaleString('en-IN')} Due</span>
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-emerald-100 text-emerald-900 text-[10px] font-bold">
+                                  Fully Paid
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center justify-end gap-1.5 sm:gap-2 flex-wrap">
                           {/* Send Phone Alert Now */}
                           <button
                             onClick={() => onRemindAppointment && onRemindAppointment(apt)}

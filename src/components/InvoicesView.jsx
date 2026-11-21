@@ -249,24 +249,29 @@ export default function InvoicesView({
                   </div>
 
                   {/* Right: Amounts & Actions */}
-                  <div className="flex sm:flex-col items-end justify-between sm:justify-center gap-3 pt-3 sm:pt-0 border-t sm:border-t-0 border-border-subtle">
-                    <div className="text-right">
-                      <span className="font-display font-bold text-lg text-text-ink">
-                        {currency}{Number(inv.total).toLocaleString('en-IN')}
+                  <div className="flex flex-col sm:flex-col items-stretch sm:items-end justify-between sm:justify-center gap-3 pt-3 sm:pt-0 border-t sm:border-t-0 border-border-subtle">
+                    <div className="flex items-center justify-between sm:block sm:text-right">
+                      <span className="text-xs font-medium text-text-muted sm:hidden">
+                        Total Amount
                       </span>
-                      {!isPaid && (
-                        <span className="text-xs text-amber-700 font-semibold block">
-                          {currency}{Number(inv.balanceDue !== undefined ? inv.balanceDue : inv.total).toLocaleString('en-IN')} due
+                      <div className="text-right">
+                        <span className="font-display font-bold text-lg text-text-ink">
+                          {currency}{Number(inv.total).toLocaleString('en-IN')}
                         </span>
-                      )}
-                      {isPaid && inv.paymentMethod && (
-                        <span className="text-[11px] text-text-muted block">
-                          via {inv.paymentMethod}
-                        </span>
-                      )}
+                        {!isPaid && (
+                          <span className="text-xs text-amber-700 font-semibold block">
+                            {currency}{Number(inv.balanceDue !== undefined ? inv.balanceDue : inv.total).toLocaleString('en-IN')} due
+                          </span>
+                        )}
+                        {isPaid && inv.paymentMethod && (
+                          <span className="text-[11px] text-text-muted block">
+                            via {inv.paymentMethod}
+                          </span>
+                        )}
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center justify-end gap-1.5 flex-wrap sm:flex-nowrap" onClick={(e) => e.stopPropagation()}>
                       {/* Quick WhatsApp Send */}
                       <button
                         onClick={(e) => handleQuickWhatsApp(e, inv)}

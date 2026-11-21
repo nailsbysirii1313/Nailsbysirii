@@ -296,7 +296,7 @@ export default function NewAppointmentModal({
           data-lenis-prevent
           data-lenis-prevent-wheel
           data-lenis-prevent-touch
-          className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-7 shadow-studio-float border-t sm:border border-studio-border relative max-h-[90vh] sm:max-h-[85vh] overflow-y-auto font-sans overscroll-contain"
+          className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-7 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:pb-7 shadow-studio-float border-t sm:border border-studio-border relative max-h-[90vh] sm:max-h-[85vh] overflow-y-auto font-sans overscroll-contain"
         >
           <div className="w-10 h-1.5 rounded-full bg-studio-borderStrong mx-auto mb-3 sm:hidden" />
           <button

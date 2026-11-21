@@ -19,14 +19,18 @@ export default function MobileBottomNav({
     'pressons',
     'giftcards',
     'inventory',
-    'financials',
+    'analytics',
     'services',
     'catalogueManager',
     'reminders',
     'settings'
   ].includes(currentTab);
 
-  const hasUrgentAttention = (counts?.pendingRepairs || 0) > 0 || (counts?.lowStockCount || 0) > 0;
+  const hasUrgentAttention =
+    (counts?.pendingRepairs || 0) > 0 ||
+    (counts?.lowStockCount || 0) > 0 ||
+    (counts?.unpaidInvoices || 0) > 0 ||
+    (counts?.pendingOrders || 0) > 0;
 
   return (
     <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-studio-surface/95 backdrop-blur-2xl border-t border-border-subtle shadow-xs px-2 pt-1 pb-[calc(0.6rem+env(safe-area-inset-bottom))] transition-all">

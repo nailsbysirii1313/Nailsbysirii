@@ -493,14 +493,14 @@ export default function PressOnsView({
                     </div>
 
                     {/* Order Actions */}
-                    <div className="pt-3 border-t border-border-subtle flex flex-wrap items-center justify-between gap-2 text-xs">
-                      <div className="flex items-center gap-2">
+                    <div className="pt-3 border-t border-border-subtle flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 text-xs">
+                      <div className="flex items-center gap-2 flex-wrap">
                         {/* WhatsApp Dispatch Link */}
                         <a
                           href={getWhatsAppDispatchUrl(order)}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-3.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-semibold flex items-center gap-1.5 transition-all"
+                          className="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-semibold flex items-center justify-center gap-1.5 transition-all min-h-[38px]"
                         >
                           <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
                           <span>WhatsApp Update</span>
@@ -509,7 +509,7 @@ export default function PressOnsView({
                         {/* Dispatch / Status Updater */}
                         <button
                           onClick={() => handleOpenDispatch(order)}
-                          className="px-3.5 py-1.5 rounded-xl bg-studio-canvas hover:bg-studio-subtle text-text-ink border border-border-subtle font-semibold flex items-center gap-1.5 transition-all"
+                          className="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-studio-canvas hover:bg-studio-subtle text-text-ink border border-border-subtle font-semibold flex items-center justify-center gap-1.5 transition-all min-h-[38px]"
                         >
                           <Truck className="w-3.5 h-3.5 text-brand-wine" />
                           <span>Update Status & Tracking</span>
@@ -517,18 +517,21 @@ export default function PressOnsView({
                       </div>
 
                       {/* Delete Order */}
-                      <button
-                        onClick={async () => {
-                          if (window.confirm(`Delete order #${order.orderNumber}?`)) {
-                            await onDeleteOrder(order.id);
-                            if (onRefreshOrders) onRefreshOrders();
-                          }
-                        }}
-                        className="text-text-muted hover:text-red-700 p-1.5 rounded-lg transition-colors"
-                        title="Delete Order Record"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+                      <div className="flex items-center justify-end">
+                        <button
+                          onClick={async () => {
+                            if (window.confirm(`Delete order #${order.orderNumber}?`)) {
+                              await onDeleteOrder(order.id);
+                              if (onRefreshOrders) onRefreshOrders();
+                            }
+                          }}
+                          className="text-text-muted hover:text-red-700 p-2 rounded-lg transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center"
+                          title="Delete Order Record"
+                          aria-label="Delete Order"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );

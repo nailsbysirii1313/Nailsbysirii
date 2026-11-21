@@ -95,7 +95,7 @@ export default function EmergencyRepairModal({
           data-lenis-prevent
           data-lenis-prevent-wheel
           data-lenis-prevent-touch
-          className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 border-t sm:border border-studio-border shadow-studio-float relative max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
+          className="bg-studio-surface rounded-t-3xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:pb-8 border-t sm:border border-studio-border shadow-studio-float relative max-h-[90vh] sm:max-h-[85vh] overflow-y-auto overscroll-contain"
         >
           <div className="w-10 h-1.5 rounded-full bg-studio-borderStrong mx-auto mb-3 sm:hidden" />
           <button

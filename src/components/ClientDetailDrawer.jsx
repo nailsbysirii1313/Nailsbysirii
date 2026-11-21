@@ -650,7 +650,7 @@ export default function ClientDetailDrawer({
           </div>
 
           {/* Footer Actions */}
-          <div className="p-4 border-t border-studio-border bg-studio-canvas/50 flex items-center justify-between gap-2">
+          <div className="p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] border-t border-studio-border bg-studio-canvas/50 flex items-center justify-between gap-2">
             <button
               onClick={() => onEditClient(client)}
               className="flex-1 py-2.5 px-3 rounded-xl border border-studio-border bg-studio-surface hover:bg-studio-wineLight text-studio-ink text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
